@@ -1,0 +1,25 @@
+Monte Carlo
+
+Generation of random numbers
+
+Markov chains also end up as a random walk?
+
+Burn in period discards initial values before it stabilises
+
+Uses the markov chain to make the sampling depend on the state of the
+previous thing
+
+How?
+
+Some initial sample
+
+Use previous sample to make the next sample
+
+How can we encode the transition states as we don't have them
+
+We need the steady state 
+
+Engineer a markov chain which has a stationary distribution as the probability
+distribution we want we are trying to fit
+
+

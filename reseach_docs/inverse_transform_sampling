@@ -1,0 +1,39 @@
+Can generate common distribution easily.
+
+How?
+
+Uniform numbers 0, 1
+
+Want to generate an exponential lambda distribution
+
+PDF = probability lambda function
+
+CDF = Cumulative density function 
+For any x you put in, probability that is x or less
+So what is the probability of x or less from this distribution
+
+Apply a transform to fit the CDF and PDF
+
+CDF = FxF(x) = { 1-e^lambda*x}, x >= 0
+               { o, x < 0 
+
+T(U) = X want to solve for T
+
+Fx(x) = P(X <= x) = So what is the probability of x or less from this distribution
+=  P(T(U) <= x) We want inverse so,
+=  P(U <= T^-1(x)) = T^-1(x)
+
+SO CDF = T^-1(x) = FxF(x)
+
+
+For uniform distribution this will be the same as the probablity itself
+
+Probability of x being less than 0.75 is 0.75
+
+So to find the inverse, find the inverse of the CDF, run the distribution through that
+
+Doable as long as you can invert the CDF
+
+
+
+

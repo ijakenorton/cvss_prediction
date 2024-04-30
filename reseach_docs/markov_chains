@@ -1,0 +1,25 @@
+Real world example
+
+Every day it can be one of two states, Sunny or cloudy
+The days are only reliant on the previous day and the weather is fully dependent on these probabilities
+
+Takes three components
+
+State space
+    {Sunny, cloudy}
+
+Markov Assumption
+    State only depends on the previous state
+    P(W_t | W_t-1, W_t-2) == P(W_t|W_t-1)
+
+Transition Matrix
+       Sunny, Cloudy
+Sunny    0.3   0.7
+Cloudy   0.5   0.5
+
+
+What is the steady state?
+
+If the values converge, we have got a distribution, if given enough iterations the probabilities will stabilise
+
+Pi is used as the indicator as the steady state
