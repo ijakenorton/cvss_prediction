@@ -3,10 +3,12 @@ import mitre_data_correlation
 
 
 def main():
+    print("nvd")
     # data, nvd_ids = nvd_data_correlation.read_data()
-    # nvd_data_correlation.write_data(data)
+    print()
+    print("mitre")
     data, mitre_ids = mitre_data_correlation.read_data()
-    print(len(mitre_ids))
+    # print(len(mitre_ids))
 
     # count = 0
     # for id in nvd_ids:

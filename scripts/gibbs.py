@@ -28,6 +28,7 @@ metrics_counts = {
     "availabilityImpact": [{"NONE": []}, {"LOW": []}, {"HIGH": []}],
 }
 
+
 confusion_matrices = {}
 for metric in metrics_and_dimensions.keys():
     confusion_matrices[metric] = []

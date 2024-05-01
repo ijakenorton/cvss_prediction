@@ -18,17 +18,17 @@ def read_data():
                         for d in cve["descriptions"]:
                             if d["lang"] == "en":
                                 desc.append(d["value"])
+                        cvss_data = cve["metrics"]["cvssMetricV31"][0]["cvssData"]
+                        del cvss_data["version"]
+                        del cvss_data["vectorString"]
+                        del cvss_data["baseSeverity"]
+
                         current = {
-                            "metric": cve["metrics"]["cvssMetricV31"],
+                            "cvssData": cve["metrics"]["cvssMetricV31"][0]["cvssData"],
                             "id": cve["id"],
                             "description": desc,
                         }
 
-                        exists, vector_string = utils.find_key_in_nested_dict(
-                            cve, "vectorString"
-                        )
-                        if exists:
-                            current["vectorString"] = vector_string
                         data.append(current)
                         ids.add(cve["id"])
 
