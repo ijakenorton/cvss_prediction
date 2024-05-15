@@ -1,13 +1,16 @@
 import nvd_data_correlation
 import mitre_data_correlation
+import utils
 
 
 def main():
-    print("nvd")
     # data, nvd_ids = nvd_data_correlation.read_data()
-    print()
-    print("mitre")
+    # nvd_data = {"data": data, "ids": nvd_ids}
     data, mitre_ids = mitre_data_correlation.read_data()
+    mitre_data = {"data": data, "ids": mitre_ids}
+    print("writing data to file....")
+    # utils.write_data(nvd_data, "../data/nvd_cleaned.pkl")
+    utils.write_data(mitre_data, "../data/mitre_cleaned.pkl")
     # print(len(mitre_ids))
 
     # count = 0

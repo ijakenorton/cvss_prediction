@@ -1,7 +1,8 @@
 import numpy as np
+import utils
 
 metrics_and_dimensions = {
-    "attackVector": ["NETWORK", "ADJACENT", "LOCAL", "PHYSICAL"],
+    "attackVector": ["NETWORK", "ADJACENT_NETWORK", "LOCAL", "PHYSICAL"],
     "attackComplexity": ["LOW", "HIGH"],
     "privilegesRequired": ["NONE", "LOW", "HIGH"],
     "userInteraction": ["NONE", "REQUIRED"],
@@ -13,21 +14,45 @@ metrics_and_dimensions = {
 # Example usage for sampling initial probabilities
 
 metrics_counts = {
-    "attackVector": [
-        {"NETWORK": []},
-        {"ADJACENT": []},
-        {"LOCAL": []},
-        {"PHYSICAL": []},
-    ],
-    "attackComplexity": [{"LOW": []}, {"HIGH": []}],
-    "privilegesRequired": [{"NONE": []}, {"LOW": []}, {"HIGH": []}],
-    "userInteraction": [{"NONE": []}, {"REQUIRED": []}],
-    "scope": [{"UNCHANGED": []}, {"CHANGED": []}],
-    "confidentialityImpact": [{"NONE": []}, {"LOW": []}, {"HIGH": []}],
-    "integrityImpact": [{"NONE": []}, {"LOW": []}, {"HIGH": []}],
-    "availabilityImpact": [{"NONE": []}, {"LOW": []}, {"HIGH": []}],
+    "attackVector": {
+        "NETWORK": 0,
+        "ADJACENT_NETWORK": 0,
+        "LOCAL": 0,
+        "PHYSICAL": 0,
+    },
+    "attackComplexity": {
+        "LOW": 0,
+        "HIGH": 0,
+    },
+    "privilegesRequired": {
+        "NONE": 0,
+        "LOW": 0,
+        "HIGH": 0,
+    },
+    "userInteraction": {
+        "NONE": 0,
+        "REQUIRED": 0,
+    },
+    "scope": {
+        "UNCHANGED": 0,
+        "CHANGED": 0,
+    },
+    "confidentialityImpact": {
+        "NONE": 0,
+        "LOW": 0,
+        "HIGH": 0,
+    },
+    "integrityImpact": {
+        "NONE": 0,
+        "LOW": 0,
+        "HIGH": 0,
+    },
+    "availabilityImpact": {
+        "NONE": 0,
+        "LOW": 0,
+        "HIGH": 0,
+    },
 }
-
 
 confusion_matrices = {}
 for metric in metrics_and_dimensions.keys():
@@ -73,9 +98,48 @@ print("Confusion Matrices:", confusion_matrices)
 
 
 # sampled_probabilities = {k: np.random.dirichlet(v) for k, v in priors.items()}
-# metric_probabilities = each metric distribution sumed to 1
+# metric_probabilities = each metric distribution summed to 1
 
+nvd_data = utils.read_data("../data/nvd_cleaned.pkl")
+mitre_data = utils.read_data("../data/mitre_cleaned.pkl")
+# print(nvd_data["data"][0].keys())
+# mitre_data = utils.read_data()
+
+adjacent = 0
+key_error = 0
+# for cve in nvd_data["data"]:
+#     for metric, value in dict.items(cve["cvssData"]):
+#         if metric == "baseScore":
+#             continue
+
+#         if value == "ADJACENT_NETWORK":
+#             value = "ADJACENT"
+
+#         metrics_counts[metric][value] += 1
+
+
+# for key in metrics_counts:
+#     print(metrics_counts[key])
+
+# print("adjacent:", adjacent)
+
+adjacent = 0
+for cve in mitre_data["data"]:
+    for metric, value in dict.items(cve["cvssData"]):
+        if metric == "baseScore":
+            continue
+        if value not in metrics_counts[metric].keys():
+            print(value)
+            print(metric)
+            key_error += 1
+            continue
+
+        metrics_counts[metric][value] += 1
+
+
+for key in metrics_counts:
+    print(metrics_counts[key])
+
+print("adjacent:", adjacent)
+print("key_error:", key_error)
 # x is the score assigned for each metric
-# for cve in cves:
-#     for metric in metrics:
-#         pass

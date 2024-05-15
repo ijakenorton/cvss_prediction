@@ -8,10 +8,15 @@ def read_data():
     data = []
     ids = set()
 
+    index = 0
+
+    print("Parsing nvd data...")
     for _, _, files in os.walk("../nvd/"):
         for file in files:
+            print(index / len(files) * 100, "%")
             with open(f"../nvd/{file}", "r") as f:
                 cves = json.load(f)
+
                 for cve in cves:
                     desc = []
                     if "cvssMetricV31" in cve["metrics"].keys():
@@ -31,6 +36,9 @@ def read_data():
 
                         data.append(current)
                         ids.add(cve["id"])
+            index += 1
+
+    print("100%")
 
     return data, ids
 

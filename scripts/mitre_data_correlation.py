@@ -14,8 +14,10 @@ def read_data():
             if "xxx" in dir:
                 paths.append(f"{root}/{dir}")
 
+    index = 0
+    print("Parsing mitre data...")
     for path in paths[:-1]:
-        # print(index / len(paths) * 100, "%")
+        print(index / len(paths) * 100, "%")
         for root, dirs, files in os.walk(path):
             for file in files:
                 with open(f"{root}/{file}", "r") as f:
@@ -49,8 +51,10 @@ def read_data():
                                 data.append(current)
 
                                 ids.add(cve["cveMetadata"]["cveId"])
+        index += 1
 
-    print(count)
+    print("100%")
+    # print(count)
     return data, ids
 
 
@@ -65,8 +69,9 @@ def parse_vector_string(vector_string: str):
     for term in terms:
         pairs = term.split(":")
 
-        metric = utils.map_metrics(pairs[0])
-        dimension = utils.map_dimensions(pairs[1])
+        # metric = utils.map_metrics(pairs[0])
+        # dimension = utils.map_dimensions(pairs[1])
+        metric, dimension = utils.metric_mappings(pairs[0], pairs[1])
         if not metric or not dimension:
             return None
 
