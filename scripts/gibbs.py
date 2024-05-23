@@ -13,46 +13,49 @@ metrics_and_dimensions = {
 }
 # Example usage for sampling initial probabilities
 
-metrics_counts = {
-    "attackVector": {
-        "NETWORK": 0,
-        "ADJACENT_NETWORK": 0,
-        "LOCAL": 0,
-        "PHYSICAL": 0,
-    },
-    "attackComplexity": {
-        "LOW": 0,
-        "HIGH": 0,
-    },
-    "privilegesRequired": {
-        "NONE": 0,
-        "LOW": 0,
-        "HIGH": 0,
-    },
-    "userInteraction": {
-        "NONE": 0,
-        "REQUIRED": 0,
-    },
-    "scope": {
-        "UNCHANGED": 0,
-        "CHANGED": 0,
-    },
-    "confidentialityImpact": {
-        "NONE": 0,
-        "LOW": 0,
-        "HIGH": 0,
-    },
-    "integrityImpact": {
-        "NONE": 0,
-        "LOW": 0,
-        "HIGH": 0,
-    },
-    "availabilityImpact": {
-        "NONE": 0,
-        "LOW": 0,
-        "HIGH": 0,
-    },
-}
+
+def metrics_counts():
+    return {
+        "attackVector": {
+            "NETWORK": 0,
+            "ADJACENT_NETWORK": 0,
+            "LOCAL": 0,
+            "PHYSICAL": 0,
+        },
+        "attackComplexity": {
+            "LOW": 0,
+            "HIGH": 0,
+        },
+        "privilegesRequired": {
+            "NONE": 0,
+            "LOW": 0,
+            "HIGH": 0,
+        },
+        "userInteraction": {
+            "NONE": 0,
+            "REQUIRED": 0,
+        },
+        "scope": {
+            "UNCHANGED": 0,
+            "CHANGED": 0,
+        },
+        "confidentialityImpact": {
+            "NONE": 0,
+            "LOW": 0,
+            "HIGH": 0,
+        },
+        "integrityImpact": {
+            "NONE": 0,
+            "LOW": 0,
+            "HIGH": 0,
+        },
+        "availabilityImpact": {
+            "NONE": 0,
+            "LOW": 0,
+            "HIGH": 0,
+        },
+    }
+
 
 confusion_matrices = {}
 for metric in metrics_and_dimensions.keys():
@@ -105,8 +108,6 @@ mitre_data = utils.read_data("../data/mitre_cleaned.pkl")
 # print(nvd_data["data"][0].keys())
 # mitre_data = utils.read_data()
 
-adjacent = 0
-key_error = 0
 # for cve in nvd_data["data"]:
 #     for metric, value in dict.items(cve["cvssData"]):
 #         if metric == "baseScore":
@@ -124,22 +125,6 @@ key_error = 0
 # print("adjacent:", adjacent)
 
 adjacent = 0
-for cve in mitre_data["data"]:
-    for metric, value in dict.items(cve["cvssData"]):
-        if metric == "baseScore":
-            continue
-        if value not in metrics_counts[metric].keys():
-            print(value)
-            print(metric)
-            key_error += 1
-            continue
-
-        metrics_counts[metric][value] += 1
 
 
-for key in metrics_counts:
-    print(metrics_counts[key])
-
-print("adjacent:", adjacent)
-print("key_error:", key_error)
 # x is the score assigned for each metric
