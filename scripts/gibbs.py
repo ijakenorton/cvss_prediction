@@ -1,5 +1,11 @@
 import numpy as np
 import utils
+import pymc3 as pm
+from scipy.stats import dirichlet
+import numpy as np
+import metric_counts
+from fastprogress import fastprogress
+fastprogress.printing = lambda: True
 
 metrics_and_dimensions = {
     "attackVector": ["NETWORK", "ADJACENT_NETWORK", "LOCAL", "PHYSICAL"],
@@ -11,51 +17,6 @@ metrics_and_dimensions = {
     "integrityImpact": ["NONE", "LOW", "HIGH"],
     "availabilityImpact": ["NONE", "LOW", "HIGH"],
 }
-# Example usage for sampling initial probabilities
-
-
-def metrics_counts():
-    return {
-        "attackVector": {
-            "NETWORK": 0,
-            "ADJACENT_NETWORK": 0,
-            "LOCAL": 0,
-            "PHYSICAL": 0,
-        },
-        "attackComplexity": {
-            "LOW": 0,
-            "HIGH": 0,
-        },
-        "privilegesRequired": {
-            "NONE": 0,
-            "LOW": 0,
-            "HIGH": 0,
-        },
-        "userInteraction": {
-            "NONE": 0,
-            "REQUIRED": 0,
-        },
-        "scope": {
-            "UNCHANGED": 0,
-            "CHANGED": 0,
-        },
-        "confidentialityImpact": {
-            "NONE": 0,
-            "LOW": 0,
-            "HIGH": 0,
-        },
-        "integrityImpact": {
-            "NONE": 0,
-            "LOW": 0,
-            "HIGH": 0,
-        },
-        "availabilityImpact": {
-            "NONE": 0,
-            "LOW": 0,
-            "HIGH": 0,
-        },
-    }
-
 
 confusion_matrices = {}
 for metric in metrics_and_dimensions.keys():
@@ -70,11 +31,6 @@ for metric in confusion_matrices.keys():
         confusion_matrices[metric].append(new)
 
 
-# for key in confusion_matrices:
-#     print(key)
-#     print("------------------------------------")
-#     for line in confusion_matrices[key]:
-#         print(line)
 
 
 # Initialize priors and confusion matrices
@@ -96,35 +52,68 @@ for metric, categories in metrics_and_dimensions.items():
 
 # Example usage for sampling initial probabilities and viewing matrices
 sampled_probabilities = {k: np.random.dirichlet(v) for k, v in priors.items()}
-print("Sampled Probabilities:", sampled_probabilities)
-print("Confusion Matrices:", confusion_matrices)
-
-
-# sampled_probabilities = {k: np.random.dirichlet(v) for k, v in priors.items()}
-# metric_probabilities = each metric distribution summed to 1
 
 nvd_data = utils.read_data("../data/nvd_cleaned.pkl")
-mitre_data = utils.read_data("../data/mitre_cleaned.pkl")
-# print(nvd_data["data"][0].keys())
-# mitre_data = utils.read_data()
+nvd_metrics = metric_counts.calculate_metric_counts(nvd_data["data"])
+print(nvd_metrics)
 
-# for cve in nvd_data["data"]:
-#     for metric, value in dict.items(cve["cvssData"]):
-#         if metric == "baseScore":
-#             continue
-
-#         if value == "ADJACENT_NETWORK":
-#             value = "ADJACENT"
-
-#         metrics_counts[metric][value] += 1
+sampled_probabilities = {k: np.random.dirichlet(v) for k, v in priors.items()}
+# metric_probabilities = each metric distribution summed to 1
 
 
-# for key in metrics_counts:
-#     print(metrics_counts[key])
+# Initial uniform priors for three levels of availability impact
 
-# print("adjacent:", adjacent)
+# Observed totals from your data for 'availabilityImpact'
+priors = []
 
-adjacent = 0
+# Update priors with observed data
+for metric in nvd_metrics:
+    priors.append(list(nvd_metrics[metric].values()))
 
 
-# x is the score assigned for each metric
+print(priors)
+exit()
+
+
+
+
+alpha_posterior = [a + o for a, o in zip(alpha_prior, observed_totals)]
+
+# Sample from the posterior distribution to get the expected probabilities
+posterior_samples = dirichlet(alpha_posterior).rvs(size=1000)
+
+# Calculate expected probabilities for each impact level
+expected_probabilities = posterior_samples.mean(axis=0)
+print("Expected Probabilities for 'Availability Impact':", expected_probabilities)
+# mitre_metrics = metric_counts.calculate_metric_counts(mitre_overlap)
+# mitre_data = utils.read_data("../data/mitre_cleaned.pkl")
+
+
+
+
+
+# # Model setup in PyMC3
+# with pm.Model() as model:
+#     # Priors for categorical probabilities
+#     category_probabilities = pm.Dirichlet('category_probabilities', a=np.array([1, 1, 1]))
+
+#     # Confusion matrix as a set of Dirichlet distributions
+#     confusion_matrix = pm.Dirichlet('confusion_matrix', 
+#                                     a=np.array([[3, 1, 1],
+#                                                 [1, 3, 1],
+#                                                 [1, 1, 3]]),
+#                                     shape=(3, 3))
+
+#     # Likelihood (Multinomial here could be replaced depending on your data structure)
+#     observed_data = pm.Multinomial('observed_data', n=np.sum(data), p=confusion_matrix[0], observed=data)
+
+#     # Gibbs sampling using Metropolis-Hastings (default for discrete variables in PyMC3)
+#     trace = pm.sample(1000, return_inferencedata=True, step=pm.Metropolis())
+
+# # Extract sampled values (post burn-in)
+# sampled_confusion_matrix = trace['confusion_matrix'][200:]  # Discard first 200 for burn-in
+
+# # Display results
+# print("Sampled Confusion Matrix Post Burn-in:")
+# print(sampled_confusion_matrix.mean(axis=0))
+

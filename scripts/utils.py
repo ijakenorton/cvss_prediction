@@ -1,5 +1,8 @@
 import pickle
-
+from typing import Dict, TypedDict, List, Any
+class CvssData(TypedDict):
+    data: List[Dict[str, Any]]
+    ids: List[str]
 
 def dimension_mappings():
     return {
@@ -99,7 +102,7 @@ def write_data(data, path):
         pickle.dump(data, file)
 
 
-def read_data(path):
-    with open(path, "rb") as file:
-        data = pickle.load(file)
-    return data
+def read_data(path)-> CvssData:
+   with open(path, "rb") as file:
+       data = pickle.load(file)
+   return data
