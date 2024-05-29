@@ -1,8 +1,0 @@
-Expected Probabilities for 'attackVector': [0.72860751 0.0230922  0.23788217 0.01041812]
-Expected Probabilities for 'attackComplexity': [0.95168939 0.04831061]
-Expected Probabilities for 'privilegesRequired': [0.5913125  0.31118077 0.09750673]
-Expected Probabilities for 'userInteraction': [0.66733851 0.33266149]
-Expected Probabilities for 'scope': [0.81945386 0.18054614]
-Expected Probabilities for 'confidentialityImpact': [0.21480074 0.20739726 0.577802  ]
-Expected Probabilities for 'integrityImpact': [0.31025634 0.19824963 0.49149403]
-Expected Probabilities for 'availabilityImpact': [0.4042858  0.02301608 0.57269812]

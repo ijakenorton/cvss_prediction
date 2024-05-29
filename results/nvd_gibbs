@@ -1,0 +1,54 @@
+Results for attackVector:
+Theta (Category Probabilities): [0.72859253 0.02307996 0.23791897 0.01040855]
+Confusion Matrix:
+ [[0.40891936 0.1955726  0.19619744 0.19931059]
+ [0.19879807 0.40045293 0.19257376 0.20817524]
+ [0.20352486 0.20353402 0.39457623 0.19836489]
+ [0.20167317 0.20190467 0.21112671 0.38529546]]
+
+Results for attackComplexity:
+Theta (Category Probabilities): [0.95171429 0.04828571]
+Confusion Matrix:
+ [[0.66521185 0.33478815]
+ [0.34210939 0.65789061]]
+
+Results for privilegesRequired:
+Theta (Category Probabilities): [0.59143705 0.31116146 0.09740149]
+Confusion Matrix:
+ [[0.4951926  0.2487446  0.2560628 ]
+ [0.24546127 0.49794111 0.25659762]
+ [0.24603592 0.24122537 0.51273871]]
+
+Results for userInteraction:
+Theta (Category Probabilities): [0.66724482 0.33275518]
+Confusion Matrix:
+ [[0.66585173 0.33414827]
+ [0.33085895 0.66914105]]
+
+Results for scope:
+Theta (Category Probabilities): [0.81954192 0.18045808]
+Confusion Matrix:
+ [[0.65893477 0.34106523]
+ [0.32263175 0.67736825]]
+
+Results for confidentialityImpact:
+Theta (Category Probabilities): [0.21481613 0.20737411 0.57780976]
+Confusion Matrix:
+ [[0.49588151 0.25662585 0.24749264]
+ [0.25219693 0.49324674 0.25455633]
+ [0.25651829 0.25112243 0.49235929]]
+
+Results for integrityImpact:
+Theta (Category Probabilities): [0.31019686 0.19829971 0.49150343]
+Confusion Matrix:
+ [[0.4927488  0.25540174 0.25184946]
+ [0.2459642  0.50379273 0.25024307]
+ [0.23435415 0.26173654 0.50390931]]
+
+Results for availabilityImpact:
+Theta (Category Probabilities): [0.404381   0.022976   0.57264301]
+Confusion Matrix:
+ [[0.50197411 0.24761886 0.25040702]
+ [0.23661356 0.50978993 0.25359651]
+ [0.23416886 0.24900632 0.51682482]]
+

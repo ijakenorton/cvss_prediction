@@ -2,3 +2,9 @@ cvelistV5-main/
 data/
 nvd/
 scripts/__pycache__/
+report/report.fls
+report/report.out
+report/report.log
+report/report.synctex.gz
+report/report.aux
+report/report.fdb_latexmk
