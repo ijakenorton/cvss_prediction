@@ -1,6 +1,10 @@
 from enum import Enum
+from multiprocessing.sharedctypes import Value
+from typing import Dict
 import numpy as np
 import argparse
+from cvss_types import ConfusionMatrixInfo, Metrics
+import confusion_generator
 import utils
 import pymc3 as pm
 import overlap
@@ -49,7 +53,7 @@ def plot_diagnostics(trace):
 
 
 def compute_metropolis_hastings():
-    metrics = counts()
+    metrics = counts(read_data())
 
     metrics_observed = {
         metric: np.array(list(data.values())) for metric, data in metrics.items()
@@ -103,12 +107,12 @@ def compute_metropolis_hastings():
         for metric, result in results.items():
             file.write(f"Results for {metric}:\n")
             file.write(f"Probabilities: result['probabilities']\n")
-            file.write(f"Confusion Matrix:\n result['confusion_matrix']\n")
+            file.write(f"Confusion Matrix:\n {result['confusion_matrix']}\n")
             file.write("\n")
 
 
 def compute_gibbs():
-    metrics = counts()
+    metrics = counts(read_data())
 
     metrics_observed = {
         metric: np.array(list(data.values())) for metric, data in metrics.items()
@@ -169,9 +173,20 @@ def compute_gibbs():
             file.write(f"Confusion Matrix:\n {result['confusion_matrix']}\n")
             file.write("\n")
 
+            inverse = utils.inverse_from_keys(list(metrics[metric].keys()))
+
+            info: ConfusionMatrixInfo = {
+                "columns": inverse,
+                "caption": f"Confusion matrix for {DATA_NAME} on {metric}",
+                "label": f"table:{DATA_NAME}-{metric}",
+                "row_labels": inverse,
+                "data": result["confusion_matrix"],
+            }
+            confusion_generator.generate(info)
+
 
 def compute_bayes():
-    metrics = counts()
+    metrics = counts(read_data())
     # Initialize priors and confusion matrices
     priors = []
     confusion_matrices = []
@@ -205,28 +220,44 @@ def compute_bayes():
             file.write("\n")
 
 
-def counts():
+def read_data():
     match DATA_NAME:
         case "nvd" | "mitre":
             data = utils.read_data(f"../data/{DATA_NAME}_cleaned.pkl")
-            return metric_counts.calculate_metric_counts(data["data"])
+            if data is None:
+                raise ValueError(f"Data not found for {DATA_NAME}")
+            return {DATA_NAME: data["data"]}
         case "combined":
             nvd = utils.read_data(f"../data/nvd_cleaned.pkl")
             mitre = utils.read_data(f"../data/mitre_cleaned.pkl")
-            nvd_counts = metric_counts.calculate_metric_counts(nvd["data"])
-            mitre_counts = metric_counts.calculate_metric_counts(mitre["data"])
-            for metric in nvd_counts:
-                for answer in nvd_counts[metric]:
-                    nvd_counts[metric][answer] += mitre_counts[metric][answer]
-            return nvd_counts
+            if nvd is None or mitre is None:
+                raise ValueError("NVD or MITRE data not found")
+            return {"nvd": nvd["data"], "mitre": mitre["data"]}
         case "overlap":
-            nvd_overlap, mitre_overlap = overlap.overlap()
-            nvd_counts = metric_counts.calculate_metric_counts(nvd_overlap)
-            mitre_counts = metric_counts.calculate_metric_counts(mitre_overlap)
+            nvd, mitre = overlap.overlap()
+            if nvd is None:
+                raise ValueError(f"Data not found for nvd")
+            if mitre is None:
+                raise ValueError(f"Data not found for mitre")
+            return {"nvd": nvd, "mitre": mitre}
+        case _:
+            raise ValueError("Dataname is incorrect")
+
+
+def counts(data) -> Metrics:
+    match DATA_NAME:
+        case "nvd" | "mitre":
+            counts: Metrics = metric_counts.calculate_metric_counts(data[DATA_NAME])
+            return counts
+        case "overlap" | "combined":
+            nvd_counts: Metrics = metric_counts.calculate_metric_counts(data["nvd"])
+            mitre_counts: Metrics = metric_counts.calculate_metric_counts(data["mitre"])
             for metric in nvd_counts:
                 for answer in nvd_counts[metric]:
                     nvd_counts[metric][answer] += mitre_counts[metric][answer]
             return nvd_counts
+        case _:
+            raise ValueError("Dataname is incorrect")
 
 
 def main():
@@ -252,12 +283,12 @@ def main():
             if data_set == "all":
                 continue
             print(DATA_NAME)
-            compute_bayes()
-            compute_metropolis_hastings()
+            # compute_bayes()
+            # compute_metropolis_hastings()
             compute_gibbs()
     else:
-        compute_bayes()
-        compute_metropolis_hastings()
+        # compute_bayes()
+        # compute_metropolis_hastings()
         compute_gibbs()
 
 

@@ -1,8 +1,11 @@
 import pickle
 from typing import Dict, TypedDict, List, Any
+
+
 class CvssData(TypedDict):
     data: List[Dict[str, Any]]
     ids: List[str]
+
 
 def dimension_mappings():
     return {
@@ -13,24 +16,48 @@ def dimension_mappings():
         "R": "REQUIRED",
         "U": "UNCHANGED",
         "C": "CHANGED",
+        "P": "PHYSICAL",
     }
 
 
-metrics_and_dimensions = {
-    "attackVector": {
-        "N": "NETWORK",
-        "A": "ADJACENT_NETWORK",
-        "L": "LOCAL",
-        "P": "PHYSICAL",
-    },
-    "attackComplexity": dimension_mappings(),
-    "privilegesRequired": dimension_mappings(),
-    "userInteraction": dimension_mappings(),
-    "scope": dimension_mappings(),
-    "confidentialityImpact": dimension_mappings(),
-    "integrityImpact": dimension_mappings(),
-    "availabilityImpact": dimension_mappings(),
-}
+def inverse_dimension_mappings():
+    return {
+        "ADJACENT_NETWORK": "A",
+        "LOW": "L",
+        "LOCAL": "L",
+        "NONE": "N",
+        "NETWORK": "N",
+        "HIGH": "H",
+        "REQUIRED": "R",
+        "UNCHANGED": "U",
+        "CHANGED": "C",
+        "PHYSICAL": "P",
+    }
+
+
+def inverse_from_keys(keys):
+    inverse = []
+    for key in keys:
+        inverse.append(inverse_dimension_mappings()[key])
+    return inverse
+
+
+def metrics_and_dimensions():
+    return {
+        "attackVector": {
+            "N": "NETWORK",
+            "A": "ADJACENT_NETWORK",
+            "L": "LOCAL",
+            "P": "PHYSICAL",
+        },
+        "attackComplexity": dimension_mappings(),
+        "privilegesRequired": dimension_mappings(),
+        "userInteraction": dimension_mappings(),
+        "scope": dimension_mappings(),
+        "confidentialityImpact": dimension_mappings(),
+        "integrityImpact": dimension_mappings(),
+        "availabilityImpact": dimension_mappings(),
+    }
 
 
 def metrics():
@@ -60,7 +87,7 @@ def metric_mappings(metric, dimension):
     if metric not in metric_mapping.keys():
         return None, None
     metric = metric_mapping[metric]
-    dimension = metrics_and_dimensions[metric][dimension]
+    dimension = metrics_and_dimensions()[metric][dimension]
     return metric, dimension
 
 
@@ -102,7 +129,7 @@ def write_data(data, path):
         pickle.dump(data, file)
 
 
-def read_data(path)-> CvssData:
-   with open(path, "rb") as file:
-       data = pickle.load(file)
-   return data
+def read_data(path) -> CvssData:
+    with open(path, "rb") as file:
+        data = pickle.load(file)
+    return data

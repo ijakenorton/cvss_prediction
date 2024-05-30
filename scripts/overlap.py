@@ -2,6 +2,7 @@ import nvd_data_correlation
 import mitre_data_correlation
 import metric_counts
 import plot
+from cvss_types import Metrics
 import utils
 
 

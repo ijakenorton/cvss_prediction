@@ -1,4 +1,11 @@
+from cvss_types import ConfusionMatrixInfo
+
+
 columns = ["A", "L"]
+caption = "Generated Table"
+label = "table:label"
+row_labels = ["Row 1", "Row 2"]
+data = [[1, 2], [3, 4]]
 
 
 def column_line(columns):
@@ -23,7 +30,7 @@ def layout(num_cols):
 def row(label, line):
     output = label
     for d in line:
-        output += " & " + f"{d}"
+        output += " & " + f"{d:.2g}"
 
     output += " \\\\\n"
     return output
@@ -37,33 +44,30 @@ def rows(labels, data):
     return output
 
 
-caption = "Generated Table"
-# column_line = """\\textbf{} & \\textbf{Column 1} & \\textbf{Column 2} \\\\ """
-label = "table:label"
-# layout = ""
-labels = ["Row 1", "Row 2"]
-data = [[1, 2], [3, 4]]
-template = (
+def generate(info: ConfusionMatrixInfo):
+    template = (
+        """
+    \\begin{table}
+        \\caption{"""
+        + f"{info['caption']}"
+        + """}
+        \\label{"""
+        + f"{info['label']}"
+        + """}
+        \\begin{center}
+            \\begin{tabular}{"""
+        + f"{layout(len(info['columns']))}}}"
+        + column_line(info["columns"])
+        + """
+                \\hline
+        """
+        + rows(info["row_labels"], info["data"])
+        + """ 
+            \\end{tabular}
+        \\end{center}
+    \\end{table}
     """
-\\begin{table}
-    \\caption{"""
-    + f"{caption}"
-    + """}
-    \\label{"""
-    + f"{label}"
-    + """}
-    \\begin{center}
-        \\begin{tabular}{"""
-    + f"{layout(len(columns))}}}"
-    + column_line(columns)
-    + """
-            \\hline
-    """
-    + rows(labels, data)
-    + """ 
-        \\end{tabular}
-    \\end{center}
-\\end{table}
-"""
-)
-print(template)
+    )
+    template.replace("_", "\\_")
+
+    print(template)

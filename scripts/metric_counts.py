@@ -1,5 +1,8 @@
-def metrics_counts():
-    metrics = {
+from cvss_types import Metrics
+
+
+def metrics_counts() -> Metrics:
+    metrics: Metrics = {
         "attackVector": {
             "NETWORK": 0,
             "ADJACENT_NETWORK": 0,
@@ -42,8 +45,9 @@ def metrics_counts():
     return metrics
 
 
-def calculate_metric_counts(data):
+def calculate_metric_counts(data) -> Metrics:
     metrics = metrics_counts()
+
     for cve in data:
         for metric, value in dict.items(cve["cvssData"]):
             if metric == "baseScore":
