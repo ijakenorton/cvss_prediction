@@ -1,0 +1,449 @@
+
+\documentclass[11pt]{article}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\pagestyle{fancy}
+\fancyhf{}
+
+\lhead{Jake Norton (5695756)} 
+
+\rfoot{\today}
+
+
+
+\begin{document}
+\begin{table}
+	\centering
+	\caption{Confusion Matrices for Attack Vector}
+	\[
+		\begin{array}{c|c}
+			\textbf{Mitre}    & \textbf{NVD}     \\
+			\hline
+			\begin{tabular}{l|cccc}
+				  & N    & A     & L    & P     \\
+				\hline
+				N & 0.4  & 0.2   & 0.2  & 0.2   \\
+				A & 0.2  & 0.4   & 0.19 & 0.2   \\
+				L & 0.2  & 0.21  & 0.4  & 0.2   \\
+				P & 0.2  & 0.2   & 0.2  & 0.4   \\
+				\hline                          \\
+				D & 0.72 & 0.055 & 0.21 & 0.012 \\
+			\end{tabular}
+			                  &
+			\begin{tabular}{l|cccc}
+				  & N    & A     & L    & P    \\
+				\hline
+				N & 0.4  & 0.2   & 0.2  & 0.2  \\
+				A & 0.2  & 0.41  & 0.2  & 0.19 \\
+				L & 0.2  & 0.2   & 0.4  & 0.2  \\
+				P & 0.2  & 0.21  & 0.2  & 0.39 \\
+				\hline                         \\
+				D & 0.73 & 0.023 & 0.24 & 0.01 \\
+			\end{tabular}
+			\\
+			\textbf{Combined} & \textbf{Overlap} \\
+			\hline
+			\begin{tabular}{l|cccc}
+				  & N    & A     & L    & P     \\
+				\hline
+				N & 0.39 & 0.2   & 0.2  & 0.21  \\
+				A & 0.2  & 0.4   & 0.2  & 0.2   \\
+				L & 0.2  & 0.19  & 0.4  & 0.2   \\
+				P & 0.19 & 0.21  & 0.2  & 0.4   \\
+				\hline                          \\
+				D & 0.73 & 0.031 & 0.23 & 0.011 \\
+			\end{tabular}
+			                  &
+			\begin{tabular}{l|cccc}
+				  & N    & A     & L    & P    \\
+				\hline
+				N & 0.39 & 0.21  & 0.2  & 0.2  \\
+				A & 0.2  & 0.39  & 0.2  & 0.21 \\
+				L & 0.2  & 0.2   & 0.39 & 0.2  \\
+				P & 0.19 & 0.2   & 0.2  & 0.4  \\
+				\hline                         \\
+				D & 0.74 & 0.041 & 0.21 & 0.01 \\
+			\end{tabular}
+		\end{array}
+	\]
+\end{table}
+\begin{table}
+	\centering
+	\caption{Confusion matrices attackComplexity}
+	\[
+		\begin{array}{c|c}
+			\textbf{Mitre}    & \textbf{NVD}     \\
+			\hline
+			\begin{tabular}{l|cc}
+				  & L    & H    \\
+				\hline
+				L & 0.66 & 0.34 \\
+				H & 0.32 & 0.68 \\
+				\hline          \\
+				D & 0.84 & 0.16 \\
+			\end{tabular}
+			                  &
+			\begin{tabular}{l|cc}
+				  & L    & H     \\
+				\hline
+				L & 0.67 & 0.33  \\
+				H & 0.33 & 0.67  \\
+				\hline           \\
+				D & 0.95 & 0.048 \\
+			\end{tabular}
+			\\
+			\textbf{Combined} & \textbf{Overlap} \\
+			\hline
+			\begin{tabular}{l|cc}
+				  & L    & H     \\
+				\hline
+				L & 0.67 & 0.33  \\
+				H & 0.34 & 0.66  \\
+				\hline           \\
+				D & 0.93 & 0.074 \\
+			\end{tabular}
+			                  &
+			\begin{tabular}{l|cc}
+				  & L    & H    \\
+				\hline
+				L & 0.66 & 0.34 \\
+				H & 0.33 & 0.67 \\
+				\hline          \\
+				D & 0.89 & 0.11 \\
+			\end{tabular}
+		\end{array}
+	\]
+\end{table}
+
+\begin{table}
+	\centering
+	\caption{Confusion matrices privilegesRequired}
+	\[
+		\begin{array}{c|c}
+			\label{table:mitre-privilegesRequired}
+			\textbf{Mitre}    & \textbf{NVD}     \\
+			\hline
+			\begin{tabular}{l|ccc}
+				  & N    & L    & H    \\
+				\hline
+				N & 0.5  & 0.25 & 0.25 \\
+				L & 0.25 & 0.5  & 0.25 \\
+				H & 0.24 & 0.26 & 0.5  \\
+				\hline                 \\
+				D & 0.47 & 0.37 & 0.17 \\
+			\end{tabular}
+			                  &
+			\begin{tabular}{l|ccc}
+				  & N    & L    & H     \\
+				\hline
+				N & 0.5  & 0.25 & 0.25  \\
+				L & 0.25 & 0.5  & 0.25  \\
+				H & 0.24 & 0.25 & 0.51  \\
+				\hline                  \\
+				D & 0.59 & 0.31 & 0.097 \\
+			\end{tabular}
+			\\
+			\textbf{Combined} & \textbf{Overlap} \\
+			\hline
+			\begin{tabular}{l|ccc}
+				  & N    & L    & H    \\
+				\hline
+				N & 0.5  & 0.25 & 0.25 \\
+				L & 0.25 & 0.5  & 0.25 \\
+				H & 0.24 & 0.26 & 0.5  \\
+				\hline                 \\
+				D & 0.56 & 0.32 & 0.11 \\
+			\end{tabular}
+			                  &
+			\begin{tabular}{l|ccc}
+				  & N    & L    & H    \\
+				\hline
+				N & 0.5  & 0.26 & 0.24 \\
+				L & 0.25 & 0.5  & 0.25 \\
+				H & 0.26 & 0.25 & 0.49 \\
+				\hline                 \\
+				D & 0.49 & 0.36 & 0.15 \\
+			\end{tabular}
+		\end{array}
+	\]
+\end{table}
+
+
+\begin{table}
+	\centering
+	\caption{Confusion matrices userInteraction}
+	\label{table:mitre-userInteraction}
+	\[
+		\begin{array}{c|c}
+			\textbf{Mitre}    & \textbf{NVD}     \\
+			\hline
+			\begin{tabular}{l|cc}
+				  & N    & R    \\
+				\hline
+				N & 0.68 & 0.32 \\
+				R & 0.34 & 0.66 \\
+				\hline          \\
+				D & 0.65 & 0.35 \\
+			\end{tabular}
+			                  &
+			\begin{tabular}{l|cc}
+				  & N    & R    \\
+				\hline
+				N & 0.65 & 0.35 \\
+				R & 0.34 & 0.66 \\
+				\hline          \\
+				D & 0.67 & 0.33 \\
+			\end{tabular}
+			\\
+			\textbf{Combined} & \textbf{Overlap} \\
+			\hline
+			\begin{tabular}{l|cc}
+				  & N    & R    \\
+				\hline
+				N & 0.66 & 0.34 \\
+				R & 0.33 & 0.67 \\
+				\hline          \\
+				D & 0.66 & 0.34 \\
+			\end{tabular}
+			                  &
+			\begin{tabular}{l|cc}
+				  & N    & R    \\
+				\hline
+				N & 0.66 & 0.34 \\
+				R & 0.33 & 0.67 \\
+				\hline          \\
+				D & 0.67 & 0.33 \\
+			\end{tabular}
+		\end{array}
+	\]
+\end{table}
+
+
+\begin{table}
+	\centering
+	\caption{Confusion matrices scope}
+	\label{table:mitre-scope}
+	\[
+		\begin{array}{c|c}
+			\textbf{Mitre}    & \textbf{NVD}     \\
+			\hline
+			\begin{tabular}{l|cc}
+				  & U    & C    \\
+				\hline
+				U & 0.66 & 0.34 \\
+				C & 0.33 & 0.67 \\
+				\hline          \\
+				D & 0.73 & 0.27 \\
+			\end{tabular}
+			                  &
+			\begin{tabular}{l|cc}
+				  & U    & C    \\
+				\hline
+				U & 0.66 & 0.34 \\
+				C & 0.33 & 0.67 \\
+				\hline          \\
+				D & 0.82 & 0.18 \\
+			\end{tabular}
+			\\
+			\textbf{Combined} & \textbf{Overlap} \\
+			\hline
+			\begin{tabular}{l|cc}
+				  & U    & C    \\
+				\hline
+				U & 0.66 & 0.34 \\
+				C & 0.33 & 0.67 \\
+				\hline          \\
+				D & 0.8  & 0.2  \\
+			\end{tabular}
+			                  &
+			\begin{tabular}{l|cc}
+				  & U    & C    \\
+				\hline
+				U & 0.67 & 0.33 \\
+				C & 0.35 & 0.65 \\
+				\hline          \\
+				D & 0.76 & 0.24 \\
+			\end{tabular}
+		\end{array}
+	\]
+\end{table}
+
+
+\begin{table}
+	\centering
+	\caption{Confusion matrices confidentialityImpact}
+	\label{table:mitre-confidentialityImpact}
+	\[
+		\begin{array}{c|c}
+			\textbf{Mitre}    & \textbf{NVD}     \\
+			\hline
+			\begin{tabular}{l|ccc}
+				  & N    & L    & H    \\
+				\hline
+				N & 0.49 & 0.26 & 0.25 \\
+				L & 0.24 & 0.5  & 0.25 \\
+				H & 0.26 & 0.24 & 0.5  \\
+				\hline                 \\
+				D & 0.27 & 0.31 & 0.41 \\
+			\end{tabular}
+			                  &
+			\begin{tabular}{l|ccc}
+				  & N    & L    & H    \\
+				\hline
+				N & 0.51 & 0.25 & 0.24 \\
+				L & 0.25 & 0.5  & 0.25 \\
+				H & 0.25 & 0.24 & 0.51 \\
+				\hline                 \\
+				D & 0.21 & 0.21 & 0.58 \\
+			\end{tabular}
+			\\
+			\textbf{Combined} & \textbf{Overlap} \\
+			\hline
+			\begin{tabular}{l|ccc}
+				  & N    & L    & H    \\
+				\hline
+				N & 0.49 & 0.26 & 0.25 \\
+				L & 0.26 & 0.49 & 0.25 \\
+				H & 0.24 & 0.26 & 0.5  \\
+				\hline                 \\
+				D & 0.23 & 0.23 & 0.54 \\
+			\end{tabular}
+			                  &
+			\begin{tabular}{l|ccc}
+				  & N    & L    & H    \\
+				\hline
+				N & 0.5  & 0.25 & 0.25 \\
+				L & 0.24 & 0.5  & 0.26 \\
+				H & 0.25 & 0.26 & 0.49 \\
+				\hline                 \\
+				D & 0.25 & 0.28 & 0.47 \\
+			\end{tabular}
+		\end{array}
+	\]
+\end{table}
+
+
+\begin{table}
+	\centering
+	\caption{Confusion matrices integrityImpact}
+	\label{table:mitre-integrityImpact}
+	\[
+		\begin{array}{c|c}
+			\textbf{Mitre}    & \textbf{NVD}     \\
+			\hline
+			\begin{tabular}{l|ccc}
+				  & N    & L    & H    \\
+				\hline
+				N & 0.49 & 0.25 & 0.26 \\
+				L & 0.25 & 0.5  & 0.25 \\
+				H & 0.25 & 0.25 & 0.5  \\
+				\hline                 \\
+				D & 0.3  & 0.35 & 0.35 \\
+			\end{tabular}
+			                  &
+			\begin{tabular}{l|ccc}
+				  & N    & L    & H    \\
+				\hline
+				N & 0.5  & 0.25 & 0.25 \\
+				L & 0.26 & 0.5  & 0.24 \\
+				H & 0.25 & 0.25 & 0.5  \\
+				\hline                 \\
+				D & 0.31 & 0.2  & 0.49 \\
+			\end{tabular}
+			\\
+			\textbf{Combined} & \textbf{Overlap} \\
+			\hline
+			\begin{tabular}{l|ccc}
+				  & N    & L    & H    \\
+				\hline
+				N & 0.49 & 0.26 & 0.25 \\
+				L & 0.25 & 0.5  & 0.26 \\
+				H & 0.24 & 0.26 & 0.51 \\
+				\hline                 \\
+				D & 0.31 & 0.23 & 0.46 \\
+			\end{tabular}
+			                  &
+			\begin{tabular}{l|ccc}
+				  & N    & L    & H    \\
+				\hline
+				N & 0.5  & 0.25 & 0.25 \\
+				L & 0.26 & 0.49 & 0.25 \\
+				H & 0.25 & 0.26 & 0.49 \\
+				\hline                 \\
+				D & 0.3  & 0.3  & 0.4  \\
+			\end{tabular}
+		\end{array}
+	\]
+\end{table}
+
+
+\begin{table}
+	\centering
+	\caption{Confusion matrices availabilityImpact}
+	\label{table:mitre-availabilityImpact}
+	\[
+		\begin{array}{c|c}
+			\textbf{Mitre}    & \textbf{NVD}     \\
+			\hline
+			\begin{tabular}{l|ccc}
+				      & N    & L    & H    \\
+				\hline
+				N     & 0.5  & 0.25 & 0.25 \\
+				L     & 0.25 & 0.5  & 0.25 \\
+				H     & 0.25 & 0.25 & 0.5  \\
+				\hline
+				D 0.4 & 0.22 & 0.38
+			\end{tabular}
+			                  &
+			\begin{tabular}{l|ccc}
+				  & N    & L     & H    \\
+				\hline
+				N & 0.5  & 0.25  & 0.25 \\
+				L & 0.27 & 0.49  & 0.24 \\
+				H & 0.25 & 0.24  & 0.5  \\
+				\hline                  \\
+				D & 0.4  & 0.023 & 0.57 \\
+			\end{tabular}
+			\\
+			\textbf{Combined} & \textbf{Overlap} \\
+			\hline
+			\begin{tabular}{l|ccc}
+				  & N    & L     & H    \\
+				\hline
+				N & 0.5  & 0.25  & 0.25 \\
+				L & 0.24 & 0.51  & 0.26 \\
+				H & 0.25 & 0.25  & 0.49 \\
+				\hline                  \\
+				D & 0.4  & 0.069 & 0.53 \\
+			\end{tabular}
+			                  &
+			\begin{tabular}{l|ccc}
+				  & N    & L    & H    \\
+				\hline
+				N & 0.5  & 0.25 & 0.25 \\
+				L & 0.26 & 0.49 & 0.25 \\
+				H & 0.25 & 0.25 & 0.5  \\
+				\hline                 \\
+				D & 0.42 & 0.13 & 0.45 \\
+			\end{tabular}
+		\end{array}
+	\]
+\end{table}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=\textwidth]{../plots/combined\_overlap.png}
+	\caption{Counts of each metric between nvd and mitre}
+	\label{fig:comparison}
+\end{figure}
+
+
+
+
+\noindent
+\end{document}

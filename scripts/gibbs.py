@@ -1,5 +1,8 @@
 from enum import Enum
 from multiprocessing.sharedctypes import Value
+
+from numpy.distutils.system_info import NotFoundError
+import temp_data
 from typing import Dict
 import numpy as np
 import argparse
@@ -150,7 +153,14 @@ def compute_gibbs():
             step_cat = [pm.CategoricalGibbsMetropolis(vars=[cat]) for cat in categories]
 
             # Sampling
-            trace = pm.sample(500, tune=2000, step=step_cat, return_inferencedata=False)
+            trace = pm.sample(
+                500,
+                tune=2000,
+                step=step_cat,
+                return_inferencedata=False,
+                chains=8,
+                cores=8,
+            )
 
             # Post-processing
             burn_in = 250
@@ -166,23 +176,28 @@ def compute_gibbs():
                 "confusion_matrix": sampled_confusion_matrix,
             }
 
-    with open(f"../results/{DATA_NAME}_gibbs", "w") as file:
+    infos = []
+    with open(f"../results/{DATA_NAME}_gibbs_formatted", "w") as file:
         for metric, result in results.items():
+
+            theta = list(map(lambda x: f"{x:.2g}\t", result["theta"]))
             file.write(f"Results for {metric}:\n")
-            file.write(f"Theta (Category Probabilities): {result['theta']}\n")
+            file.write(f"Theta (Category Probabilities): {theta}\n")
             file.write(f"Confusion Matrix:\n {result['confusion_matrix']}\n")
             file.write("\n")
 
             inverse = utils.inverse_from_keys(list(metrics[metric].keys()))
-
+            inverse = list(map(lambda x: f"{metric} {x}", inverse))
             info: ConfusionMatrixInfo = {
                 "columns": inverse,
-                "caption": f"Confusion matrix for {DATA_NAME} on {metric}",
+                "caption": f"Confusion matrices {metric}",
                 "label": f"table:{DATA_NAME}-{metric}",
                 "row_labels": inverse,
                 "data": result["confusion_matrix"],
             }
-            confusion_generator.generate(info)
+            infos.append(info)
+
+    return infos
 
 
 def compute_bayes():
@@ -277,19 +292,53 @@ def main():
     global DATA_NAME
     DATA_NAME = args.source
     print(f"Using source: {args.source}")
+
+    data = {}
+    data["all"] = []
     if DATA_NAME == "all":
         for data_set in DATA_TYPES:
             DATA_NAME = data_set
             if data_set == "all":
                 continue
-            print(DATA_NAME)
-            # compute_bayes()
-            # compute_metropolis_hastings()
-            compute_gibbs()
-    else:
-        # compute_bayes()
-        # compute_metropolis_hastings()
-        compute_gibbs()
+            data[DATA_NAME] = compute_gibbs()
+
+        # data = temp_data.data()
+        for metric_idx in range(len(data[DATA_TYPES[0]])):
+            row_labels = data["mitre"][metric_idx]["columns"]
+            column_labels = []
+            print(data.keys())
+            for source in data.keys():
+                if source == "all":
+                    continue
+                for item in data[source][metric_idx]["columns"]:
+                    column_labels.append(item)
+
+            data["all"].append(
+                {
+                    "columns": column_labels,
+                    "caption": data[DATA_TYPES[0]][metric_idx]["caption"],
+                    "label": data[DATA_TYPES[0]][metric_idx]["label"],
+                    "row_labels": row_labels,
+                    "data": np.hstack(
+                        (
+                            data["nvd"][metric_idx]["data"],
+                            data["mitre"][metric_idx]["data"],
+                            data["combined"][metric_idx]["data"],
+                            data["overlap"][metric_idx]["data"],
+                        )
+                    ),
+                }
+            )
+
+        with open("./table_data", "w") as file:
+            file.write(str((data["all"])))
+        for metric_idx in range(len(data["all"])):
+            confusion_generator.generate(data["all"][metric_idx])
+
+    # else:
+    #     infos = compute_gibbs()
+    #     for info in infos:
+    #         confusion_generator.generate(info)
 
 
 if __name__ == "__main__":

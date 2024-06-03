@@ -4,6 +4,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{fancyhdr}
 \usepackage{enumitem}
+\usepackage{array}
  
 \pagestyle{fancy}
 \fancyhf{}
@@ -23,117 +24,156 @@
 	Veronica Liesaputra
 }
 
-
+\begin{array}{c|c}
+	\textbf{Table 1} & \textbf{Table 2} \\
+	\hline
+	\begin{tabular}{l|cccc}
+		  & N   & A    & L    & P    \\
+		\hline
+		N & 0.4 & 0.21 & 0.19 & 0.2  \\
+		A & 0.2 & 0.4  & 0.2  & 0.2  \\
+		L & 0.2 & 0.2  & 0.4  & 0.2  \\
+		P & 0.2 & 0.2  & 0.2  & 0.39 \\
+	\end{tabular}
+	                 &
+	\begin{tabular}{l|cccc}
+		  & N   & A    & L   & P    \\
+		\hline
+		N & 0.4 & 0.2  & 0.2 & 0.2  \\
+		A & 0.2 & 0.41 & 0.2 & 0.19 \\
+		L & 0.2 & 0.2  & 0.4 & 0.2  \\
+		P & 0.2 & 0.21 & 0.2 & 0.39 \\
+	\end{tabular}
+	\\
+	\textbf{Table 3} & \textbf{Table 4} \\
+	\hline
+	\begin{tabular}{l|cccc}
+		  & N    & A    & L    & P    \\
+		\hline
+		N & 0.39 & 0.2  & 0.2  & 0.21 \\
+		A & 0.2  & 0.4  & 0.2  & 0.2  \\
+		L & 0.2  & 0.2  & 0.4  & 0.2  \\
+		P & 0.2  & 0.19 & 0.21 & 0.4  \\
+	\end{tabular}
+	                 &
+	\begin{tabular}{l|cccc}
+		  & N    & A    & L    & P    \\
+		\hline
+		N & 0.39 & 0.21 & 0.2  & 0.2  \\
+		A & 0.2  & 0.39 & 0.2  & 0.21 \\
+		L & 0.2  & 0.2  & 0.39 & 0.2  \\
+		P & 0.19 & 0.2  & 0.2  & 0.4  \\
+	\end{tabular}
+\end{array}
 
 \begin{table}
-	\caption{Confusion matrix for mitre on attackVector}
+	\caption{Confusion matrices attackVector}
 	\label{table:mitre-attackVector}
 	\begin{center}
-		\begin{tabular}{l|l|l|l|l}\textbf{} & \textbf{N} & \textbf{A} & \textbf{L} & \textbf{P} \\
+		\begin{tabular}{l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l}\textbf{} & \textbf{N} & \textbf{A} & \textbf{L} & \textbf{P} & \textbf{N} & \textbf{A} & \textbf{L} & \textbf{P} & \textbf{N} & \textbf{A} & \textbf{L} & \textbf{P} & \textbf{N} & \textbf{A} & \textbf{L} & \textbf{P} \\
                \hline
-               N                    & 0.41       & 0.19       & 0.2        & 0.19       \\
-               A                    & 0.2        & 0.4        & 0.2        & 0.21       \\
-               L                    & 0.2        & 0.19       & 0.41       & 0.2        \\
-               P                    & 0.2        & 0.21       & 0.2        & 0.39       \\
+               N                                            & 0.4        & 0.21       & 0.19       & 0.2        & 0.4        & 0.2        & 0.2        & 0.2        & 0.39       & 0.2        & 0.2        & 0.21       & 0.39       & 0.21       & 0.2        & 0.2        \\
+               A                                            & 0.2        & 0.4        & 0.2        & 0.2        & 0.2        & 0.41       & 0.2        & 0.19       & 0.2        & 0.4        & 0.2        & 0.2        & 0.2        & 0.39       & 0.2        & 0.21       \\
+               L                                            & 0.2        & 0.2        & 0.4        & 0.2        & 0.2        & 0.2        & 0.4        & 0.2        & 0.2        & 0.2        & 0.4        & 0.2        & 0.2        & 0.2        & 0.39       & 0.2        \\
+               P                                            & 0.2        & 0.2        & 0.2        & 0.39       & 0.2        & 0.21       & 0.2        & 0.39       & 0.2        & 0.19       & 0.21       & 0.4        & 0.19       & 0.2        & 0.2        & 0.4        \\
 		\end{tabular}
 	\end{center}
 \end{table}
 
 
 \begin{table}
-	\caption{Confusion matrix for mitre on attackComplexity}
+	\caption{Confusion matrices attackComplexity}
 	\label{table:mitre-attackComplexity}
 	\begin{center}
-		\begin{tabular}{l|l|l}\textbf{} & \textbf{L} & \textbf{H} \\
+		\begin{tabular}{l|l|l|l|l|l|l|l|l}\textbf{} & \textbf{L} & \textbf{H} & \textbf{L} & \textbf{H} & \textbf{L} & \textbf{H} & \textbf{L} & \textbf{H} \\
                \hline
-               L                & 0.65       & 0.35       \\
-               H                & 0.34       & 0.66       \\
+               L                            & 0.66       & 0.34       & 0.67       & 0.33       & 0.67       & 0.33       & 0.66       & 0.34       \\
+               H                            & 0.34       & 0.66       & 0.34       & 0.66       & 0.33       & 0.67       & 0.33       & 0.67       \\
 		\end{tabular}
 	\end{center}
 \end{table}
 
 
 \begin{table}
-	\caption{Confusion matrix for mitre on privilegesRequired}
+	\caption{Confusion matrices privilegesRequired}
 	\label{table:mitre-privilegesRequired}
 	\begin{center}
-		\begin{tabular}{l|l|l|l}\textbf{} & \textbf{N} & \textbf{L} & \textbf{H} \\
+		\begin{tabular}{l|l|l|l|l|l|l|l|l|l|l|l|l}\textbf{} & \textbf{N} & \textbf{L} & \textbf{H} & \textbf{N} & \textbf{L} & \textbf{H} & \textbf{N} & \textbf{L} & \textbf{H} & \textbf{N} & \textbf{L} & \textbf{H} \\
                \hline
-               N                  & 0.5        & 0.25       & 0.25       \\
-               L                  & 0.24       & 0.52       & 0.24       \\
-               H                  & 0.25       & 0.26       & 0.5        \\
+               N                                    & 0.5        & 0.25       & 0.25       & 0.5        & 0.26       & 0.24       & 0.51       & 0.25       & 0.24       & 0.51       & 0.24       & 0.25       \\
+               L                                    & 0.24       & 0.51       & 0.25       & 0.26       & 0.5        & 0.25       & 0.25       & 0.5        & 0.25       & 0.26       & 0.5        & 0.25       \\
+               H                                    & 0.25       & 0.24       & 0.51       & 0.25       & 0.26       & 0.49       & 0.24       & 0.25       & 0.51       & 0.25       & 0.25       & 0.5        \\
 		\end{tabular}
 	\end{center}
 \end{table}
 
 
 \begin{table}
-	\caption{Confusion matrix for mitre on userInteraction}
+	\caption{Confusion matrices userInteraction}
 	\label{table:mitre-userInteraction}
 	\begin{center}
-		\begin{tabular}{l|l|l}\textbf{} & \textbf{N} & \textbf{R} \\
+		\begin{tabular}{l|l|l|l|l|l|l|l|l}\textbf{} & \textbf{N} & \textbf{R} & \textbf{N} & \textbf{R} & \textbf{N} & \textbf{R} & \textbf{N} & \textbf{R} \\
                \hline
-               N                & 0.66       & 0.34       \\
-               R                & 0.33       & 0.67       \\
+               N                            & 0.67       & 0.33       & 0.67       & 0.33       & 0.68       & 0.32       & 0.67       & 0.33       \\
+               R                            & 0.34       & 0.66       & 0.33       & 0.67       & 0.34       & 0.66       & 0.33       & 0.67       \\
 		\end{tabular}
 	\end{center}
 \end{table}
 
 
 \begin{table}
-	\caption{Confusion matrix for mitre on scope}
+	\caption{Confusion matrices scope}
 	\label{table:mitre-scope}
 	\begin{center}
-		\begin{tabular}{l|l|l}\textbf{} & \textbf{U} & \textbf{C} \\
+		\begin{tabular}{l|l|l|l|l|l|l|l|l}\textbf{} & \textbf{U} & \textbf{C} & \textbf{U} & \textbf{C} & \textbf{U} & \textbf{C} & \textbf{U} & \textbf{C} \\
                \hline
-               U                & 0.67       & 0.33       \\
-               C                & 0.34       & 0.66       \\
+               U                            & 0.68       & 0.32       & 0.66       & 0.34       & 0.66       & 0.34       & 0.66       & 0.34       \\
+               C                            & 0.34       & 0.66       & 0.33       & 0.67       & 0.34       & 0.66       & 0.34       & 0.66       \\
 		\end{tabular}
 	\end{center}
 \end{table}
 
 
 \begin{table}
-	\caption{Confusion matrix for mitre on confidentialityImpact}
+	\caption{Confusion matrices confidentialityImpact}
 	\label{table:mitre-confidentialityImpact}
 	\begin{center}
-		\begin{tabular}{l|l|l|l}\textbf{} & \textbf{N} & \textbf{L} & \textbf{H} \\
+		\begin{tabular}{l|l|l|l|l|l|l|l|l|l|l|l|l}\textbf{} & \textbf{N} & \textbf{L} & \textbf{H} & \textbf{N} & \textbf{L} & \textbf{H} & \textbf{N} & \textbf{L} & \textbf{H} & \textbf{N} & \textbf{L} & \textbf{H} \\
                \hline
-               N                  & 0.5        & 0.24       & 0.27       \\
-               L                  & 0.24       & 0.5        & 0.26       \\
-               H                  & 0.25       & 0.25       & 0.5        \\
+               N                                    & 0.5        & 0.25       & 0.25       & 0.5        & 0.25       & 0.25       & 0.5        & 0.26       & 0.24       & 0.5        & 0.26       & 0.24       \\
+               L                                    & 0.25       & 0.5        & 0.25       & 0.26       & 0.49       & 0.25       & 0.25       & 0.5        & 0.25       & 0.25       & 0.49       & 0.26       \\
+               H                                    & 0.25       & 0.25       & 0.51       & 0.25       & 0.25       & 0.5        & 0.25       & 0.24       & 0.5        & 0.25       & 0.26       & 0.5        \\
 		\end{tabular}
 	\end{center}
 \end{table}
 
 
 \begin{table}
-	\caption{Confusion matrix for mitre on integrityImpact}
+	\caption{Confusion matrices integrityImpact}
 	\label{table:mitre-integrityImpact}
 	\begin{center}
-		\begin{tabular}{l|l|l|l}\textbf{} & \textbf{N} & \textbf{L} & \textbf{H} \\
+		\begin{tabular}{l|l|l|l|l|l|l|l|l|l|l|l|l}\textbf{} & \textbf{N} & \textbf{L} & \textbf{H} & \textbf{N} & \textbf{L} & \textbf{H} & \textbf{N} & \textbf{L} & \textbf{H} & \textbf{N} & \textbf{L} & \textbf{H} \\
                \hline
-               N                  & 0.47       & 0.27       & 0.26       \\
-               L                  & 0.26       & 0.5        & 0.25       \\
-               H                  & 0.26       & 0.26       & 0.48       \\
+               N                                    & 0.51       & 0.25       & 0.25       & 0.49       & 0.25       & 0.26       & 0.5        & 0.26       & 0.25       & 0.49       & 0.25       & 0.26       \\
+               L                                    & 0.25       & 0.5        & 0.25       & 0.25       & 0.5        & 0.25       & 0.24       & 0.51       & 0.25       & 0.25       & 0.5        & 0.25       \\
+               H                                    & 0.25       & 0.25       & 0.49       & 0.25       & 0.25       & 0.49       & 0.25       & 0.24       & 0.51       & 0.25       & 0.24       & 0.5        \\
 		\end{tabular}
 	\end{center}
 \end{table}
 
 
 \begin{table}
-	\caption{Confusion matrix for mitre on availabilityImpact}
+	\caption{Confusion matrices availabilityImpact}
 	\label{table:mitre-availabilityImpact}
 	\begin{center}
-		\begin{tabular}{l|l|l|l}\textbf{} & \textbf{N} & \textbf{L} & \textbf{H} \\
+		\begin{tabular}{l|l|l|l|l|l|l|l|l|l|l|l|l}\textbf{} & \textbf{N} & \textbf{L} & \textbf{H} & \textbf{N} & \textbf{L} & \textbf{H} & \textbf{N} & \textbf{L} & \textbf{H} & \textbf{N} & \textbf{L} & \textbf{H} \\
                \hline
-               N                  & 0.51       & 0.24       & 0.25       \\
-               L                  & 0.26       & 0.49       & 0.25       \\
-               H                  & 0.26       & 0.25       & 0.49       \\
+               N                                    & 0.5        & 0.25       & 0.24       & 0.5        & 0.25       & 0.24       & 0.5        & 0.25       & 0.25       & 0.5        & 0.25       & 0.25       \\
+               L                                    & 0.25       & 0.5        & 0.25       & 0.24       & 0.51       & 0.25       & 0.25       & 0.5        & 0.25       & 0.25       & 0.5        & 0.25       \\
+               H                                    & 0.25       & 0.25       & 0.5        & 0.25       & 0.25       & 0.5        & 0.25       & 0.24       & 0.51       & 0.25       & 0.25       & 0.5        \\
 		\end{tabular}
 	\end{center}
 \end{table}
-
 
 \paragraph{Aims}
 The primary aim of this research is to develop sophisticated predictive models capable of accurately determining
