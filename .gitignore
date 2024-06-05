@@ -1,7 +1,7 @@
 cvelistV5-main/
 data/
 nvd/
-**/__pycache__/*
+**/__pycache__/
 **.fls
 **.out
 **.log
