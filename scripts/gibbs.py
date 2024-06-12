@@ -238,7 +238,7 @@ def compute_bayes():
 def read_data():
     match DATA_NAME:
         case "nvd" | "mitre":
-            data = utils.read_data(f"../data/{DATA_NAME}_cleaned.pkl")
+            data = utils.read_data(f"../data/{DATA_NAME}_2.0_cleaned.pkl")
             if data is None:
                 raise ValueError(f"Data not found for {DATA_NAME}")
             return {DATA_NAME: data["data"]}
@@ -335,10 +335,10 @@ def main():
         for metric_idx in range(len(data["all"])):
             confusion_generator.generate(data["all"][metric_idx])
 
-    # else:
-    #     infos = compute_gibbs()
-    #     for info in infos:
-    #         confusion_generator.generate(info)
+    else:
+        infos = compute_metropolis_hastings()
+        # for info in infos:
+        #     confusion_generator.generate(info)
 
 
 if __name__ == "__main__":

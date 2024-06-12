@@ -28,14 +28,14 @@ def read_data():
 
                     if found and metric is not None:
                         for m in metric:
-                            if "cvssV3_1" in m.keys():
+                            if "cvssV2_0" in m.keys():
                                 cvss_data = parse_vector_string(
-                                    m["cvssV3_1"]["vectorString"]
+                                    m["cvssV2_0"]["vectorString"]
                                 )
                                 if not cvss_data:
                                     count += 1
                                     continue
-                                cvss_data["baseScore"] = m["cvssV3_1"]["baseScore"]
+                                cvss_data["baseScore"] = m["cvssV2_0"]["baseScore"]
 
                                 current = {
                                     "cvssData": cvss_data,
@@ -59,7 +59,7 @@ def read_data():
 
 
 def write_data(data):
-    with open("mitre_cleaned.pkl", "wb") as file:
+    with open("mitre_cleaned_1.0.pkl", "wb") as file:
         pickle.dump(data, file)
 
 

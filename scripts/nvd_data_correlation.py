@@ -19,17 +19,18 @@ def read_data():
 
                 for cve in cves:
                     desc = []
-                    if "cvssMetricV31" in cve["metrics"].keys():
+                    if "cvssMetricV2" in cve["metrics"].keys():
+                        # print(cve["metrics"])
                         for d in cve["descriptions"]:
                             if d["lang"] == "en":
                                 desc.append(d["value"])
-                        cvss_data = cve["metrics"]["cvssMetricV31"][0]["cvssData"]
+                        cvss_data = cve["metrics"]["cvssMetricV2"][0]["cvssData"]
                         del cvss_data["version"]
                         del cvss_data["vectorString"]
-                        del cvss_data["baseSeverity"]
+                        # del cvss_data["baseSeverity"]
 
                         current = {
-                            "cvssData": cve["metrics"]["cvssMetricV31"][0]["cvssData"],
+                            "cvssData": cve["metrics"]["cvssMetricV2"][0]["cvssData"],
                             "id": cve["id"],
                             "description": desc,
                         }
