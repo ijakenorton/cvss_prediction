@@ -1,27 +1,23 @@
-from enum import Enum
-from multiprocessing.sharedctypes import Value
-
-from numpy.distutils.system_info import NotFoundError
-import temp_data
-from typing import Dict
 import numpy as np
+import pymc3 as pm
+import theano.tensor as tt
 import argparse
 from cvss_types import ConfusionMatrixInfo, Metrics
 import confusion_generator
 import utils
-import pymc3 as pm
 import overlap
-from scipy.stats import dirichlet
+
+# from scipy.stats import dirichlet
 import numpy as np
 import metric_counts
-from fastprogress import fastprogress
+
+import seaborn as sns
 import arviz as az
 import matplotlib.pyplot as plt
 
-fastprogress.printing = lambda: True
-pass
 DATA_TYPES = ["mitre", "nvd", "combined", "overlap", "all"]
-DATA_NAME = ""
+data_name = ""
+CVSS_VERSION = "3.1"
 
 metrics_and_dimensions = {
     "attackVector": ["NETWORK", "ADJACENT_NETWORK", "LOCAL", "PHYSICAL"],
@@ -33,6 +29,28 @@ metrics_and_dimensions = {
     "integrityImpact": ["NONE", "LOW", "HIGH"],
     "availabilityImpact": ["NONE", "LOW", "HIGH"],
 }
+
+
+def plot_confusion_matrix(
+    trace, var_name, categories, title="Confusion Matrix", outpath="default"
+):
+
+    cm_mean = np.mean(trace.posterior[var_name].values, axis=(0, 1))
+
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(
+        cm_mean,
+        annot=True,
+        fmt=".2f",
+        cmap="Blues",
+        xticklabels=categories,
+        yticklabels=categories,
+    )
+    plt.xlabel("Predicted Category")
+    plt.ylabel("True Category")
+    plt.title(title)
+    plt.savefig(outpath)
+    # plt.show()
 
 
 def plot_diagnostics(trace):
@@ -56,62 +74,97 @@ def plot_diagnostics(trace):
 
 
 def compute_metropolis_hastings():
-    metrics = counts(read_data())
 
-    metrics_observed = {
-        metric: np.array(list(data.values())) for metric, data in metrics.items()
+    nvd, mitre = counts(read_data())
+
+    nvd_observed = {
+        metric: np.array(list(data.values())) for metric, data in nvd.items()
+    }
+
+    mitre_observed = {
+        metric: np.array(list(data.values())) for metric, data in mitre.items()
     }
 
     results = {}
-
-    for metric, observed_totals in metrics_observed.items():
+    for metric in nvd_observed:
+        nvd_counts = nvd_observed[metric]
+        mitre_counts = mitre_observed[metric]
         with pm.Model() as model:
-            num_categories = len(observed_totals)
+            num_categories = len(nvd_counts)
 
-            category_probabilities = pm.Dirichlet(
-                "category_probabilities", a=observed_totals + 1
-            )
+            # Priors for the true category probabilities
+            psi_attackVector = pm.Dirichlet(f"psi_{metric}", a=np.ones(num_categories))
 
+            # Confusion matrices for MITRE and NVD
             alpha_matrix = (
                 np.ones((num_categories, num_categories)) + np.eye(num_categories) * 2
             )  # Slight diagonal dominance
-
-            pm.Dirichlet(
-                "confusion_matrix",
+            pi_mitre = pm.Dirichlet(
+                "pi_mitre",
+                a=alpha_matrix,
+                shape=(num_categories, num_categories),
+            )
+            pi_nvd = pm.Dirichlet(
+                "pi_nvd",
                 a=alpha_matrix,
                 shape=(num_categories, num_categories),
             )
 
-            # Likelihood
-            pm.Multinomial(
-                "observed_data",
-                n=observed_totals.sum(),
-                p=category_probabilities,
-                observed=observed_totals,
+            # Compute expected probabilities for each database
+            expected_mitre = tt.dot(psi_attackVector, pi_mitre)
+            expected_nvd = tt.dot(psi_attackVector, pi_nvd)
+
+            # Likelihood for observed count data using Multinomial
+            obs_mitre = pm.Multinomial(
+                "obs_mitre",
+                n=sum(mitre_counts),
+                p=expected_mitre,
+                observed=mitre_counts,
+            )
+            obs_nvd = pm.Multinomial(
+                "obs_nvd", n=sum(nvd_counts), p=expected_nvd, observed=nvd_counts
             )
 
             # Sampling
+            pm.set_tt_rng(42)
             trace = pm.sample(
-                500, tune=2000, return_inferencedata=False, step=pm.Metropolis()
+                2000,
+                chains=8,
+                cores=8,
+                tune=2000,
+                target_accept=0.95,
+                return_inferencedata=True,
+            )
+            categories = metrics_and_dimensions[metric]
+
+            plot_confusion_matrix(
+                trace,
+                "pi_mitre",
+                categories,
+                title=f"Confusion Matrix for {metric} from Mitre version {CVSS_VERSION}",
+                outpath=f"mitre_{metric}_{CVSS_VERSION}.png",
             )
 
-            burn_in = 250
-            sampled_category_probabilities = trace["category_probabilities"][
-                burn_in:
-            ].mean(axis=0)
-            sampled_confusion_matrix = trace["confusion_matrix"][burn_in:].mean(axis=0)
+            # Plot confusion matrix for NVD
+            plot_confusion_matrix(
+                trace,
+                "pi_nvd",
+                categories,
+                title=f"Confusion Matrix for {metric} from NVD version {CVSS_VERSION}",
+                outpath=f"nvd_{metric}_{CVSS_VERSION}.png",
+            )
 
-            results[metric] = {
-                "probabilities": sampled_category_probabilities,
-                "confusion_matrix": sampled_confusion_matrix,
-            }
+            summary = az.summary(trace)
+            print(summary)
+            # print(summary)
+            #         results[metric] = trace
 
-    with open(f"../results/{DATA_NAME}_metropolis", "w") as file:
-        for metric, result in results.items():
-            file.write(f"Results for {metric}:\n")
-            file.write(f"Probabilities: result['probabilities']\n")
-            file.write(f"Confusion Matrix:\n {result['confusion_matrix']}\n")
-            file.write("\n")
+    # with open(f"../results/{data_name}_metropolis", "w") as file:
+    #     for metric, result in results.items():
+    #         file.write(f"Results for {metric}:\n")
+    #         file.write(f"Probabilities: result['probabilities']\n")
+    #         file.write(f"Confusion Matrix:\n {result['confusion_matrix']}\n")
+    #         file.write("\n")
 
 
 def compute_gibbs():
@@ -132,22 +185,6 @@ def compute_gibbs():
                 a=np.ones(num_categories) + observed_totals,
                 shape=num_categories,
             )
-
-            # Confusion matrix as a set of Dirichlet distributions
-            alpha_matrix = np.ones((num_categories, num_categories)) + np.eye(
-                num_categories
-            )
-            confusion_matrix = pm.Dirichlet(
-                "confusion_matrix",
-                a=alpha_matrix,
-                shape=(num_categories, num_categories),
-            )
-
-            # Define categorical outcomes influenced by the confusion matrix
-            categories = [
-                pm.Categorical(f"category_{i}", p=confusion_matrix[i, :])
-                for i in range(num_categories)
-            ]
 
             # Use CategoricalGibbsMetropolis for the categories
             step_cat = [pm.CategoricalGibbsMetropolis(vars=[cat]) for cat in categories]
@@ -177,7 +214,7 @@ def compute_gibbs():
             }
 
     infos = []
-    with open(f"../results/{DATA_NAME}_gibbs_formatted", "w") as file:
+    with open(f"../results/{data_name}_gibbs_formatted", "w") as file:
         for metric, result in results.items():
 
             theta = list(map(lambda x: f"{x:.2g}\t", result["theta"]))
@@ -191,7 +228,7 @@ def compute_gibbs():
             info: ConfusionMatrixInfo = {
                 "columns": inverse,
                 "caption": f"Confusion matrices {metric}",
-                "label": f"table:{DATA_NAME}-{metric}",
+                "label": f"table:{data_name}-{metric}",
                 "row_labels": inverse,
                 "data": result["confusion_matrix"],
             }
@@ -224,7 +261,7 @@ def compute_bayes():
             observed_totals.append(np.zeros(len(metrics_and_dimensions[metric])))
 
     # Calculate updated probabilities and print them
-    with open(f"../results/{DATA_NAME}_bayes", "w") as file:
+    with open(f"../results/{data_name}_bayes", "w") as file:
         for i, (prior, observed) in enumerate(zip(confusion_matrices, observed_totals)):
             updated_prior = prior.diagonal() + observed
             posterior_samples = dirichlet(updated_prior).rvs(size=1000)
@@ -236,12 +273,12 @@ def compute_bayes():
 
 
 def read_data():
-    match DATA_NAME:
+    match data_name:
         case "nvd" | "mitre":
-            data = utils.read_data(f"../data/{DATA_NAME}_2.0_cleaned.pkl")
+            data = utils.read_data(f"../data/{data_name}_2.0_cleaned.pkl")
             if data is None:
-                raise ValueError(f"Data not found for {DATA_NAME}")
-            return {DATA_NAME: data["data"]}
+                raise ValueError(f"Data not found for {data_name}")
+            return {data_name: data["data"]}
         case "combined":
             nvd = utils.read_data(f"../data/nvd_cleaned.pkl")
             mitre = utils.read_data(f"../data/mitre_cleaned.pkl")
@@ -260,17 +297,17 @@ def read_data():
 
 
 def counts(data) -> Metrics:
-    match DATA_NAME:
+    match data_name:
         case "nvd" | "mitre":
-            counts: Metrics = metric_counts.calculate_metric_counts(data[DATA_NAME])
+            counts: Metrics = metric_counts.calculate_metric_counts(data[data_name])
             return counts
         case "overlap" | "combined":
             nvd_counts: Metrics = metric_counts.calculate_metric_counts(data["nvd"])
             mitre_counts: Metrics = metric_counts.calculate_metric_counts(data["mitre"])
-            for metric in nvd_counts:
-                for answer in nvd_counts[metric]:
-                    nvd_counts[metric][answer] += mitre_counts[metric][answer]
-            return nvd_counts
+            # for metric in nvd_counts:
+            #     for answer in nvd_counts[metric]:
+            #         nvd_counts[metric][answer] += mitre_counts[metric][answer]
+            return nvd_counts, mitre_counts
         case _:
             raise ValueError("Dataname is incorrect")
 
@@ -289,24 +326,23 @@ def main():
 
     # Parse the arguments
     args = parser.parse_args()
-    global DATA_NAME
-    DATA_NAME = args.source
+    global data_name
+    data_name = args.source
     print(f"Using source: {args.source}")
 
     data = {}
     data["all"] = []
-    if DATA_NAME == "all":
+    if data_name == "all":
         for data_set in DATA_TYPES:
-            DATA_NAME = data_set
+            data_name = data_set
             if data_set == "all":
                 continue
-            data[DATA_NAME] = compute_gibbs()
+            data[data_name] = compute_gibbs()
 
         # data = temp_data.data()
         for metric_idx in range(len(data[DATA_TYPES[0]])):
             row_labels = data["mitre"][metric_idx]["columns"]
             column_labels = []
-            print(data.keys())
             for source in data.keys():
                 if source == "all":
                     continue
@@ -336,7 +372,12 @@ def main():
             confusion_generator.generate(data["all"][metric_idx])
 
     else:
-        infos = compute_metropolis_hastings()
+        results = compute_metropolis_hastings()
+        # for trace in results:
+        #     print(trace)
+
+        # summary = az.summary(trace)
+        # print(summary)
         # for info in infos:
         #     confusion_generator.generate(info)
 
