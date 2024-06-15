@@ -57,9 +57,3 @@ def calculate_metric_counts(data) -> Metrics:
 
             metrics[metric][value] += 1
     return metrics
-
-
-# if __name__ == "__main__":
-
-# for key in calculate_metric_counts():
-#     print(metrics_counts[key])

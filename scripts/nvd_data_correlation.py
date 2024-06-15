@@ -1,36 +1,39 @@
 import os
 import json
-import utils
-import pickle
 
 
-def read_data():
+def read_data(version_number):
     data = []
     ids = set()
 
     index = 0
+    access_vector = set()
 
     print("Parsing nvd data...")
     for _, _, files in os.walk("../nvd/"):
         for file in files:
-            print(index / len(files) * 100, "%")
+            print("\t", index / len(files) * 100, "%", end="\r")
             with open(f"../nvd/{file}", "r") as f:
                 cves = json.load(f)
 
                 for cve in cves:
                     desc = []
-                    if "cvssMetricV2" in cve["metrics"].keys():
-                        # print(cve["metrics"])
+                    if f"cvssMetricV{version_number}" in cve["metrics"].keys():
                         for d in cve["descriptions"]:
                             if d["lang"] == "en":
                                 desc.append(d["value"])
-                        cvss_data = cve["metrics"]["cvssMetricV2"][0]["cvssData"]
+                        cvss_data = cve["metrics"][f"cvssMetricV{version_number}"][0][
+                            "cvssData"
+                        ]
+                        access_vector.add(cvss_data["attackVector"])
                         del cvss_data["version"]
                         del cvss_data["vectorString"]
                         # del cvss_data["baseSeverity"]
 
                         current = {
-                            "cvssData": cve["metrics"]["cvssMetricV2"][0]["cvssData"],
+                            "cvssData": cve["metrics"][f"cvssMetricV{version_number}"][
+                                0
+                            ]["cvssData"],
                             "id": cve["id"],
                             "description": desc,
                         }
@@ -39,15 +42,7 @@ def read_data():
                         ids.add(cve["id"])
             index += 1
 
+    print(access_vector)
     print("100%")
 
     return data, ids
-
-
-# def write_data(data):
-def write_data(data):
-    with open("nvd_cleaned.pkl", "wb") as file:
-        pickle.dump(data, file)
-
-
-# write_data(read_data())

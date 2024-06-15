@@ -1,11 +1,20 @@
 import os
 import json
 import utils
-import pickle
 
 
-def read_data():
+def read_data(version_number):
+    version = ""
+    match version_number:
+        case 2:
+            version = "2_0"
+        case 3:
+            version = "3_0"
+        case 31:
+            version = "3_1"
+
     data = []
+    bad_vector_strings = []
     paths = []
     ids = set()
     count = 0
@@ -17,7 +26,7 @@ def read_data():
     index = 0
     print("Parsing mitre data...")
     for path in paths[:-1]:
-        print(index / len(paths) * 100, "%")
+        print("\t", index / len(paths) * 100, "%", end="\r")
         for root, dirs, files in os.walk(path):
             for file in files:
                 with open(f"{root}/{file}", "r") as f:
@@ -28,14 +37,18 @@ def read_data():
 
                     if found and metric is not None:
                         for m in metric:
-                            if "cvssV2_0" in m.keys():
+                            if f"cvssV{version}" in m.keys():
                                 cvss_data = parse_vector_string(
-                                    m["cvssV2_0"]["vectorString"]
+                                    m[f"cvssV{version}"]["vectorString"]
                                 )
                                 if not cvss_data:
-                                    count += 1
+                                    bad_vector_strings.append(
+                                        m[f"cvssV{version}"]["vectorString"]
+                                    )
                                     continue
-                                cvss_data["baseScore"] = m["cvssV2_0"]["baseScore"]
+                                cvss_data["baseScore"] = m[f"cvssV{version}"][
+                                    "baseScore"
+                                ]
 
                                 current = {
                                     "cvssData": cvss_data,
@@ -54,13 +67,10 @@ def read_data():
         index += 1
 
     print("100%")
-    # print(count)
+    print(bad_vector_strings)
+    print(len(bad_vector_strings))
+    print(len(ids))
     return data, ids
-
-
-def write_data(data):
-    with open("mitre_cleaned_1.0.pkl", "wb") as file:
-        pickle.dump(data, file)
 
 
 def parse_vector_string(vector_string: str):
@@ -68,9 +78,6 @@ def parse_vector_string(vector_string: str):
     corrected_terms = []
     for term in terms:
         pairs = term.split(":")
-
-        # metric = utils.map_metrics(pairs[0])
-        # dimension = utils.map_dimensions(pairs[1])
         metric, dimension = utils.metric_mappings(pairs[0], pairs[1])
         if not metric or not dimension:
             return None
@@ -79,6 +86,3 @@ def parse_vector_string(vector_string: str):
 
         corrected_terms.append(corrected_term)
     return dict(corrected_terms)
-
-
-# write_data(read_data())
