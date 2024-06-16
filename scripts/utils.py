@@ -7,90 +7,79 @@ class CvssData(TypedDict):
     ids: List[str]
 
 
-def dimensions_v2(metric, dimension):
-    dimensions = {
-        "accessVector": {
-            "A": "ADJACENT_NETWORK",
-            "L": "LOCAL",
-            "N": "NETWORK",
-        },
-        "accessComplexity": {
-            "L": "LOW",
-            "M": "MEDIUM",
-            "H": "HIGH",
-        },
-        "authentication": {
-            "M": "MULTIPLE",
-            "S": "SINGLE",
-            "N": "NONE",
-        },
-        "confidentialityImpact": {
-            "N": "NONE",
-            "P": "PARTIAL",
-            "C": "COMPLETE",
-        },
-        "integrityImpact": {
-            "N": "NONE",
-            "P": "PARTIAL",
-            "C": "COMPLETE",
-        },
-        "availabilityImpact": {
-            "N": "NONE",
-            "P": "PARTIAL",
-            "C": "COMPLETE",
-        },
-    }
-    if metric not in dimensions.keys() or dimension not in dimensions[metric].keys():
-        return None, None
+v2_dimensions = {
+    "accessVector": {
+        "A": "ADJACENT_NETWORK",
+        "L": "LOCAL",
+        "N": "NETWORK",
+    },
+    "accessComplexity": {
+        "L": "LOW",
+        "M": "MEDIUM",
+        "H": "HIGH",
+    },
+    "authentication": {
+        "M": "MULTIPLE",
+        "S": "SINGLE",
+        "N": "NONE",
+    },
+    "confidentialityImpact": {
+        "N": "NONE",
+        "P": "PARTIAL",
+        "C": "COMPLETE",
+    },
+    "integrityImpact": {
+        "N": "NONE",
+        "P": "PARTIAL",
+        "C": "COMPLETE",
+    },
+    "availabilityImpact": {
+        "N": "NONE",
+        "P": "PARTIAL",
+        "C": "COMPLETE",
+    },
+}
 
-    return dimension[metric][dimension]
-
-
-def dimensions_v3(metric, dimension):
-    dimensions = {
-        "attackVector": {
-            "A": "ADJACENT_NETWORK",
-            "L": "LOCAL",
-            "N": "NETWORK",
-            "P": "PHYSICAL",
-        },
-        "attackComplexity": {
-            "L": "LOW",
-            "H": "HIGH",
-        },
-        "privilegesRequired": {
-            "N": "NONE",
-            "L": "LOW",
-            "H": "HIGH",
-        },
-        "userInteraction": {
-            "N": "NONE",
-            "R": "REQUIRED",
-        },
-        "scope": {
-            "U": "UNCHANGED",
-            "C": "CHANGED",
-        },
-        "confidentialityImpact": {
-            "N": "NONE",
-            "L": "LOW",
-            "H": "HIGH",
-        },
-        "integrityImpact": {
-            "N": "NONE",
-            "L": "LOW",
-            "H": "HIGH",
-        },
-        "availabilityImpact": {
-            "N": "NONE",
-            "L": "LOW",
-            "H": "HIGH",
-        },
-    }
-    if metric not in dimensions.keys() or dimension not in dimensions[metric].keys():
-        return None, None
-
-    return dimension[metric][dimension]
+v3_dimensions = {
+    "attackVector": {
+        "A": "ADJACENT_NETWORK",
+        "L": "LOCAL",
+        "N": "NETWORK",
+        "P": "PHYSICAL",
+    },
+    "attackComplexity": {
+        "L": "LOW",
+        "H": "HIGH",
+    },
+    "privilegesRequired": {
+        "N": "NONE",
+        "L": "LOW",
+        "H": "HIGH",
+    },
+    "userInteraction": {
+        "N": "NONE",
+        "R": "REQUIRED",
+    },
+    "scope": {
+        "U": "UNCHANGED",
+        "C": "CHANGED",
+    },
+    "confidentialityImpact": {
+        "N": "NONE",
+        "L": "LOW",
+        "H": "HIGH",
+    },
+    "integrityImpact": {
+        "N": "NONE",
+        "L": "LOW",
+        "H": "HIGH",
+    },
+    "availabilityImpact": {
+        "N": "NONE",
+        "L": "LOW",
+        "H": "HIGH",
+    },
+}
 
 
 def metrics_v2(metric):
@@ -131,6 +120,34 @@ def metrics_v3(metric):
             return "availabilityImpact"
         case _:
             return None
+
+
+def dimensions_v2(metric, dimension):
+    if (
+        metric not in v2_dimensions.keys()
+        or dimension not in v2_dimensions[metric].keys()
+    ):
+        return None, None
+
+    return metric, v2_dimensions[metric][dimension]
+
+
+def dimensions_v3(metric, dimension):
+    if (
+        metric not in v3_dimensions.keys()
+        or dimension not in v3_dimensions[metric].keys()
+    ):
+        return None, None
+
+    return metric, v3_dimensions[metric][dimension]
+
+
+def dimensions(metric, version):
+    return (
+        list(v2_dimensions[metric].values())
+        if version == 2
+        else list(v3_dimensions[metric].values())
+    )
 
 
 def inverse_dimension_mappings():

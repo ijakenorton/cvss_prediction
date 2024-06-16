@@ -7,7 +7,6 @@ def read_data(version_number):
     ids = set()
 
     index = 0
-    access_vector = set()
 
     print("Parsing nvd data...")
     for _, _, files in os.walk("../nvd/"):
@@ -25,10 +24,8 @@ def read_data(version_number):
                         cvss_data = cve["metrics"][f"cvssMetricV{version_number}"][0][
                             "cvssData"
                         ]
-                        access_vector.add(cvss_data["attackVector"])
                         del cvss_data["version"]
                         del cvss_data["vectorString"]
-                        # del cvss_data["baseSeverity"]
 
                         current = {
                             "cvssData": cve["metrics"][f"cvssMetricV{version_number}"][
@@ -42,7 +39,6 @@ def read_data(version_number):
                         ids.add(cve["id"])
             index += 1
 
-    print(access_vector)
-    print("100%")
+    print("\n\t100%")
 
     return data, ids

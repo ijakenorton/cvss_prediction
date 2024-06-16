@@ -1,7 +1,43 @@
 from cvss_types import Metrics
 
 
-def metrics_counts() -> Metrics:
+def v2_metrics_counts():
+    metrics = {
+        "accessVector": {
+            "ADJACENT_NETWORK": 0,
+            "LOCAL": 0,
+            "NETWORK": 0,
+        },
+        "accessComplexity": {
+            "LOW": 0,
+            "MEDIUM": 0,
+            "HIGH": 0,
+        },
+        "authentication": {
+            "MULTIPLE": 0,
+            "SINGLE": 0,
+            "NONE": 0,
+        },
+        "confidentialityImpact": {
+            "NONE": 0,
+            "PARTIAL": 0,
+            "COMPLETE": 0,
+        },
+        "integrityImpact": {
+            "NONE": 0,
+            "PARTIAL": 0,
+            "COMPLETE": 0,
+        },
+        "availabilityImpact": {
+            "NONE": 0,
+            "PARTIAL": 0,
+            "COMPLETE": 0,
+        },
+    }
+    return metrics
+
+
+def v3_metrics_counts() -> Metrics:
     metrics: Metrics = {
         "attackVector": {
             "NETWORK": 0,
@@ -45,15 +81,17 @@ def metrics_counts() -> Metrics:
     return metrics
 
 
-def calculate_metric_counts(data) -> Metrics:
-    metrics = metrics_counts()
+def calculate_metric_counts(data, version):
+    metrics = v2_metrics_counts() if version == 2 else v3_metrics_counts()
 
     for cve in data:
         for metric, value in dict.items(cve["cvssData"]):
             if metric == "baseScore":
                 continue
-            # if value not in cve["cvssData"].keys():
-            #     continue
+            if metric == "baseSeverity":
+                continue
+            if value not in cve["cvssData"].keys():
+                continue
 
             metrics[metric][value] += 1
     return metrics

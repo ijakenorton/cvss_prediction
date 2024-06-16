@@ -8,7 +8,7 @@ def read_data(version_number):
     match version_number:
         case 2:
             version = "2_0"
-        case 3:
+        case 30:
             version = "3_0"
         case 31:
             version = "3_1"
@@ -34,12 +34,17 @@ def read_data(version_number):
                     found, metric = utils.find_key_in_nested_dict(cve, "metrics")
                     _, descriptions = utils.find_key_in_nested_dict(cve, "descriptions")
                     desc = []
+                    # other_found, other_metric = utils.find_key_in_nested_dict(
+                    #     cve, f"cvssV3_1"
+                    # )
+                    # if other_found and other_metric is not None:
+                    #     count += 1
 
                     if found and metric is not None:
                         for m in metric:
                             if f"cvssV{version}" in m.keys():
                                 cvss_data = parse_vector_string(
-                                    m[f"cvssV{version}"]["vectorString"]
+                                    m[f"cvssV{version}"]["vectorString"], version_number
                                 )
                                 if not cvss_data:
                                     bad_vector_strings.append(
@@ -65,22 +70,21 @@ def read_data(version_number):
 
                                 ids.add(cve["cveMetadata"]["cveId"])
         index += 1
-
-    print("100%")
+    print("\n\t100%")
     print(bad_vector_strings)
-    print(len(bad_vector_strings))
-    print(len(ids))
+    print(count)
+
     return data, ids
 
 
-def parse_vector_string(vector_string: str):
+def parse_vector_string(vector_string: str, version):
     terms = vector_string.split("/")[1:]
     corrected_terms = []
     for term in terms:
         pairs = term.split(":")
-        metric, dimension = utils.metric_mappings(pairs[0], pairs[1])
+        metric, dimension = utils.metric_mappings(pairs[0], pairs[1], version)
         if not metric or not dimension:
-            return None
+            continue
 
         corrected_term = [metric, dimension]
 
