@@ -90,8 +90,6 @@ def calculate_metric_counts(data, version):
                 continue
             if metric == "baseSeverity":
                 continue
-            if value not in cve["cvssData"].keys():
-                continue
 
             metrics[metric][value] += 1
     return metrics

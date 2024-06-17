@@ -1,3 +1,4 @@
+from os.path import isfile
 import numpy as np
 import pymc3 as pm
 import theano.tensor as tt
@@ -6,10 +7,12 @@ from cvss_types import ConfusionMatrixInfo, Metrics
 import confusion_generator
 import utils
 import overlap
+import parse_data
 
 # from scipy.stats import dirichlet
 import numpy as np
 import metric_counts
+import os
 
 import seaborn
 import pandas as pd
@@ -72,7 +75,8 @@ def plot_diagnostics(trace):
 def compute_metropolis_hastings():
 
     nvd, mitre = counts(read_data())
-
+    print(nvd, mitre)
+    exit()
     nvd_observed = {
         metric: np.array(list(data.values())) for metric, data in nvd.items()
     }
@@ -132,11 +136,11 @@ def compute_metropolis_hastings():
             # Sampling
             pm.set_tt_rng(42)
             trace = pm.sample(
-                100,
+                2000,
                 chains=8,
                 cores=8,
-                tune=250,
-                target_accept=0.90,
+                tune=2000,
+                target_accept=0.95,
                 return_inferencedata=True,
             )
             # categories = utils.dimensions(metric, CVSS_VERSION)
@@ -163,8 +167,8 @@ def compute_metropolis_hastings():
                 ax=mitre_axes.flat[i],
             )
     try:
-        nvd_fig.savefig(f"../plots/nvd_{CVSS_VERSION}smll.png")
-        mitre_fig.savefig(f"../plots/mitre_{CVSS_VERSION}smll.png")
+        nvd_fig.savefig(f"../plots/nvd_{CVSS_VERSION}.png")
+        mitre_fig.savefig(f"../plots/mitre_{CVSS_VERSION}.png")
     except Exception as e:
         print(f"Error: {e}")
 
@@ -251,15 +255,22 @@ def compute_metropolis_hastings():
 def read_data():
     match DATA_NAME:
         case "nvd" | "mitre":
-            data = utils.read_data(f"../data/{DATA_NAME}_2.0_cleaned.pkl")
+            data = utils.read_data(f"../data/{DATA_NAME}_{CVSS_VERSION}_cleaned.pkl")
             if data is None:
                 raise ValueError(f"Data not found for {DATA_NAME}")
             return {DATA_NAME: data["data"]}
         case "combined":
-            nvd = utils.read_data(f"../data/nvd_{CVSS_VERSION}_cleaned.pkl")
-            mitre = utils.read_data(f"../data/mitre_{CVSS_VERSION}_cleaned.pkl")
-            if nvd is None or mitre is None:
-                raise ValueError("NVD or MITRE data not found")
+
+            if os.path.isfile(f"../data/nvd_{CVSS_VERSION}_cleaned.pkl"):
+                nvd = utils.read_data(f"../data/nvd_{CVSS_VERSION}_cleaned.pkl")
+            else:
+                nvd = parse_data.parse("nvd", CVSS_VERSION)
+
+            if os.path.isfile(f"../data/mitre_{CVSS_VERSION}_cleaned.pkl"):
+                mitre = utils.read_data(f"../data/mitre_{CVSS_VERSION}_cleaned.pkl")
+            else:
+                mitre = parse_data.parse("mitre", CVSS_VERSION)
+
             return {"nvd": nvd["data"], "mitre": mitre["data"]}
         case "overlap":
             nvd, mitre = overlap.overlap()

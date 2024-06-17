@@ -9,92 +9,92 @@ class CvssData(TypedDict):
 
 v2_dimensions = {
     "accessVector": {
-        "A": "ADJACENT_NETWORK",
-        "L": "LOCAL",
-        "N": "NETWORK",
+        "a": "ADJACENT_NETWORK",
+        "l": "LOCAL",
+        "n": "NETWORK",
     },
     "accessComplexity": {
-        "L": "LOW",
-        "M": "MEDIUM",
-        "H": "HIGH",
+        "l": "LOW",
+        "m": "MEDIUM",
+        "h": "HIGH",
     },
     "authentication": {
-        "M": "MULTIPLE",
-        "S": "SINGLE",
-        "N": "NONE",
+        "m": "MULTIPLE",
+        "s": "SINGLE",
+        "n": "NONE",
     },
     "confidentialityImpact": {
-        "N": "NONE",
-        "P": "PARTIAL",
-        "C": "COMPLETE",
+        "n": "NONE",
+        "p": "PARTIAL",
+        "c": "COMPLETE",
     },
     "integrityImpact": {
-        "N": "NONE",
-        "P": "PARTIAL",
-        "C": "COMPLETE",
+        "n": "NONE",
+        "p": "PARTIAL",
+        "c": "COMPLETE",
     },
     "availabilityImpact": {
-        "N": "NONE",
-        "P": "PARTIAL",
-        "C": "COMPLETE",
+        "n": "NONE",
+        "p": "PARTIAL",
+        "c": "COMPLETE",
     },
 }
 
 v3_dimensions = {
     "attackVector": {
-        "A": "ADJACENT_NETWORK",
-        "L": "LOCAL",
-        "N": "NETWORK",
-        "P": "PHYSICAL",
+        "a": "ADJACENT_NETWORK",
+        "l": "LOCAL",
+        "n": "NETWORK",
+        "p": "PHYSICAL",
     },
     "attackComplexity": {
-        "L": "LOW",
-        "H": "HIGH",
+        "l": "LOW",
+        "h": "HIGH",
     },
     "privilegesRequired": {
-        "N": "NONE",
-        "L": "LOW",
-        "H": "HIGH",
+        "n": "NONE",
+        "l": "LOW",
+        "h": "HIGH",
     },
-    "userInteraction": {
-        "N": "NONE",
-        "R": "REQUIRED",
+    "userinteraction": {
+        "n": "NONE",
+        "r": "REQUIRED",
     },
     "scope": {
-        "U": "UNCHANGED",
-        "C": "CHANGED",
+        "u": "UNCHANGED",
+        "c": "CHANGED",
     },
     "confidentialityImpact": {
-        "N": "NONE",
-        "L": "LOW",
-        "H": "HIGH",
+        "n": "NONE",
+        "l": "LOW",
+        "h": "HIGH",
     },
     "integrityImpact": {
-        "N": "NONE",
-        "L": "LOW",
-        "H": "HIGH",
+        "n": "NONE",
+        "l": "LOW",
+        "h": "HIGH",
     },
     "availabilityImpact": {
-        "N": "NONE",
-        "L": "LOW",
-        "H": "HIGH",
+        "n": "NONE",
+        "l": "LOW",
+        "h": "HIGH",
     },
 }
 
 
 def metrics_v2(metric):
     match metric:
-        case "AV":
+        case "av":
             return "accessVector"
-        case "AC":
+        case "ac":
             return "accessComplexity"
-        case "Au":
+        case "au":
             return "authentication"
-        case "C":
+        case "c":
             return "confidentialityImpact"
-        case "I":
+        case "i":
             return "integrityImpact"
-        case "A":
+        case "a":
             return "availabilityImpact"
         case _:
             return None
@@ -102,21 +102,21 @@ def metrics_v2(metric):
 
 def metrics_v3(metric):
     match metric:
-        case "AV":
+        case "av":
             return "attackVector"
-        case "AC":
+        case "ac":
             return "attackComplexity"
-        case "PR":
+        case "pr":
             return "privilegesRequired"
-        case "UI":
+        case "ui":
             return "userInteraction"
-        case "S":
+        case "s":
             return "scope"
-        case "C":
+        case "c":
             return "confidentialityImpact"
-        case "I":
+        case "i":
             return "integrityImpact"
-        case "A":
+        case "a":
             return "availabilityImpact"
         case _:
             return None
@@ -178,6 +178,8 @@ def inverse_from_keys(keys):
 
 
 def metric_mappings(metric, dimension, version):
+    metric = metric.lower()
+    dimension = dimension.lower()
     metric = metrics_v2(metric) if version == 2 else metrics_v3(metric)
 
     if metric == None:

@@ -1,6 +1,7 @@
 import os
 import json
 import utils
+from pprint import pprint
 
 
 def read_data(version_number):
@@ -34,11 +35,6 @@ def read_data(version_number):
                     found, metric = utils.find_key_in_nested_dict(cve, "metrics")
                     _, descriptions = utils.find_key_in_nested_dict(cve, "descriptions")
                     desc = []
-                    # other_found, other_metric = utils.find_key_in_nested_dict(
-                    #     cve, f"cvssV3_1"
-                    # )
-                    # if other_found and other_metric is not None:
-                    #     count += 1
 
                     if found and metric is not None:
                         for m in metric:
@@ -71,22 +67,22 @@ def read_data(version_number):
                                 ids.add(cve["cveMetadata"]["cveId"])
         index += 1
     print("\n\t100%")
-    print(bad_vector_strings)
-    print(count)
+    # print(bad_vector_strings)
+    # print(count)
 
     return data, ids
 
 
 def parse_vector_string(vector_string: str, version):
-    terms = vector_string.split("/")[1:]
+    terms = vector_string.split("/")
+
     corrected_terms = []
     for term in terms:
         pairs = term.split(":")
         metric, dimension = utils.metric_mappings(pairs[0], pairs[1], version)
         if not metric or not dimension:
             continue
-
         corrected_term = [metric, dimension]
-
         corrected_terms.append(corrected_term)
-    return dict(corrected_terms)
+    corrected = dict(corrected_terms)
+    return corrected
