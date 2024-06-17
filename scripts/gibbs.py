@@ -1,4 +1,5 @@
 from os.path import isfile
+from pprint import pprint
 import numpy as np
 import pymc3 as pm
 import theano.tensor as tt
@@ -76,7 +77,6 @@ def compute_metropolis_hastings():
 
     nvd, mitre = counts(read_data())
     print(nvd, mitre)
-    exit()
     nvd_observed = {
         metric: np.array(list(data.values())) for metric, data in nvd.items()
     }
@@ -264,14 +264,16 @@ def read_data():
             if os.path.isfile(f"../data/nvd_{CVSS_VERSION}_cleaned.pkl"):
                 nvd = utils.read_data(f"../data/nvd_{CVSS_VERSION}_cleaned.pkl")
             else:
+                # TODO fix this
                 nvd = parse_data.parse("nvd", CVSS_VERSION)
 
             if os.path.isfile(f"../data/mitre_{CVSS_VERSION}_cleaned.pkl"):
                 mitre = utils.read_data(f"../data/mitre_{CVSS_VERSION}_cleaned.pkl")
             else:
+                # TODO fix this
                 mitre = parse_data.parse("mitre", CVSS_VERSION)
 
-            return {"nvd": nvd["data"], "mitre": mitre["data"]}
+            return {"nvd": nvd, "mitre": mitre}
         case "overlap":
             nvd, mitre = overlap.overlap()
             if nvd is None:

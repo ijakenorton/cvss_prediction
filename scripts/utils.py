@@ -56,7 +56,7 @@ v3_dimensions = {
         "l": "LOW",
         "h": "HIGH",
     },
-    "userinteraction": {
+    "userInteraction": {
         "n": "NONE",
         "r": "REQUIRED",
     },
