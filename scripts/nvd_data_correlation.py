@@ -2,7 +2,7 @@ import os
 import json
 
 
-def read_data(version_number):
+def read_data(version_number: int):
     data = []
     ids = set()
 
