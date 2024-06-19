@@ -55,7 +55,7 @@ def make_lines(data):
         for key in cvssData:
             if key in ["baseScore", "baseSeverity"]:
                 continue
-            outstr = f"{outstr}, {cvssData[key]}"
+            outstr = f"{outstr},{cvssData[key]}"
         output += outstr + "\n"
     return output
 
