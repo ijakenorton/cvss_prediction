@@ -1,0 +1,7 @@
+Look into this 
+https://theoryof.predictable.software/articles/a-closer-look-at-cvss-scores/
+
+@Tlopasha you can find CISA KEV and InTheWild API from a Google search. If you're digging into prioritization, I would
+recommend you have a look at EPSS, from first.org (responsible for the CVSS specification BTW): first.org/epss Like
+everything statistical related, read it cover to cover, with the fine prints. first.org/epss/api Last, have a look at
+SSVC: cisa.gov/stakeholder-specific-vulnerability-categorization-ssvc github.com/CERTCC/SSVC

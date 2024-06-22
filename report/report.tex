@@ -31,8 +31,97 @@
 	vulnerabilities that have been identified for specific code bases, such as software applications or
 	open libraries.}[https://nvd.nist.gov/general/cve-process]
 
+\subsection{Common Vulnerability Scoring System(CVSS)}
+
+\textit{The Common Vulnerability Scoring System (CVSS) provides a way to capture the principal characteristics of a
+	vulnerability and produce a numerical score reflecting its severity. The numerical score can then be translated
+	into a qualitative representation (such as low, medium, high, and critical) to help organizations properly
+	assess and prioritize their vulnerability management
+	processes.}
+%[https://www.first.org/cvss/#:~:text=The%20Common%20Vulnerability%20Scoring%20System,numerical%20score%20reflecting%20its%20severity.]
+
+CVSS scoring is a high level way to break up vulnerabilities into different categories so that
+organisations can choose which vulnerability to focus on first. CVSS in broken up into 3 distinct sections, base score,
+temporal and environmental.
+
+For brevity I will only show the specifics of CVSS 3.1 as this is by far the most commonly used version, even if it is
+not the most recent.
+
+\subsubsection*{Base Score}
+
+\begin{itemize}
+
+	\begin{itemize}
+
+		\item Attack Vector -> Defines the avenues of attack that the vulnerability is open to. The more open a
+		      component is, the higher the score. This can have the values Network, Adjacent, Local and Physical.
+
+		\item Attack Complexity -> How complex the attack is so orchestrate. What are they prerequisites, how much
+		      domain knowledge/ background work in necessary, how much effort does the attacker need to invest to
+		      succeed. This can have the values Low or High. Low gives a higher base score.
+
+		\item Priviledges Required -> The degree of priviledges the user needs to complete the attack. Generally
+		      ranging from None, Low(e.g User level priviledge), High(e.g Administrator). The lower the priviledge
+		      the higher the base score.
+
+		\item User Interaction -> If the exploit requires another human user to make the attack possible, E.g
+		      clicking a phishing link. This is either None or Required, the score is highest when no user
+		      interaction is required.
+
+		\item Scope -> Defines if the attack can bleed into other security scopes. E.g access to one machine gives
+		      the ability to elevate privileges on other parts of the system. This can take Unchanged or Changed,
+		      the score being highest when a scope change occurs.
+
+		\item Confidentiality Impact -> Detemines what is the impact on the information access / disclosure to the
+		      attacker. This can be High, Low or None with High adding the most to the base score.
+
+		\item Integrity Impact -> Refers to the integrity of the information within the component. I.e could the
+		      data have been modified by the attacker. This has High, Low or None as categories with High adding the
+		      most to the base score.
+
+		\item Availability Impact -> Refers to the impact of the attack on the availability of the component. E.g
+		      the attacker taking the component off the network, denying the users access. This can haved High, Low
+		      and None with High adding the most to the base score.
+
+	\end{itemize}
+\end{itemize}
+%[https://www.first.org/cvss/v3.1/specification-document]
+\subsubsection*{Temporal}
+
+Temporal metrics describe the state of the exploit in relation to any further developments.
+
+\bigskip
+
+This could be:
+\begin{itemize}
+
+	\item Exploit Code Maturity -> The state of the attack itself, e.g has this exploit been pulled off in the wild or is it currently academic.
+
+	\item Remidiation Level -> Broadly whether the exploit in question has been patched,
+
+	\item Report Confidence -> The degree of confidence in the CVE report itself, the report may be in early stages where not all of the
+	      information is known.
+
+\end{itemize}
+
+Temporal metrics would be useful in general for a CVSS score, however NVD do not store these temporal metrics. As far as
+I can tell there is no reason given for this specifically, though discourse[stack exchange] around the subject suggests that this is due
+to a lack of verifiable reporting. From my perspective both remidiation level and report confidence feel like they could
+have scores attributed to them, however finding verifiable reports on the exploits seen in the wild does seem more
+tricky, though there are two relatively new organisations on this front, CISA(public sector) and inthewild.org(private
+sector).
+%https://security.stackexchange.com/questions/270257/cvss-v3-and-v3-1-missing-temporal-metrics-exploit-code-maturity-and-remediation
+%https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+%https://inthewild.io/
+
+\subsubsection*{Environmental}
+
+The environment metrics are there so that the specific user can modify the metrics to suit their specific circumstances,
+the general idea is that you can scale a metric higher or lower, as such I will not go into any more detail here.
+
 \section{Motive}
 \subsection{Should we use CVSS?}
+\todo[inline]{Read https://theoryof.predictable.software/articles/a-closer-look-at-cvss-scores/}
 
 There have been a few attempts at dethroning CVSS. It does have some shortcomings:
 
@@ -48,6 +137,7 @@ Historically unlikely, especially given the uptake for CVSS 4.0 is so poor.
 
 \subsubsection{Why 4.0 is not being used}
 \todo[inline]{See if there are any valid reasons why it isn't instead of just inertia}
+\todo[inline]{Honestly cannot find anything on the reasoning....}
 \section{Exploration of the Space}
 
 NVD is used by majority of studies as primary and sole data source.

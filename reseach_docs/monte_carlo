@@ -1,8 +1,0 @@
-Find the probability based on experimentation
-
-Probability of a dart landing in the circle is the number of times the dart hits the circle divided by the
-number of throws
-
-Accurate with high enough N and random distribution
-
-Sort of a brute force method, not always fast and not always interpretable
