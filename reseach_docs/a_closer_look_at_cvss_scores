@@ -1,0 +1,125 @@
+https://theoryof.predictable.software/articles/a-closer-look-at-cvss-scores/
+
+The every distribution of available scores?
+
+CVSS could plot up to 2592 possible variations of scores, however the score output only allows for
+101 values
+
+It is not a uniform distribution, do we want it to be? Looks like a normal distribution. 
+
+Full range is not used, the minimum score being 1.6, meaning there are only 85 different degrees
+
+Central limit theorem, CVSS resembles a galton board with more options towards the centre
+
+There is a hard limit at 0 and 10, this makes scores of 10 over represented as anything over 10 is clipped
+down
+
+Made it into a normal distribution using the constants
+
+High and critical reports are overrepresented, the data is spikey
+
+There is a focus on higher rated security issues as they are more important to report and spend time
+on, reporter incentives, for a product vendor, high scoring vulnerabilities could cause reputational
+damage
+
+This gives me the hibbie gibbies but also understandable
+
+The data between multiple years gives a R2 value of 0.99 which doesn't happen
+
+Scope metric was a big culprit for the data being dodge, however it has been removed from 4.0
+
+Other critiques
+---------------
+
+You are using it wrong
+
+CVSS is wrong
+
+Issues of things being defined wrong, attack vector network and local are ill-defined. Paradoxical
+case
+
+"They present a paradoxical case where a vulnerability against PDF readers is "Local" if you
+download the file and open it again, but "Network" if it renders immediately in a browser."
+
+Attack complexity has some temporal score embedded in it, attacks are easier if the software exists
+
+No remote vulnerability can be scored lower than 5.0
+
+CVSSv3 and 3.1 score higher than CVSS2
+
+"CVSS is mean for vulnerability severity, but folks use it to provide a ranking risk"
+
+Look into paper on security experts ranking a vulnerability up to 4 points different
+
+CVSS combines ordinal measures in a numerical way, eg fastest + fastest. People take averages, this
+makes no sense. Cannot take the average of critical and medium. If other statistical means were used
+to relate ordinal values together, these are not disclosed. Maybe they are now?
+
+Takeaway, it is in no way mathematically justified, and no obvious way to justify it, set of formula
+mutated to produce a normally distributed set of outcomes?
+
+Alternative Schemes
+-----------------
+
+Vendor schemes exist as the vendors for software become responsible for the classification of the
+vulnerabilities, if they find that CVSS does not accurately represent these, they may choose there
+own. #This does seem to potentially introduce bias....
+
+Red hat does use CVSS, but does not use for prioritization of flaws to fix
+
+Microsoft has multiple schemes, they don't seem to solve the problems either
+
+SSVC
+    Decision tree, only 36 permutations
+    Adds explicit connection between each of the decisions, instead of implicit
+    Ordinal on both sides, no false precision 
+    Combines temporal and base, the whole score must be updated upon new information
+    Maybe too simple?
+    Thoroughly documented
+    Combines CIA -> maybe that makes sense? Any loss on these is a really bad thing, though I guess
+    it is different depending on the business, C and I might be more important for some business
+    cases 
+EPSS
+    Purely numerical, has some analytical model which takes all the data about exploitations and
+    spits out a percentage chance on if an exploit will occur in the next 30 days
+    Factors such as"
+        Code exploitation (it's not clear to me what this is meant to entail, exactly)
+        Whether there is an entry in the Exploit DB
+        The number of references to other resources included in the National Vulnerability Database entry
+        Whether the vendor is Microsoft
+        Whether there is a module for the exploit available for the popular penetration toolkit
+        Metasploit"
+
+    Specifically avoided binning, numerical scores are more accurate and only take a little bit of
+    cognitive effort to parse.
+    Gives infinite resolution between two different exploits
+    Temporal in nature 
+        new information is fed into the model e.g metasploit post a
+        version of the exploit
+        The version of EPSS is constantly changing, the equation itself changes with the data
+    To be used as a supplement to CVSS, not a measurement of risk, it relates to the Threat
+    component of Risk = Threat x Vulnerability x Impact
+    EPSS maybe sheds more light on the less impactful exploits
+    Possibility vs probability
+Vulntology
+    Represents the causal model of th domain of software exploitation, does not try to assign
+    probability or possibility
+
+
+All share that they are newer and trying to solve some of the issues posited about CVSS, otherwise
+they are quite different
+
+"I am ambivalent about the inclusion of Exploitation status and Automatability. As noted above,
+threat intelligence vendors have long argued that CVSS without exploitation and exploitability data
+is sterile and incomplete; SSVC seems to take this to heart."
+
+Future of CVSS
+
+Future versions will not drastically change the model, tweaks to constants, changes in variables
+
+"If CVSS is an accurate gauge of a vulnerabilitys severity, there should be a linear correlation"
+which there is not.
+
+"Similarly, more exploits are developed for scores at 5 than for 6. Attackers do not appear to use
+CVSSv3.1 to prioritise their efforts. Why should defenders?"
+
