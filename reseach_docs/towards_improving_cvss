@@ -1,0 +1,75 @@
+https://insights.sei.cmu.edu/documents/574/2018_019_001_538372.pdf
+
+Towards Improving CVSS
+
+CVSS scoring isnt justified
+
+Missuse is widespread
+
+Base scores as direct vulnerability prioritization may be policy-- US government-- and payment card
+industry
+
+Mathematical operations is not defined between ordinal data
+
+Creates regression formula based on unspecified methods, no evidence or argument in favour of the
+robustness of the given formula
+
+CVSS scores severity not risk
+
+CVSS is designed to identify the technical severity of a vulnerability, people want to know risk of
+a vulnerability or flaw 
+
+CVSS does not account for
+    the type of information processed,
+    the proper operation of the system
+    the context in whicn the vulnerable software is used
+    the material consequences of an attack
+
+Failure to account for context
+    Broadly
+        Shared libraries
+            One size fits all does not capture complexity
+        Related or chained vulnerabilities
+            Only scope, maybe 4 helps with this?
+        Web vulnerabilities
+        Different interpretations of CVSS
+            Too simple
+                Failure to account for complexities
+            No guidance on how communities should intepret scores, such as how to map actions or
+            responses to either numbers or severity categories
+        Issues of context
+            Mitre worked with food and drug peeps to adjust stuff to the medical device context,
+            designed for more traditional IT vulnerabilities
+
+Failure to account for threat and consequences of vulnerability
+
+Should consider materical consequences? Threat likelihood and security issues that are not strictly
+defined as vulnerabilities. Intuitively if a vulnerability will plausibly harm humans or physical
+property, then it should be severe, e.g weapons, cars but CVSS does not account for this, not easy
+to fix
+Isn't this sorted by the environmental factors?
+
+Temporal metrics attempt to address exploit likelihood, but the default value assumes widespread
+exploitation which is not realistic
+
+Good evidence to suggest attackers are work-averse and only develop exploits when economically
+advantageous, exploit likelihood is not prioritized enough
+
+Look into CMSS and CCSS
+
+Operational Problems with scoring
+
+Assigning scores, inconsistency and inflation, vague guidelines
+
+Experts score things with a wide range of error / difference
+
+Scores inflate over time
+
+A way forward
+
+The scoring system needs to be redone from scratch
+Should be a clear rubric, tested by three scorers reaching high agreement
+
+Should be two-scorer agreement
+
+
