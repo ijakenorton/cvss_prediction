@@ -31,6 +31,7 @@
 	vulnerabilities that have been identified for specific code bases, such as software applications or
 	open libraries.}[https://nvd.nist.gov/general/cve-process]
 
+<<<<<<< Updated upstream
 \subsection{Common Vulnerability Scoring System(CVSS)}
 
 \textit{The Common Vulnerability Scoring System (CVSS) provides a way to capture the principal characteristics of a
@@ -119,6 +120,7 @@ sector).
 The environment metrics are there so that the specific user can modify the metrics to suit their specific circumstances,
 the general idea is that you can scale a metric higher or lower, as such I will not go into any more detail here.
 
+
 \section{Motive}
 \subsection{Should we use CVSS?}
 \todo[inline]{Read https://theoryof.predictable.software/articles/a-closer-look-at-cvss-scores/}
@@ -178,6 +180,12 @@ of CVSS base score as the primary framework used to prioritize remediation.
 %[graph me, https://cve.icu/CVEAll.html]
 
 
+Some alternatives
+\begin{itemize}
+	\item EPSS -> https://www.first.org/epss/
+	\item SSCV -> https://www.cisa.gov/stakeholder-specific-vulnerability-categorization-ssvc
+\end{itemize}
+
 \subsubsection{Why 4.0 is not being used}
 \todo[inline]{See if there are any valid reasons why it isn't instead of just inertia}
 \todo[inline]{Honestly cannot find anything on the reasoning....}
@@ -189,6 +197,9 @@ Reasoning:
 	\item Data is in a nice format
 	\item Largest collection of free CVE and CVSS scores, well maintained and in consistent format
 \end{itemize}
+
+NVD base their CVSS scores on publically availability information, this means that they cannot
+just take other vendors results without at least some prior vetting.
 
 Mitre is another large source.
 Reasoning:
