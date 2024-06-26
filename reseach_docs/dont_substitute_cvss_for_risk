@@ -1,0 +1,31 @@
+https://www.mcafee.com/blogs/other-blogs/mcafee-labs/dont-substitute-cvss-for-risk-scoring-system-inflates-importance-of-cve-2017-3735/
+
+Links to this https://nvd.nist.gov/vuln/detail/CVE-2017-3735, example of limitations of CVSS, used
+for far more than it should be
+
+Companies use the CVSS score on unfixed vulnerabilities and CVSS scores
+
+Probabilities of exploitation is the highest importance
+
+Marinate on
+"But as we shall see from the following analysis, a vulnerability itself, taken out of context,
+cannot be equated to risk. Furthermore, CVSS has an inherent problem in that the impact is averaged
+against the exploitability: From the attacker’s perspective, this is a mistake, because threat
+actors exploit vulnerabilities to suit their goals, not just because something is easy."
+
+The openssl exploit in reality should be rated very low as the impact is limited to a small text
+display, however it is rated as 5 - 7.5 depending on which CVSS version which is misleading 
+
+The impact of the exploit is also of paramount importance, it is a waste of a hackers time to do an
+easy exploit if they don't gain much from it
+
+"Attackers exploit vulnerabilitiethat further their goals."
+
+Again CVSS should be used in tandem with other tools.
+
+Should be used as an initial guideline for further analysis, triage
+
+"Still, despite the importance of CVSS to vulnerability triage, it is a mistake to confuse a CVSS
+score with a risk rating, as we shall see."
+
+
