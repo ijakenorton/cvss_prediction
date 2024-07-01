@@ -123,14 +123,21 @@ the general idea is that you can scale a metric higher or lower, as such I will 
 \subsection{Should we use CVSS?}
 \todo[inline]{Read https://theoryof.predictable.software/articles/a-closer-look-at-cvss-scores/}
 
+Wasn't originally designed to be used as a prioritization tool, however with the the massive rise in
+the number of vulnerabilities, security analysts latched onto it as something they could use.
+%[graph me daddy, https://cve.icu/CVEAll.html]
+%https://www.tenable.com/blog/why-you-need-to-stop-using-cvss-for-vulnerability-prioritization
 There have been a few attempts at dethroning CVSS. It does have some shortcomings:
 
-\begin{itemize}
-	\item Vaguerity
-	\item Oversaturation in some scoring bands
-	\item Seemingly arbitrage?/ complexity in the scoring function
-	\item etc...
-\end{itemize}
+\subsubsection*{Severity vs Risk}
+
+The severity ideally is a measure of the impact(worst case? Or different levels?). Risk is the
+likelihood of the event happening. However in CVSS this is a bit muddied as even the Base score
+includes some aspects which defaults to worst case risk.
+
+Should use some way of temporal / environmental. These are included in CVSS however, they are often
+not used and it may be better to use EPSS, which gives a numerical value of the likelihood of the
+event happening in 30 days based on previous history
 
 These being the case, would the cyber sec community use a new standard if one came along?
 Historically unlikely, especially given the uptake for CVSS 4.0 is so poor.
