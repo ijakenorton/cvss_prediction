@@ -7,3 +7,8 @@ recommend you have a look at EPSS, from first.org (responsible for the CVSS spec
 everything statistical related, read it cover to cover, with the fine prints. first.org/epss/api Last, have a look at
 SSVC: cisa.gov/stakeholder-specific-vulnerability-categorization-ssvc github.com/CERTCC/SSVC
 
+CVSS descriptions are very short
+
+https://arxiv.org/abs/2302.14172
+
+https://www.mcafee.com/blogs/other-blogs/mcafee-labs/dont-substitute-cvss-for-risk-scoring-system-inflates-importance-of-cve-2017-3735/
