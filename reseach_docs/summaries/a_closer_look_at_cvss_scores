@@ -47,7 +47,7 @@ No remote vulnerability can be scored lower than 5.0
 
 CVSSv3 and 3.1 score higher than CVSS2
 
-"CVSS is mean for vulnerability severity, but folks use it to provide a ranking risk"
+"CVSS is meant for vulnerability severity, but folks use it to provide a ranking risk"
 
 Look into paper on security experts ranking a vulnerability up to 4 points different
 

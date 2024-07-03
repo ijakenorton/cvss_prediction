@@ -1,0 +1,4 @@
+Same issues, cvss is broken, doesn't show the actual highest risk entries.
+
+It was originally designed as a measurement of risk, but due to complaints they pivoted to a score
+of severity while leaving in risk
