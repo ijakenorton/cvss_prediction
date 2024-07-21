@@ -6,10 +6,9 @@ So just for a little bit of motivation as to why, recently there was a widesprea
 called polyfill.io. For those that aren't aware, polyfill.io was a domain designed to house
 third-party scripts, which added functionality to old versions of a browser. However, this domain
 was bought by a malicious party and infected with malware. This went on to affect over 110,000
-websites through the polyfill.js dependency. Now, unfortunately, Polyfill has good company, and last
-year,
+websites through the polyfill.js dependency. Now, unfortunately, Polyfill has good company, and 
 
-29,065 new vulnerabilities. And this is, as you can see from this graph, a number that is only going
+last year there were 29,065 new vulnerabilities. And this is, as you can see from this graph, a number that is only going
 up year on year. Now, we need a way to record these vulnerabilities, and we do that using the common
 vulnerabilities and exposure system called CVEs. And so we can see here an example, and so we have
 the unique identifier, which is given by one of the CVE numbering authorities, such as GitHub and a
@@ -28,13 +27,18 @@ So if we were to look at the specification for privileges required, we would see
 pick the metric value non, the attacker is unauthorized prior to an attack and therefore does not
 require any access to settings or anything like that. So this is very dangerous because it means
 anyone could do this attack if they have access to the software component. And then if we were to
-look at high, this is talking about having administrative privileges, less likely and so we would give it a lower score from this metric even though it's called high.
+look at high, this is talking about having administrative privileges, less likely and so we would
+give it a lower score from this metric even though it's called high.
 
 So what is the life cycle of a CVE? So as you said, one of the CVE numbering authorities, say
 GitHub, would enumerate the CVE and post it to MITRE. Now MITRE are the company who came up with the
 CVE standard and they are the main database for it. And then this can be used by many of the third
 parties. So one of them would be the National Vulnerability Database, so NBD, and they are the
-primary resource as they do a bunch of the enriching of the CVSS scores themselves. Then it could be used, well it could be used before that, but it's used by IT professionals and consumers. They can check their dependencies to see if there are any outlying vulnerabilities and also get updates on just the space in general. And you can also add extra resources like a link to the GitHub or something like that, or the source code.
+primary resource as they do a bunch of the enriching of the CVSS scores themselves. Then it could be
+used, well it could be used before that, but it's used by IT professionals and consumers. They can
+check their dependencies to see if there are any outlying vulnerabilities and also get updates on
+just the space in general. And you can also add extra resources like a link to the GitHub or
+something like that, or the source code.
 
 Now, base metrics only show us the worst possible score, but we do have some other metrics, so one
 of them being the environmental score, and they are a way for a specific business to change the
@@ -74,47 +78,101 @@ encoded, as well as a bunch of other random cleaning.
 
 tasks.
 
-And then after that, I did a bit of an analysis between the two databases. So this is just a graph showing the counts of overlapping CVEs between MITRE and NVD. So there's something around a 40,000 overlap. And so we can see here that there is actually a difference in how these things are being rated. Now, NVD do all of their own ratings, or at least they check all of their own ratings, but MITRE, on the other hand, will take them from vendors,
+And then after that, I did a bit of an analysis between the two databases. So this is just a graph
+showing the counts of overlapping CVEs between MITRE and NVD. So there's something around a 40,000
+overlap. And so we can see here that there is actually a difference in how these things are being
+rated. Now, NVD do all of their own ratings, or at least they check all of their own ratings, but
+MITRE, on the other hand, will take them from vendors,
 
-strict to their own ratings. So we can see that there is a difference in that. MITRE, as a general rule, seemed to have more of an even spread over all the categories. Whether or not that's a good thing, I don't know, really. But yeah, but there is a definite difference in how these things are being rated. And then I wanted to do a little bit of a
+strict to their own ratings. So we can see that there is a difference in that. MITRE, as a general
+rule, seemed to have more of an even spread over all the categories. Whether or not that's a good
+thing, I don't know, really. But yeah, but there is a definite difference in how these things are
+being rated. And then I wanted to do a little bit of a
 
-I wanted to estimate the accuracy of each database, and to do that I used a hierarchical Bayesian model. This is based off a 2016 paper which did a...
+I wanted to estimate the accuracy of each database, and to do that I used a hierarchical Bayesian
+model. This is based off a 2016 paper which did a...
 
-sorry, which did a Bayesian analysis of around five different databases to do with CVSS scores and they were trying to see how accurate CVSS scores and things were. Unfortunately, as mentioned today, there are only really two good options. And I found that...
+sorry, which did a Bayesian analysis of around five different databases to do with CVSS scores and
+they were trying to see how accurate CVSS scores and things were. Unfortunately, as mentioned today,
+there are only really two good options. And I found that...
 
-This would give us, so NVD has around a 98 estimated percent chance accuracy for the low metric for the attack complexity and a 66 for high, whereas MITRE has around, has about 87 for low and 75 for high. Like the, it's maybe strange to look at, but the general rule was, NVD did better on this accuracy estimation in general,
+This would give us, so NVD has around a 98 estimated percent chance accuracy for the low metric for
+the attack complexity and a 66 for high, whereas MITRE has around, has about 87 for low and 75 for
+high. Like the, it's maybe strange to look at, but the general rule was, NVD did better on this
+accuracy estimation in general,
 
-it would do less good in sort of the gray areas and would do less good on the scores where it outputted things less. And then I also did a...
+it would do less good in sort of the gray areas and would do less good on the scores where it
+outputted things less. And then I also did a...
 
-I also did some CVSS score prediction. So I was bootstrapping off Cody's work and I have begun doing some of the training of a Distilbert model, which he will go into way more depth because I don't have time to. And I trained it on both the NVD and MITRE data. Unfortunately, I haven't got all the results in and by the looks of things, it's not looking like it's gonna make any meaningful improvement,
+I also did some CVSS score prediction. So I was bootstrapping off Cody's work and I have begun doing
+some of the training of a Distilbert model, which he will go into way more depth because I don't
+have time to. And I trained it on both the NVD and MITRE data. Unfortunately, I haven't got all the
+results in and by the looks of things, it's not looking like it's gonna make any meaningful
+improvement,
 
-worse, but that's just the way things go. So CVSS has an identity crisis. I found that many people weren't happy with CVSS, and this is one of the reasons. So when they released CVSS 2.0, first said, IT management need to prioritize these vulnerabilities and remediate those that pose the greatest risk. The Cohen vulnerability scoring system is an open framework that addresses this issue. However,
+worse, but that's just the way things go. So CVSS has an identity crisis. I found that many people
+weren't happy with CVSS, and this is one of the reasons. So when they released CVSS 2.0, first said,
+IT management need to prioritize these vulnerabilities and remediate those that pose the greatest
+risk. The Cohen vulnerability scoring system is an open framework that addresses this issue.
+However,
 
-When they released 3.1, which is the version that I've been doing all this analysis on, they said CVSS measures severity and not risk. So what is it? Well, it's kind of somewhere in between. The main takeaway is that you cannot just take the CVSS scores, especially the base scores as the BLNL. They don't tell you all the information.
+When they released 3.1, which is the version that I've been doing all this analysis on, they said
+CVSS measures severity and not risk. So what is it? Well, it's kind of somewhere in between. The
+main takeaway is that you cannot just take the CVSS scores, especially the base scores as the BLNL.
+They don't tell you all the information.
 
-The difference between severity and risk is a little bit up in the air, but generally the idea is that risk has more to do with likelihood. Unfortunately, this base score is used by many companies.
+The difference between severity and risk is a little bit up in the air, but generally the idea is
+that risk has more to do with likelihood. Unfortunately, this base score is used by many companies.
 
-There's a few US government and large industries that use it just for this. And there's another reason why this is a problem is because you can have poor ratings like this one. So this was a CVE vulnerability that came from the curl library. And this is the description, integer overflow vulnerability and tool operate.c. In curl, this version very large value as the retry delay. So essentially they didn't handle
+There's a few US government and large industries that use it just for this. And there's another
+reason why this is a problem is because you can have poor ratings like this one. So this was a CVE
+vulnerability that came from the curl library. And this is the description, integer overflow
+vulnerability and tool operate.c. In curl, this version very large value as the retry delay. So
+essentially they didn't handle
 
-the user putting in a value that was over the integer limit, and so it could potentially overflow, which resulted in undefined behavior. This gave a score of 9.8. Now, Daniel Stenberg, the original founder, did not agree with this, as he said this was a bug that they had fixed back in 2019, and this is something that came out recently.
+the user putting in a value that was over the integer limit, and so it could potentially overflow,
+which resulted in undefined behavior. This gave a score of 9.8. Now, Daniel Stenberg, the original
+founder, did not agree with this, as he said this was a bug that they had fixed back in 2019, and
+this is something that came out recently.
 
-And so he went to MITRE to try and get the CVE removed, which didn't happen. He may, I have just noticed that he is now part of the CVE numbering authorities. So he's taken control of his own CVE vulnerability disclosure. So.
+And so he went to MITRE to try and get the CVE removed, which didn't happen. He may, I have just
+noticed that he is now part of the CVE numbering authorities. So he's taken control of his own CVE
+vulnerability disclosure. So.
 
-Maybe he's trying to get it removed. I'm not sure if he's been successful. He then went on to NVD to get the score lowered, which he was successful in doing, and now it is a 3.3. But there was a bunch of time wasted, unfortunately, doing that. And it's just something to keep in mind. You cannot just blindly trust the CVS score.
+Maybe he's trying to get it removed. I'm not sure if he's been successful. He then went on to NVD to
+get the score lowered, which he was successful in doing, and now it is a 3.3. But there was a bunch
+of time wasted, unfortunately, doing that. And it's just something to keep in mind. You cannot just
+blindly trust the CVS score.
 
-Additionally, CVSS, this is the formula for CVSS, is a little bit suspect. There are many magic values here which are in no way backed up by anything mathematical, especially considering that they are adding and multiplying categorical scores. So this is a.
+Additionally, CVSS, this is the formula for CVSS, is a little bit suspect. There are many magic
+values here which are in no way backed up by anything mathematical, especially considering that they
+are adding and multiplying categorical scores. So this is a.
 
-distribution of all the possible CVSS scores. So we can see it looks like a vaguely normal-like distribution. However, as we just saw briefly from that formula, there's no mathematical basis as to why this is a normal distribution, and it has been posited that they just deliberately made it like this, which is interesting.
+distribution of all the possible CVSS scores. So we can see it looks like a vaguely normal-like
+distribution. However, as we just saw briefly from that formula, there's no mathematical basis as to
+why this is a normal distribution, and it has been posited that they just deliberately made it like
+this, which is interesting.
 
-And then the scores are suspiciously similar. So if we look, this is the distribution of all the scores in 2019 of all the count of reports. And.
+And then the scores are suspiciously similar. So if we look, this is the distribution of all the
+scores in 2019 of all the count of reports. And.
 
-We can see here that they're vaguely swayed towards the upper end into these distinct buckets, probably because of some rounding. And then if we look at 2020, very similar. And we look at 2021, very similar. And if we look at the R squared...
+We can see here that they're vaguely swayed towards the upper end into these distinct buckets,
+probably because of some rounding. And then if we look at 2020, very similar. And we look at 2021,
+very similar. And if we look at the R squared...
 
 correlation between the two, you can see that it's 0.99, which is very high and kind of un-
 
-in this sort of setting, so a little bit strange. So then onto some future work. Surprisingly, I am gonna stay doing research on CVSS and CVEs. My primary focus will be looking into how can we make CVE, how can we clean up the CVE data so that it is more useful to machine learning models. Cody will, up next, will show you a few examples of,
+in this sort of setting, so a little bit strange. So then onto some future work. Surprisingly, I am
+gonna stay doing research on CVSS and CVEs. My primary focus will be looking into how can we make
+CVE, how can we clean up the CVE data so that it is more useful to machine learning models. Cody
+will, up next, will show you a few examples of,
 
-CVE descriptions, but just know that there are many, many bad examples that do not give us good descriptions of the whole problem. So I'm going to be working on that as well as doing some clustering of the data and seeing how, seeing if I can maybe map it to CWEs, the Common Weakness Enumeration, which has kind of been done, but it'd be interesting to do that in a more machine learning type sense, and other things along that vein not fully figured out yet. Awesome. Thank you.
+CVE descriptions, but just know that there are many, many bad examples that do not give us good
+descriptions of the whole problem. So I'm going to be working on that as well as doing some
+clustering of the data and seeing how, seeing if I can maybe map it to CWEs, the Common Weakness
+Enumeration, which has kind of been done, but it'd be interesting to do that in a more machine
+learning type sense, and other things along that vein not fully figured out yet. Awesome. Thank you.
 
-Any questions? I do have some a little bit of other information that I didn't manage to fit in so if you have any other questions I can I can just do that instead. Thank you.
+Any questions? I do have some a little bit of other information that I didn't manage to fit in so if
+you have any other questions I can I can just do that instead. Thank you.
 
