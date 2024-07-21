@@ -6,6 +6,10 @@ scripts/__pycache__/
 **/*.fls
 **/*.out
 **/*.log
+**/*.bbl
+**/*.bcf
+**/*.blg
 **/*.synctex.gz
 **/*.aux
 **/*.fdb_latexmk
+**/*.run.xml
