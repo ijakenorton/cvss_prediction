@@ -1,13 +1,4 @@
 
-OK, hi. So I'm Jake Norton. And today I'm going to be talking to you about my exploration of the
-common vulnerability scoring system.
-
-So just for a little bit of motivation as to why, recently there was a widespread vulnerability
-called polyfill.io. For those that aren't aware, polyfill.io was a domain designed to house
-third-party scripts, which added functionality to old versions of a browser. However, this domain
-was bought by a malicious party and infected with malware. This went on to affect over 110,000
-websites through the polyfill.js dependency. Now, unfortunately, Polyfill has good company, and 
-
 last year there were 29,065 new vulnerabilities. And this is, as you can see from this graph, a number that is only going
 up year on year. Now, we need a way to record these vulnerabilities, and we do that using the common
 vulnerabilities and exposure system called CVEs. And so we can see here an example, and so we have
@@ -22,13 +13,6 @@ using the common vulnerability scoring system. And this is a high level way to b
 vulnerabilities into different categories. So to make a user score, we would fill in this little
 chart here. So these are all the different metrics, attack vector, attack complexity. And these
 across here are the possible categorical values that you can set them to.
-
-So if we were to look at the specification for privileges required, we would see that if you were to
-pick the metric value non, the attacker is unauthorized prior to an attack and therefore does not
-require any access to settings or anything like that. So this is very dangerous because it means
-anyone could do this attack if they have access to the software component. And then if we were to
-look at high, this is talking about having administrative privileges, less likely and so we would
-give it a lower score from this metric even though it's called high.
 
 So what is the life cycle of a CVE? So as you said, one of the CVE numbering authorities, say
 GitHub, would enumerate the CVE and post it to MITRE. Now MITRE are the company who came up with the
