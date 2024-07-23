@@ -128,33 +128,35 @@ For brevity I will only show the specifics of CVSS 3.1 as this is by far the mos
 
 \begin{itemize}
 
-	\item Attack Vector -> Defines the avenues of attack that the vulnerability is open to. The more open a component is, the higher the score. This
+	\item Attack Vector: Defines the avenues of attack that the vulnerability is open to. The more open a component is, the higher the score. This
 	      can have the values Network, Adjacent, Local and Physical.
 
-	\item Attack Complexity -> How complex the attack is so orchestrate. What are they prerequisites, how much domain knowledge/ background work in
+	\item Attack Complexity: How complex the attack is so orchestrate. What are they prerequisites, how much domain knowledge/ background work in
 	      necessary, how much effort does the attacker need to invest to succeed. This can have the values Low or High. Low gives a higher base score.
 
-	\item Priviledges Required -> The degree of priviledges the user needs to complete the attack. Generally ranging from None, Low(e.g User level
+	\item Priviledges Required: The degree of priviledges the user needs to complete the attack. Generally ranging from None, Low(e.g User level
 	      priviledge), High(e.g Administrator). The lower the priviledge the higher the base score.
 
-	\item User Interaction -> If the exploit requires another human user to make the attack possible, E.g clicking a phishing link. This is either
+	\item User Interaction: If the exploit requires another human user to make the attack possible, E.g clicking a phishing link. This is either
 	      None or Required, the score is highest when no user interaction is required.
 
-	\item Scope -> Defines if the attack can bleed into other security scopes. E.g access to one machine gives the ability to elevate privileges on
+	\item Scope: Defines if the attack can bleed into other security scopes. E.g access to one machine gives the ability to elevate privileges on
 	      other parts of the system. This can take Unchanged or Changed, the score being highest when a scope change occurs.
 
-	\item Confidentiality Impact -> Detemines what is the impact on the information access / disclosure to the attacker. This can be High, Low or None
+	\item Confidentiality Impact: Detemines what is the impact on the information access / disclosure to the attacker. This can be High, Low or None
 	      with High adding the most to the base score.
 
-	\item Integrity Impact -> Refers to the integrity of the information within the component. I.e could the data have been modified by the attacker.
+	\item Integrity Impact: Refers to the integrity of the information within the component. I.e could the data have been modified by the attacker.
 	      This has High, Low or None as categories with High adding the most to the base score.
 
-	\item Availability Impact -> Refers to the impact of the attack on the availability of the component. E.g the attacker taking the component off
+	\item Availability Impact: Refers to the impact of the attack on the availability of the component. E.g the attacker taking the component off
 	      the network, denying the users access. This can haved High, Low and None with High adding the most to the base score.
 
 \end{itemize}
 
-This is a summarized version of the \href{https://www.first.org/cvss/v3.1/specification-document}{3.1 specification document provided by FIRST}.
+\footnotesize{This is a summarized version of the
+	\href{https://www.first.org/cvss/v3.1/specification-document}{3.1 specification document
+		provided by FIRST}.}
 
 
 \subsubsection*{Temporal}
@@ -166,17 +168,18 @@ Temporal metrics describe the state of the exploit in relation to any further de
 This could be:
 \begin{itemize}
 
-	\item Exploit Code Maturity -> The state of the attack itself, e.g has this exploit been pulled off in the wild or is it currently academic.
+	\item Exploit Code Maturity: The state of the attack itself, e.g has this exploit been pulled off in the wild or is it currently academic.
 
-	\item Remidiation Level -> Broadly whether the exploit in question has been patched,
+	\item Remidiation Level: Broadly whether the exploit in question has been patched,
 
-	\item Report Confidence -> The degree of confidence in the CVE report itself, the report may be in early stages where not all of the
+	\item Report Confidence: The degree of confidence in the CVE report itself, the report may be in early stages where not all of the
 	      information is known.
 
 \end{itemize}
 
-\href{https://www.first.org/cvss/v3.1/specification-document}{3.1 specification document provided by
-	FIRST}.
+\footnotesize{This is a summarized version of the
+	\href{https://www.first.org/cvss/v3.1/specification-document}{3.1 specification document
+		provided by FIRST}.}
 
 Temporal metrics would be useful in general for a CVSS score, however NVD do not store these temporal metrics. As far as I can tell there is no reason
 given for this specifically, though discourse
@@ -207,10 +210,37 @@ in a JSON dump retrieved also in March 2024. The format for usage is a bit more 
 strings(a simple text encoding). These are not hard to parse, though they are stored slightly different between versions, as well as sometimes being
 inconsistent(some had temporal metrics within the vector strings).
 
+\subsubsection{Priliminary Data exploration}
+
+The scorers for both NVD and MITRE do rate CVEs reasonably similar, one pattern you can see as shown by Fig~\ref{fig:counts}, is that NVD generally
+give the most common categorical output more ratings. They are less spread out across the full range of values. In addition, if we look at the
+attackComplexity metric, there is a reasonably large difference in how they are rated, MITRE rate a lot more of the metrics with a low score. This
+points to some of the difficulty with this kind of rating system, while in theory there is a true value for these metrics, it requires knowledge of
+the whole space around each of the vulnerabilities, this knowledge will always vary marker to marker.
+
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\textwidth]{figures/combined_overlap.png}
+	\caption{\label{fig:counts}Comparison of CVSS ratings between MITRE and NVD}
+\end{figure}
+
+\section{Methods}
+
+\subsection{Hierarchical Bayesian Model}
+
+The analysis between the two databases is done with a hierarchical bayesian model. This type of model is suitable when you expect the population to be
+similar in some respects but different in others. In this case they share common knowledge towards the vulnerability mostly, but differ the experience
+of the people rating the metrics.\cite{bayes} The model is similar to the original model, it assumes that there exists a true value for each CVSS
+dimension. A difference from the original paper is that there is no longer consistently 3 variables for each CVSS metric, varying from 2 to 4
+categorical choices.
+
+Additionally
+we initialise confusion matrices for each database
 \section{Discussion}
 
 \subsection{Should we use CVSS?}
-\todo[inline]{Read https://theoryof.predictable.software/articles/a-closer-look-at-cvss-scores/}
+% \todo[inline]{Read https://theoryof.predictable.software/articles/a-closer-look-at-cvss-scores/}
 
 CVSS has an identity crisis. Throughout its history, when originally released it was touted as a
 solution to the task of prioritising CVE remediation as well as an assessment of risk, "IT management must identify and assess vulnera-
@@ -236,17 +266,17 @@ not used and it may be better to use EPSS, which gives a numerical value of the 
 event happening in 30 days based on previous history
 
 FIRST give this definition of severity vs risk
-\textit{
-	CVSS Base scores (CVSS-B) represent “Technical Severity”
-	Only takes into consideration the attributes of the vulnerability itself
-	It is not recommended to use this alone to determine remediation priority
+\textit{}
+% CVSS Base scores (CVSS-B) represent "Technical Severity"
+% Only takes into consideration the attributes of the vulnerability itself
+% It is not recommended to use this alone to determine remediation priority
 
-	Risk is often a religious topic… but…
-	CVSS-BTE scores take into consideration the attributes of the…
-	Base Score
-	Threat associated with the vulnerability
-	Environmental controls / Criticality
-}
+% Risk is often a religious topic… but…
+% CVSS-BTE scores take into consideration the attributes of the…
+% Base Score
+% Threat associated with the vulnerability
+% Environmental controls / Criticality 
+% }
 
 As mentioned by FIRST, the exact differences between risk and severity are strangely nebulous,
 however here is a more usable definition as stated by NIST
@@ -260,58 +290,9 @@ likelihood of occurrence"
 There have been myriad complaints about this topic, generally due to the nature of how CVSS is often
 used, especially in the US. There are many known occurences of the US government mandating the use
 of CVSS base score as the primary framework used to prioritize remediation.
-% \section{\LaTeX{} markup examples}
-% \label{sec:examples}
-
-% \subsection{Sections}
-
-% Use section and subsection commands to organise your document. \LaTeX{} handles all the formatting and numbering automatically. Use ref and label commands for cross-references.
-
-% \subsection{Comments}
-
-% Comments might be useful during the writing process, as reminders or questions to your supervisor (who should get a chance to comment on your report).  Comments can be added to the margins of the document using the \todo{Here's a comment in the margin!} \verb$\todo{}$ command, as shown in the example on the right. You can also add inline comments too:
-
-% \todo[inline, color=green!40]{This is an inline comment.}
-
-% \subsection{Tables and Figures}
-
-% Use the table and tabular commands for basic tables --- see Table~\ref{tab:widgets}, for example. You can include a figure (JPEG, PNG or PDF) with the \verb$\includegraphics$ command as in the code for Figure~\ref{fig:frog} below.
-
-% \begin{table}
-% 	\centering
-% 	\begin{tabular}{l|r}
-% 		Item    & Quantity \\\hline
-% 		Widgets & 42       \\
-% 		Gadgets & 13
-% 	\end{tabular}
-% 	\caption{\label{tab:widgets}An example table.}
-% \end{table}
-
-% \subsection{Mathematics}
-
-% \LaTeX{} is great at typesetting mathematics. Let $X_1, X_2, \ldots, X_n$ be a sequence of independent and identically distributed random variables with $\text{E}[X_i] = \mu$ and $\text{Var}[X_i] = \sigma^2 < \infty$, and let
-% $$S_n = \frac{X_1 + X_2 + \cdots + X_n}{n}
-% 	= \frac{1}{n}\sum_{i}^{n} X_i$$
-% denote their mean. Then as $n$ approaches infinity, the random variables $\sqrt{n}(S_n - \mu)$ converge in distribution to a normal $\mathcal{N}(0, \sigma^2)$.
-
-% \subsection{Lists}
-
-% You can make lists with automatic numbering \dots
-
-% \begin{enumerate}
-% 	\item Like this,
-% 	\item and like this.
-% \end{enumerate}
-% \dots or bullet points \dots
-% \begin{itemize}
-% 	\item Like this,
-% 	\item and like this.
-% \end{itemize}
-
-% \section{Conclusion}
 
 
-% \printbibliography[title={References}]
+\printbibliography[title={References}]
 
 
 
@@ -375,3 +356,53 @@ cybersecurity by enhancing the precision of threat severity assessments.
 
 
 \end{document}
+
+% \section{\LaTeX{} markup examples}
+% \label{sec:examples}
+
+% \subsection{Sections}
+
+% Use section and subsection commands to organise your document. \LaTeX{} handles all the formatting and numbering automatically. Use ref and label commands for cross-references.
+
+% \subsection{Comments}
+
+% Comments might be useful during the writing process, as reminders or questions to your supervisor (who should get a chance to comment on your report).  Comments can be added to the margins of the document using the \todo{Here's a comment in the margin!} \verb$\todo{}$ command, as shown in the example on the right. You can also add inline comments too:
+
+% \todo[inline, color=green!40]{This is an inline comment.}
+
+% \subsection{Tables and Figures}
+
+% Use the table and tabular commands for basic tables --- see Table~\ref{tab:widgets}, for example. You can include a figure (JPEG, PNG or PDF) with the \verb$\includegraphics$ command as in the code for Figure~\ref{fig:frog} below.
+
+% \begin{table}
+% 	\centering
+% 	\begin{tabular}{l|r}
+% 		Item    & Quantity \\\hline
+% 		Widgets & 42       \\
+% 		Gadgets & 13
+% 	\end{tabular}
+% 	\caption{\label{tab:widgets}An example table.}
+% \end{table}
+
+% \subsection{Mathematics}
+
+% \LaTeX{} is great at typesetting mathematics. Let $X_1, X_2, \ldots, X_n$ be a sequence of independent and identically distributed random variables with $\text{E}[X_i] = \mu$ and $\text{Var}[X_i] = \sigma^2 < \infty$, and let
+% $$S_n = \frac{X_1 + X_2 + \cdots + X_n}{n}
+% 	= \frac{1}{n}\sum_{i}^{n} X_i$$
+% denote their mean. Then as $n$ approaches infinity, the random variables $\sqrt{n}(S_n - \mu)$ converge in distribution to a normal $\mathcal{N}(0, \sigma^2)$.
+
+% \subsection{Lists}
+
+% You can make lists with automatic numbering \dots
+
+% \begin{enumerate}
+% 	\item Like this,
+% 	\item and like this.
+% \end{enumerate}
+% \dots or bullet points \dots
+% \begin{itemize}
+% 	\item Like this,
+% 	\item and like this.
+% \end{itemize}
+
+% \section{Conclusion}
