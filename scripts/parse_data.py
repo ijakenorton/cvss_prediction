@@ -43,9 +43,12 @@ def parse(source: str, version: int):
 
 
 def make_lines(data):
+    count = 0
     output = ""
     for d in data["data"]:
         if "description" not in d.keys():
+            count += 1
+
             continue
 
         outstr = (
@@ -57,6 +60,8 @@ def make_lines(data):
                 continue
             outstr = f"{outstr},{cvssData[key]}"
         output += outstr + "\n"
+    print(count)
+    print(len(data["data"]))
     return output
 
 
@@ -64,7 +69,7 @@ def make_combined_csv(version: int) -> None:
     nvd_data = utils.read_data(f"../data/nvd_{version}_cleaned.pkl")
     mitre_data = utils.read_data(f"../data/mitre_{version}_cleaned.pkl")
 
-    with open(f"../data/combined_{version}.csv", "w") as f:
+    with open(f"../data/test_combined_{version}.csv", "w") as f:
         f.write(f"{make_lines(nvd_data)}")
         f.write(f"{make_lines(mitre_data)}\n")
 
