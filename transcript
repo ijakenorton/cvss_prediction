@@ -94,7 +94,8 @@ have time to. And I trained it on both the NVD and MITRE data. Unfortunately, I 
 results in and by the looks of things, it's not looking like it's gonna make any meaningful
 improvement,
 
-worse, but that's just the way things go. So CVSS has an identity crisis. I found that many people
+worse, but that's just the way things go. 
+So CVSS has an identity crisis. I found that many people
 weren't happy with CVSS, and this is one of the reasons. So when they released CVSS 2.0, first said,
 IT management need to prioritize these vulnerabilities and remediate those that pose the greatest
 risk. The Cohen vulnerability scoring system is an open framework that addresses this issue.
