@@ -500,28 +500,37 @@ me to believe that there is a chance that incorrect scores can end up corrupting
 
 \subsection{CVSS Prediction}
 
+Below in Table~\ref{tab:distil_part1} Table~\ref{tab:distil_part2} show the results of the
+Distilbert model trained on the combination of NVD and MITRE data. Unfortunately this basically has
+a purely negative effect on all metrics, with the caveat that some of the standard deviations are
+lower. Additional note is the balanced accuracy for some metrics looks a bit weird, I believe that
+is due to the model not outputing some of the categorical options for that metric. This applies to
+all the balanced accuracy apart from the Priorities Required(PR) and Confidentiality(C). As this was
+done only recently I have not looked into this issue in-depth to see why this is happening, but I
+will in the future. As to why the model performs worse, my theory is that the added data, and
+therefore the overlapping CVEs with different scores confuses the model. I thought this may have
+given the model a better chance of generalising on the data, however this does not appear to be the
+case.
+
 \begin{table}[H]
 	\centering
-	\label{tab:3p1compp1}
+	\label{tab:distil_part1}
 	\resizebox{\textwidth}{!}{%
 		\begin{tabular}{llcccc}
 			\toprule
-			\textbf{Metric} & \textbf{Model} & \textbf{AV}           & \textbf{AC}           & \textbf{PR}           & \textbf{UI}           \\
+			\textbf{Metric} & \textbf{Model}  & \textbf{AV}           & \textbf{AC}  & \textbf{PR}           & \textbf{UI}           \\
 			\midrule
 			\multirow{2}{*}{Accuracy}
-			                & DistilBERT     & \textbf{91.28 ± 0.26} & 95.64 ± 0.68          & \textbf{82.77 ± 0.24} & \textbf{93.86 ± 0.19} \\
-			                & T5-Small       & 86.41 ± 0.30          & \textbf{95.93 ± 0.31} & 74.43 ± 1.44          & 89.30 ± 0.62          \\
-			                & XLNet          & 73.21 ± 0.18          & 95.11 ± 0.13          & 59.43 ± 0.30          & 69.81 ± 5.45          \\
+			                & DistilBERT-Cody & \textbf{91.28 ± 0.26} & 95.64 ± 0.68 & \textbf{82.77 ± 0.24} & \textbf{93.86 ± 0.19} \\
+			                & DistilBERT-Jake & 72.81 ± 0.32          & 92.62 ± 0.15 & 81.18 ± 0.18          & 66.35 ± 0.24          \\
 			\midrule
 			\multirow{2}{*}{F1}
-			                & DistilBERT     & \textbf{90.98 ± 0.31} & 93.85 ± 1.39          & \textbf{82.53 ± 0.26} & \textbf{93.82 ± 0.19} \\
-			                & T5-Small       & 84.69 ± 0.34          & \textbf{94.61 ± 0.56} & 71.91 ± 1.76          & 89.03 ± 0.67          \\
-			                & XLNet          & 61.92 ± 0.26          & 92.73 ± 0.19          & 44.30 ± 0.37          & 59.04 ± 10.35         \\
+			                & DistilBERT-Cody & \textbf{90.98 ± 0.31} & 93.85 ± 1.39 & \textbf{82.53 ± 0.26} & \textbf{93.82 ± 0.19} \\
+			                & DistilBERT-Jake & 61.36 ± 0.42          & 89.08 ± 0.22 & 80.96 ± 0.19          & 52.93 ± 0.31          \\
 			\midrule
 			\multirow{2}{*}{Bal Acc}
-			                & DistilBERT     & \textbf{67.88 ± 2.11} & 55.82 ± 7.23          & \textbf{75.98 ± 0.47} & \textbf{92.46 ± 0.21} \\
-			                & T5-Small       & 41.19 ± 0.34          & \textbf{59.22 ± 2.53} & 56.19 ± 2.41          & 85.83 ± 0.94          \\
-			                & XLNet          & 25.04 ± 0.07          & 50.00 ± 0.00          & 33.33 ± 0.00          & 54.90 ± 9.81          \\
+			                & DistilBERT-Cody & \textbf{67.88 ± 2.11} & 55.82 ± 7.23 & \textbf{75.98 ± 0.47} & \textbf{92.46 ± 0.21} \\
+			                & DistilBERT-Jake & 25.00 ± 0.00          & 50.00 ± 0.00 & 75.18 ± 0.31          & 50.00 ± 0.00          \\
 			\bottomrule
 		\end{tabular}
 	}
@@ -530,36 +539,97 @@ me to believe that there is a chance that incorrect scores can end up corrupting
 
 \begin{table}[H]
 	\centering
-	\label{tab:3p1compp2}
+	\label{tab:distil_part2}
 	\resizebox{\textwidth}{!}{%
 		\begin{tabular}{llcccc}
 			\toprule
-			\textbf{Metric} & \textbf{Model} & \textbf{S}            & \textbf{C}            & \textbf{I}            & \textbf{A}            \\
+			\textbf{Metric} & \textbf{Model}  & \textbf{S}            & \textbf{C}            & \textbf{I}            & \textbf{A}            \\
 			\midrule
 			\multirow{2}{*}{Accuracy}
-			                & DistilBERT     & \textbf{96.38 ± 0.09} & \textbf{86.24 ± 0.20} & \textbf{87.15 ± 0.10} & \textbf{88.70 ± 0.10} \\
-			                & T5-Small       & 94.96 ± 0.33          & 78.10 ± 0.90          & 76.77 ± 0.86          & 83.28 ± 0.84          \\
-			                & XLNet          & 84.44 ± 3.84          & 59.37 ± 2.99          & 52.33 ± 3.62          & 65.22 ± 9.63          \\
+			                & DistilBERT-Cody & \textbf{96.38 ± 0.09} & \textbf{86.24 ± 0.20} & \textbf{87.15 ± 0.10} & \textbf{88.70 ± 0.10} \\
+			                & DistilBERT-Jake & 80.21 ± 0.16          & 82.45 ± 0.11          & 45.71 ± 0.26          & 52.53 ± 0.23          \\
 			\midrule
 			\multirow{2}{*}{F1}
-			                & DistilBERT     & \textbf{96.30 ± 0.10} & \textbf{86.09 ± 0.21} & \textbf{87.11 ± 0.10} & \textbf{88.04 ± 0.11} \\
-			                & T5-Small       & 94.73 ± 0.36          & 76.89 ± 1.22          & 76.43 ± 0.84          & 82.47 ± 0.83          \\
-			                & XLNet          & 78.00 ± 6.76          & 45.49 ± 6.12          & 37.88 ± 6.40          & 55.44 ± 16.66         \\
+			                & DistilBERT-Cody & \textbf{96.30 ± 0.10} & \textbf{86.09 ± 0.21} & \textbf{87.11 ± 0.10} & \textbf{88.04 ± 0.11} \\
+			                & DistilBERT-Jake & 71.40 ± 0.22          & 82.34 ± 0.12          & 28.68 ± 0.28          & 36.18 ± 0.27          \\
 			\midrule
 			\multirow{2}{*}{Bal Acc}
-			                & DistilBERT     & \textbf{91.57 ± 0.43} & \textbf{82.70 ± 0.36} & \textbf{85.81 ± 0.10} & \textbf{64.01 ± 0.13} \\
-			                & T5-Small       & 87.41 ± 0.85          & 69.18 ± 1.78          & 73.32 ± 0.70          & 57.55 ± 1.40          \\
-			                & XLNet          & 56.05 ± 12.10         & 37.34 ± 8.01          & 39.51 ± 7.58          & 40.54 ± 8.89          \\
+			                & DistilBERT-Cody & \textbf{91.57 ± 0.43} & \textbf{82.70 ± 0.36} & \textbf{85.81 ± 0.10} & \textbf{64.01 ± 0.13} \\
+			                & DistilBERT-Jake & 50.00 ± 0.00          & 79.85 ± 0.23          & 33.33 ± 0.00          & 33.33 ± 0.00          \\
 			\bottomrule
 		\end{tabular}
 	}
 	\caption{Comparison of the effects of the X pre-trained models on the CVSS v3.1 dataset (Part 2).}
 \end{table}
 
-The models did not perform better than
+
 \section{Discussion}
 
 \subsection{Should we use CVSS?}
+\todo[inline]{Note, a lot of this subsection is very rough/ transcript from presentation and I will be
+	cleaning it up}
+So CVSS has an identity crisis. I found that many people
+weren't happy with CVSS, and this is one of the reasons. So when they released CVSS 2.0, first said,
+IT management need to prioritize these vulnerabilities and remediate those that pose the greatest
+risk. The Cohen vulnerability scoring system is an open framework that addresses this issue.
+However,
+
+When they released 3.1, which is the version that I've been doing all this analysis on, they said
+CVSS measures severity and not risk. So what is it? Well, it's kind of somewhere in between. The
+main takeaway is that you cannot just take the CVSS scores, especially the base scores as the BLNL.
+They don't tell you all the information.
+
+The difference between severity and risk is a little bit up in the air, but generally the idea is
+that risk has more to do with likelihood. Unfortunately, this base score is used by many companies.
+
+There's a few US government and large industries that use it just for this. And there's another
+reason why this is a problem is because you can have poor ratings like this one. So this was a CVE
+vulnerability that came from the curl library. And this is the description, integer overflow
+vulnerability and tool operate.c. In curl, this version very large value as the retry delay. So
+essentially they didn't handle
+
+the user putting in a value that was over the integer limit, and so it could potentially overflow,
+which resulted in undefined behavior. This gave a score of 9.8. Now, Daniel Stenberg, the original
+founder, did not agree with this, as he said this was a bug that they had fixed back in 2019, and
+this is something that came out recently.
+
+And so he went to MITRE to try and get the CVE removed, which didn't happen. He may, I have just
+noticed that he is now part of the CVE numbering authorities. So he's taken control of his own CVE
+vulnerability disclosure. So.
+
+Maybe he's trying to get it removed. I'm not sure if he's been successful. He then went on to NVD to
+get the score lowered, which he was successful in doing, and now it is a 3.3. But there was a bunch
+of time wasted, unfortunately, doing that. And it's just something to keep in mind. You cannot just
+blindly trust the CVS score.
+
+Additionally, CVSS, this is the formula for CVSS, is a little bit suspect. There are many magic
+values here which are in no way backed up by anything mathematical, especially considering that they
+are adding and multiplying categorical scores. So this is a.
+
+distribution of all the possible CVSS scores. So we can see it looks like a vaguely normal-like
+distribution. However, as we just saw briefly from that formula, there's no mathematical basis as to
+why this is a normal distribution, and it has been posited that they just deliberately made it like
+this, which is interesting.
+
+And then the scores are suspiciously similar. So if we look, this is the distribution of all the
+scores in 2019 of all the count of reports. And.
+
+We can see here that they're vaguely swayed towards the upper end into these distinct buckets,
+probably because of some rounding. And then if we look at 2020, very similar. And we look at 2021,
+very similar. And if we look at the R squared...
+
+correlation between the two, you can see that it's 0.99, which is very high and kind of un-
+
+in this sort of setting, so a little bit strange. So then onto some future work. Surprisingly, I am
+gonna stay doing research on CVSS and CVEs. My primary focus will be looking into how can we make
+CVE, how can we clean up the CVE data so that it is more useful to machine learning models. Cody
+will, up next, will show you a few examples of,
+
+CVE descriptions, but just know that there are many, many bad examples that do not give us good
+descriptions of the whole problem. So I'm going to be working on that as well as doing some
+clustering of the data and seeing how, seeing if I can maybe map it to CWEs, the Common Weakness
+Enumeration, which has kind of been done, but it'd be interesting to do that in a more machine
+learning type sense, and other things along that vein not fully figured out yet. Awesome. Thank you.
 % \todo[inline]{Read https://theoryof.predictable.software/articles/a-closer-look-at-cvss-scores/}
 
 CVSS has an identity crisis. Throughout its history, when originally released it was touted as a
@@ -586,21 +656,16 @@ Should use some way of temporal / environmental. These are included in CVSS howe
 not used and it may be better to use EPSS, which gives a numerical value of the likelihood of the
 event happening in 30 days based on previous history
 
-FIRST give this definition of severity vs risk
-\textit{}
-% CVSS Base scores (CVSS-B) represent "Technical Severity"
-% Only takes into consideration the attributes of the vulnerability itself
-% It is not recommended to use this alone to determine remediation priority
+FIRST give this definition of severity vs risk:
+\begin{itemize}
+	\item CVSS Base scores (CVSS-B) represent "Technical Severity" Only takes into consideration the
+	      attributes of the vulnerability itself It is not recommended to use this alone to determine
+	      remediation priority
 
-% Risk is often a religious topic… but…
-% CVSS-BTE scores take into consideration the attributes of the…
-% Base Score
-% Threat associated with the vulnerability
-% Environmental controls / Criticality 
-% }
+	\item Risk is often a religious topic… but… CVSS-BTE scores take into consideration the attributes of the…
+	      Base Score Threat associated with the vulnerability Environmental controls / Criticality
+\end{itemize}
 
-As mentioned by FIRST, the exact differences between risk and severity are strangely nebulous,
-however here is a more usable definition as stated by NIST
 
 "Risk is a measure of the extent to which an entity is threatened by a potential circumstance or event, and is
 typically a function of: (i) the adverse impacts that would arise if the circumstance or event occurs; and (ii) the
@@ -643,6 +708,9 @@ I have asked for some help with my understand of the topic, but I did not go to 
 could have given me access to a deeper level of knowledge on the specific topic, that being
 hierarchical bayesian models and MCMC Gibbs sampling.
 
+\section{Conclusion}
+
+\todo[inline]{Need to do this!}
 \printbibliography[title={References}]
 
 
