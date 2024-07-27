@@ -57,19 +57,19 @@
 
 \begin{abstract}
 
-	The Common Vulnerability Scoring System(CVSS \cite{CVSS}) is designed to produce scores for
+	The Common Vulnerability Scoring System (CVSS~\cite{CVSS}) is designed to produce scores for
 	software vulnerabilities. Such a system is needed in order to triage the sheer number of new
 	vulnerabilities being released every year. We cannot keep up with the amount of CVSS scores that
 	need to be produced, as such we need a way to generate them. There is precedent to using machine
-	learning, specifically in more recent times, large language models(LLMS) to accurately predict
-	these CVSS scores. \cite{costa} However, there is a general focus on only using the National
-	Vulnerability Database \cite{costa} \cite{nvd_example1} \cite{nvd_example2}, it would be ideal if
+	learning, specifically in more recent times, large language models (LLMs) to accurately predict
+	these CVSS scores~\cite{costa}. However, there is a general focus on only using the National
+	Vulnerability Database~\cite{costa,nvd_example1,nvd_example2}, it would be ideal if
 	there was more than one source for the ratings, not only for cross validation, but also for an
-	increase in data. Before we use any extra data sources, it will be interesting to do a
+	increase in training data volume. Before we use any extra data sources, it will be interesting to do a
 	comparison between the different sources, to see if we can get an estimate accuracy for each of
 	the metrics within the scoring system. Additionally we should know how good of a system CVSS is
-	and whether or not there are better alternatives. Unfortunately CVSS(version 3.1 \cite{CVSS_31}) is a flawed
-	metric, hopefully once 4.0 begins to be used commonly that will solve some of these issues.
+	and whether or not there are better alternatives. Unfortunately CVSS (version 3.1~\cite{CVSS_31}) is a flawed
+	metric, hopefully once version 4.0 begins to be used commonly that will solve some of these issues.
 	However, the ability to predict a metric based on a short text description is still useful and a
 	focus on the interpretability of such a system remains important.
 
