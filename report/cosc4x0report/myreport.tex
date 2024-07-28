@@ -17,6 +17,7 @@
 
 \documentclass[12pt]{article}
 \usepackage[draft]{cosc4x0style}
+%\usepackage{cosc4x0style}
 
 \usepackage{hyperref}
 \usepackage{csquotes}
@@ -26,10 +27,10 @@
 \usepackage{array}
 \usepackage{multirow}
 \usepackage{booktabs}
+\usepackage{dirtytalk}
 \addbibresource{refs.bib}
 
 % To compile the final version of the report (which will remove all the todo content)
-%\usepackage{cosc4x0style}
 
 % Specify project code 480 or 490
 \papercode{480}
@@ -60,64 +61,58 @@
 	The Common Vulnerability Scoring System (CVSS~\cite{CVSS}) is designed to produce scores for
 	software vulnerabilities. Such a system is needed in order to triage the sheer number of new
 	vulnerabilities being released every year. We cannot keep up with the amount of CVSS scores that
-	need to be produced, as such we need a way to generate them. There is precedent to using machine
+	need to be produced, as such we need a way to automatically predict them. There is precedent to using machine
 	learning, specifically in more recent times, large language models (LLMs) to accurately predict
 	these CVSS scores~\cite{costa}. However, there is a general focus on only using the National
 	Vulnerability Database~\cite{costa,nvd_example1,nvd_example2}, it would be ideal if
 	there was more than one source for the ratings, not only for cross validation, but also for an
 	increase in training data volume. Before we use any extra data sources, it will be interesting to do a
-	comparison between the different sources, to see if we can get an estimate accuracy for each of
+	comparison between the different sources, to see if we can get an estimated accuracy for each of
 	the metrics within the scoring system. Additionally we should know how good of a system CVSS is
 	and whether or not there are better alternatives. Unfortunately CVSS (version 3.1~\cite{CVSS_31}) is a flawed
-	metric, hopefully once version 4.0 begins to be used commonly that will solve some of these issues.
-	However, the ability to predict a metric based on a short text description is still useful and a
+	metric, hopefully once version 4.0 begins to be used commonly, it will solve some of these issues.
+	However, the ability to predict a metric based on a short text description is still useful, and a
 	focus on the interpretability of such a system remains important.
 
 \end{abstract}
 
-\begin{figure}
-	\centering
-	\includegraphics[width=0.5\textwidth]{figures/cve_year.png}
-	\caption{\label{fig:cve_year}Number of new CVEs by year}
-\end{figure}
 
 \section{Introduction}
 
-Last year there were 29,065 new vulnerabilities. This is a number that is only going up year on
-year. Now, we need a way to record these vulnerabilities, and we do that using the common
-vulnerabilities and exposure system called CVEs. From these CVEs, CVSS scores can be calculated or
-generated. The National Vulnerability Database(NVD \cite{NVD}) takes the CVEs and enriches them with
-CVSS data. They are not the only place to do so, however in terms of research they are often the
-main or sole data provider. \cite{costa} \cite{nvd_example1} \cite{nvd_example2} I explored other
-options, the main obvious one being the MITRE \cite{MITRE} database, as it is the main database for
-CVEs and they also have a decent chunk of CVEs enriched with CVSS scores. As a guideline to my
-investigation between the two databases I used the same method as the paper \textit{Can the Common
-	Vulnerability Scoring System be Trusted? A Bayesian Analysis}. \cite{bayes} This paper tries to see
-how much different data sources agree on the scoring of a CVE, and thereby gaining insight into the
-potential of a ground truth value. Unfortunately since that paper in 2016, many of the databases
-they compared are either unavailable or in archival status. However, following their method still
-allows for insight between the two chosen databases, NVD and MITRE. This analysis shows that the
-databases do fundamentally rate CVEs differently. The uncertainty between the two can therefore be
-an indicator going forward when analysing generated CVE scores, as it is likely that the model will
-also struggle in similar places to where the human evaluators did. In addition to this analysis, I
-looked into the CVSS system itself. There have been many complaints laid against
-CVSS \cite{ubiquitous} \cite{improving_cvss} \cite{time_to_change_cvss}, the main ideas being:
 
-\begin{itemize}
-	\item Mathmatical operations on categorical values,
-	\item No mathmatical basis for the formula,
-	\item Lack of likelihood,
-	\item Scope has too much influence,
-	\item Identity crisis,
-\end{itemize}
+Last year there were 29,065 new vulnerabilities as show by Figure~\ref{fig:cve_year}. This is a
+number that is only going up year on year. These vulnerabilities are recorded using the Common
+Vulnerabilities and Exposure system (CVE~\cite{CVE}). From these CVEs, CVSS scores can be computed.
+The National Vulnerability Database (NVD~\cite{NVD}) takes CVEs and enriches them with CVSS data.
+They are not the only place to do so, however in terms of research they are often the main or sole
+data provider (E.g.\@ \cite{costa, nvd_example1, nvd_example2}).  I explored other options, the main
+obvious one being the MITRE database~\cite{MITRE}, as it is the main database for CVEs and they also
+have a decent chunk of CVEs enriched with CVSS scores. As a guideline to my investigation between
+the two databases I used the same method as the paper \textit{Can the Common Vulnerability Scoring
+	System be Trusted? A Bayesian Analysis}~\cite{bayes}. This paper tries to see how much different
+data sources agree on the scoring of a CVE, and thereby gain insight into the potential of a ground
+truth value. Unfortunately since that paper was released back in 2016, many of the databases they
+compared are either unavailable or in archival status. However, following their method still allows
+for insight between the two chosen databases, NVD and MITRE. This analysis shows that the databases
+do fundamentally rate CVEs differently (see Figure~\ref{fig:counts}). The uncertainty between the
+two can therefore be an indicator going forward when analysing generated CVE scores, as it is likely
+that the model will also struggle in similar places to where the human evaluators did. In addition
+to this analysis, I looked into the CVSS system itself. There have been many complaints laid against
+CVSS (E.g.\@~\cite{ubiquitous,improving_cvss, time_to_change_cvss}), these will be discussed in
+Section~\ref{discussion}, but broadly, CVSS is used for more than it is designed to do,
+leading to an inefficient system.
 
-These are all on going issues and should colour how we use the CVSS system. It should only be used as a way to triage our vulnerabilities, any further
-prioritisation should be done by more specific inqueries or perhaps other systems.
+
+\begin{figure}[h] \centering
+	\includegraphics[width=0.8\textwidth]{figures/cve_year.pdf}
+	\caption{\label{fig:cve_year}Number of new CVEs by year}
+\end{figure}
+
 
 \section{Background}
 
 Vulnerabilities are stored in a consistent system called Common Vulnerabilities and
-Exposures(CVE \cite{CVE}).
+Exposures (CVE~\cite{CVE}).
 
 \subsubsection*{Here is an example CVE}
 \begin{itemize}
@@ -127,33 +122,32 @@ Exposures(CVE \cite{CVE}).
 	\item   Updated:06/26/2024
 
 	\item   Description: pdoc provides API Documentation for Python Projects. Documentation
-	      generated with `pdoc --math` linked to JavaScript files from polyfill.io. The polyfill.io
+	      generated with \texttt{pdoc --math} linked to JavaScript files from polyfill.io. The polyfill.io
 	      CDN has been sold and now serves malicious code. This issue has been fixed in pdoc 14.5.1.
 
 \end{itemize}
 
-\footnotesize{Sourced from \href{https://nvd.nist.gov/vuln/detail/CVE-2024-38526}{NVD CVE-2024-38526
-		Detail} \cite{polyfill}} \\
+{\footnotesize Sourced from \href{https://nvd.nist.gov/vuln/detail/CVE-2024-38526}{NVD CVE-2024-38526
+	Detail} \cite{polyfill}} \\
 \bigskip
 
-This has a unique identifier, which is given by one of the CVE numbering authorities(CNA \cite{CNA}), such as
-GitHub, Google and many other
-organizations.[\href{https://www.cve.org/PartnerInformation/ListofPartners}{CVE list of
-			partners} \cite{partners}]
+This has a unique identifier, which is given by one of the CVE numbering authorities (CNA~\cite{CNA}), such as
+GitHub, Google or any of these, \href{https://www.cve.org/PartnerInformation/ListofPartners}{CVE list of
+	partners}~\cite{partners}.
 The description is the most important part in our case. This should give some information about the
-vulnerability, what can be exploited (device / software component), how is the product affected if
-the vulnerability is exploited. In this case we have the library PyDoc and this links to the
-polyfill.io CDN. Ideally there would be something in the description which relates to every metric,
+vulnerability, what can be exploited (device / software component)? How is the product affected if
+the vulnerability is exploited? In this case we have the library, PyDoc~\cite{pydoc}, which this links to the
+polyfill.io CDN. Ideally there would be a part of the description that relates to every metric,
 unfortunately these descriptions are not necessarily suited to machine learning as the people
 writing the descriptions are expecting a lot of intrinsic knowledge.
 
 \subsection*{The Common Vulnerability Scoring System}
 
 CVSS scoring is a high level way to break up vulnerabilities into different categories.
-Organisations can use it to choose which vulnerability to focus on first. CVSS is broken up into 3
-distinct sections, base, temporal and environmental scores.
+Organisations can use it to choose which vulnerability to focus on first. CVSS is broken up into
+three distinct sections: base, temporal and environmental scores.
 
-For brevity I will only show the specifics of CVSS 3.1 \cite{CVSS_31}as this is by far the most commonly used
+For brevity I will only show the specifics of CVSS 3.1~\cite{CVSS_31} as this is by far the most commonly used
 version, even if it is not the most recent.
 
 \subsubsection*{Base Score}
@@ -161,105 +155,98 @@ version, even if it is not the most recent.
 \begin{itemize}
 
 	\item Attack Vector: Defines the avenues of attack that the vulnerability is open to. The more
-	      open a component is, the higher the score. This can have the values Network, Adjacent, Local
-	      and Physical.
+	      open a component is, the higher the score. This can have the values: \texttt{Network},
+	      \texttt{Adjacent}, \texttt{Local} and \texttt{Physical}.
 
-	\item Attack Complexity: How complex the attack is to orchestrate. What are their prerequisites,
-	      how much domain knowledge / background work is necessary, how much effort does the attacker
-	      need to invest to succeed. This can have the values Low or High. Low gives a higher base
-	      score.
+	\item Attack Complexity: Describes how complex the attack is to orchestrate. Encompasses
+	      questions like, what are the prerequisites? How much domain knowledge / background work is
+	      necessary? How much effort does the attacker need to invest to succeed? This can have the
+	      values: \texttt{Low} or \texttt{High}. \texttt{Low} gives a higher base score.
 
 	\item Priviledges Required: The degree of privileges the user needs to complete the attack.
-	      Generally ranging from None, Low(e.g User level privilege), High(e.g Administrator). The
-	      lower the privilege the higher the base score.
+	      Ranging from: \texttt{None}, \texttt{Low} (e.g.\@ User level privilege), \texttt{High}
+	      (e.g.\@ Administrator). The lower the privilege the higher the base score.
 
-	\item User Interaction: If the exploit requires another human user to make the attack possible,
-	      E.g clicking a phishing link. This is either None or Required, the score is highest when no
-	      user interaction is required.
+	\item User Interaction: Describes if the exploit requires another human user to make the attack
+	      possible, E.g.\@ clicking a phishing link. This is either \texttt{None} or
+	      \texttt{Required}, the score is highest when no user interaction is required.
 
-	\item Scope: Defines if the attack can leak into other security scopes. E.g access to one
+	\item Scope: Defines if the attack can leak into other security scopes. E.g.\@~access to one
 	      machine gives the ability to elevate privileges on other parts of the system. This can take
-	      Unchanged or Changed, the score being highest when a scope change occurs.
+	      \texttt{Unchanged} or \texttt{Changed}, the score being highest when a scope change occurs.
 
 	\item Confidentiality Impact: Detemines what is the impact on the information access /
-	      disclosure to the attacker. This can be High, Low or None with High adding the most to the
-	      base score.
+	      disclosure to the attacker. This can be: \texttt{High}, \texttt{Low} or \texttt{None} with
+	      \texttt{High} adding the most to the base score.
 
-	\item Integrity Impact: Refers to the integrity of the information within the component. I.e
-	      could the data have been modified by the attacker. This has High, Low or None as categories
-	      with High adding the most to the base score.
+	\item Integrity Impact: Refers to the integrity of the information within the component. I.e.\@
+	      could the data have been modified by the attacker. This has: \texttt{High}, \texttt{Low} or
+	      \texttt{None}, as categories with \texttt{High} adding the most to the base score.
 
 	\item Availability Impact: Refers to the impact of the attack on the availability of the
-	      component. E.g the attacker taking the component off the network, denying the users access.
-	      This can haved High, Low and None with High adding the most to the base score.
+	      component. E.g.\@ the attacker taking the component off the network, denying the users
+	      access. This can be: \texttt{High}, \texttt{Low} and \texttt{None} with \texttt{High} adding
+	      the most to the base score.
 
 \end{itemize}
 
-\footnotesize{This is a summarized version of the
-	\href{https://www.first.org/cvss/v3.1/specification-document}{3.1 specification document
-		provided by FIRST}. \cite{CVSS_31}}
+{\footnotesize This is a summarized version of the
+\href{https://www.first.org/cvss/v3.1/specification-document}{3.1 specification document
+	provided by the  Forum of Incident Response and Security Teams (FIRST)}~\cite{CVSS_31}. } \\
 
 
 \subsubsection*{Temporal}
 
-
-\bigskip
-
-This could be:
 \begin{itemize}
 
-	\item Exploit Code Maturity: The state of the attack itself, e.g has this exploit been pulled
+	\item Exploit Code Maturity: The state of the attack itself, e.g.\@ has this exploit been pulled
 	      off in the wild or is it currently academic.
 
-	\item Remidiation Level: Broadly, whether the exploit in question has been patched,
+	\item Remidiation Level: Whether the exploit in question has a patch availabile.
 
 	\item Report Confidence: The degree of confidence in the CVE report itself, the report may be in
 	      early stages where not all of the information is known.
 
 \end{itemize}
-\
-\footnotesize{This is a summarized version of the
-	\href{https://www.first.org/cvss/v3.1/specification-document}{3.1 specification document
-		provided by FIRST}. \cite{CVSS_31}} \\
+
+{\footnotesize This is a summarized version of the
+\href{https://www.first.org/cvss/v3.1/specification-document}{3.1 specification document
+	provided by the Forum of Incident Response and Security Teams (FIRST)}~\cite{CVSS_31}.}  \\
 \bigskip
 
 Temporal metrics would be useful in general for a CVSS score, however NVD do not store these
 temporal metrics. As far as I can tell there is no reason given for this specifically, though
 discourse
 \href{https://security.stackexchange.com/questions/270257/cvss-v3-and-v3-1-missing-temporal-metrics-exploit-code-maturity-and-remediation
-}{(Stack exchange post)} \cite{stack_exchange} around the subject suggests that this is due to a lack
-of verifiable reporting. From my perspective both remidiation level and report confidence feel like
+}{(Stack exchange post)}~\cite{stack_exchange} around the subject suggests that this is due to a lack
+of verifiable reporting. From my perspective, both remidiation level and report confidence feel like
 they could have scores attributed to them, however finding verifiable reports on the exploits seen
-in the wild does seem more tricky. There are two relatively new organisations on this front,
-Cybersecurity \& Infrastructure Security Agency(CISA,
+in the wild is difficult. There are two relatively new organisations on this front,
+Cybersecurity \& Infrastructure Security Agency (CISA,
 \href{https://www.cisa.gov/known-exploited-vulnerabilities-catalog}{public sector}) and
-inthewild.org(\href{https://inthewild.io/}{private sector} \cite{cisa}).
+inthewild.org (\href{https://inthewild.io/}{private sector}~\cite{cisa}).
 
 \subsection{Data Options}
 
-In 2016 when Johnson et al \cite{bayes} did the original paper, they had access to 5 different
-databases. Unfortunately only 2 of these remain for modern data, there are some others, but
-essentially they are either in archival status or they are proprietary. I have managed to acquire
-the data from the original paper, however it is in a much different format(XML vs JSON), and Pontus
-Langstrom, one of the contributors to the project said it would be akin to an archaeological dig.
-Additionally as I did not plan to make this the full focus of the project, that will sit dormant for
-now.
+I will be using NVD and MITRE as the sources of data. In 2016 when Johnson et al.\@ did their paper
+on CVSS~\cite{bayes}, they had access to five different databases. Unfortunately only two of these
+remain for modern data. There are others, but they are either in archival or proprietary status.
 
 \subsubsection*{National Vulnerability Database}
 
 The National Vulnerability Database is the defacto standard dataset used for CVSS generation
-research. \cite{costa} \cite{nvd_example1} \cite{nvd_example2} This makes a lot of sense as it is built
+research~\cite{costa, nvd_example1, nvd_example2}.  This makes a lot of sense as it is built
 for the purpose with a team dedicated to enriching CVEs with CVSS scores. The dataset I am using was
 retrieved using the NVD API in March 2024 and contains $\sim$100000 CVEs enriched with CVSS scores. This
-comes in a easy to use format, in a consistently formatted JSON dump.
+comes in a consistently formatted JSON dump.
 
 \subsubsection*{MITRE Database}
 
-MITRE is the defacto database for the storage of CVEs themselves, however they do contain $\sim$40000
-CVEs enriched with CVSS 3.1 scores. These are also in a JSON dump retrieved also in March 2024. The
+MITRE is the defacto database for the storage of CVEs themselves, their database contains $\sim$40000
+CVEs enriched with CVSS 3.1 scores. These are in a JSON dump retrieved in March 2024. The
 format for usage is a bit more cumbersome to use. The CVSS scores are only stored as CVSS vector
-strings(a simple text encoding \cite{vector_string}). These are not hard to parse, though they are stored slightly
-different between versions, as well as sometimes being inconsistent($\sim$5000 had temporal metrics within
+strings (a simple text encoding~\cite{vector_string}). These are not hard to parse, though they are stored slightly
+different between versions, as well as sometimes being inconsistent ($\sim$5000 had temporal metrics within
 the vector strings in the MITRE database).
 
 \subsubsection{Priliminary Data exploration}
@@ -267,118 +254,125 @@ the vector strings in the MITRE database).
 The scorers for both NVD and MITRE do rate CVEs reasonably similar, one pattern you can see as shown
 by Fig~\ref{fig:counts}, is that NVD generally give the most common categorical output more ratings.
 They are less spread out across the full range of values. In addition, if we look at the
-attackComplexity metric, there is a reasonably large difference in how they are rated, MITRE rate a
-lot more of the metrics with a low score. This points to some of the difficulty with this kind of
+\texttt{Attack Complexity} metric, there is a reasonably large difference in how they are rated, MITRE rate a
+lot more of the metrics with a \texttt{Low} score. This points to some of the difficulty with this kind of
 rating system, while in theory there is a true value for these metrics, it requires knowledge of the
 whole space around each of the vulnerabilities, this knowledge will always vary marker to marker.
 
 
 \begin{figure}
 	\centering
-	\includegraphics[width=1\textwidth]{figures/combined_overlap.png}
+	\makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{figures/combined_overlap.pdf}}
 	\caption{\label{fig:counts}Comparison of CVSS ratings between MITRE and NVD}
 \end{figure}
 
 \section{Related Work}
 
-\begin{enumerate}
-	\item Johnson et al. in the paper
-	      \textit{Can the Common Vulnerability Scoring System be Trusted? A Bayesian
-		      Analysis} \cite{bayes} conducted a study of the state of CVSS databases and there accuracy in 2016.
-	      They found NVD to be the most correct database, and that we can trust the CVSS scoring system as a
-	      whole in the consistency of how scorers rate CVEs.
+Johnson et al.\@ in the paper,
+\textit{Can the Common Vulnerability Scoring System be Trusted? A Bayesian
+	Analysis}~\cite{bayes}, conducted a study into the state of CVSS databases and their accuracy in 2016.
+They found NVD to be the most correct database, and we can trust the Common~Vulnerability~Scoring~System as a
+whole as scorers rate CVEs consistently. This paper will be used as the basis for the database
+comparison in Section~\ref{bayesian_modeling}.
 
-	\item   Costa et al. in the paper \textit{Predicting CVSS Metric via Description Interpretation} tested
-	      generation of CVSS from CVE descriptions with a range of large language encoder-only models. The
-	      achieved state-of-the-art results with the Distilbert model \cite{distilbert}. They also improved
-	      the score with text preprocessing(e.g lemmatization) and looked into interpretability of the models
-	      using Shapley values.
+Costa et al.\@ in the paper, \textit{Predicting CVSS Metric via Description
+	Interpretation}~\cite{costa}, tested generation of CVSS from CVE descriptions with a range of large
+language encoder-only models. They achieved state-of-the-art results with the DistilBERT
+model~\cite{distilbert}. They also improved the score with text preprocessing (e.g.\@ lemmatization)
+and looked into interpretability of the models using Shapley values. This paper is relevant to
+Section~\ref{cvss_prediction} as much of the process around training and making inferences of CVSS
+scores comes from this paper.
 
-	\item Jiang and Atif in the paper \textit{An Approach to Discover and Assess Vulnerability Severity
-		      Automatically in Cyber-Physical Systems} \cite{jiang} creates a novel pipeline for vulnerability
-	      assessment. They used multiple data sources and a majority voting system to decrease the chance of
-	      badly scored CVEs.
+Jiang and Atif in the paper, \textit{An Approach to Discover and Assess Vulnerability Severity
+	Automatically in Cyber-Physical Systems}~\cite{jiang}, create a novel pipeline for vulnerability
+assessment. They used multiple data sources and a majority voting system to decrease the chance of
+badly scored CVEs. This paper relates in that it shows a use case for multiple data sources, though
+less so on the methods used.
 
-	\item  Henry Howland in the paper \textit{CVSS: Ubiquitous and Broken} broke down issues with
-	      the CVSS system, namely, "lack of justification for its underlying formula, inconsistencies
-	      in its specification document, and no correlation to exploited vulnerabilities in the wild,
-	      it is unable to provide a meaningful metric for describing a vulnerability’s severity"
+Henry Howland in the paper, \textit{CVSS: Ubiquitous and Broken}~\cite{ubiquitous} broke down issues with
+the CVSS system, namely, \say{lack of justification for its underlying formula, inconsistencies
+	in its specification document, and no correlation to exploited vulnerabilities in the wild,
+	it is unable to provide a meaningful metric for describing a vulnerability’s
+	severity}~\cite{ubiquitous}.  This paper mainly relates to Section~\ref{discussion} exposing the
+issues and general impression of CVSS.
 
-\end{enumerate}
 
 \section{Methods}
 
-\subsection{Hierarchical Bayesian Model}
+\subsection{Hierarchical Bayesian Model} \label{bayesian_modeling}
 
-The analysis between the two databases is done with a hierarchical bayesian model. This type of
-model is suitable when you expect the population to be similar in some respects but different in
-others. In this case they share common knowledge towards the vulnerability mostly, but differ the
-experience of the people rating the metrics. \cite{bayes} The model is similar to the original
-model(see section 4.1 of  \cite{bayes}), it assumes that there exists a true value for each CVSS
-dimension, but the database sample may not be that true value. We represent the inaccuracies with a
-confusion matrix. The A difference from the original paper is that there is no longer consistently 3
-variables for each CVSS metric, varying from 2 to 4 categorical choices. \\
+Analysis between the NVD~\cite{NVD} and MITRE~\cite{MITRE} databases is done with a hierarchical
+bayesian model. This type of model is suitable when you expect the population to be similar in some
+respects but different in others. In this case, they share common knowledge towards the
+vulnerability, but differ in the experience of the people rating the metrics~\cite{bayes}.  The
+model is similar to the original model (see section 4.1 of~\cite{bayes}), it assumes that there
+exists a true value for each CVSS dimension, but the database sample may not be that true value.
+These inaccuracies are represented with a confusion matrix (see
+equation~\ref{confusion_matrix_formula}. The difference from the original paper is that there is no
+longer consistently three variables for each CVSS metric, varying from two to four categorical
+choices. \\
 
 \bigskip
 
-The confusion matrix CVSS dimension \textit{confidentiality impact}
+Below is the confusion matrix of the CVSS dimension \texttt{Confidentiality Impact}
 
 
-\begin{equation}
+\begin{equation}\label{confusion_matrix_formula}
 	\Pi_ci = \begin{bmatrix}
 		\pi_{nn} & \pi_{nl} & \pi_{nh} \\
 		\pi_{ln} & \pi_{ll} & \pi_{lh} \\
 		\pi_{hn} & \pi_{lh} & \pi_{hh} \\
 	\end{bmatrix}
 \end{equation}
+\\
 where $\pi_{nn}$ denotes the probability that the current database correctly assigns the random
-vulnerability \emph{none} when the actual value is the same. $\pi_{nl}$ and $\pi_{nh}$ represent
-when \emph{none} was not the actual truth value.
+vulnerability the score \texttt{None} when the actual value is the same. $\pi_{nl}$ and $\pi_{nh}$ represent
+when \texttt{None} was not the actual truth value, i.e.\@ the database produced the wrong score.
 
 \subsubsection{Priors}
 
 The priors for the categorical variables were set up with uninformative priors using a Dirichlet
-distribution, this will give a uniform prior over they probability space for all categorical
-options. This is done to not colour the outcome of the results based on prior belief, but either
-way this prior will have little impact for any categorical metric which has more than the number of
-options for that metric.
+distribution, this will give a uniform prior over the probability space for all categorical options.
+This is done to not colour the outcome of the results based on prior belief, though, this prior will
+have little impact for any categorical metric which has more than the number of options for that
+metric.
 
-The confusion matrices also need priors, for this they will also be a Dirichlet distribution,
-however as we do want to add some initial belief to this, in that the people producing scores are
-not acting completely randomly, and are likely to be right more often. These are still weak priors
+The confusion matrices also need priors, as before using Dirichlet distribution.
+However as we do want to add some initial belief to this, as the people producing scores are
+not acting completely randomly, and are likely to be right more often than not. These are still weak priors
 as the number of observations is in the thousands.
 
 \subsubsection{Estimation}
 
-This follows, the Bayesian approach, where to estimate the parameters, you take the prior beliefs,
-take an observation, and update these believes to produce posterior beliefs. In this case the method
-involves using Markov Chain Monte Carlo methods. Broadly this allows for simulating the data based
-on the previously created distribution by sampling values that the model has high belief would be
+This follows the Bayesian approach where to estimate the parameters: you take the prior beliefs,
+take an observation, and update these beliefs to produce posterior beliefs. In this case, the method
+involves using Markov Chain Monte Carlo methods. Broadly, this allows for simulating the data, based
+on the previously created distribution, by sampling values that the model has high belief would be
 from the target distribution. This allows for accurate sampling without having all of the data. The
-original paper used JAGS \cite{JAGS} and R. As I am more familiar with python I did try
-pyjags \cite{pyjags} however I did not find great success. Instead I used the pymc library to help
-with the modelling, it fulfilled the same tasks that JAGS did with the original paper \cite{bayes}
+original paper used JAGS~\cite{JAGS} and R. As I am more familiar with Python I did try
+pyjags (a python wrapper around JAGS~\cite{pyjags}), however I did not find great success. Instead I used the pymc
+library~\cite{pymc} to help with the modelling. It fulfilled the same tasks that JAGS did with the
+original paper~\cite{bayes}.
 
-\subsection{CVSS Prediction}
+\subsection{CVSS Prediction} \label{cvss_prediction}
 
-Cody Airey--a classmate of mine-- has been working on a similar problem. He has been repoducing some
-results from Costa et al. \cite{costa}. My choice of model for CVSS prediction will very much
-bootstrap of his work and that which is surrounding it. So far, a strong contender for
-state-of-the-art model for predicting CVSS metrics from CVE descriptions is the distilbert
-model \cite{distilbert}. This is a variant of BERT \cite{BERT}, a pre-trained deep bidirectional
-transformer large language model developed by Google. Distilbert has advantages over the models in
-terms of performance, but also on speed of training as well as size / memory footprint of the
-model.
+Cody Airey --a classmate of mine-- has been working on a similar problem. He has been repoducing
+results from Costa et al.\@~\cite{costa}. My choice of model for CVSS prediction will very much
+bootstrap off his work. So far, a strong contender for state-of-the-art model for predicting CVSS
+metrics from CVE descriptions is the DistilBERT model~\cite{distilbert}. This is a variant of
+BERT~\cite{BERT}, a pre-trained deep bidirectional transformer large language model developed by
+Google. DistilBERT has advantages over other BERT models in terms of performance, but also on speed
+of training as well as size / memory footprint of the model.
 
 \subsubsection{Training}
 
 The model is trained separately for each metric. Following Airey's method, each of the eight models
 were trained on five different data splits to allow for a standard deviation to be calculated, in
-order to aid in reducing the chance of a 'good' data split effecting the results. The difference
-between Costa et al. \& Airey's work and mine is that this model was trained on a combination of NVD and MITRE
-data. This was converted to the same format, a CSV containing the descriptions and the CVSS scores.
-This does mean there are now $\sim$40000 duplicate CVEs and $\sim$140000 CVEs enriched with CVSS
-scores.
+order to aid in reducing the chance of a \textit{lucky} data split effecting the results. The
+difference between Costa et al.\@ \& Airey's work, and mine is that this model was trained on a
+combination of NVD and MITRE data as opposed to just using NVD. This was converted to the same
+format, a CSV containing the descriptions and the CVSS scores. This does mean there are now
+$\sim$40000 duplicate CVEs and $\sim$140000 CVEs enriched with CVSS scores total.
 
 \section{Results}
 
@@ -386,59 +380,59 @@ scores.
 
 The results for the database analysis will be shown through the confusion matrices for the estimated
 accuracy of both NVD and MITRE. Unfortunately it is difficult to compare my results to the original
-paper as they are on a totally different dataset. However I will note that in general the estimated
-accuracy for both datasets is much lower than the scores they were getting. Across the board NVD
+paper~\cite{bayes} as they are on a totally different dataset. However I will note that in general the estimated
+accuracy for both datasets is much lower than the scores from the original study. Across the board NVD
 often had $\sim$90\% accuracy for the highest accuracy field of any metric, with Confidentiality as
 a clear outlier as seen from Table~\ref{fig:johnson_confusion_matrices}.
 
-Some general trends are that NVD(see Figure~\ref{fig:nvd_31_confusion_matrices}) have more extreme
-estimated accuracies. They do better for the higher frequency options, for the \emph{Low} on
-\emph{Attack Complexity} for example NVD have 98\% estimated accuracy and 66\% for \emph{High}
-versus MITRE(see Figure~\ref{fig:mitre_31_confusion_matrices}) for the \emph{Low} score 87\% and
-\emph{High}. Instead of further analysing in this way, I will point out some of my worries around
-these results, not that they are wrong per se, but that they do not really tell us anything extra
-than that shown by in Figure~\ref{fig:counts}, except perhaps it is helpful to see it in a
-percentage estimated accuracy instead of a proportion. Unfortunately this is outside of my
-strengths, I did some cursory exploration into if a doing this sort of analysis between two
-populations like this does make sense, the discourse here  \cite{stat_modeling} suggests that such a
-thing can be done, though it also suggests the need for more informative priors. This may apply in
-my case, and I intend on getting an expert opinion closer to home, however that will be after this
-report.
+Some general trends are that NVD (see Figure~\ref{fig:nvd_31_confusion_matrices}) have more extreme
+estimated accuracies. They do better for the higher frequency options, for the \texttt{Low} option
+on \texttt{Attack Complexity} for example, NVD have 98\% estimated accuracy and 66\% for
+\texttt{High} versus MITRE (see Figure~\ref{fig:mitre_31_confusion_matrices}), \texttt{Low} scored
+87\% and 75\% for \texttt{High}. Instead of further analysing in this way, I will point out some of
+my worries around these results, not that they are wrong per se, but that they do not really tell us
+anything extra than that shown by in Figure~\ref{fig:counts}, except perhaps it is helpful to see
+the results in a percentage estimated accuracy instead of a proportion. Unfortunately this is
+outside of my strengths, I did some cursory exploration into if a doing this sort of analysis
+between two populations like this does make sense, the discourse here~\cite{stat_modeling} suggests
+that such a thing can be done, though it also suggests the need for more informative priors. This
+may apply in my case, and I intend on getting an expert opinion closer to home, however that will be
+after this report.
 
-Johnson et al. talk about the reliability of their results saying this in section 7.1 of \cite{bayes}:\\ \\
+Johnson et al.\@ talk about the reliability of their results saying this in section 7.1 of~\cite{bayes}:\\ \\
 
-\textit{"reliability concerns
-	are discussed. In this study we use five different scoring instruments the databases. If some of
-	these are generally correct, but some are generally incorrect, will not the scores of the
-	incorrect ones still affect our beliefs about the actual values, thus worsening reliability? It
-	turns out that this is not the case. In a simulation, two scorers were set up to be completely
-	aligned, scoring 90\% complete impact in one of the CIA dimensions, while a third was unaligned
-	and scoring only 10\% complete impact. Initially, all scorers are equally credible, but the
-	gradual accrual of evidence impacts scorer credibility (as well as beliefs about the actual CVSS
-	score distributions). Thus, as the third scorer rarely matched the other two, its credibility
-	eroded, thus shrinking the weight of its advise."} \cite{bayes}\\
+\textit{\say{reliability concerns
+		are discussed. In this study we use five different scoring instruments - the databases. If some of
+		these are generally correct, but some are generally incorrect, will not the scores of the
+		incorrect ones still affect our beliefs about the actual values, thus worsening reliability? It
+		turns out that this is not the case. In a simulation, two scorers were set up to be completely
+		aligned, scoring 90\% complete impact in one of the CIA dimensions, while a third was unaligned
+		and scoring only 10\% complete impact. Initially, all scorers are equally credible, but the
+		gradual accrual of evidence impacts scorer credibility (as well as beliefs about the actual CVSS
+		score distributions). Thus, as the third scorer rarely matched the other two, its credibility
+		eroded, thus shrinking the weight of its advise~\cite{bayes}.}} \\
 
 Unfortunately in my case I do not have the advantage of a potential third or more scorer. This leads
 me to believe that there is a chance that incorrect scores can end up corrupting the results.
 
 \bigskip
 
-\begin{figure}[t]
+\begin{figure}[H]
 	\centering
-	\makebox[\textwidth][c]{\includegraphics[width=1.5\textwidth]{figures/nvd_31_titles.png}}
+	\makebox[\textwidth][c]{\includegraphics[width=1.5\textwidth]{figures/nvd_31_titles.pdf}}
 	\caption{\label{fig:nvd_31_confusion_matrices}Confusion Matrices for NVD for CVSS version 3.1}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}[H]
 	\centering
-	\makebox[\textwidth][c]{\includegraphics[width=1.5\textwidth]{figures/mitre_31_titles.png}}
+	\makebox[\textwidth][c]{\includegraphics[width=1.5\textwidth]{figures/mitre_31_titles.pdf}}
 	\caption{\label{fig:mitre_31_confusion_matrices}Confusion Matrices for MITRE for CVSS version 3.1}
 \end{figure}
 
 \begin{table}
 	\label{fig:johnson_confusion_matrices}
 	\centering
-	\caption{Confusion Matrices for NVD on CVSS version 2.0 from Johnson et al. \cite{bayes}}
+	\caption{Confusion Matrices for NVD on CVSS version 2.0 from Johnson et al.\@ \cite{bayes}}
 	\[
 		\begin{array}{c|c}
 			\textbf{Access vector}  & \textbf{Access complexity} \\
@@ -500,21 +494,21 @@ me to believe that there is a chance that incorrect scores can end up corrupting
 
 \subsection{CVSS Prediction}
 
-Below in Table~\ref{tab:distil_part1} Table~\ref{tab:distil_part2} show the results of the
-Distilbert model trained on the combination of NVD and MITRE data. Unfortunately this basically has
+Below, Table~\ref{tab:distil_part1} \& Table~\ref{tab:distil_part2} show the results of the
+DistilBERT model trained on a combination of NVD and MITRE data. Unfortunately this has
 a purely negative effect on all metrics, with the caveat that some of the standard deviations are
-lower. Additional note is the balanced accuracy for some metrics looks a bit weird, I believe that
+lower. Additional note is that the balanced accuracy for some metrics looks a bit weird, I believe that
 is due to the model not outputing some of the categorical options for that metric. This applies to
-all the balanced accuracy apart from the Priorities Required(PR) and Confidentiality(C). As this was
-done only recently I have not looked into this issue in-depth to see why this is happening, but I
-will in the future. As to why the model performs worse, my theory is that the added data, and
-therefore the overlapping CVEs with different scores confuses the model. I thought this may have
-given the model a better chance of generalising on the data, however this does not appear to be the
-case.
+all the balanced accuracy scores, apart from the Priorities Required (PR) and Confidentiality (C) as
+seen on Table~\ref{tab:distil_part1} \& Table~\ref{tab:distil_part2}. As this
+was done only recently I have not looked into this issue in-depth to see why this is happening, but
+I will in the future. As to why the model performs worse, my theory is that the added data, and
+therefore the overlapping CVEs with different scores confuse the model. I thought that adding the
+additional data may have given the model a better chance of generalising, however this
+does not appear to be the case.
 
 \begin{table}[H]
 	\centering
-	\label{tab:distil_part1}
 	\resizebox{\textwidth}{!}{%
 		\begin{tabular}{llcccc}
 			\toprule
@@ -535,11 +529,11 @@ case.
 		\end{tabular}
 	}
 	\caption{Comparison of the effects of the X pre-trained models on the CVSS v3.1 dataset (Part 1).}
+	\label{tab:distil_part1}
 \end{table}
 
 \begin{table}[H]
 	\centering
-	\label{tab:distil_part2}
 	\resizebox{\textwidth}{!}{%
 		\begin{tabular}{llcccc}
 			\toprule
@@ -560,287 +554,301 @@ case.
 		\end{tabular}
 	}
 	\caption{Comparison of the effects of the X pre-trained models on the CVSS v3.1 dataset (Part 2).}
+	\label{tab:distil_part2}
 \end{table}
 
 
-\section{Discussion}
+\section{Discussion}\label{discussion}
 
-\subsection{Should we use CVSS?}
-\todo[inline]{Note, a lot of this subsection is very rough/ transcript from presentation and I will be
-	cleaning it up}
-So CVSS has an identity crisis. I found that many people
-weren't happy with CVSS, and this is one of the reasons. So when they released CVSS 2.0, first said,
-IT management need to prioritize these vulnerabilities and remediate those that pose the greatest
-risk. The Cohen vulnerability scoring system is an open framework that addresses this issue.
-However,
+\subsubsection*{Case Study: Curl Library Vulnerability}
 
-When they released 3.1, which is the version that I've been doing all this analysis on, they said
-CVSS measures severity and not risk. So what is it? Well, it's kind of somewhere in between. The
-main takeaway is that you cannot just take the CVSS scores, especially the base scores as the BLNL.
-They don't tell you all the information.
+A practical example of the issues with CVSS scoring can be seen with a vulnerability in the curl
+library. The vulnerability was described as an integer overflow in \texttt{tool\_operate.c}, which could
+result in undefined behaviour if a user entered a value exceeding the integer limit~\cite{curlcve}. Initially, this
+vulnerability received a CVSS score of 9.8. Daniel Stenberg, the original founder of curl, disagreed
+with this high score, arguing that it was a bug fixed back in 2019~\cite{curl1}. Despite his efforts, the CVE
+(Common Vulnerabilities and Exposures) entry remained, and he eventually became part of the CVE
+Numbering Authorities. Stenberg successfully lobbied to have the National Vulnerability Database
+(NVD) lower the score to 3.3~\cite{curl2}. This example highlights the time-consuming nature of rectifying CVSS
+scores and the potential for initial misratings.
 
-The difference between severity and risk is a little bit up in the air, but generally the idea is
-that risk has more to do with likelihood. Unfortunately, this base score is used by many companies.
+\subsection{Evolution of CVSS and Its Identity Crisis}
 
-There's a few US government and large industries that use it just for this. And there's another
-reason why this is a problem is because you can have poor ratings like this one. So this was a CVE
-vulnerability that came from the curl library. And this is the description, integer overflow
-vulnerability and tool operate.c. In curl, this version very large value as the retry delay. So
-essentially they didn't handle
+When CVSS 2.0 was released, it was promoted as a framework to help IT management prioritize and
+remediate vulnerabilities posing the greatest risk. The initial goal was to provide a comprehensive
+method for assessing risk, as indicated by its original documentation:
+\\
 
-the user putting in a value that was over the integer limit, and so it could potentially overflow,
-which resulted in undefined behavior. This gave a score of 9.8. Now, Daniel Stenberg, the original
-founder, did not agree with this, as he said this was a bug that they had fixed back in 2019, and
-this is something that came out recently.
+\textit{\say{Currently, IT management must identify and assess vulnerabilities across many disparate
+		hardware and software platforms. They need to prioritize these vulnerabilities and remediate those
+		that pose the greatest risk. But when there are so many to fix, with each being scored using
+		different scales, how can IT managers convert this mountain of vulnerability data into
+		actionable information? The Common Vulnerability Scoring System (CVSS) is an open framework that
+		addresses this issue.}}~\cite{CVSS_2}
+\\
 
-And so he went to MITRE to try and get the CVE removed, which didn't happen. He may, I have just
-noticed that he is now part of the CVE numbering authorities. So he's taken control of his own CVE
-vulnerability disclosure. So.
+However, by the time CVSS 3.1 was released, the framework's focus had shifted, partly due to
+complaints about CVSS being a poor judge of risk. The authors stated:
 
-Maybe he's trying to get it removed. I'm not sure if he's been successful. He then went on to NVD to
-get the score lowered, which he was successful in doing, and now it is a 3.3. But there was a bunch
-of time wasted, unfortunately, doing that. And it's just something to keep in mind. You cannot just
-blindly trust the CVS score.
+\textit{\say{CVSS measures severity, not risk.}}~\cite{CVSS_31}
+\\
 
-Additionally, CVSS, this is the formula for CVSS, is a little bit suspect. There are many magic
-values here which are in no way backed up by anything mathematical, especially considering that they
-are adding and multiplying categorical scores. So this is a.
+The identity crisis is a problem because the original stance, that it can be used as a primary
+prioritisation tool, has lured parts of the industry into doing just that. As mentioned by Henry
+Howland in~\cite{ubiquitous} there are many large, mainly US based places mandating the sole use of
+CVSS base score for remediation, Payment Card Industry Data Security Standard~\cite{PCI}, the
+Department of Defense Joint Special Access Program implementation Guide~\cite{DOD} to name a few.
 
-distribution of all the possible CVSS scores. So we can see it looks like a vaguely normal-like
-distribution. However, as we just saw briefly from that formula, there's no mathematical basis as to
-why this is a normal distribution, and it has been posited that they just deliberately made it like
-this, which is interesting.
+This change in stance has created confusion about the true purpose of CVSS.
 
-And then the scores are suspiciously similar. So if we look, this is the distribution of all the
-scores in 2019 of all the count of reports. And.
-
-We can see here that they're vaguely swayed towards the upper end into these distinct buckets,
-probably because of some rounding. And then if we look at 2020, very similar. And we look at 2021,
-very similar. And if we look at the R squared...
-
-correlation between the two, you can see that it's 0.99, which is very high and kind of un-
-
-in this sort of setting, so a little bit strange. So then onto some future work. Surprisingly, I am
-gonna stay doing research on CVSS and CVEs. My primary focus will be looking into how can we make
-CVE, how can we clean up the CVE data so that it is more useful to machine learning models. Cody
-will, up next, will show you a few examples of,
-
-CVE descriptions, but just know that there are many, many bad examples that do not give us good
-descriptions of the whole problem. So I'm going to be working on that as well as doing some
-clustering of the data and seeing how, seeing if I can maybe map it to CWEs, the Common Weakness
-Enumeration, which has kind of been done, but it'd be interesting to do that in a more machine
-learning type sense, and other things along that vein not fully figured out yet. Awesome. Thank you.
-% \todo[inline]{Read https://theoryof.predictable.software/articles/a-closer-look-at-cvss-scores/}
-
-CVSS has an identity crisis. Throughout its history, when originally released it was touted as a
-solution to the task of prioritising CVE remediation as well as an assessment of risk, "IT
-management must identify and assess vulnerabilities across many disparate hardware and software
-platforms. They (IT management) need to prioritize these vulnerabilities and remediate those that
-pose the greatest risk. The Common Vulnerability Scoring System (CVSS) is an open framework that
-addresses this issue"
-
-%[Peter Mell, Karen Scarfone, and Sasha Romanosky. 2007. The common vulnerability scoring system
-%(CVSS) and its applicability to federal agency systems. Retrieved from
-%https://www.govinfo.gov/content/pkg/GOVPUB-C13-19c8184048f013016412405161920394/pdf/]
-
-However, due to a lot of feedback from the community and security agencies, when FIRST released
-version 3.1, the authors state "CVSS Measures Severity Not Risk".
-
-\subsubsection*{Severity vs Risk}
-
-The severity ideally is a measure of the impact(worst case? Or different levels?). Risk is the
-likelihood of the event happening. However in CVSS this is a bit muddied as even the Base score
-includes some aspects which defaults to worst case risk.
-
-Should use some way of temporal / environmental. These are included in CVSS however, they are often
-not used and it may be better to use EPSS, which gives a numerical value of the likelihood of the
-event happening in 30 days based on previous history
-
-FIRST give this definition of severity vs risk:
-\begin{itemize}
-	\item CVSS Base scores (CVSS-B) represent "Technical Severity" Only takes into consideration the
-	      attributes of the vulnerability itself It is not recommended to use this alone to determine
-	      remediation priority
-
-	\item Risk is often a religious topic… but… CVSS-BTE scores take into consideration the attributes of the…
-	      Base Score Threat associated with the vulnerability Environmental controls / Criticality
-\end{itemize}
+\subsubsection{CVSS Formula}
 
 
-"Risk is a measure of the extent to which an entity is threatened by a potential circumstance or event, and is
-typically a function of: (i) the adverse impacts that would arise if the circumstance or event occurs; and (ii) the
-likelihood of occurrence"
-%NIST SP 800-30 Rev.1 Guide for Conducting Risk Assessments and the Committee on National Security
-%Systems Information Assurance Glossary
+How CVSS is computed under-the-hood is confusing at best. CVSS 3.1 is not explained to the same
+depth as version 2.0, but my understanding is that it followed a similar process. This is that
+process summarised from
+\href{https://www.first.org/cvss/v2/faq#Explanation-of-CVSS-v2-formula-and-metric-valued-development}{CVSS
+	version 2 FAQ:}~\cite{CVSS_formula}
 
-There have been myriad complaints about this topic, generally due to the nature of how CVSS is often
-used, especially in the US. There are many known occurences of the US government mandating the use
-of CVSS base score as the primary framework used to prioritize remediation.
-
-\subsection{Reflection}
-
-The Bayesian analysis portion of the project in my head was initially supposed to be a small
-diversion for interest on how the CVSS data landscape has changed since 2016. However it ended up
-taking a good part of the project. There were a few confounding factors that caused this.
 
 \begin{enumerate}
-	\item The data landscape has changed so much that it is essentially impossible to recreate the
-	      results
-	\item I do not have a statistics background
-	\item I should have asked for more help
+	\item  Divide the six metrics into two groups:
+
+	      \begin{itemize}
+		      \item \textbf{Impact} (3 metrics)
+		      \item \textbf{Exploitability} (3 metrics)
+	      \end{itemize}
+
+	\item Create sub-vectors for each group:
+	      \begin{itemize}
+		      \item \textbf{Impact sub-vector}: 27 possible values ($3^3$)
+		      \item \textbf{Exploitability sub-vector}: 26 possible values ($3^3 - 1$ for no impact)
+	      \end{itemize}
+
+	\item Develop and apply a series of rules to order the sub-vectors. These rules
+	      are primarily based on the severity of components, e.g.\@ vectors with more
+	      \texttt{Complete}
+	      components are rated higher.
+
+	\item Assign scores to the ordered sub-vectors based on the derived rules and review by the
+	      Special Interest Group (SIG).
+
+	\item Apply weightings to the sub-vectors:
+	      \begin{itemize}
+		      \item \textbf{Impact}: 0.6
+		      \item \textbf{Exploitability}: 0.4
+	      \end{itemize}
+
+	\item \label{formula} Develop a formula that approximates the scores derived from the ordered
+	      sub-vectors. Ensure the formula produces scores with $\pm$0.5 error from the originally
+	      defined vector score and does not exceed the maximum value of 10.
+
+	\item Test and refine the formula through iterations, ensuring it aligns with desired values and
+	      corrects any issues, such as scores exceeding 10.
+
 \end{enumerate}
 
-I did realise the data landscape had changed sufficiently, however the analysis still seemed useful
-for some interpretability of machine learngin models going forward. I am unsure if this is still
-true or not.
+This is process is inherently inaccurate, it is not a system designed to give definitive scores. If
+we look at~\ref{formula} above (\ref{equation} shows the CVSS 3.1 base score formula for reference),
+the formula which produces the score does not match exactly the experts decision. There is a lot of
+rounding and approximation going on. All this is designed to make a system which is easy to use and
+quick to complete by security professionals. There is a space for this, however this along with the
+other reasons outlines the issues with CVSS as a sole metric for prioritization. Perhaps an option
+is to triage the large swathes of new vulnerabilites coming in with an initial CVSS score, then move
+on to a deeper dive. This could be in the form of the extra CVSS metrics (Temporal score \&
+Environmental score), or a look into other potential options like the Exploit Prediction Scoring
+System (EPSS~\cite{EPSS}).
 
-The statistics I have done has mainly been ingested through osmosis. I was under the
-impression--whether through ignorance or hubris-- that I could learn enough statistics to be able to
-understand and execute on this problem. I did spend time getting an understanding on the
-fundamentals, Markov chains, Monte Carlo methods, and Bayesian statistics(this I had done some study
-on before). However, this was not enough to understand statistics enough to really understand what
-was going on. This led me to make many mistakes in my implementation before getting to something
-that seems reasonable. I think if my data had been similar to the original study, this would have
-been less of a problem. The issues to do with only having two different populations would not have
-come up and I would have not had the same unease at the results.
+\subsubsection{Exploit Prediction Scoring System}
 
-I have asked for some help with my understand of the topic, but I did not go to statisticians who
-could have given me access to a deeper level of knowledge on the specific topic, that being
-hierarchical bayesian models and MCMC Gibbs sampling.
+EPSS is developed by FIRST, the same group who govern the CVSS standard. It takes a different take
+on the problem, focusing on a data driven model designed to give \say{a daily estimate of the probability
+	of exploitation activity being observed over the next 30 days.} If the data shown on the model
+page are to believed, it is a promising system (some of their findings Figure~\ref{fig:epss},
+Figure~\ref{fig:epss}. Unfortunately while good to keep in mind for the industry, it is less useful
+for our purposes. This is a pretrained and uninterpretable model, from the outside at least.
+Analysis could be done on the output of the model in relation to CVEs, but that will not be a focus
+going forward.
+
+
+\subsection{Future Work}
+
+Despite the disadvantages of CVSS, I will continue to focus on it in my studies. My focus will pivot
+towards the interpretability of large language models, particularly from the perspective of data.
+The CVE dataset is messy, with many poorly written CVE descriptions that are not useful for machine
+learning models. I plan to clean up this dataset by identifying and removing low-quality entries. To
+achieve this, I will perform clustering and general analysis of the CVE descriptions to better
+understand the dataset and develop heuristics for filtering it.
 
 \section{Conclusion}
 
-\todo[inline]{Need to do this!}
+The Common Vulnerability Scoring System (CVSS) is integral in prioritizing and managing the
+ever-growing number of software vulnerabilities. While the current approach heavily relies on
+manually assigned scores from the National Vulnerability Database (NVD), it may be worth using the
+MITRE database as well. However, the findings are very much inconclusive, it is possible that adding
+the extra data during model training is worth it, so far it has only been to the detriment of
+performance.One key issue is the variability in CVSS scores between different databases, such as NVD
+and MITRE, which suggests a lack of consistency in the scoring process. This inconsistency can
+confuse automated systems and reduce the overall reliability of the predicted scores. Additionally,
+our comparison revealed that the current CVSS system, particularly version 3.1, has inherent flaws
+that may not fully be addressed until the widespread adoption of version 4.0.
+
+In conclusion, while CVSS remains a crucial tool for vulnerability management, its current
+implementation has limitations that need to be addressed. The integration of machine learning models
+offers a promising solution to automate and enhance the accuracy of CVSS scoring. Future research
+should focus on refining these models, and focusing on interpretability, whether through LLM
+interpretability methods, or through more traditional databased clustering.
+
 \printbibliography[title={References}]
 
 
 
-% % Activate the appendix
-% % from now on sections are numerated with capital letters
 \appendix
 
 \renewcommand{\thesection}{Appendix \Alph{section}}
 
-\section{CVSS figures from other versions}
+\subsection{CVSS figures from other versions}
 
-\begin{figure}[t]
+Below is a collection of confusion matrics which are results from the Bayesian analysis of CVSS
+versions 2.0 \& 3.0 for both the NVD and MITRE databases. Version 2.0 for MITRE is especially rough
+as there was very little data.
+
+\begin{figure}[H]
 	\centering
-	\makebox[\textwidth][c]{\includegraphics[width=1.5\textwidth]{{figures/nvd_2_titles.png}}}%
+	\makebox[\textwidth][c]{\includegraphics[width=1.5\textwidth]{{figures/nvd_2_titles.pdf}}}%
 	\caption{\label{fig:nvd_2_confusion_matrices}Confusion matrix of estimated accuracy for CVSS metrics for version 2.0 for NVD}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}[H]
 	\centering
-	\makebox[\textwidth][c]{\includegraphics[width=1.5\textwidth]{figures/mitre_2_titles.png}}
+	\makebox[\textwidth][c]{\includegraphics[width=1.5\textwidth]{figures/mitre_2_titles.pdf}}
 	\caption{\label{fig:mitre_2_confusion_matrices}Confusion matrix of estimated accuracy for CVSS
 		metrics for version 2.0 for MITRE}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}[H]
 	\centering
-	\makebox[\textwidth][c]{\includegraphics[width=1.5\textwidth]{figures/nvd_30_titles.png}}
+	\makebox[\textwidth][c]{\includegraphics[width=1.5\textwidth]{figures/nvd_30_titles.pdf}}
 	\caption{\label{fig:nvd_30_confusion_matrices}Confusion matrix of estimated accuracy for CVSS metrics for version 3.0 for NVD}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}[H]
 	\centering
-	\makebox[\textwidth][c]{\includegraphics[width=1.5\textwidth]{figures/mitre_30_titles.png}}
+	\makebox[\textwidth][c]{\includegraphics[width=1.5\textwidth]{figures/mitre_30_titles.pdf}}
 	\caption{\label{fig:mitre_30_confusion_matrices}Confusion matrix of estimated accuracy for CVSS
 		metrics for version 3.0 for MITRE}
 \end{figure}
-% \section{Aims and Objectives}
 
 
-% \subsection*{Original}
 
-% \paragraph{Aims}
-% The primary aim of this research is to develop sophisticated predictive models capable of accurately determining
-% the severity levels of security threats based on the CVSS. This will involve a comprehensive review and comparison
-% of current datasets, with a focus on leveraging natural language descriptions provided in security vulnerability reports.
-% The project intends to utilize advanced transformer-based models to achieve this goal, contributing to the field of
-% cybersecurity by enhancing the precision of threat severity assessments.
+\subsection{CVSS 3.1 Base Score formula} \label{equation}
 
-% \paragraph{Objectives}
-% \begin{itemize}[noitemsep]
-% 	\item Conduct a comprehensive literature review to understand the current landscape of CVSS score prediction and the methodologies employed in existing models.
-% 	\item Replicate successful methodologies to verify the accuracy of CVSS score databases, with a particular focus on alignment with recent CVSS standards and datasets.
-% 	\item Explore opportunities for enhancing existing methodologies, including the investigation of data amalgamation from multiple databases to ascertain improvements in model performance.
-% 	\item Experiment with various model architectures to identify the most effective approach in terms of predictive accuracy, specifically focusing on metrics such as the F1 score and balanced accuracy.
-% \end{itemize}
+Below is a formulaic representation of the CVSS 3.1 base score formula.
+	{\scriptsize
+		\begin{equation}
+			ISS = 1 - ((1 - Confidentiality) \times (1 - Integrity) \times (1 - Availability)) \\
+		\end{equation}
+		\begin{equation}
+			Impact =
+			\begin{cases}
+				7.52 \times (ISS - 0.029) - 3.25 \times (ISS - 0.02)^{15} & \text{if \textit{Scope} is
+				\textit{Changed}}                                                                      \\
+				6.42 \times ISS                                           & \text{if \textit{Scope} is
+					\textit{Unchanged}}
+			\end{cases}
+		\end{equation}
 
-% \paragraph{Timeline}
-% \begin{itemize}[noitemsep]
-% 	\item March: Initiate the project with a literature review, system environment setup, and resource gathering.
-% 	\item March-April: Replicate existing methodologies to validate findings and ensure alignment with current standards.
-% 	\item May-June: Generate preliminary results and compile an interim report detailing findings and methodologies.
-% 	\item July-August: Conduct experiments with various data source combinations and model architectures to identify optimal configurations.
-% 	\item September-October: Finalize experimental work, analyze results, and prepare the comprehensive final report.
-% \end{itemize}
+		\begin{equation}
+			Exploitability = 8.22 - AttackVector \times AttackComplexity \times PrivilegesRequired \times
+			UserInteraction \\
+		\end{equation}
 
-% \subsection*{Revised}
+		\begin{equation}
+			Base Score =
+			\begin{cases}
+				0                                                           & Impact \leq 0              \\
+				Roundup(Minimum(1.08 \times (Impact + Exploitability), 10)) & \text{if \textit{Scope} is
+				\textit{Changed}}                                                                        \\
+				Roundup(Minimum((Impact + Exploitability), 0))              & \text{if \textit{Scope} is
+				\textit{Unchanged}}                                                                      \\
+			\end{cases}
+		\end{equation}
+	}
 
-% \paragraph{Aims}
-% Here you are describing the term goal of the project.  What do you want to achieve by the end?  What is the ultimate goal of this work?  For example, the primary aim of this document is to have students produce suitable aims and objectives for their COSC480/490 project.  While the aims and objectives documents is not an assessed deliverable, a clear definition of what is to be done, and a bit of planning of how it is to be accomplished is paramount to the project's success.  It is important to establish the scope of the project.
+\subsection{Exploit Prediction Scoring System diagrams for reference}
 
-% \paragraph{Objectives}
-% Objectives list the milestones that you need to achieve in order to achieve the projects aim(s).  It's a rough plan for what needs to happen in what order.  It's best to list the objective in bullet point form.  For many projects the structure to these objective might follow the following pattern (objective names are just examples -- you can have different objective names):
-% \begin{itemize}[noitemsep]
-% 	\item background reading; going through the literature; learning about the research field;
-% 	\item setting up of some kind of system for the project; getting the environment for experiments working;
-% 	\item conducting preliminary experiments; implementation of a basic/simple approach; ; producing base case results ;
-% 	\item trying method 1 (A); recording the results;
-% 	\item trying method 1 (B); recording the results.
-% \end{itemize}
+Below are two graphs from FIRST, the creator of EPSS. These show some of the results they have
+found for this system, especially when comparing EPSS to CVSS in terms of effeciency of effort if
+you use EPSS to guide remediation of vulnerabilities.
 
+\begin{figure}
+	\centering
+	\makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{figures/epss.pdf}}
+	\caption{\label{fig:epss}Comparing Metrics: CVSS 7+ vs. EPSS 10\%+ sourced from \cite{EPSS}}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{figures/epss_and_cvss.pdf}}
+	\caption{\label{fig:epss_and_cvss}EPSS score compared to CVSS Base Score (NVD) sourced from
+		\cite{EPSS_USER}}
+\end{figure}
+
+\section{Aims and Objectives}
+
+\subsection*{Original}
+
+\paragraph{Aims}
+The primary aim of this research is to develop sophisticated predictive models capable of accurately determining
+the severity levels of security threats based on the CVSS. This will involve a comprehensive review and comparison
+of current datasets, with a focus on leveraging natural language descriptions provided in security vulnerability reports.
+The project intends to utilize advanced transformer-based models to achieve this goal, contributing to the field of
+cybersecurity by enhancing the precision of threat severity assessments.
+
+\paragraph{Objectives}
+\begin{itemize}[noitemsep]
+	\item Conduct a comprehensive literature review to understand the current landscape of CVSS score prediction and the methodologies employed in existing models.
+	\item Replicate successful methodologies to verify the accuracy of CVSS score databases, with a particular focus on alignment with recent CVSS standards and datasets.
+	\item Explore opportunities for enhancing existing methodologies, including the investigation of data amalgamation from multiple databases to ascertain improvements in model performance.
+	\item Experiment with various model architectures to identify the most effective approach in terms of predictive accuracy, specifically focusing on metrics such as the F1 score and balanced accuracy.
+\end{itemize}
+
+\paragraph{Timeline}
+\begin{itemize}[noitemsep]
+	\item March: Initiate the project with a literature review, system environment setup, and resource gathering.
+	\item March-April: Replicate existing methodologies to validate findings and ensure alignment with current standards.
+	\item May-June: Generate preliminary results and compile an interim report detailing findings and methodologies.
+	\item July-August: Conduct experiments with various data source combinations and model architectures to identify optimal configurations.
+	\item September-October: Finalize experimental work, analyze results, and prepare the comprehensive final report.
+\end{itemize}
+
+\subsection*{Revised}
+
+\paragraph{Aims}
+
+The primary aim of this research is to develop sophisticated predictive models capable of accurately determining
+the severity levels of security threats based on the CVSS. This will involve a comprehensive review and comparison
+of current datasets, with a focus on leveraging natural language descriptions provided in security vulnerability reports.
+The project intends to utilize advanced transformer-based models to achieve this goal, contributing to the field of
+cybersecurity by enhancing the precision of threat severity assessments.
+
+\paragraph{Objectives}
+Objectives list the milestones that you need to achieve in order to achieve the projects aim(s).  It's a rough plan for what needs to happen in what order.  It's best to list the objective in bullet point form.  For many projects the structure to these objective might follow the following pattern (objective names are just examples -- you can have different objective names):
+\begin{itemize}[noitemsep]
+
+	\item Conduct a comprehensive literature review to understand the current landscape of CVSS
+	      score prediction and the methodologies employed in existing models.
+
+	\item Replicate successful methodologies to verify the accuracy of CVSS score databases, with a
+	      particular focus on alignment with recent CVSS standards and datasets.
+
+	\item Explore opportunities for enhancing existing methodologies, including the investigation of
+	      data amalgamation from multiple databases to ascertain improvements in model performance.
+
+	\item Look into data cleaning and clustering, to improve the efficacy of the models, as well as
+	      a look into interpretability though data analysis.
+
+\end{itemize}
 
 \end{document}
 
-% \section{\LaTeX{} markup examples}
-% \label{sec:examples}
-
-% \subsection{Sections}
-
-% Use section and subsection commands to organise your document. \LaTeX{} handles all the formatting and numbering automatically. Use ref and label commands for cross-references.
-
-% \subsection{Comments}
-
-% Comments might be useful during the writing process, as reminders or questions to your supervisor (who should get a chance to comment on your report).  Comments can be added to the margins of the document using the \todo{Here's a comment in the margin!} \verb$\todo{}$ command, as shown in the example on the right. You can also add inline comments too:
-
-% \todo[inline, color=green!40]{This is an inline comment.}
-
-% \subsection{Tables and Figures}
-
-% Use the table and tabular commands for basic tables --- see Table~\ref{tab:widgets}, for example. You can include a figure (JPEG, PNG or PDF) with the \verb$\includegraphics$ command as in the code for Figure~\ref{fig:frog} below.
-
-% \begin{table}
-% 	\centering
-% 	\begin{tabular}{l|r}
-% 		Item    & Quantity \\\hline
-% 		Widgets & 42       \\
-% 		Gadgets & 13
-% 	\end{tabular}
-% 	\caption{\label{tab:widgets}An example table.}
-% \end{table}
-
-% \subsection{Mathematics}
-
-% \LaTeX{} is great at typesetting mathematics. Let $X_1, X_2, \ldots, X_n$ be a sequence of independent and identically distributed random variables with $\text{E}[X_i] = \mu$ and $\text{Var}[X_i] = \sigma^2 < \infty$, and let
-% $$S_n = \frac{X_1 + X_2 + \cdots + X_n}{n}
-% 	= \frac{1}{n}\sum_{i}^{n} X_i$$
-% denote their mean. Then as $n$ approaches infinity, the random variables $\sqrt{n}(S_n - \mu)$ converge in distribution to a normal $\mathcal{N}(0, \sigma^2)$.
-
-% \subsection{Lists}
-
-% You can make lists with automatic numbering \dots
-
-% \begin{enumerate}
-% 	\item Like this,
-% 	\item and like this.
-% \end{enumerate}
-% \dots or bullet points \dots
-% \begin{itemize}
-% 	\item Like this,
-% 	\item and like this.
-% \end{itemize}
-
-% \section{Conclusion}
