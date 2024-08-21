@@ -64,10 +64,12 @@ def main():
     #                 # print()
     #                 # print(mitre["description"])
 
-    # plot.plot_comparison(nvd_overlap, mitre_overlap)
+    nvd_counts = metric_counts.calculate_metric_counts(nvd_overlap, 31)
+    mitre_counts = metric_counts.calculate_metric_counts(mitre_overlap, 31)
 
-    print(count)
-    print(mitre_count)
+    # plot.plot_comparison(nvd_counts, mitre_counts)
+    plot.plot_percentages(nvd_counts, mitre_counts)
+    # plot.plot_percentages(nvd, mitre)
 
 
 if __name__ == "__main__":

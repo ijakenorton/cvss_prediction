@@ -77,6 +77,8 @@ def compute_metropolis_hastings():
 
     nvd, mitre = counts(read_data())
     print(nvd, mitre)
+    exit()
+
     nvd_observed = {
         metric: np.array(list(data.values())) for metric, data in nvd.items()
     }
