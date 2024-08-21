@@ -1,7 +1,7 @@
 import gensim
 from gensim import corpora
 from gensim.models.ldamodel import LdaModel
-from gensim.models import Phrases
+from gensim.models import LdaMulticore, Phrases
 from gensim.models.coherencemodel import CoherenceModel
 from gensim.parsing.preprocessing import STOPWORDS
 from time import time
@@ -56,7 +56,7 @@ def compute_coherence_values(corpus, dictionary, texts, limit, start=2, step=3):
     coherence_values = []
     model_list = []
     for num_topics in range(start, limit, step):
-        model = LdaModel(
+        model = LdaMulticore(
             corpus=corpus,
             id2word=dictionary,
             num_topics=num_topics,
@@ -64,6 +64,7 @@ def compute_coherence_values(corpus, dictionary, texts, limit, start=2, step=3):
             chunksize=2000,
             passes=20,
             iterations=400,
+            workers=6,
         )
         model_list.append(model)
         coherencemodel = CoherenceModel(
