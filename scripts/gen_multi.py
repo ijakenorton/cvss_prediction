@@ -10,16 +10,16 @@ from nltk.corpus import stopwords
 import random
 import numpy as np
 import matplotlib.pyplot as plt
-
+import pandas as pd
 import utils
 
+nltk.download("stopwords", quiet=True)
 true_k = 8
 version = 31
 nvd_data = utils.read_data(f"../data/nvd_{version}_cleaned.pkl")
-
 data = nvd_data["data"]
+data = utils.filter_by_metric_score(data, "attackVector", "LOCAL")
 descriptions = list(map(lambda x: x["description"][0], data))
-nltk.download("stopwords", quiet=True)
 
 custom_stopwords = set(stopwords.words("english")).union(set(STOPWORDS))
 custom_stopwords.update(["vulnerability", "via", "allows", "attacker", "could", "lead"])
@@ -31,9 +31,6 @@ def preprocess(text):
         for word in gensim.utils.simple_preprocess(text)
         if word not in custom_stopwords and len(word) > 2
     ]
-
-
-# Use a smaller subset of the data for quicker iterations
 
 
 texts = [preprocess(text) for text in descriptions]
@@ -75,15 +72,21 @@ def compute_coherence_values(corpus, dictionary, texts, limit, start=2, step=3):
     return model_list, coherence_values
 
 
+limit = 20
+start = 2
+step = 2
+
 # Compute coherence values for different numbers of topics
 model_list, coherence_values = compute_coherence_values(
-    corpus=corpus, dictionary=dictionary, texts=texts, start=2, limit=40, step=6
+    corpus=corpus,
+    dictionary=dictionary,
+    texts=texts,
+    start=start,
+    limit=limit,
+    step=step,
 )
 
 # Plot coherence scores
-limit = 40
-start = 2
-step = 6
 x = range(start, limit, step)
 plt.plot(x, coherence_values)
 plt.xlabel("Num Topics")
@@ -128,7 +131,6 @@ df_topic_sents_keywords = format_topics_sentences(
 )
 
 # Convert to DataFrame
-import pandas as pd
 
 df_dominant_topic = pd.DataFrame(
     df_topic_sents_keywords,
@@ -136,7 +138,7 @@ df_dominant_topic = pd.DataFrame(
 )
 
 # Show
-print(df_dominant_topic.head(10))
+print(df_dominant_topic.head(50))
 
 # Compute topic distribution for all documents
 doc_topics = [optimal_model.get_document_topics(doc) for doc in corpus]

@@ -211,6 +211,12 @@ def find_key_in_nested_dict(dictionary, target_key):
     return False, None
 
 
+def filter_by_metric_score(data, metric, score):
+
+    data = list(filter(lambda x: x["cvssData"][metric] == score, data))
+    return data
+
+
 def write_data(data, path):
     with open(path, "wb") as file:
         pickle.dump(data, file)

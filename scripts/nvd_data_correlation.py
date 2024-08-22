@@ -1,6 +1,8 @@
 import os
 import json
+import pandas as pd
 from pprint import pprint
+import utils
 
 
 def read_data(version_number: int):
@@ -17,21 +19,12 @@ def read_data(version_number: int):
                 cves = json.load(f)
 
                 for cve in cves:
+
                     desc = []
                     if f"cvssMetricV{version_number}" in cve["metrics"].keys():
+
                         for d in cve["descriptions"]:
                             if d["lang"] == "en":
-                                if (
-                                    "Improper access control in the firmware for some Intel(R) Processors may allow a privileged user to potentially enable a denial of service via local access."
-                                    in d["value"]
-                                ):
-                                    print(cve["id"], "\n")
-                                    print(d["value"])
-                                    pprint(
-                                        cve["metrics"][f"cvssMetricV{version_number}"][
-                                            0
-                                        ]["cvssData"]
-                                    )
                                 desc.append(d["value"])
                         cvss_data = cve["metrics"][f"cvssMetricV{version_number}"][0][
                             "cvssData"
@@ -49,8 +42,6 @@ def read_data(version_number: int):
 
                         data.append(current)
                         ids.add(cve["id"])
-                        # if cve["id"] == "CVE-2022-21233":
-                        #     print(cve)
 
             index += 1
 
@@ -59,8 +50,14 @@ def read_data(version_number: int):
     return data, ids
 
 
+def read_and_save_data(version=31):
+    data, nvd_ids = read_data(version)
+    nvd_data = {"data": data, "ids": nvd_ids}
+    utils.write_data(nvd_data, "../data/nvd_31_cleaned.pkl")
+
+
 def main():
-    read_data(31)
+    read_and_save_data(31)
 
 
 if __name__ == "__main__":
