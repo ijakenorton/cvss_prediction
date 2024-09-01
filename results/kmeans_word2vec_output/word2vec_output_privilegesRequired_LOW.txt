@@ -1,0 +1,19 @@
+Analysis for privilegesRequired with value LOW
+
+Number of documents: 34306
+Total number of words: 864910
+
+Word2Vec Topics:
+Topic 0: issue, component, based, multiple, library, high, following, range, auth, launch
+Topic 1: functionality, path, leads, properly, field, url, manipulation, vector, escape, module
+Topic 2: needed, additional, interaction
+Topic 3: versions, prior, version, android, windows, vulnerable, ibm, management, discovered, exists
+Topic 4: cve, tensorflow, affects, sdm, github, fixed, iot, upgrade, msm, note
+Topic 5: data, possible, permission, permissions, control, credentials, app, jenkins, configuration, api
+Topic 6: oracle, product, cvss, attacks, unauthorized, successful, enterprise, androidversions, accessible, compromise
+Topic 7: site, cross, scripting, xss, plugin, web, stored, injection, page, wordpress
+Topic 8: user, access, local, authenticated, users, arbitrary, allow, code, file, privilege
+Topic 9: snapdragon, denial, disclosure, memory, kernel, check, use, function, buffer, linux
+
+Word2Vec model saved. You can load it later using:
+model = Word2Vec.load('word2vec_output/word2vec_model_privilegesRequired_LOW.model')

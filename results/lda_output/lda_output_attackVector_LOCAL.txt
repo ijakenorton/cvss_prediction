@@ -1,0 +1,132 @@
+Analysis for attackVector with value LOCAL
+
+Number of documents in corpus: 26224
+Number of unique tokens: 9657
+Total number of terms in corpus: 614638
+
+Coherence Scores:
+Num Topics: 2, Coherence Score: 0.41673504986589827
+Num Topics: 4, Coherence Score: 0.3723951806454601
+Num Topics: 6, Coherence Score: 0.5305309056392097
+Num Topics: 8, Coherence Score: 0.5140987705377723
+Num Topics: 10, Coherence Score: 0.5741488098277777
+Num Topics: 12, Coherence Score: 0.6070099449469037
+Num Topics: 14, Coherence Score: 0.6020569642877432
+Num Topics: 16, Coherence Score: 0.6413381076709912
+Num Topics: 18, Coherence Score: 0.6070596921759532
+
+Optimal number of topics: 16
+
+Top 10 words for each topic in the optimal model:
+Topic: 0 
+Words: 0.116*"android" + 0.087*"needed" + 0.055*"user" + 0.047*"exploitation" + 0.045*"interaction" + 0.044*"execution" + 0.043*"possible" + 0.043*"product" + 0.042*"local" + 0.042*"privileges"
+
+Topic: 1 
+Words: 0.113*"versions" + 0.032*"code" + 0.030*"files" + 0.025*"identified" + 0.024*"parsing" + 0.023*"execute" + 0.022*"process" + 0.022*"visualization" + 0.022*"teamcenter" + 0.021*"context"
+
+Topic: 2 
+Words: 0.047*"oracle" + 0.046*"prior" + 0.033*"versions" + 0.031*"tensorflow" + 0.028*"cvss" + 0.027*"virtualbox" + 0.019*"attacks" + 0.019*"affected" + 0.014*"supported" + 0.014*"data"
+
+Topic: 3 
+Words: 0.038*"kernel" + 0.028*"linux" + 0.025*"memory" + 0.020*"use" + 0.018*"flaw" + 0.015*"free" + 0.014*"issue" + 0.012*"service" + 0.011*"cause" + 0.011*"guest"
+
+Topic: 4 
+Words: 0.031*"information" + 0.023*"ibm" + 0.021*"local" + 0.020*"sensitive" + 0.019*"user" + 0.018*"file" + 0.017*"access" + 0.013*"log" + 0.012*"force" + 0.012*"files"
+
+Topic: 5 
+Words: 0.041*"local" + 0.035*"user" + 0.035*"allow" + 0.030*"access" + 0.023*"privileges" + 0.021*"privilege" + 0.020*"authenticated" + 0.018*"potentially" + 0.018*"version" + 0.017*"escalation"
+
+Topic: 6 
+Words: 0.058*"overflow" + 0.048*"buffer" + 0.030*"crafted" + 0.030*"cause" + 0.029*"service" + 0.028*"file" + 0.028*"denial" + 0.026*"heap" + 0.025*"discovered" + 0.025*"function"
+
+Topic: 7 
+Words: 0.082*"issue" + 0.059*"macos" + 0.044*"fixed" + 0.041*"addressed" + 0.036*"improved" + 0.031*"able" + 0.030*"ios" + 0.025*"ipados" + 0.020*"memory" + 0.019*"code"
+
+Topic: 8 
+Words: 0.058*"bounds" + 0.054*"privilege" + 0.047*"check" + 0.043*"service" + 0.042*"needed" + 0.042*"missing" + 0.041*"local" + 0.037*"execution" + 0.037*"privileges" + 0.036*"alps"
+
+Topic: 9 
+Words: 0.069*"earlier" + 0.063*"user" + 0.049*"file" + 0.036*"victim" + 0.036*"open" + 0.036*"exploitation" + 0.035*"affected" + 0.035*"malicious" + 0.033*"requires" + 0.032*"interaction"
+
+Topic: 10 
+Words: 0.059*"code" + 0.054*"remote" + 0.051*"execution" + 0.037*"microsoft" + 0.026*"windows" + 0.025*"file" + 0.017*"exists" + 0.017*"security" + 0.015*"specially" + 0.015*"crafted"
+
+Topic: 11 
+Words: 0.025*"exploit" + 0.024*"component" + 0.021*"affected" + 0.021*"service" + 0.020*"local" + 0.018*"leads" + 0.017*"issue" + 0.017*"attack" + 0.017*"manipulation" + 0.016*"function"
+
+Topic: 12 
+Words: 0.038*"app" + 0.029*"device" + 0.027*"installed" + 0.016*"build" + 0.016*"pre" + 0.015*"versions" + 0.015*"user" + 0.011*"package" + 0.011*"android" + 0.011*"key"
+
+Topic: 13 
+Words: 0.110*"snapdragon" + 0.032*"sdm" + 0.030*"iot" + 0.024*"prior" + 0.023*"msm" + 0.021*"mobile" + 0.019*"improper" + 0.018*"release" + 0.017*"mdm" + 0.017*"access"
+
+Topic: 14 
+Words: 0.043*"code" + 0.042*"malicious" + 0.041*"execute" + 0.032*"file" + 0.029*"user" + 0.027*"arbitrary" + 0.022*"exists" + 0.022*"open" + 0.022*"attackers" + 0.020*"specific"
+
+Topic: 15 
+Words: 0.023*"server" + 0.016*"code" + 0.015*"version" + 0.014*"hpe" + 0.013*"local" + 0.013*"prior" + 0.012*"arbitrary" + 0.012*"service" + 0.011*"contains" + 0.011*"file"
+
+
+Dominant Topics:
+    Dominant_Topic  Perc_Contribution                                                                                      Topic_Keywords
+0                3             0.4883                                kernel, linux, memory, use, flaw, free, issue, service, cause, guest
+1                3             0.5112                                kernel, linux, memory, use, flaw, free, issue, service, cause, guest
+2                3             0.5224                                kernel, linux, memory, use, flaw, free, issue, service, cause, guest
+3                6             0.7779                 overflow, buffer, crafted, cause, service, file, denial, heap, discovered, function
+4                1             0.5666    versions, code, files, identified, parsing, execute, process, visualization, teamcenter, context
+5                4             0.2965                           information, ibm, local, sensitive, user, file, access, log, force, files
+6                6             0.7668                 overflow, buffer, crafted, cause, service, file, denial, heap, discovered, function
+7                9             0.3969         earlier, user, file, victim, open, exploitation, affected, malicious, requires, interaction
+8               15             0.2972                        server, code, version, hpe, local, prior, arbitrary, service, contains, file
+9                5             0.6347  local, user, allow, access, privileges, privilege, authenticated, potentially, version, escalation
+10               7             0.3221                           issue, macos, fixed, addressed, improved, able, ios, ipados, memory, code
+11               5             0.5491  local, user, allow, access, privileges, privilege, authenticated, potentially, version, escalation
+12               6             0.7579                 overflow, buffer, crafted, cause, service, file, denial, heap, discovered, function
+13               6             0.7088                 overflow, buffer, crafted, cause, service, file, denial, heap, discovered, function
+14               5             0.4342  local, user, allow, access, privileges, privilege, authenticated, potentially, version, escalation
+15               4             0.6630                           information, ibm, local, sensitive, user, file, access, log, force, files
+16               4             0.3919                           information, ibm, local, sensitive, user, file, access, log, force, files
+17              15             0.6104                        server, code, version, hpe, local, prior, arbitrary, service, contains, file
+18               5             0.4748  local, user, allow, access, privileges, privilege, authenticated, potentially, version, escalation
+19               5             0.8231  local, user, allow, access, privileges, privilege, authenticated, potentially, version, escalation
+20               5             0.6117  local, user, allow, access, privileges, privilege, authenticated, potentially, version, escalation
+21               3             0.6543                                kernel, linux, memory, use, flaw, free, issue, service, cause, guest
+22               5             0.5565  local, user, allow, access, privileges, privilege, authenticated, potentially, version, escalation
+23               5             0.6996  local, user, allow, access, privileges, privilege, authenticated, potentially, version, escalation
+24               5             0.4341  local, user, allow, access, privileges, privilege, authenticated, potentially, version, escalation
+25               4             0.6628                           information, ibm, local, sensitive, user, file, access, log, force, files
+26               5             0.4341  local, user, allow, access, privileges, privilege, authenticated, potentially, version, escalation
+27               4             0.6632                           information, ibm, local, sensitive, user, file, access, log, force, files
+28               5             0.4340  local, user, allow, access, privileges, privilege, authenticated, potentially, version, escalation
+29               5             0.4341  local, user, allow, access, privileges, privilege, authenticated, potentially, version, escalation
+30               5             0.4341  local, user, allow, access, privileges, privilege, authenticated, potentially, version, escalation
+31               5             0.2898  local, user, allow, access, privileges, privilege, authenticated, potentially, version, escalation
+32               5             0.5456  local, user, allow, access, privileges, privilege, authenticated, potentially, version, escalation
+33               5             0.3948  local, user, allow, access, privileges, privilege, authenticated, potentially, version, escalation
+34               5             0.4342  local, user, allow, access, privileges, privilege, authenticated, potentially, version, escalation
+35               4             0.3379                           information, ibm, local, sensitive, user, file, access, log, force, files
+36               4             0.3374                           information, ibm, local, sensitive, user, file, access, log, force, files
+37               4             0.3375                           information, ibm, local, sensitive, user, file, access, log, force, files
+38               4             0.4633                           information, ibm, local, sensitive, user, file, access, log, force, files
+39               4             0.4633                           information, ibm, local, sensitive, user, file, access, log, force, files
+40               4             0.5151                           information, ibm, local, sensitive, user, file, access, log, force, files
+41               4             0.8408                           information, ibm, local, sensitive, user, file, access, log, force, files
+42              12             0.3803                           app, device, installed, build, pre, versions, user, package, android, key
+43               4             0.8741                           information, ibm, local, sensitive, user, file, access, log, force, files
+44               5             0.8414  local, user, allow, access, privileges, privilege, authenticated, potentially, version, escalation
+45               3             0.6662                                kernel, linux, memory, use, flaw, free, issue, service, cause, guest
+46               3             0.7283                                kernel, linux, memory, use, flaw, free, issue, service, cause, guest
+47               4             0.4328                           information, ibm, local, sensitive, user, file, access, log, force, files
+48              10             0.5938             code, remote, execution, microsoft, windows, file, exists, security, specially, crafted
+49              10             0.4978             code, remote, execution, microsoft, windows, file, exists, security, specially, crafted
+
+
+Shape of topic distribution matrix: (26224, 16)
+Sample topic distribution for a document:
+[0.         0.         0.         0.48836121 0.         0.4601571
+ 0.         0.         0.         0.         0.         0.
+ 0.         0.         0.         0.        ]
+
+Model and dictionary saved. You can load them later using:
+lda_model = LdaModel.load('lda_output/lda_model_attackVector_LOCAL.gensim')
+dictionary = corpora.Dictionary.load('lda_output/dictionary_attackVector_LOCAL.gensim')

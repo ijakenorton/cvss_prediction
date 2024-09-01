@@ -1,0 +1,37 @@
+Analysis for confidentialityImpact with value LOW
+
+Number of documents in corpus: 22864
+Number of unique tokens: 10079
+Total number of terms in corpus: 543058
+
+Word2Vec-based Coherence Scores:
+Num Topics: 2, Coherence Score: 0.28201794226964316
+Num Topics: 4, Coherence Score: 0.3730008768331673
+Num Topics: 6, Coherence Score: 0.3027194742872207
+Num Topics: 8, Coherence Score: 0.3111882375087589
+Num Topics: 10, Coherence Score: 0.3206922476697299
+Num Topics: 12, Coherence Score: 0.31738483567153003
+Num Topics: 14, Coherence Score: 0.3022453344530529
+Num Topics: 16, Coherence Score: 0.30443909994468815
+Num Topics: 18, Coherence Score: 0.28823933971953797
+
+Optimal number of topics: 4
+
+Top 10 words for each topic in the optimal model:
+Topic: 0 
+Words: 0.029*"access" + 0.023*"oracle" + 0.020*"information" + 0.019*"data" + 0.018*"cvss" + 0.015*"unauthorized" + 0.015*"attacks" + 0.014*"read" + 0.012*"server" + 0.011*"successful"
+
+Topic: 1 
+Words: 0.021*"user" + 0.019*"versions" + 0.014*"prior" + 0.013*"malicious" + 0.010*"issue" + 0.010*"web" + 0.010*"version" + 0.010*"allow" + 0.009*"users" + 0.009*"xss"
+
+Topic: 2 
+Words: 0.031*"site" + 0.030*"cross" + 0.030*"scripting" + 0.023*"xss" + 0.022*"arbitrary" + 0.019*"php" + 0.019*"attackers" + 0.017*"web" + 0.016*"html" + 0.015*"inject"
+
+Topic: 3 
+Words: 0.051*"site" + 0.050*"cross" + 0.049*"scripting" + 0.042*"xss" + 0.036*"plugin" + 0.026*"stored" + 0.023*"wordpress" + 0.017*"users" + 0.015*"admin" + 0.014*"page"
+
+
+Models saved. You can load them later using:
+lda_model = LdaModel.load('lda_word2vec_output/lda_model_confidentialityImpact_LOW.gensim')
+dictionary = corpora.Dictionary.load('lda_word2vec_output/dictionary_confidentialityImpact_LOW.gensim')
+w2v_model = Word2Vec.load('lda_word2vec_output/word2vec_model_confidentialityImpact_LOW.model')

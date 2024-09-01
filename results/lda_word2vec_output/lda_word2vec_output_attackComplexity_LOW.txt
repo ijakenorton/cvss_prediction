@@ -1,0 +1,55 @@
+Analysis for attackComplexity with value LOW
+
+Number of documents in corpus: 104921
+Number of unique tokens: 27463
+Total number of terms in corpus: 2479830
+
+Word2Vec-based Coherence Scores:
+Num Topics: 2, Coherence Score: 0.1785997637030151
+Num Topics: 4, Coherence Score: 0.14196798386466172
+Num Topics: 6, Coherence Score: 0.15627585527556084
+Num Topics: 8, Coherence Score: 0.18254384372719668
+Num Topics: 10, Coherence Score: 0.19633978405242994
+Num Topics: 12, Coherence Score: 0.190947511091104
+Num Topics: 14, Coherence Score: 0.18557422663499085
+Num Topics: 16, Coherence Score: 0.1865557898308099
+Num Topics: 18, Coherence Score: 0.190229437182324
+
+Optimal number of topics: 10
+
+Top 10 words for each topic in the optimal model:
+Topic: 0 
+Words: 0.031*"allow" + 0.026*"exploit" + 0.022*"user" + 0.022*"cve" + 0.022*"remote" + 0.020*"code" + 0.019*"arbitrary" + 0.018*"windows" + 0.018*"execute" + 0.017*"affected"
+
+Topic: 1 
+Words: 0.045*"site" + 0.041*"cross" + 0.033*"scripting" + 0.031*"xss" + 0.030*"plugin" + 0.021*"wordpress" + 0.017*"page" + 0.016*"stored" + 0.015*"attackers" + 0.014*"versions"
+
+Topic: 2 
+Words: 0.058*"injection" + 0.049*"sql" + 0.040*"php" + 0.025*"leads" + 0.023*"file" + 0.022*"attack" + 0.021*"manipulation" + 0.020*"identifier" + 0.020*"remotely" + 0.019*"vdb"
+
+Topic: 3 
+Words: 0.036*"user" + 0.027*"android" + 0.027*"issue" + 0.026*"needed" + 0.025*"execution" + 0.023*"bounds" + 0.022*"code" + 0.022*"exploitation" + 0.021*"interaction" + 0.018*"privileges"
+
+Topic: 4 
+Words: 0.023*"access" + 0.019*"user" + 0.016*"information" + 0.013*"authentication" + 0.012*"attackers" + 0.011*"password" + 0.011*"issue" + 0.011*"server" + 0.010*"sensitive" + 0.009*"request"
+
+Topic: 5 
+Words: 0.043*"overflow" + 0.039*"buffer" + 0.031*"snapdragon" + 0.027*"crafted" + 0.024*"function" + 0.020*"discovered" + 0.019*"service" + 0.018*"stack" + 0.017*"denial" + 0.017*"cause"
+
+Topic: 6 
+Words: 0.046*"oracle" + 0.041*"cvss" + 0.036*"access" + 0.026*"data" + 0.025*"server" + 0.024*"attacks" + 0.022*"unauthorized" + 0.022*"successful" + 0.019*"enterprise" + 0.017*"base"
+
+Topic: 7 
+Words: 0.133*"versions" + 0.069*"prior" + 0.019*"series" + 0.017*"firmware" + 0.017*"earlier" + 0.012*"version" + 0.010*"identified" + 0.010*"affected" + 0.009*"allow" + 0.009*"networks"
+
+Topic: 8 
+Words: 0.025*"service" + 0.021*"denial" + 0.018*"cause" + 0.014*"memory" + 0.010*"issue" + 0.010*"kernel" + 0.009*"linux" + 0.008*"dos" + 0.008*"crash" + 0.008*"use"
+
+Topic: 9 
+Words: 0.023*"file" + 0.016*"version" + 0.016*"files" + 0.015*"users" + 0.015*"code" + 0.014*"arbitrary" + 0.014*"ibm" + 0.013*"user" + 0.013*"issue" + 0.010*"server"
+
+
+Models saved. You can load them later using:
+lda_model = LdaModel.load('lda_word2vec_output/lda_model_attackComplexity_LOW.gensim')
+dictionary = corpora.Dictionary.load('lda_word2vec_output/dictionary_attackComplexity_LOW.gensim')
+w2v_model = Word2Vec.load('lda_word2vec_output/word2vec_model_attackComplexity_LOW.model')

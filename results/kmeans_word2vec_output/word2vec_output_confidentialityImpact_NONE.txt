@@ -1,0 +1,19 @@
+Analysis for confidentialityImpact with value NONE
+
+Number of documents: 23683
+Total number of words: 613809
+
+Word2Vec Topics:
+Topic 0: security, improper, software, cisco, bypass, control, fixed, android, windows, insufficient
+Topic 1: vulnerable, functionality, mode, point, following, agent, critical, project, profile, storage
+Topic 2: server, affected, device, exploit, successful, http, sending, management, packet, specially
+Topic 3: cvss, affects, tensorflow, product, base, score, impacts, open, note, source
+Topic 4: data, check, use, vector, code, snapdragon, value, incorrect, parameter, invalid
+Topic 5: user, access, attackers, allow, file, request, unauthenticated, users, local, plugin
+Topic 6: series, junos, networks, juniper, evo, srx, qfx
+Topic 7: versions, prior, version, discovered, component, earlier, contain, exists, linux, cross
+Topic 8: service, denial, cause, issue, crafted, dos, remote, function, crash, memory
+Topic 9: mysql, oracle, network, java, multiple, supported, privileged, compromise, exploitable, easily
+
+Word2Vec model saved. You can load it later using:
+model = Word2Vec.load('word2vec_output/word2vec_model_confidentialityImpact_NONE.model')

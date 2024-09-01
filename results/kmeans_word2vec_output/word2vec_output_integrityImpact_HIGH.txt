@@ -1,0 +1,19 @@
+Analysis for integrityImpact with value HIGH
+
+Number of documents: 54184
+Total number of words: 1296972
+
+Word2Vec Topics:
+Topic 0: needed, interaction, open, flaw, specific, victim, required, target, androidversions, installations
+Topic 1: exists, vulnerable, product, multiple, potential, line, issues, conduct, party, bluetooth
+Topic 2: issue, cve, affects, aka, module, firefox, source, impacts, repository, time
+Topic 3: windows, security, fixed, update, cisco, macos, app, addressed, ios, improved
+Topic 4: code, user, arbitrary, remote, execution, execute, affected, access, allow, crafted
+Topic 5: versions, prior, version, discovered, management, android, contain, devices, cross, elevation
+Topic 6: server, users, use, possible, authentication, bypass, control, password, interface, attacks
+Topic 7: overflow, buffer, function, snapdragon, bounds, based, heap, free, stack, check
+Topic 8: file, injection, sql, php, request, web, parameter, plugin, input, admin
+Topic 9: oracle, critical, cvss, sdm, patch, identifier, vdb, note, unknown, msm
+
+Word2Vec model saved. You can load it later using:
+model = Word2Vec.load('word2vec_output/word2vec_model_integrityImpact_HIGH.model')

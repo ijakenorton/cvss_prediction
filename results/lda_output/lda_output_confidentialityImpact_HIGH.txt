@@ -1,0 +1,138 @@
+Analysis for confidentialityImpact with value HIGH
+
+Number of documents in corpus: 63697
+Number of unique tokens: 19865
+Total number of terms in corpus: 1493363
+
+Coherence Scores:
+Num Topics: 2, Coherence Score: 0.3814691002340686
+Num Topics: 4, Coherence Score: 0.509035862704395
+Num Topics: 6, Coherence Score: 0.541777568847177
+Num Topics: 8, Coherence Score: 0.5168846072989157
+Num Topics: 10, Coherence Score: 0.5110649182121971
+Num Topics: 12, Coherence Score: 0.5447401905697444
+Num Topics: 14, Coherence Score: 0.5860830785344938
+Num Topics: 16, Coherence Score: 0.6150367511151121
+Num Topics: 18, Coherence Score: 0.655852513396848
+
+Optimal number of topics: 18
+
+Top 10 words for each topic in the optimal model:
+Topic: 0 
+Words: 0.054*"buffer" + 0.052*"overflow" + 0.044*"code" + 0.032*"crafted" + 0.032*"execution" + 0.024*"remote" + 0.023*"cause" + 0.020*"arbitrary" + 0.020*"specially" + 0.019*"based"
+
+Topic: 1 
+Words: 0.035*"arbitrary" + 0.034*"execute" + 0.031*"commands" + 0.030*"device" + 0.030*"allow" + 0.029*"command" + 0.025*"exploit" + 0.025*"affected" + 0.025*"remote" + 0.025*"vulnerabilities"
+
+Topic: 2 
+Words: 0.041*"plugin" + 0.032*"site" + 0.031*"request" + 0.025*"cross" + 0.025*"wordpress" + 0.024*"forgery" + 0.023*"csrf" + 0.021*"versions" + 0.020*"prior" + 0.020*"page"
+
+Topic: 3 
+Words: 0.059*"oracle" + 0.046*"access" + 0.043*"cvss" + 0.041*"data" + 0.029*"attacks" + 0.025*"successful" + 0.024*"confidentiality" + 0.021*"unauthorized" + 0.020*"base" + 0.020*"compromise"
+
+Topic: 4 
+Words: 0.041*"code" + 0.037*"execute" + 0.029*"user" + 0.025*"context" + 0.025*"malicious" + 0.021*"process" + 0.021*"affected" + 0.020*"file" + 0.020*"exploit" + 0.019*"arbitrary"
+
+Topic: 5 
+Words: 0.090*"information" + 0.061*"sensitive" + 0.035*"ibm" + 0.021*"obtain" + 0.021*"access" + 0.020*"disclosure" + 0.020*"xml" + 0.019*"allow" + 0.018*"force" + 0.017*"data"
+
+Topic: 6 
+Words: 0.015*"version" + 0.014*"http" + 0.013*"firmware" + 0.011*"request" + 0.011*"tensorflow" + 0.011*"data" + 0.010*"source" + 0.009*"value" + 0.008*"open" + 0.007*"commit"
+
+Topic: 7 
+Words: 0.071*"issue" + 0.035*"macos" + 0.035*"fixed" + 0.032*"addressed" + 0.030*"code" + 0.026*"ios" + 0.026*"improved" + 0.022*"memory" + 0.020*"able" + 0.020*"execution"
+
+Topic: 8 
+Words: 0.045*"file" + 0.045*"versions" + 0.034*"arbitrary" + 0.034*"code" + 0.031*"prior" + 0.029*"files" + 0.021*"remote" + 0.016*"execution" + 0.016*"upload" + 0.016*"execute"
+
+Topic: 9 
+Words: 0.039*"local" + 0.039*"access" + 0.037*"privileges" + 0.036*"user" + 0.030*"allow" + 0.028*"privilege" + 0.022*"escalation" + 0.017*"potentially" + 0.015*"version" + 0.015*"improper"
+
+Topic: 10 
+Words: 0.027*"versions" + 0.022*"server" + 0.020*"linux" + 0.019*"kernel" + 0.018*"use" + 0.014*"issue" + 0.013*"prior" + 0.013*"flaw" + 0.009*"series" + 0.009*"key"
+
+Topic: 11 
+Words: 0.132*"earlier" + 0.044*"exploitation" + 0.043*"versions" + 0.041*"user" + 0.033*"adobe" + 0.031*"file" + 0.029*"victim" + 0.025*"arbitrary" + 0.025*"affected" + 0.025*"code"
+
+Topic: 12 
+Words: 0.072*"needed" + 0.070*"android" + 0.044*"user" + 0.044*"execution" + 0.041*"privileges" + 0.040*"possible" + 0.038*"exploitation" + 0.036*"interaction" + 0.036*"local" + 0.034*"bounds"
+
+Topic: 13 
+Words: 0.093*"injection" + 0.092*"sql" + 0.053*"parameter" + 0.052*"discovered" + 0.043*"php" + 0.038*"contain" + 0.023*"command" + 0.022*"function" + 0.019*"vulnerable" + 0.017*"admin"
+
+Topic: 14 
+Words: 0.021*"user" + 0.020*"access" + 0.016*"authentication" + 0.015*"users" + 0.013*"versions" + 0.013*"issue" + 0.013*"password" + 0.011*"bypass" + 0.010*"version" + 0.010*"server"
+
+Topic: 15 
+Words: 0.124*"cve" + 0.070*"windows" + 0.038*"privilege" + 0.038*"elevation" + 0.026*"memory" + 0.025*"aka" + 0.022*"code" + 0.022*"exists" + 0.021*"execution" + 0.020*"remote"
+
+Topic: 16 
+Words: 0.145*"snapdragon" + 0.065*"sdm" + 0.048*"msm" + 0.044*"iot" + 0.036*"mdm" + 0.028*"apq" + 0.028*"mobile" + 0.024*"consumer" + 0.022*"industrial" + 0.021*"auto"
+
+Topic: 17 
+Words: 0.035*"leads" + 0.033*"file" + 0.032*"manipulation" + 0.030*"identifier" + 0.029*"attack" + 0.028*"critical" + 0.027*"vdb" + 0.027*"public" + 0.027*"remotely" + 0.025*"unknown"
+
+
+Dominant Topics:
+    Dominant_Topic  Perc_Contribution                                                                                    Topic_Keywords
+0                2             0.6455                     plugin, site, request, cross, wordpress, forgery, csrf, versions, prior, page
+1                7             0.2983                      issue, macos, fixed, addressed, code, ios, improved, memory, able, execution
+2                7             0.9055                      issue, macos, fixed, addressed, code, ios, improved, memory, able, execution
+3               13             0.6279         injection, sql, parameter, discovered, php, contain, command, function, vulnerable, admin
+4               13             0.5793         injection, sql, parameter, discovered, php, contain, command, function, vulnerable, admin
+5                1             0.2878  arbitrary, execute, commands, device, allow, command, exploit, affected, remote, vulnerabilities
+6               13             0.5939         injection, sql, parameter, discovered, php, contain, command, function, vulnerable, admin
+7                7             0.9141                      issue, macos, fixed, addressed, code, ios, improved, memory, able, execution
+8                2             0.4030                     plugin, site, request, cross, wordpress, forgery, csrf, versions, prior, page
+9                7             0.6879                      issue, macos, fixed, addressed, code, ios, improved, memory, able, execution
+10               7             0.4678                      issue, macos, fixed, addressed, code, ios, improved, memory, able, execution
+11               2             0.5035                     plugin, site, request, cross, wordpress, forgery, csrf, versions, prior, page
+12               7             0.7053                      issue, macos, fixed, addressed, code, ios, improved, memory, able, execution
+13               7             0.4999                      issue, macos, fixed, addressed, code, ios, improved, memory, able, execution
+14               9             0.4462     local, access, privileges, user, allow, privilege, escalation, potentially, version, improper
+15               8             0.6673                 file, versions, arbitrary, code, prior, files, remote, execution, upload, execute
+16               0             0.8704            buffer, overflow, code, crafted, execution, remote, cause, arbitrary, specially, based
+17               5             0.5765                  information, sensitive, ibm, obtain, access, disclosure, xml, allow, force, data
+18               9             0.5080     local, access, privileges, user, allow, privilege, escalation, potentially, version, improper
+19               0             0.8240            buffer, overflow, code, crafted, execution, remote, cause, arbitrary, specially, based
+20               7             0.5822                      issue, macos, fixed, addressed, code, ios, improved, memory, able, execution
+21               7             0.5809                      issue, macos, fixed, addressed, code, ios, improved, memory, able, execution
+22               7             0.5965                      issue, macos, fixed, addressed, code, ios, improved, memory, able, execution
+23               2             0.4493                     plugin, site, request, cross, wordpress, forgery, csrf, versions, prior, page
+24               7             0.5115                      issue, macos, fixed, addressed, code, ios, improved, memory, able, execution
+25               7             0.4859                      issue, macos, fixed, addressed, code, ios, improved, memory, able, execution
+26               2             0.5344                     plugin, site, request, cross, wordpress, forgery, csrf, versions, prior, page
+27               7             0.6892                      issue, macos, fixed, addressed, code, ios, improved, memory, able, execution
+28               7             0.5410                      issue, macos, fixed, addressed, code, ios, improved, memory, able, execution
+29               7             0.6259                      issue, macos, fixed, addressed, code, ios, improved, memory, able, execution
+30               8             0.5053                 file, versions, arbitrary, code, prior, files, remote, execution, upload, execute
+31               7             0.7164                      issue, macos, fixed, addressed, code, ios, improved, memory, able, execution
+32               7             0.4113                      issue, macos, fixed, addressed, code, ios, improved, memory, able, execution
+33               7             0.5102                      issue, macos, fixed, addressed, code, ios, improved, memory, able, execution
+34               7             0.4721                      issue, macos, fixed, addressed, code, ios, improved, memory, able, execution
+35               2             0.7571                     plugin, site, request, cross, wordpress, forgery, csrf, versions, prior, page
+36               2             0.2539                     plugin, site, request, cross, wordpress, forgery, csrf, versions, prior, page
+37               5             0.4690                  information, sensitive, ibm, obtain, access, disclosure, xml, allow, force, data
+38              14             0.3835           user, access, authentication, users, versions, issue, password, bypass, version, server
+39               8             0.8485                 file, versions, arbitrary, code, prior, files, remote, execution, upload, execute
+40               8             0.8251                 file, versions, arbitrary, code, prior, files, remote, execution, upload, execute
+41               8             0.5704                 file, versions, arbitrary, code, prior, files, remote, execution, upload, execute
+42              14             0.3339           user, access, authentication, users, versions, issue, password, bypass, version, server
+43               8             0.9811                 file, versions, arbitrary, code, prior, files, remote, execution, upload, execute
+44              14             0.4995           user, access, authentication, users, versions, issue, password, bypass, version, server
+45              15             0.3197                  cve, windows, privilege, elevation, memory, aka, code, exists, execution, remote
+46              13             0.5027         injection, sql, parameter, discovered, php, contain, command, function, vulnerable, admin
+47              13             0.5647         injection, sql, parameter, discovered, php, contain, command, function, vulnerable, admin
+48              13             0.4894         injection, sql, parameter, discovered, php, contain, command, function, vulnerable, admin
+49              13             0.4459         injection, sql, parameter, discovered, php, contain, command, function, vulnerable, admin
+
+
+Shape of topic distribution matrix: (63697, 18)
+Sample topic distribution for a document:
+[0.         0.         0.64550477 0.         0.         0.06560563
+ 0.         0.         0.         0.         0.         0.
+ 0.         0.20374112 0.         0.         0.         0.06467673]
+
+Model and dictionary saved. You can load them later using:
+lda_model = LdaModel.load('lda_output/lda_model_confidentialityImpact_HIGH.gensim')
+dictionary = corpora.Dictionary.load('lda_output/dictionary_confidentialityImpact_HIGH.gensim')

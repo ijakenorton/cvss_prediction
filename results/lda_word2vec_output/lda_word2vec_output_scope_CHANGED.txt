@@ -1,0 +1,55 @@
+Analysis for scope with value CHANGED
+
+Number of documents in corpus: 19895
+Number of unique tokens: 9385
+Total number of terms in corpus: 505486
+
+Word2Vec-based Coherence Scores:
+Num Topics: 2, Coherence Score: 0.2886399953522616
+Num Topics: 4, Coherence Score: 0.30033030141558914
+Num Topics: 6, Coherence Score: 0.3467713800431402
+Num Topics: 8, Coherence Score: 0.34129026119286815
+Num Topics: 10, Coherence Score: 0.35016303187857073
+Num Topics: 12, Coherence Score: 0.3398545690881158
+Num Topics: 14, Coherence Score: 0.33589875949251036
+Num Topics: 16, Coherence Score: 0.30782116187814
+Num Topics: 18, Coherence Score: 0.3189700318649871
+
+Optimal number of topics: 10
+
+Top 10 words for each topic in the optimal model:
+Topic: 0 
+Words: 0.055*"server" + 0.031*"request" + 0.029*"http" + 0.022*"cve" + 0.019*"exists" + 0.019*"crafted" + 0.017*"specially" + 0.017*"microsoft" + 0.014*"command" + 0.014*"peoplesoft"
+
+Topic: 1 
+Words: 0.059*"site" + 0.058*"cross" + 0.058*"scripting" + 0.047*"xss" + 0.039*"plugin" + 0.026*"wordpress" + 0.026*"stored" + 0.019*"admin" + 0.016*"parameter" + 0.016*"attackers"
+
+Topic: 2 
+Words: 0.072*"oracle" + 0.045*"cvss" + 0.041*"attacks" + 0.039*"access" + 0.030*"data" + 0.026*"successful" + 0.024*"unauthorized" + 0.021*"accessible" + 0.018*"base" + 0.017*"impact"
+
+Topic: 3 
+Words: 0.040*"user" + 0.032*"interface" + 0.030*"allow" + 0.029*"web" + 0.023*"versions" + 0.022*"remote" + 0.022*"exploit" + 0.021*"based" + 0.019*"management" + 0.017*"site"
+
+Topic: 4 
+Words: 0.029*"xss" + 0.028*"site" + 0.028*"ibm" + 0.026*"javascript" + 0.024*"cross" + 0.023*"scripting" + 0.023*"users" + 0.023*"vulnerable" + 0.022*"code" + 0.021*"arbitrary"
+
+Topic: 5 
+Words: 0.046*"xss" + 0.025*"site" + 0.023*"cross" + 0.023*"scripting" + 0.019*"victim" + 0.018*"malicious" + 0.018*"javascript" + 0.017*"earlier" + 0.015*"inject" + 0.015*"php"
+
+Topic: 6 
+Words: 0.028*"leads" + 0.027*"attack" + 0.027*"site" + 0.026*"cross" + 0.026*"scripting" + 0.025*"remotely" + 0.025*"manipulation" + 0.024*"file" + 0.024*"problematic" + 0.023*"identifier"
+
+Topic: 7 
+Words: 0.018*"device" + 0.017*"cause" + 0.016*"service" + 0.014*"allow" + 0.013*"prior" + 0.012*"buffer" + 0.012*"affected" + 0.011*"versions" + 0.011*"denial" + 0.011*"exploit"
+
+Topic: 8 
+Words: 0.016*"version" + 0.013*"user" + 0.013*"versions" + 0.012*"users" + 0.011*"issue" + 0.010*"prior" + 0.009*"html" + 0.008*"code" + 0.008*"open" + 0.007*"content"
+
+Topic: 9 
+Words: 0.039*"site" + 0.036*"cross" + 0.036*"scripting" + 0.027*"stored" + 0.027*"input" + 0.026*"xss" + 0.025*"web" + 0.023*"page" + 0.023*"user" + 0.018*"vulnerable"
+
+
+Models saved. You can load them later using:
+lda_model = LdaModel.load('lda_word2vec_output/lda_model_scope_CHANGED.gensim')
+dictionary = corpora.Dictionary.load('lda_word2vec_output/dictionary_scope_CHANGED.gensim')
+w2v_model = Word2Vec.load('lda_word2vec_output/word2vec_model_scope_CHANGED.model')

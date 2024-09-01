@@ -1,0 +1,113 @@
+Analysis for attackVector with value NETWORK
+
+Number of documents in corpus: 80331
+Number of unique tokens: 23915
+Total number of terms in corpus: 1926488
+
+Coherence Scores:
+Num Topics: 2, Coherence Score: 0.3718595736276007
+Num Topics: 4, Coherence Score: 0.47871080508576447
+Num Topics: 6, Coherence Score: 0.5501663282881418
+Num Topics: 8, Coherence Score: 0.5984214830144268
+Num Topics: 10, Coherence Score: 0.6171633168123662
+Num Topics: 12, Coherence Score: 0.5849431217076541
+Num Topics: 14, Coherence Score: 0.6042788354585485
+Num Topics: 16, Coherence Score: 0.5739617528583573
+Num Topics: 18, Coherence Score: 0.5662612306577257
+
+Optimal number of topics: 10
+
+Top 10 words for each topic in the optimal model:
+Topic: 0 
+Words: 0.112*"versions" + 0.089*"prior" + 0.028*"snapdragon" + 0.023*"series" + 0.016*"github" + 0.015*"repository" + 0.014*"sdm" + 0.013*"scalance" + 0.010*"networks" + 0.010*"issue"
+
+Topic: 1 
+Words: 0.044*"service" + 0.039*"denial" + 0.036*"overflow" + 0.033*"buffer" + 0.028*"cause" + 0.023*"function" + 0.022*"discovered" + 0.017*"memory" + 0.017*"crafted" + 0.016*"stack"
+
+Topic: 2 
+Words: 0.022*"user" + 0.017*"issue" + 0.017*"access" + 0.013*"server" + 0.012*"password" + 0.012*"discovered" + 0.010*"request" + 0.010*"http" + 0.010*"authentication" + 0.009*"attackers"
+
+Topic: 3 
+Words: 0.054*"site" + 0.049*"cross" + 0.040*"plugin" + 0.039*"scripting" + 0.037*"xss" + 0.026*"wordpress" + 0.019*"stored" + 0.017*"attackers" + 0.017*"versions" + 0.014*"vulnerable"
+
+Topic: 4 
+Words: 0.021*"version" + 0.021*"versions" + 0.015*"users" + 0.014*"issue" + 0.010*"open" + 0.009*"user" + 0.009*"source" + 0.008*"upgrade" + 0.007*"server" + 0.007*"prior"
+
+Topic: 5 
+Words: 0.050*"sql" + 0.048*"php" + 0.047*"injection" + 0.023*"file" + 0.023*"leads" + 0.021*"attack" + 0.021*"manipulation" + 0.021*"remotely" + 0.020*"identifier" + 0.019*"parameter"
+
+Topic: 6 
+Words: 0.029*"remote" + 0.022*"allowed" + 0.021*"prior" + 0.021*"crafted" + 0.020*"android" + 0.019*"issue" + 0.018*"google" + 0.018*"chrome" + 0.018*"html" + 0.016*"page"
+
+Topic: 7 
+Words: 0.052*"code" + 0.042*"arbitrary" + 0.038*"remote" + 0.036*"file" + 0.032*"execution" + 0.027*"cve" + 0.025*"execute" + 0.024*"earlier" + 0.018*"files" + 0.017*"crafted"
+
+Topic: 8 
+Words: 0.040*"oracle" + 0.038*"cvss" + 0.035*"access" + 0.025*"server" + 0.024*"data" + 0.021*"attacks" + 0.020*"unauthorized" + 0.020*"java" + 0.020*"versions" + 0.019*"successful"
+
+Topic: 9 
+Words: 0.031*"allow" + 0.022*"information" + 0.022*"remote" + 0.020*"exploit" + 0.020*"device" + 0.019*"user" + 0.018*"web" + 0.018*"affected" + 0.016*"interface" + 0.015*"ibm"
+
+
+Dominant Topics:
+    Dominant_Topic  Perc_Contribution                                                                               Topic_Keywords
+0                3             0.9029      site, cross, plugin, scripting, xss, wordpress, stored, attackers, versions, vulnerable
+1                3             0.5948      site, cross, plugin, scripting, xss, wordpress, stored, attackers, versions, vulnerable
+2                2             0.5426  user, issue, access, server, password, discovered, request, http, authentication, attackers
+3                5             0.7223      sql, php, injection, file, leads, attack, manipulation, remotely, identifier, parameter
+4                5             0.6329      sql, php, injection, file, leads, attack, manipulation, remotely, identifier, parameter
+5                5             0.9099      sql, php, injection, file, leads, attack, manipulation, remotely, identifier, parameter
+6                7             0.2915              code, arbitrary, remote, file, execution, cve, execute, earlier, files, crafted
+7                5             0.7835      sql, php, injection, file, leads, attack, manipulation, remotely, identifier, parameter
+8                1             0.5385       service, denial, overflow, buffer, cause, function, discovered, memory, crafted, stack
+9                1             0.9000       service, denial, overflow, buffer, cause, function, discovered, memory, crafted, stack
+10               5             0.6535      sql, php, injection, file, leads, attack, manipulation, remotely, identifier, parameter
+11               3             0.6152      site, cross, plugin, scripting, xss, wordpress, stored, attackers, versions, vulnerable
+12               5             0.6775      sql, php, injection, file, leads, attack, manipulation, remotely, identifier, parameter
+13               5             0.8137      sql, php, injection, file, leads, attack, manipulation, remotely, identifier, parameter
+14               3             0.6961      site, cross, plugin, scripting, xss, wordpress, stored, attackers, versions, vulnerable
+15               5             0.7311      sql, php, injection, file, leads, attack, manipulation, remotely, identifier, parameter
+16               5             0.9437      sql, php, injection, file, leads, attack, manipulation, remotely, identifier, parameter
+17               7             0.4564              code, arbitrary, remote, file, execution, cve, execute, earlier, files, crafted
+18               7             0.4103              code, arbitrary, remote, file, execution, cve, execute, earlier, files, crafted
+19               1             0.8904       service, denial, overflow, buffer, cause, function, discovered, memory, crafted, stack
+20               1             0.8299       service, denial, overflow, buffer, cause, function, discovered, memory, crafted, stack
+21               5             0.8618      sql, php, injection, file, leads, attack, manipulation, remotely, identifier, parameter
+22               5             0.5743      sql, php, injection, file, leads, attack, manipulation, remotely, identifier, parameter
+23               5             0.6313      sql, php, injection, file, leads, attack, manipulation, remotely, identifier, parameter
+24               3             0.6045      site, cross, plugin, scripting, xss, wordpress, stored, attackers, versions, vulnerable
+25               5             0.3413      sql, php, injection, file, leads, attack, manipulation, remotely, identifier, parameter
+26               5             0.4732      sql, php, injection, file, leads, attack, manipulation, remotely, identifier, parameter
+27               5             0.5106      sql, php, injection, file, leads, attack, manipulation, remotely, identifier, parameter
+28               5             0.5139      sql, php, injection, file, leads, attack, manipulation, remotely, identifier, parameter
+29               3             0.4246      site, cross, plugin, scripting, xss, wordpress, stored, attackers, versions, vulnerable
+30               5             0.7568      sql, php, injection, file, leads, attack, manipulation, remotely, identifier, parameter
+31               5             0.7465      sql, php, injection, file, leads, attack, manipulation, remotely, identifier, parameter
+32               2             0.4804  user, issue, access, server, password, discovered, request, http, authentication, attackers
+33               5             0.6755      sql, php, injection, file, leads, attack, manipulation, remotely, identifier, parameter
+34               5             0.6579      sql, php, injection, file, leads, attack, manipulation, remotely, identifier, parameter
+35               3             0.9666      site, cross, plugin, scripting, xss, wordpress, stored, attackers, versions, vulnerable
+36               3             0.8826      site, cross, plugin, scripting, xss, wordpress, stored, attackers, versions, vulnerable
+37               3             0.7394      site, cross, plugin, scripting, xss, wordpress, stored, attackers, versions, vulnerable
+38               5             0.4946      sql, php, injection, file, leads, attack, manipulation, remotely, identifier, parameter
+39               2             0.6810  user, issue, access, server, password, discovered, request, http, authentication, attackers
+40               4             0.4740                  version, versions, users, issue, open, user, source, upgrade, server, prior
+41               4             0.5650                  version, versions, users, issue, open, user, source, upgrade, server, prior
+42               4             0.5954                  version, versions, users, issue, open, user, source, upgrade, server, prior
+43               4             0.6357                  version, versions, users, issue, open, user, source, upgrade, server, prior
+44               4             0.6628                  version, versions, users, issue, open, user, source, upgrade, server, prior
+45               4             0.5444                  version, versions, users, issue, open, user, source, upgrade, server, prior
+46               2             0.4151  user, issue, access, server, password, discovered, request, http, authentication, attackers
+47               4             0.4859                  version, versions, users, issue, open, user, source, upgrade, server, prior
+48               0             0.7285      versions, prior, snapdragon, series, github, repository, sdm, scalance, networks, issue
+49               4             0.5066                  version, versions, users, issue, open, user, source, upgrade, server, prior
+
+
+Shape of topic distribution matrix: (80331, 10)
+Sample topic distribution for a document:
+[0.         0.         0.         0.90291786 0.         0.0780121
+ 0.         0.         0.         0.        ]
+
+Model and dictionary saved. You can load them later using:
+lda_model = LdaModel.load('lda_output/lda_model_attackVector_NETWORK.gensim')
+dictionary = corpora.Dictionary.load('lda_output/dictionary_attackVector_NETWORK.gensim')

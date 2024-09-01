@@ -1,0 +1,107 @@
+Analysis for privilegesRequired with value HIGH
+
+Number of documents in corpus: 10743
+Number of unique tokens: 5591
+Total number of terms in corpus: 274011
+
+Coherence Scores:
+Num Topics: 2, Coherence Score: 0.3832028733419356
+Num Topics: 4, Coherence Score: 0.6727861782328639
+Num Topics: 6, Coherence Score: 0.586886690810202
+Num Topics: 8, Coherence Score: 0.692520923421977
+Num Topics: 10, Coherence Score: 0.6017875274008629
+Num Topics: 12, Coherence Score: 0.6174742921759483
+Num Topics: 14, Coherence Score: 0.5808087726016254
+Num Topics: 16, Coherence Score: 0.6090464973272851
+Num Topics: 18, Coherence Score: 0.5699194756835576
+
+Optimal number of topics: 8
+
+Top 10 words for each topic in the optimal model:
+Topic: 0 
+Words: 0.065*"cvss" + 0.064*"mysql" + 0.059*"server" + 0.036*"oracle" + 0.028*"prior" + 0.027*"attacks" + 0.026*"access" + 0.026*"successful" + 0.024*"base" + 0.024*"unauthorized"
+
+Topic: 1 
+Words: 0.023*"oracle" + 0.023*"virtualbox" + 0.022*"data" + 0.020*"enterprise" + 0.016*"access" + 0.016*"exploit" + 0.015*"manager" + 0.011*"high" + 0.010*"http" + 0.010*"dell"
+
+Topic: 2 
+Words: 0.024*"user" + 0.023*"access" + 0.016*"allow" + 0.015*"local" + 0.014*"privileged" + 0.014*"version" + 0.011*"potentially" + 0.011*"privilege" + 0.010*"intel" + 0.010*"kernel"
+
+Topic: 3 
+Words: 0.024*"versions" + 0.019*"code" + 0.016*"arbitrary" + 0.016*"user" + 0.016*"authenticated" + 0.015*"remote" + 0.015*"file" + 0.013*"prior" + 0.013*"server" + 0.011*"execution"
+
+Topic: 4 
+Words: 0.036*"plugin" + 0.034*"wordpress" + 0.032*"users" + 0.026*"privilege" + 0.026*"high" + 0.024*"escape" + 0.022*"site" + 0.021*"cross" + 0.021*"admin" + 0.021*"scripting"
+
+Topic: 5 
+Words: 0.039*"exploit" + 0.033*"vulnerabilities" + 0.033*"device" + 0.033*"allow" + 0.029*"affected" + 0.027*"arbitrary" + 0.024*"interface" + 0.024*"execute" + 0.023*"web" + 0.021*"cisco"
+
+Topic: 6 
+Words: 0.043*"xss" + 0.043*"site" + 0.040*"admin" + 0.038*"cross" + 0.038*"scripting" + 0.031*"stored" + 0.030*"php" + 0.023*"sql" + 0.022*"injection" + 0.021*"plugin"
+
+Topic: 7 
+Words: 0.079*"needed" + 0.055*"bounds" + 0.047*"privileges" + 0.047*"execution" + 0.046*"local" + 0.044*"possible" + 0.043*"exploitation" + 0.042*"user" + 0.040*"interaction" + 0.039*"alps"
+
+
+Dominant Topics:
+    Dominant_Topic  Perc_Contribution                                                                                Topic_Keywords
+0                6             0.8229                       xss, site, admin, cross, scripting, stored, php, sql, injection, plugin
+1                2             0.5543        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+2                3             0.7193        versions, code, arbitrary, user, authenticated, remote, file, prior, server, execution
+3                2             0.5440        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+4                6             0.7789                       xss, site, admin, cross, scripting, stored, php, sql, injection, plugin
+5                3             0.6535        versions, code, arbitrary, user, authenticated, remote, file, prior, server, execution
+6                6             0.7421                       xss, site, admin, cross, scripting, stored, php, sql, injection, plugin
+7                6             0.8497                       xss, site, admin, cross, scripting, stored, php, sql, injection, plugin
+8                6             0.7860                       xss, site, admin, cross, scripting, stored, php, sql, injection, plugin
+9                6             0.8915                       xss, site, admin, cross, scripting, stored, php, sql, injection, plugin
+10               6             0.9326                       xss, site, admin, cross, scripting, stored, php, sql, injection, plugin
+11               3             0.9326        versions, code, arbitrary, user, authenticated, remote, file, prior, server, execution
+12               2             0.6659        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+13               2             0.9416        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+14               2             0.5452        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+15               2             0.4881        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+16               5             0.4807  exploit, vulnerabilities, device, allow, affected, arbitrary, interface, execute, web, cisco
+17               2             0.9270        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+18               2             0.6658        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+19               2             0.9416        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+20               2             0.6658        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+21               2             0.9416        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+22               2             0.6659        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+23               2             0.6658        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+24               2             0.6659        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+25               3             0.5544        versions, code, arbitrary, user, authenticated, remote, file, prior, server, execution
+26               2             0.5485        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+27               2             0.5449        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+28               2             0.6658        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+29               2             0.5035        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+30               2             0.5035        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+31               2             0.5035        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+32               2             0.5040        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+33               2             0.5040        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+34               2             0.7688        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+35               6             0.7803                       xss, site, admin, cross, scripting, stored, php, sql, injection, plugin
+36               2             0.8118        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+37               2             0.9124        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+38               4             0.9676              plugin, wordpress, users, privilege, high, escape, site, cross, admin, scripting
+39               2             0.9513        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+40               3             0.5705        versions, code, arbitrary, user, authenticated, remote, file, prior, server, execution
+41               1             0.5048              oracle, virtualbox, data, enterprise, access, exploit, manager, high, http, dell
+42               3             0.4783        versions, code, arbitrary, user, authenticated, remote, file, prior, server, execution
+43               3             0.6662        versions, code, arbitrary, user, authenticated, remote, file, prior, server, execution
+44               6             0.6577                       xss, site, admin, cross, scripting, stored, php, sql, injection, plugin
+45               6             0.5803                       xss, site, admin, cross, scripting, stored, php, sql, injection, plugin
+46               6             0.9125                       xss, site, admin, cross, scripting, stored, php, sql, injection, plugin
+47               2             0.8023        user, access, allow, local, privileged, version, potentially, privilege, intel, kernel
+48               3             0.7377        versions, code, arbitrary, user, authenticated, remote, file, prior, server, execution
+49               5             0.5504  exploit, vulnerabilities, device, allow, affected, arbitrary, interface, execute, web, cisco
+
+
+Shape of topic distribution matrix: (10743, 8)
+Sample topic distribution for a document:
+[0.         0.         0.13284428 0.         0.         0.
+ 0.82296669 0.        ]
+
+Model and dictionary saved. You can load them later using:
+lda_model = LdaModel.load('lda_output/lda_model_privilegesRequired_HIGH.gensim')
+dictionary = corpora.Dictionary.load('lda_output/dictionary_privilegesRequired_HIGH.gensim')

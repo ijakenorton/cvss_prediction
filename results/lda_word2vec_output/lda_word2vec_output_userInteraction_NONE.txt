@@ -1,0 +1,55 @@
+Analysis for userInteraction with value NONE
+
+Number of documents in corpus: 73571
+Number of unique tokens: 22727
+Total number of terms in corpus: 1794818
+
+Word2Vec-based Coherence Scores:
+Num Topics: 2, Coherence Score: 0.20547906228651602
+Num Topics: 4, Coherence Score: 0.1508899658569135
+Num Topics: 6, Coherence Score: 0.15496877655818092
+Num Topics: 8, Coherence Score: 0.17932184598369835
+Num Topics: 10, Coherence Score: 0.22266413497428098
+Num Topics: 12, Coherence Score: 0.21277406732724216
+Num Topics: 14, Coherence Score: 0.20767210191707056
+Num Topics: 16, Coherence Score: 0.21839731094142836
+Num Topics: 18, Coherence Score: 0.2035221650345642
+
+Optimal number of topics: 10
+
+Top 10 words for each topic in the optimal model:
+Topic: 0 
+Words: 0.093*"snapdragon" + 0.038*"sdm" + 0.028*"iot" + 0.027*"msm" + 0.020*"mdm" + 0.018*"mobile" + 0.016*"consumer" + 0.016*"apq" + 0.014*"industrial" + 0.014*"auto"
+
+Topic: 1 
+Words: 0.036*"privileges" + 0.036*"user" + 0.034*"needed" + 0.031*"android" + 0.028*"local" + 0.026*"exploitation" + 0.025*"execution" + 0.021*"possible" + 0.019*"exploit" + 0.017*"interaction"
+
+Topic: 2 
+Words: 0.046*"oracle" + 0.046*"cvss" + 0.032*"server" + 0.031*"access" + 0.024*"mysql" + 0.021*"data" + 0.020*"unauthorized" + 0.020*"component" + 0.019*"attacks" + 0.019*"java"
+
+Topic: 3 
+Words: 0.085*"versions" + 0.051*"prior" + 0.022*"affected" + 0.021*"device" + 0.018*"service" + 0.018*"cause" + 0.018*"series" + 0.014*"denial" + 0.012*"allow" + 0.012*"dos"
+
+Topic: 4 
+Words: 0.030*"command" + 0.029*"arbitrary" + 0.028*"remote" + 0.024*"ibm" + 0.024*"overflow" + 0.023*"execute" + 0.021*"crafted" + 0.021*"request" + 0.020*"code" + 0.019*"injection"
+
+Topic: 5 
+Words: 0.030*"service" + 0.026*"denial" + 0.020*"issue" + 0.018*"memory" + 0.017*"cause" + 0.017*"kernel" + 0.015*"access" + 0.014*"local" + 0.013*"user" + 0.011*"potentially"
+
+Topic: 6 
+Words: 0.014*"version" + 0.013*"tensorflow" + 0.011*"issue" + 0.010*"github" + 0.009*"versions" + 0.008*"source" + 0.008*"package" + 0.008*"prior" + 0.008*"open" + 0.008*"scalance"
+
+Topic: 7 
+Words: 0.040*"file" + 0.027*"files" + 0.023*"arbitrary" + 0.022*"code" + 0.022*"earlier" + 0.021*"windows" + 0.018*"remote" + 0.018*"privilege" + 0.017*"cve" + 0.014*"directory"
+
+Topic: 8 
+Words: 0.061*"sql" + 0.051*"injection" + 0.049*"php" + 0.022*"file" + 0.020*"leads" + 0.020*"parameter" + 0.019*"manipulation" + 0.018*"identifier" + 0.017*"attack" + 0.017*"issue"
+
+Topic: 9 
+Words: 0.022*"access" + 0.020*"user" + 0.014*"users" + 0.011*"versions" + 0.011*"server" + 0.011*"information" + 0.010*"issue" + 0.010*"version" + 0.009*"authentication" + 0.009*"plugin"
+
+
+Models saved. You can load them later using:
+lda_model = LdaModel.load('lda_word2vec_output/lda_model_userInteraction_NONE.gensim')
+dictionary = corpora.Dictionary.load('lda_word2vec_output/dictionary_userInteraction_NONE.gensim')
+w2v_model = Word2Vec.load('lda_word2vec_output/word2vec_model_userInteraction_NONE.model')

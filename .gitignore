@@ -13,3 +13,4 @@ scripts/__pycache__/
 **/*.aux
 **/*.fdb_latexmk
 **/*.run.xml
+**/*.gensim*

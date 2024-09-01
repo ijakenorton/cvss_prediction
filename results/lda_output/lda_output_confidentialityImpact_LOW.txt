@@ -1,0 +1,100 @@
+Analysis for confidentialityImpact with value LOW
+
+Number of documents in corpus: 22864
+Number of unique tokens: 10079
+Total number of terms in corpus: 543058
+
+Coherence Scores:
+Num Topics: 2, Coherence Score: 0.4677809402100991
+Num Topics: 4, Coherence Score: 0.6248802176972446
+Num Topics: 6, Coherence Score: 0.6528644294341838
+Num Topics: 8, Coherence Score: 0.6288130685273517
+Num Topics: 10, Coherence Score: 0.596628921208774
+Num Topics: 12, Coherence Score: 0.6309310885946099
+Num Topics: 14, Coherence Score: 0.59875381942278
+Num Topics: 16, Coherence Score: 0.601338698153796
+Num Topics: 18, Coherence Score: 0.566735595821831
+
+Optimal number of topics: 6
+
+Top 10 words for each topic in the optimal model:
+Topic: 0 
+Words: 0.045*"oracle" + 0.038*"access" + 0.036*"cvss" + 0.027*"data" + 0.024*"attacks" + 0.024*"unauthorized" + 0.021*"accessible" + 0.019*"successful" + 0.015*"confidentiality" + 0.014*"component"
+
+Topic: 1 
+Words: 0.031*"versions" + 0.021*"prior" + 0.020*"issue" + 0.015*"access" + 0.011*"server" + 0.010*"user" + 0.010*"version" + 0.008*"users" + 0.007*"files" + 0.007*"discovered"
+
+Topic: 2 
+Words: 0.018*"xss" + 0.016*"version" + 0.015*"user" + 0.014*"html" + 0.012*"issue" + 0.010*"users" + 0.009*"php" + 0.008*"open" + 0.008*"url" + 0.006*"redirect"
+
+Topic: 3 
+Words: 0.053*"plugin" + 0.042*"wordpress" + 0.034*"site" + 0.032*"cross" + 0.031*"scripting" + 0.027*"users" + 0.024*"escape" + 0.021*"stored" + 0.018*"perform" + 0.016*"attacks"
+
+Topic: 4 
+Words: 0.050*"site" + 0.049*"cross" + 0.048*"scripting" + 0.046*"xss" + 0.020*"stored" + 0.017*"arbitrary" + 0.016*"web" + 0.015*"versions" + 0.015*"php" + 0.013*"attackers"
+
+Topic: 5 
+Words: 0.026*"user" + 0.023*"information" + 0.020*"web" + 0.019*"allow" + 0.016*"ibm" + 0.016*"remote" + 0.015*"interface" + 0.013*"code" + 0.012*"site" + 0.012*"sensitive"
+
+
+Dominant Topics:
+    Dominant_Topic  Perc_Contribution                                                                      Topic_Keywords
+0                4             0.8424       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+1                4             0.9399       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+2                4             0.5730       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+3                4             0.4062       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+4                2             0.5322                    xss, version, user, html, issue, users, php, open, url, redirect
+5                2             0.5999                    xss, version, user, html, issue, users, php, open, url, redirect
+6                4             0.8716       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+7                3             0.4116  plugin, wordpress, site, cross, scripting, users, escape, stored, perform, attacks
+8                5             0.7954        user, information, web, allow, ibm, remote, interface, code, site, sensitive
+9                4             0.6840       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+10               4             0.6759       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+11               5             0.5044        user, information, web, allow, ibm, remote, interface, code, site, sensitive
+12               4             0.9356       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+13               4             0.9301       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+14               4             0.6654       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+15               3             0.4942  plugin, wordpress, site, cross, scripting, users, escape, stored, perform, attacks
+16               4             0.9236       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+17               4             0.9355       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+18               4             0.9070       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+19               4             0.9442       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+20               4             0.9302       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+21               4             0.6802       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+22               4             0.9476       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+23               4             0.7078       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+24               4             0.6342       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+25               4             0.9355       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+26               4             0.7413       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+27               4             0.9239       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+28               5             0.6941        user, information, web, allow, ibm, remote, interface, code, site, sensitive
+29               2             0.3786                    xss, version, user, html, issue, users, php, open, url, redirect
+30               5             0.7274        user, information, web, allow, ibm, remote, interface, code, site, sensitive
+31               4             0.9301       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+32               4             0.9402       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+33               4             0.5259       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+34               1             0.5239     versions, prior, issue, access, server, user, version, users, files, discovered
+35               5             0.6912        user, information, web, allow, ibm, remote, interface, code, site, sensitive
+36               5             0.5006        user, information, web, allow, ibm, remote, interface, code, site, sensitive
+37               5             0.5769        user, information, web, allow, ibm, remote, interface, code, site, sensitive
+38               5             0.7849        user, information, web, allow, ibm, remote, interface, code, site, sensitive
+39               5             0.5776        user, information, web, allow, ibm, remote, interface, code, site, sensitive
+40               5             0.5769        user, information, web, allow, ibm, remote, interface, code, site, sensitive
+41               5             0.5768        user, information, web, allow, ibm, remote, interface, code, site, sensitive
+42               5             0.5769        user, information, web, allow, ibm, remote, interface, code, site, sensitive
+43               5             0.5940        user, information, web, allow, ibm, remote, interface, code, site, sensitive
+44               4             0.8762       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+45               4             0.8381       site, cross, scripting, xss, stored, arbitrary, web, versions, php, attackers
+46               1             0.8284     versions, prior, issue, access, server, user, version, users, files, discovered
+47               1             0.4818     versions, prior, issue, access, server, user, version, users, files, discovered
+48               1             0.7033     versions, prior, issue, access, server, user, version, users, files, discovered
+49               1             0.5618     versions, prior, issue, access, server, user, version, users, files, discovered
+
+
+Shape of topic distribution matrix: (22864, 6)
+Sample topic distribution for a document:
+[0.         0.         0.         0.07114656 0.84246469 0.0744189 ]
+
+Model and dictionary saved. You can load them later using:
+lda_model = LdaModel.load('lda_output/lda_model_confidentialityImpact_LOW.gensim')
+dictionary = corpora.Dictionary.load('lda_output/dictionary_confidentialityImpact_LOW.gensim')

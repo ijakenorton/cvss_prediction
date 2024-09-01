@@ -1,0 +1,113 @@
+Analysis for availabilityImpact with value NONE
+
+Number of documents in corpus: 44572
+Number of unique tokens: 15729
+Total number of terms in corpus: 1063707
+
+Coherence Scores:
+Num Topics: 2, Coherence Score: 0.48144483542306427
+Num Topics: 4, Coherence Score: 0.5457499925494043
+Num Topics: 6, Coherence Score: 0.6286171028497589
+Num Topics: 8, Coherence Score: 0.6177321821136397
+Num Topics: 10, Coherence Score: 0.6446851943483991
+Num Topics: 12, Coherence Score: 0.63287047749875
+Num Topics: 14, Coherence Score: 0.624331792426939
+Num Topics: 16, Coherence Score: 0.6250375106445833
+Num Topics: 18, Coherence Score: 0.608004148153675
+
+Optimal number of topics: 10
+
+Top 10 words for each topic in the optimal model:
+Topic: 0 
+Words: 0.049*"android" + 0.043*"needed" + 0.035*"information" + 0.033*"user" + 0.031*"disclosure" + 0.028*"execution" + 0.027*"privileges" + 0.025*"local" + 0.025*"possible" + 0.023*"exploitation"
+
+Topic: 1 
+Words: 0.030*"java" + 0.024*"information" + 0.015*"disclosure" + 0.015*"security" + 0.013*"cve" + 0.012*"microsoft" + 0.011*"server" + 0.010*"key" + 0.010*"windows" + 0.009*"exists"
+
+Topic: 2 
+Words: 0.046*"plugin" + 0.031*"wordpress" + 0.022*"users" + 0.020*"ibm" + 0.020*"attackers" + 0.018*"allow" + 0.017*"request" + 0.017*"site" + 0.015*"perform" + 0.015*"jenkins"
+
+Topic: 3 
+Words: 0.059*"oracle" + 0.048*"access" + 0.041*"cvss" + 0.039*"data" + 0.028*"attacks" + 0.025*"unauthorized" + 0.024*"successful" + 0.024*"accessible" + 0.018*"versions" + 0.016*"base"
+
+Topic: 4 
+Words: 0.028*"web" + 0.025*"user" + 0.022*"allow" + 0.020*"remote" + 0.019*"interface" + 0.018*"site" + 0.018*"affected" + 0.018*"exploit" + 0.016*"malicious" + 0.016*"cross"
+
+Topic: 5 
+Words: 0.047*"issue" + 0.026*"user" + 0.025*"earlier" + 0.021*"read" + 0.019*"file" + 0.019*"malicious" + 0.017*"macos" + 0.016*"fixed" + 0.016*"memory" + 0.014*"information"
+
+Topic: 6 
+Words: 0.018*"versions" + 0.015*"version" + 0.014*"issue" + 0.013*"user" + 0.013*"users" + 0.012*"server" + 0.008*"prior" + 0.007*"discovered" + 0.007*"http" + 0.006*"request"
+
+Topic: 7 
+Words: 0.053*"xss" + 0.052*"site" + 0.050*"cross" + 0.050*"scripting" + 0.024*"stored" + 0.020*"plugin" + 0.019*"php" + 0.018*"arbitrary" + 0.018*"parameter" + 0.017*"page"
+
+Topic: 8 
+Words: 0.039*"information" + 0.035*"access" + 0.025*"sensitive" + 0.021*"versions" + 0.018*"file" + 0.017*"files" + 0.016*"prior" + 0.016*"allow" + 0.015*"user" + 0.014*"remote"
+
+Topic: 9 
+Words: 0.025*"issue" + 0.023*"attack" + 0.021*"leads" + 0.021*"affected" + 0.020*"file" + 0.019*"manipulation" + 0.018*"identifier" + 0.018*"remotely" + 0.017*"public" + 0.016*"vdb"
+
+
+Dominant Topics:
+    Dominant_Topic  Perc_Contribution                                                                                        Topic_Keywords
+0                7             0.8630                          xss, site, cross, scripting, stored, plugin, php, arbitrary, parameter, page
+1                2             0.6203                      plugin, wordpress, users, ibm, attackers, allow, request, site, perform, jenkins
+2                7             0.9357                          xss, site, cross, scripting, stored, plugin, php, arbitrary, parameter, page
+3                5             0.4816                        issue, user, earlier, read, file, malicious, macos, fixed, memory, information
+4                7             0.9437                          xss, site, cross, scripting, stored, plugin, php, arbitrary, parameter, page
+5                7             0.3297                          xss, site, cross, scripting, stored, plugin, php, arbitrary, parameter, page
+6                8             0.4924                     information, access, sensitive, versions, file, files, prior, allow, user, remote
+7                6             0.3636                       versions, version, issue, user, users, server, prior, discovered, http, request
+8                6             0.5386                       versions, version, issue, user, users, server, prior, discovered, http, request
+9                6             0.5368                       versions, version, issue, user, users, server, prior, discovered, http, request
+10               2             0.2603                      plugin, wordpress, users, ibm, attackers, allow, request, site, perform, jenkins
+11               2             0.9750                      plugin, wordpress, users, ibm, attackers, allow, request, site, perform, jenkins
+12               7             0.8093                          xss, site, cross, scripting, stored, plugin, php, arbitrary, parameter, page
+13               1             0.3932                 java, information, disclosure, security, cve, microsoft, server, key, windows, exists
+14               2             0.6345                      plugin, wordpress, users, ibm, attackers, allow, request, site, perform, jenkins
+15               8             0.5776                     information, access, sensitive, versions, file, files, prior, allow, user, remote
+16               8             0.3753                     information, access, sensitive, versions, file, files, prior, allow, user, remote
+17               8             0.2866                     information, access, sensitive, versions, file, files, prior, allow, user, remote
+18               8             0.4421                     information, access, sensitive, versions, file, files, prior, allow, user, remote
+19               8             0.4192                     information, access, sensitive, versions, file, files, prior, allow, user, remote
+20               8             0.5734                     information, access, sensitive, versions, file, files, prior, allow, user, remote
+21               7             0.6069                          xss, site, cross, scripting, stored, plugin, php, arbitrary, parameter, page
+22               8             0.5692                     information, access, sensitive, versions, file, files, prior, allow, user, remote
+23               8             0.4283                     information, access, sensitive, versions, file, files, prior, allow, user, remote
+24               6             0.8315                       versions, version, issue, user, users, server, prior, discovered, http, request
+25               8             0.4443                     information, access, sensitive, versions, file, files, prior, allow, user, remote
+26               0             0.4375  android, needed, information, user, disclosure, execution, privileges, local, possible, exploitation
+27               0             0.4057  android, needed, information, user, disclosure, execution, privileges, local, possible, exploitation
+28               8             0.4397                     information, access, sensitive, versions, file, files, prior, allow, user, remote
+29               8             0.5427                     information, access, sensitive, versions, file, files, prior, allow, user, remote
+30               8             0.5752                     information, access, sensitive, versions, file, files, prior, allow, user, remote
+31               7             0.8529                          xss, site, cross, scripting, stored, plugin, php, arbitrary, parameter, page
+32               6             0.6957                       versions, version, issue, user, users, server, prior, discovered, http, request
+33               7             0.9308                          xss, site, cross, scripting, stored, plugin, php, arbitrary, parameter, page
+34               7             0.9250                          xss, site, cross, scripting, stored, plugin, php, arbitrary, parameter, page
+35               7             0.9099                          xss, site, cross, scripting, stored, plugin, php, arbitrary, parameter, page
+36               7             0.9399                          xss, site, cross, scripting, stored, plugin, php, arbitrary, parameter, page
+37               7             0.9180                          xss, site, cross, scripting, stored, plugin, php, arbitrary, parameter, page
+38               5             0.3174                        issue, user, earlier, read, file, malicious, macos, fixed, memory, information
+39               7             0.7333                          xss, site, cross, scripting, stored, plugin, php, arbitrary, parameter, page
+40               7             0.9000                          xss, site, cross, scripting, stored, plugin, php, arbitrary, parameter, page
+41               7             0.6723                          xss, site, cross, scripting, stored, plugin, php, arbitrary, parameter, page
+42               7             0.9249                          xss, site, cross, scripting, stored, plugin, php, arbitrary, parameter, page
+43               7             0.9399                          xss, site, cross, scripting, stored, plugin, php, arbitrary, parameter, page
+44               7             0.9437                          xss, site, cross, scripting, stored, plugin, php, arbitrary, parameter, page
+45               7             0.9469                          xss, site, cross, scripting, stored, plugin, php, arbitrary, parameter, page
+46               7             0.9470                          xss, site, cross, scripting, stored, plugin, php, arbitrary, parameter, page
+47               7             0.8529                          xss, site, cross, scripting, stored, plugin, php, arbitrary, parameter, page
+48               7             0.9250                          xss, site, cross, scripting, stored, plugin, php, arbitrary, parameter, page
+49               7             0.9182                          xss, site, cross, scripting, stored, plugin, php, arbitrary, parameter, page
+
+
+Shape of topic distribution matrix: (44572, 10)
+Sample topic distribution for a document:
+[0.         0.         0.11791486 0.         0.         0.
+ 0.         0.86301935 0.         0.        ]
+
+Model and dictionary saved. You can load them later using:
+lda_model = LdaModel.load('lda_output/lda_model_availabilityImpact_NONE.gensim')
+dictionary = corpora.Dictionary.load('lda_output/dictionary_availabilityImpact_NONE.gensim')

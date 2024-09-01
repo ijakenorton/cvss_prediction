@@ -1,0 +1,94 @@
+Analysis for attackComplexity with value HIGH
+
+Number of documents in corpus: 5323
+Number of unique tokens: 5441
+Total number of terms in corpus: 167486
+
+Coherence Scores:
+Num Topics: 2, Coherence Score: 0.5639832598196943
+Num Topics: 4, Coherence Score: 0.5799410660945549
+Num Topics: 6, Coherence Score: 0.5230407622738512
+Num Topics: 8, Coherence Score: 0.515455791947879
+Num Topics: 10, Coherence Score: 0.5593017703089151
+Num Topics: 12, Coherence Score: 0.5299171836172857
+Num Topics: 14, Coherence Score: 0.49095669470871994
+Num Topics: 16, Coherence Score: 0.521566496557003
+Num Topics: 18, Coherence Score: 0.49995983328248605
+
+Optimal number of topics: 4
+
+Top 10 words for each topic in the optimal model:
+Topic: 0 
+Words: 0.048*"java" + 0.039*"cvss" + 0.038*"oracle" + 0.024*"access" + 0.022*"attacks" + 0.020*"successful" + 0.020*"mysql" + 0.018*"data" + 0.016*"component" + 0.015*"exploit"
+
+Topic: 1 
+Words: 0.020*"versions" + 0.013*"server" + 0.012*"prior" + 0.010*"user" + 0.010*"middle" + 0.009*"man" + 0.009*"issue" + 0.008*"attack" + 0.008*"allow" + 0.008*"version"
+
+Topic: 2 
+Words: 0.021*"code" + 0.019*"remote" + 0.018*"versions" + 0.016*"ruggedcom" + 0.016*"cve" + 0.013*"execution" + 0.009*"affected" + 0.009*"memory" + 0.008*"file" + 0.008*"attack"
+
+Topic: 3 
+Words: 0.019*"race" + 0.017*"condition" + 0.016*"user" + 0.013*"local" + 0.013*"kernel" + 0.012*"issue" + 0.011*"use" + 0.011*"privileges" + 0.010*"code" + 0.009*"access"
+
+
+Dominant Topics:
+    Dominant_Topic  Perc_Contribution                                                                     Topic_Keywords
+0                3             0.8903         race, condition, user, local, kernel, issue, use, privileges, code, access
+1                3             0.9726         race, condition, user, local, kernel, issue, use, privileges, code, access
+2                1             0.9444          versions, server, prior, user, middle, man, issue, attack, allow, version
+3                1             0.8329          versions, server, prior, user, middle, man, issue, attack, allow, version
+4                3             0.9029         race, condition, user, local, kernel, issue, use, privileges, code, access
+5                3             0.9710         race, condition, user, local, kernel, issue, use, privileges, code, access
+6                1             0.5354          versions, server, prior, user, middle, man, issue, attack, allow, version
+7                2             0.9876  code, remote, versions, ruggedcom, cve, execution, affected, memory, file, attack
+8                2             0.9876  code, remote, versions, ruggedcom, cve, execution, affected, memory, file, attack
+9                2             0.9872  code, remote, versions, ruggedcom, cve, execution, affected, memory, file, attack
+10               2             0.9872  code, remote, versions, ruggedcom, cve, execution, affected, memory, file, attack
+11               1             0.9619          versions, server, prior, user, middle, man, issue, attack, allow, version
+12               1             0.6969          versions, server, prior, user, middle, man, issue, attack, allow, version
+13               1             0.6368          versions, server, prior, user, middle, man, issue, attack, allow, version
+14               1             0.8427          versions, server, prior, user, middle, man, issue, attack, allow, version
+15               1             0.4801          versions, server, prior, user, middle, man, issue, attack, allow, version
+16               1             0.9732          versions, server, prior, user, middle, man, issue, attack, allow, version
+17               0             0.8651   java, cvss, oracle, access, attacks, successful, mysql, data, component, exploit
+18               0             0.5467   java, cvss, oracle, access, attacks, successful, mysql, data, component, exploit
+19               0             0.5468   java, cvss, oracle, access, attacks, successful, mysql, data, component, exploit
+20               2             0.6849  code, remote, versions, ruggedcom, cve, execution, affected, memory, file, attack
+21               0             0.8446   java, cvss, oracle, access, attacks, successful, mysql, data, component, exploit
+22               3             0.6051         race, condition, user, local, kernel, issue, use, privileges, code, access
+23               3             0.9536         race, condition, user, local, kernel, issue, use, privileges, code, access
+24               3             0.7863         race, condition, user, local, kernel, issue, use, privileges, code, access
+25               2             0.9830  code, remote, versions, ruggedcom, cve, execution, affected, memory, file, attack
+26               1             0.8116          versions, server, prior, user, middle, man, issue, attack, allow, version
+27               1             0.9816          versions, server, prior, user, middle, man, issue, attack, allow, version
+28               1             0.7662          versions, server, prior, user, middle, man, issue, attack, allow, version
+29               1             0.5690          versions, server, prior, user, middle, man, issue, attack, allow, version
+30               2             0.8303  code, remote, versions, ruggedcom, cve, execution, affected, memory, file, attack
+31               1             0.9415          versions, server, prior, user, middle, man, issue, attack, allow, version
+32               1             0.9415          versions, server, prior, user, middle, man, issue, attack, allow, version
+33               3             0.8334         race, condition, user, local, kernel, issue, use, privileges, code, access
+34               1             0.8931          versions, server, prior, user, middle, man, issue, attack, allow, version
+35               1             0.7541          versions, server, prior, user, middle, man, issue, attack, allow, version
+36               1             0.6021          versions, server, prior, user, middle, man, issue, attack, allow, version
+37               1             0.5375          versions, server, prior, user, middle, man, issue, attack, allow, version
+38               3             0.7778         race, condition, user, local, kernel, issue, use, privileges, code, access
+39               1             0.7400          versions, server, prior, user, middle, man, issue, attack, allow, version
+40               1             0.9720          versions, server, prior, user, middle, man, issue, attack, allow, version
+41               3             0.4962         race, condition, user, local, kernel, issue, use, privileges, code, access
+42               1             0.9902          versions, server, prior, user, middle, man, issue, attack, allow, version
+43               3             0.4493         race, condition, user, local, kernel, issue, use, privileges, code, access
+44               3             0.5177         race, condition, user, local, kernel, issue, use, privileges, code, access
+45               1             0.5262          versions, server, prior, user, middle, man, issue, attack, allow, version
+46               1             0.6923          versions, server, prior, user, middle, man, issue, attack, allow, version
+47               1             0.7007          versions, server, prior, user, middle, man, issue, attack, allow, version
+48               1             0.9180          versions, server, prior, user, middle, man, issue, attack, allow, version
+49               1             0.5228          versions, server, prior, user, middle, man, issue, attack, allow, version
+
+
+Shape of topic distribution matrix: (5323, 4)
+Sample topic distribution for a document:
+[0.07231303 0.01875987 0.01859253 0.89033461]
+
+Model and dictionary saved. You can load them later using:
+lda_model = LdaModel.load('lda_output/lda_model_attackComplexity_HIGH.gensim')
+dictionary = corpora.Dictionary.load('lda_output/dictionary_attackComplexity_HIGH.gensim')

@@ -1,0 +1,138 @@
+Analysis for availabilityImpact with value HIGH
+
+Number of documents in corpus: 63138
+Number of unique tokens: 20458
+Total number of terms in corpus: 1492449
+
+Coherence Scores:
+Num Topics: 2, Coherence Score: 0.4072997917048747
+Num Topics: 4, Coherence Score: 0.45827655054156113
+Num Topics: 6, Coherence Score: 0.48940951241066766
+Num Topics: 8, Coherence Score: 0.5292648777801983
+Num Topics: 10, Coherence Score: 0.5508758901188961
+Num Topics: 12, Coherence Score: 0.6114607492906744
+Num Topics: 14, Coherence Score: 0.6056002783744461
+Num Topics: 16, Coherence Score: 0.6062524671569912
+Num Topics: 18, Coherence Score: 0.6267315333040867
+
+Optimal number of topics: 18
+
+Top 10 words for each topic in the optimal model:
+Topic: 0 
+Words: 0.075*"service" + 0.069*"denial" + 0.039*"cause" + 0.022*"memory" + 0.020*"crash" + 0.016*"kernel" + 0.016*"flaw" + 0.016*"attackers" + 0.013*"crafted" + 0.012*"local"
+
+Topic: 1 
+Words: 0.045*"vulnerabilities" + 0.037*"exploit" + 0.034*"device" + 0.030*"arbitrary" + 0.030*"allow" + 0.030*"execute" + 0.026*"affected" + 0.025*"remote" + 0.024*"web" + 0.022*"commands"
+
+Topic: 2 
+Words: 0.053*"plugin" + 0.043*"request" + 0.041*"site" + 0.032*"cross" + 0.031*"csrf" + 0.030*"forgery" + 0.030*"wordpress" + 0.025*"versions" + 0.015*"scalance" + 0.013*"attackers"
+
+Topic: 3 
+Words: 0.189*"versions" + 0.116*"prior" + 0.018*"issue" + 0.018*"series" + 0.017*"networks" + 0.017*"junos" + 0.014*"juniper" + 0.013*"affects" + 0.008*"evo" + 0.008*"version"
+
+Topic: 4 
+Words: 0.068*"android" + 0.063*"needed" + 0.044*"execution" + 0.044*"local" + 0.043*"user" + 0.042*"escalation" + 0.042*"privileges" + 0.042*"privilege" + 0.040*"possible" + 0.036*"exploitation"
+
+Topic: 5 
+Words: 0.042*"code" + 0.042*"execute" + 0.027*"user" + 0.027*"context" + 0.025*"affected" + 0.023*"leverage" + 0.022*"process" + 0.022*"malicious" + 0.020*"current" + 0.019*"lack"
+
+Topic: 6 
+Words: 0.069*"code" + 0.069*"arbitrary" + 0.063*"file" + 0.051*"earlier" + 0.042*"execution" + 0.034*"remote" + 0.033*"execute" + 0.026*"user" + 0.021*"upload" + 0.020*"attackers"
+
+Topic: 7 
+Words: 0.022*"ibm" + 0.020*"user" + 0.018*"server" + 0.018*"allow" + 0.016*"code" + 0.016*"windows" + 0.014*"security" + 0.014*"file" + 0.014*"malicious" + 0.013*"execute"
+
+Topic: 8 
+Words: 0.033*"device" + 0.030*"service" + 0.024*"cause" + 0.024*"affected" + 0.022*"denial" + 0.021*"firmware" + 0.017*"dos" + 0.017*"allow" + 0.016*"condition" + 0.016*"exploit"
+
+Topic: 9 
+Words: 0.017*"version" + 0.013*"issue" + 0.011*"server" + 0.011*"users" + 0.008*"data" + 0.008*"vulnerable" + 0.007*"source" + 0.007*"package" + 0.007*"upgrade" + 0.007*"versions"
+
+Topic: 10 
+Words: 0.072*"discovered" + 0.054*"function" + 0.045*"contain" + 0.032*"overflow" + 0.026*"pointer" + 0.024*"stack" + 0.023*"null" + 0.022*"issue" + 0.022*"service" + 0.022*"parameter"
+
+Topic: 11 
+Words: 0.054*"server" + 0.048*"cvss" + 0.041*"mysql" + 0.035*"oracle" + 0.024*"tensorflow" + 0.024*"affected" + 0.022*"attacks" + 0.022*"availability" + 0.022*"supported" + 0.020*"successful"
+
+Topic: 12 
+Words: 0.107*"cve" + 0.057*"windows" + 0.050*"remote" + 0.049*"code" + 0.047*"execution" + 0.042*"privilege" + 0.037*"elevation" + 0.021*"microsoft" + 0.019*"aka" + 0.019*"exists"
+
+Topic: 13 
+Words: 0.037*"access" + 0.035*"user" + 0.019*"privileges" + 0.017*"authentication" + 0.014*"password" + 0.013*"users" + 0.013*"bypass" + 0.012*"local" + 0.010*"control" + 0.010*"allow"
+
+Topic: 14 
+Words: 0.072*"buffer" + 0.070*"overflow" + 0.030*"heap" + 0.029*"based" + 0.026*"crafted" + 0.025*"code" + 0.023*"specially" + 0.023*"trigger" + 0.019*"stack" + 0.017*"memory"
+
+Topic: 15 
+Words: 0.118*"snapdragon" + 0.039*"sdm" + 0.035*"iot" + 0.028*"msm" + 0.023*"access" + 0.021*"mdm" + 0.021*"intel" + 0.020*"enable" + 0.019*"mobile" + 0.019*"consumer"
+
+Topic: 16 
+Words: 0.066*"injection" + 0.062*"sql" + 0.039*"php" + 0.023*"leads" + 0.022*"parameter" + 0.021*"manipulation" + 0.020*"attack" + 0.020*"identifier" + 0.020*"file" + 0.018*"vdb"
+
+Topic: 17 
+Words: 0.062*"issue" + 0.025*"fixed" + 0.023*"macos" + 0.023*"code" + 0.022*"app" + 0.021*"addressed" + 0.019*"memory" + 0.018*"arbitrary" + 0.018*"discovered" + 0.018*"improved"
+
+
+Dominant Topics:
+    Dominant_Topic  Perc_Contribution                                                                            Topic_Keywords
+0               16             0.5173        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+1               16             0.9055        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+2               16             0.6341        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+3               16             0.7270        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+4               13             0.2851  access, user, privileges, authentication, password, users, bypass, local, control, allow
+5               16             0.8587        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+6               14             0.4576           buffer, overflow, heap, based, crafted, code, specially, trigger, stack, memory
+7               10             0.8951  discovered, function, contain, overflow, pointer, stack, null, issue, service, parameter
+8               16             0.7518        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+9               16             0.3897        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+10              16             0.6995        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+11              16             0.4034        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+12               2             0.5848     plugin, request, site, cross, csrf, forgery, wordpress, versions, scalance, attackers
+13              16             0.6556        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+14              16             0.9410        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+15              13             0.3712  access, user, privileges, authentication, password, users, bypass, local, control, allow
+16               7             0.3906               ibm, user, server, allow, code, windows, security, file, malicious, execute
+17              14             0.4887           buffer, overflow, heap, based, crafted, code, specially, trigger, stack, memory
+18              14             0.4033           buffer, overflow, heap, based, crafted, code, specially, trigger, stack, memory
+19              15             0.4881                   snapdragon, sdm, iot, msm, access, mdm, intel, enable, mobile, consumer
+20               0             0.6657            service, denial, cause, memory, crash, kernel, flaw, attackers, crafted, local
+21              16             0.5134        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+22              16             0.6462        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+23              16             0.7741        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+24               2             0.5195     plugin, request, site, cross, csrf, forgery, wordpress, versions, scalance, attackers
+25              16             0.5411        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+26              16             0.5175        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+27              16             0.7973        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+28              16             0.6023        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+29              16             0.2890        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+30              16             0.9273        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+31               6             0.4096       code, arbitrary, file, earlier, execution, remote, execute, user, upload, attackers
+32              16             0.7729        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+33              16             0.7775        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+34              16             0.6992        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+35              16             0.5649        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+36               2             0.8645     plugin, request, site, cross, csrf, forgery, wordpress, versions, scalance, attackers
+37              16             0.3107        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+38               9             0.4685       version, issue, server, users, data, vulnerable, source, package, upgrade, versions
+39               9             0.5403       version, issue, server, users, data, vulnerable, source, package, upgrade, versions
+40               9             0.5412       version, issue, server, users, data, vulnerable, source, package, upgrade, versions
+41               6             0.2724       code, arbitrary, file, earlier, execution, remote, execute, user, upload, attackers
+42              13             0.3251  access, user, privileges, authentication, password, users, bypass, local, control, allow
+43              10             0.3570  discovered, function, contain, overflow, pointer, stack, null, issue, service, parameter
+44               9             0.4948       version, issue, server, users, data, vulnerable, source, package, upgrade, versions
+45              16             0.7605        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+46              16             0.8369        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+47              16             0.8274        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+48              16             0.8532        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+49              16             0.7984        injection, sql, php, leads, parameter, manipulation, attack, identifier, file, vdb
+
+
+Shape of topic distribution matrix: (63138, 18)
+Sample topic distribution for a document:
+[0.         0.         0.         0.         0.         0.
+ 0.         0.         0.         0.         0.         0.
+ 0.         0.44407314 0.         0.         0.51726747 0.        ]
+
+Model and dictionary saved. You can load them later using:
+lda_model = LdaModel.load('lda_output/lda_model_availabilityImpact_HIGH.gensim')
+dictionary = corpora.Dictionary.load('lda_output/dictionary_availabilityImpact_HIGH.gensim')

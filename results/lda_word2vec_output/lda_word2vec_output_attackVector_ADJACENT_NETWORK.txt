@@ -1,0 +1,61 @@
+Analysis for attackVector with value ADJACENT_NETWORK
+
+Number of documents in corpus: 2542
+Number of unique tokens: 3087
+Total number of terms in corpus: 74202
+
+Word2Vec-based Coherence Scores:
+Num Topics: 2, Coherence Score: 0.6321436234646374
+Num Topics: 4, Coherence Score: 0.6861037439770168
+Num Topics: 6, Coherence Score: 0.722078939637652
+Num Topics: 8, Coherence Score: 0.7177218584757712
+Num Topics: 10, Coherence Score: 0.7510436388850212
+Num Topics: 12, Coherence Score: 0.774563140132361
+Num Topics: 14, Coherence Score: 0.7590654817365465
+Num Topics: 16, Coherence Score: 0.7702923021382755
+Num Topics: 18, Coherence Score: 0.766826141193325
+
+Optimal number of topics: 12
+
+Top 10 words for each topic in the optimal model:
+Topic: 0 
+Words: 0.038*"device" + 0.032*"cause" + 0.030*"affected" + 0.027*"cisco" + 0.027*"exploit" + 0.025*"service" + 0.024*"allow" + 0.022*"denial" + 0.019*"software" + 0.017*"dos"
+
+Topic: 1 
+Words: 0.080*"earlier" + 0.030*"firmware" + 0.028*"wrc" + 0.022*"prior" + 0.017*"cve" + 0.012*"gst" + 0.012*"server" + 0.012*"access" + 0.011*"arbitrary" + 0.011*"windows"
+
+Topic: 2 
+Words: 0.030*"wndr" + 0.027*"buffer" + 0.027*"user" + 0.024*"execute" + 0.023*"adjacent" + 0.023*"overflow" + 0.021*"code" + 0.020*"authentication" + 0.019*"affected" + 0.016*"stack"
+
+Topic: 3 
+Words: 0.025*"bizhub" + 0.022*"information" + 0.020*"earlier" + 0.018*"sensitive" + 0.017*"security" + 0.016*"ibm" + 0.014*"leads" + 0.014*"issue" + 0.014*"manipulation" + 0.013*"identifier"
+
+Topic: 4 
+Words: 0.045*"firmware" + 0.040*"ver" + 0.032*"earlier" + 0.014*"bluetooth" + 0.013*"wzr" + 0.012*"pairing" + 0.011*"attackers" + 0.011*"access" + 0.010*"device" + 0.010*"remote"
+
+Topic: 5 
+Words: 0.074*"devices" + 0.072*"netgear" + 0.070*"affected" + 0.066*"rbk" + 0.065*"affects" + 0.065*"certain" + 0.050*"rbs" + 0.048*"rbr" + 0.040*"injection" + 0.039*"command"
+
+Topic: 6 
+Words: 0.065*"cluster" + 0.062*"mysql" + 0.044*"prior" + 0.041*"cvss" + 0.029*"attacks" + 0.028*"successful" + 0.026*"access" + 0.019*"confidentiality" + 0.018*"oracle" + 0.018*"availability"
+
+Topic: 7 
+Words: 0.024*"versions" + 0.021*"network" + 0.018*"allow" + 0.018*"firmware" + 0.016*"access" + 0.016*"arbitrary" + 0.015*"scalance" + 0.014*"web" + 0.014*"execute" + 0.013*"server"
+
+Topic: 8 
+Words: 0.040*"android" + 0.029*"execution" + 0.029*"bluetooth" + 0.029*"needed" + 0.025*"bounds" + 0.024*"user" + 0.019*"information" + 0.019*"exploitation" + 0.019*"remote" + 0.018*"possible"
+
+Topic: 9 
+Words: 0.035*"device" + 0.025*"affected" + 0.024*"protocol" + 0.023*"cisco" + 0.020*"cause" + 0.020*"exploit" + 0.019*"discovery" + 0.018*"layer" + 0.018*"allow" + 0.017*"lldp"
+
+Topic: 10 
+Words: 0.107*"prior" + 0.094*"versions" + 0.023*"junos" + 0.022*"service" + 0.021*"networks" + 0.021*"juniper" + 0.021*"issue" + 0.018*"series" + 0.016*"qfx" + 0.015*"denial"
+
+Topic: 11 
+Words: 0.162*"versions" + 0.067*"prior" + 0.028*"evo" + 0.021*"junos" + 0.020*"issue" + 0.017*"networks" + 0.017*"series" + 0.017*"juniper" + 0.013*"simatic" + 0.012*"ruggedcom"
+
+
+Models saved. You can load them later using:
+lda_model = LdaModel.load('lda_word2vec_output/lda_model_attackVector_ADJACENT_NETWORK.gensim')
+dictionary = corpora.Dictionary.load('lda_word2vec_output/dictionary_attackVector_ADJACENT_NETWORK.gensim')
+w2v_model = Word2Vec.load('lda_word2vec_output/word2vec_model_attackVector_ADJACENT_NETWORK.model')

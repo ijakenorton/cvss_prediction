@@ -1,0 +1,61 @@
+Analysis for attackVector with value LOCAL
+
+Number of documents in corpus: 26224
+Number of unique tokens: 9657
+Total number of terms in corpus: 614638
+
+Word2Vec-based Coherence Scores:
+Num Topics: 2, Coherence Score: 0.2819589667022228
+Num Topics: 4, Coherence Score: 0.25220342956276404
+Num Topics: 6, Coherence Score: 0.2960272034871633
+Num Topics: 8, Coherence Score: 0.26576579385695775
+Num Topics: 10, Coherence Score: 0.32165584675553777
+Num Topics: 12, Coherence Score: 0.32628131833410373
+Num Topics: 14, Coherence Score: 0.2913335431204547
+Num Topics: 16, Coherence Score: 0.3125278119696304
+Num Topics: 18, Coherence Score: 0.3074553866410789
+
+Optimal number of topics: 12
+
+Top 10 words for each topic in the optimal model:
+Topic: 0 
+Words: 0.045*"code" + 0.041*"execute" + 0.036*"malicious" + 0.033*"user" + 0.026*"file" + 0.025*"arbitrary" + 0.020*"specific" + 0.020*"attackers" + 0.020*"remote" + 0.020*"exists"
+
+Topic: 1 
+Words: 0.100*"versions" + 0.039*"code" + 0.028*"identified" + 0.022*"files" + 0.021*"visualization" + 0.021*"teamcenter" + 0.020*"parsing" + 0.020*"execute" + 0.020*"allow" + 0.019*"process"
+
+Topic: 2 
+Words: 0.044*"prior" + 0.039*"oracle" + 0.032*"versions" + 0.025*"tensorflow" + 0.024*"cvss" + 0.024*"server" + 0.023*"virtualbox" + 0.016*"attacks" + 0.016*"affected" + 0.013*"data"
+
+Topic: 3 
+Words: 0.034*"kernel" + 0.028*"cve" + 0.026*"memory" + 0.023*"windows" + 0.021*"linux" + 0.016*"service" + 0.014*"elevation" + 0.013*"use" + 0.011*"flaw" + 0.011*"denial"
+
+Topic: 4 
+Words: 0.024*"file" + 0.019*"information" + 0.017*"ibm" + 0.017*"users" + 0.014*"local" + 0.014*"files" + 0.013*"directory" + 0.012*"sensitive" + 0.010*"user" + 0.010*"issue"
+
+Topic: 5 
+Words: 0.037*"local" + 0.031*"user" + 0.030*"access" + 0.028*"allow" + 0.018*"privilege" + 0.018*"privileges" + 0.016*"version" + 0.015*"authenticated" + 0.014*"escalation" + 0.014*"potentially"
+
+Topic: 6 
+Words: 0.042*"overflow" + 0.037*"buffer" + 0.029*"file" + 0.029*"crafted" + 0.025*"cause" + 0.021*"service" + 0.021*"denial" + 0.021*"function" + 0.021*"discovered" + 0.019*"heap"
+
+Topic: 7 
+Words: 0.075*"issue" + 0.053*"macos" + 0.041*"fixed" + 0.037*"addressed" + 0.032*"improved" + 0.029*"able" + 0.027*"ios" + 0.023*"ipados" + 0.020*"app" + 0.019*"code"
+
+Topic: 8 
+Words: 0.072*"needed" + 0.071*"android" + 0.046*"local" + 0.045*"execution" + 0.044*"privileges" + 0.043*"possible" + 0.040*"user" + 0.035*"exploitation" + 0.034*"bounds" + 0.034*"privilege"
+
+Topic: 9 
+Words: 0.060*"earlier" + 0.059*"user" + 0.048*"file" + 0.034*"open" + 0.033*"malicious" + 0.032*"victim" + 0.032*"exploitation" + 0.032*"affected" + 0.028*"issue" + 0.028*"requires"
+
+Topic: 10 
+Words: 0.119*"snapdragon" + 0.034*"sdm" + 0.033*"iot" + 0.025*"msm" + 0.022*"mobile" + 0.018*"compute" + 0.018*"consumer" + 0.018*"mdm" + 0.017*"auto" + 0.017*"industrial"
+
+Topic: 11 
+Words: 0.023*"service" + 0.023*"exploit" + 0.021*"component" + 0.020*"affected" + 0.019*"local" + 0.017*"attack" + 0.016*"function" + 0.016*"leads" + 0.016*"issue" + 0.015*"manipulation"
+
+
+Models saved. You can load them later using:
+lda_model = LdaModel.load('lda_word2vec_output/lda_model_attackVector_LOCAL.gensim')
+dictionary = corpora.Dictionary.load('lda_word2vec_output/dictionary_attackVector_LOCAL.gensim')
+w2v_model = Word2Vec.load('lda_word2vec_output/word2vec_model_attackVector_LOCAL.model')

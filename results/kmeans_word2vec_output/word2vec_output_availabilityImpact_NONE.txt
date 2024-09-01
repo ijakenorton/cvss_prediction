@@ -1,0 +1,19 @@
+Analysis for availabilityImpact with value NONE
+
+Number of documents: 44572
+Total number of words: 1085689
+
+Word2Vec Topics:
+Topic 0: versions, prior, management, android, manager, software, windows, supported, devices, cisco
+Topic 1: affected, exists, functionality, multiple, feature, project, exposure, store, ssrf, related
+Topic 2: user, access, information, data, attackers, users, allow, file, arbitrary, remote
+Topic 3: oracle, attacks, cvss, successful, ibm, unauthorized, product, needed, interaction, result
+Topic 4: site, cross, scripting, xss, plugin, stored, wordpress, vulnerable, php, admin
+Topic 5: check, authentication, use, api, missing, service, vector, client, impacts, key
+Topic 6: issue, version, security, fixed, update, identifier, remotely, patch, upgrade, note
+Topic 7: request, parameter, input, http, improper, validation, function, content, based, bounds
+Topic 8: web, page, malicious, code, exploit, crafted, attack, html, execute, exploitation
+Topic 9: discovered, affects, app, contain, source, github, module, contains, repository, aka
+
+Word2Vec model saved. You can load it later using:
+model = Word2Vec.load('word2vec_output/word2vec_model_availabilityImpact_NONE.model')

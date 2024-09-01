@@ -1,0 +1,31 @@
+Analysis for userInteraction with value REQUIRED
+
+Number of documents in corpus: 36673
+Number of unique tokens: 12627
+Total number of terms in corpus: 848424
+
+Word2Vec-based Coherence Scores:
+Num Topics: 2, Coherence Score: 0.2753519372600648
+Num Topics: 4, Coherence Score: 0.23105357457987136
+Num Topics: 6, Coherence Score: 0.23538495649204214
+Num Topics: 8, Coherence Score: 0.24145064736561228
+Num Topics: 10, Coherence Score: 0.25823842387853396
+Num Topics: 12, Coherence Score: 0.2554240388881967
+Num Topics: 14, Coherence Score: 0.2555391341019127
+Num Topics: 16, Coherence Score: 0.27367711384237436
+Num Topics: 18, Coherence Score: 0.2626418894294788
+
+Optimal number of topics: 2
+
+Top 10 words for each topic in the optimal model:
+Topic: 0 
+Words: 0.026*"code" + 0.026*"user" + 0.021*"malicious" + 0.021*"file" + 0.016*"affected" + 0.016*"issue" + 0.014*"arbitrary" + 0.014*"execute" + 0.012*"crafted" + 0.012*"remote"
+
+Topic: 1 
+Words: 0.031*"site" + 0.029*"cross" + 0.024*"scripting" + 0.021*"xss" + 0.014*"plugin" + 0.013*"versions" + 0.010*"stored" + 0.010*"web" + 0.009*"page" + 0.009*"wordpress"
+
+
+Models saved. You can load them later using:
+lda_model = LdaModel.load('lda_word2vec_output/lda_model_userInteraction_REQUIRED.gensim')
+dictionary = corpora.Dictionary.load('lda_word2vec_output/dictionary_userInteraction_REQUIRED.gensim')
+w2v_model = Word2Vec.load('lda_word2vec_output/word2vec_model_userInteraction_REQUIRED.model')

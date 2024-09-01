@@ -1,0 +1,79 @@
+Analysis for privilegesRequired with value NONE
+
+Number of documents in corpus: 65195
+Number of unique tokens: 21623
+Total number of terms in corpus: 1516510
+
+Word2Vec-based Coherence Scores:
+Num Topics: 2, Coherence Score: 0.16838691966194247
+Num Topics: 4, Coherence Score: 0.13933844515898575
+Num Topics: 6, Coherence Score: 0.16366207267295707
+Num Topics: 8, Coherence Score: 0.17797563304193317
+Num Topics: 10, Coherence Score: 0.17326879701059722
+Num Topics: 12, Coherence Score: 0.20178649496907988
+Num Topics: 14, Coherence Score: 0.21790453105470137
+Num Topics: 16, Coherence Score: 0.20965677798053042
+Num Topics: 18, Coherence Score: 0.2400840750487268
+
+Optimal number of topics: 18
+
+Top 10 words for each topic in the optimal model:
+Topic: 0 
+Words: 0.072*"issue" + 0.042*"fixed" + 0.039*"macos" + 0.034*"addressed" + 0.031*"ios" + 0.029*"improved" + 0.029*"code" + 0.024*"memory" + 0.023*"able" + 0.021*"windows"
+
+Topic: 1 
+Words: 0.070*"android" + 0.038*"needed" + 0.033*"exploitation" + 0.032*"product" + 0.030*"execution" + 0.029*"privileges" + 0.029*"bounds" + 0.027*"user" + 0.024*"possible" + 0.023*"additional"
+
+Topic: 2 
+Words: 0.059*"site" + 0.052*"cross" + 0.041*"plugin" + 0.035*"xss" + 0.033*"scripting" + 0.028*"request" + 0.027*"wordpress" + 0.024*"csrf" + 0.021*"forgery" + 0.021*"versions"
+
+Topic: 3 
+Words: 0.042*"issue" + 0.036*"leads" + 0.031*"patch" + 0.030*"affected" + 0.028*"manipulation" + 0.028*"identifier" + 0.028*"attack" + 0.028*"component" + 0.025*"remotely" + 0.024*"problematic"
+
+Topic: 4 
+Words: 0.060*"sql" + 0.059*"injection" + 0.045*"php" + 0.039*"java" + 0.023*"exploit" + 0.021*"public" + 0.021*"disclosed" + 0.020*"file" + 0.019*"attack" + 0.019*"leads"
+
+Topic: 5 
+Words: 0.033*"remote" + 0.030*"allow" + 0.026*"access" + 0.023*"unauthenticated" + 0.020*"exploit" + 0.020*"user" + 0.018*"code" + 0.018*"web" + 0.017*"interface" + 0.016*"server"
+
+Topic: 6 
+Words: 0.046*"cve" + 0.033*"crafted" + 0.029*"service" + 0.027*"denial" + 0.026*"cause" + 0.024*"file" + 0.024*"memory" + 0.023*"code" + 0.018*"attackers" + 0.017*"execution"
+
+Topic: 7 
+Words: 0.105*"snapdragon" + 0.043*"sdm" + 0.034*"iot" + 0.030*"msm" + 0.022*"mdm" + 0.021*"mobile" + 0.018*"consumer" + 0.018*"auto" + 0.017*"industrial" + 0.016*"apq"
+
+Topic: 8 
+Words: 0.022*"issue" + 0.020*"version" + 0.013*"server" + 0.012*"users" + 0.012*"http" + 0.010*"versions" + 0.009*"source" + 0.009*"request" + 0.008*"upgrade" + 0.008*"data"
+
+Topic: 9 
+Words: 0.014*"attackers" + 0.013*"access" + 0.013*"authentication" + 0.012*"key" + 0.010*"use" + 0.009*"password" + 0.008*"server" + 0.008*"issue" + 0.008*"certificate" + 0.008*"client"
+
+Topic: 10 
+Words: 0.061*"versions" + 0.046*"prior" + 0.044*"service" + 0.036*"denial" + 0.030*"cause" + 0.019*"device" + 0.017*"dos" + 0.016*"condition" + 0.014*"series" + 0.014*"affected"
+
+Topic: 11 
+Words: 0.058*"oracle" + 0.044*"cvss" + 0.042*"access" + 0.035*"data" + 0.029*"attacks" + 0.027*"successful" + 0.025*"unauthorized" + 0.019*"base" + 0.018*"accessible" + 0.017*"enterprise"
+
+Topic: 12 
+Words: 0.071*"overflow" + 0.063*"discovered" + 0.062*"buffer" + 0.045*"contain" + 0.042*"function" + 0.033*"stack" + 0.029*"command" + 0.029*"arbitrary" + 0.026*"execute" + 0.025*"based"
+
+Topic: 13 
+Words: 0.040*"user" + 0.019*"firefox" + 0.018*"password" + 0.015*"affects" + 0.015*"url" + 0.012*"users" + 0.011*"redirect" + 0.011*"account" + 0.009*"login" + 0.009*"session"
+
+Topic: 14 
+Words: 0.070*"versions" + 0.053*"information" + 0.033*"sensitive" + 0.027*"ibm" + 0.026*"firmware" + 0.023*"prior" + 0.019*"allow" + 0.017*"version" + 0.017*"series" + 0.016*"force"
+
+Topic: 15 
+Words: 0.052*"prior" + 0.049*"allowed" + 0.043*"html" + 0.042*"google" + 0.041*"chrome" + 0.039*"crafted" + 0.038*"remote" + 0.038*"page" + 0.027*"potentially" + 0.024*"free"
+
+Topic: 16 
+Words: 0.062*"file" + 0.044*"files" + 0.027*"path" + 0.025*"arbitrary" + 0.024*"directory" + 0.019*"traversal" + 0.019*"upload" + 0.015*"versions" + 0.014*"server" + 0.010*"code"
+
+Topic: 17 
+Words: 0.049*"earlier" + 0.041*"user" + 0.037*"code" + 0.030*"malicious" + 0.029*"file" + 0.025*"execute" + 0.025*"affected" + 0.024*"versions" + 0.023*"context" + 0.021*"arbitrary"
+
+
+Models saved. You can load them later using:
+lda_model = LdaModel.load('lda_word2vec_output/lda_model_privilegesRequired_NONE.gensim')
+dictionary = corpora.Dictionary.load('lda_word2vec_output/dictionary_privilegesRequired_NONE.gensim')
+w2v_model = Word2Vec.load('lda_word2vec_output/word2vec_model_privilegesRequired_NONE.model')

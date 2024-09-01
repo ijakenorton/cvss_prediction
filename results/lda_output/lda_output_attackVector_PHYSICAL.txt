@@ -1,0 +1,126 @@
+Analysis for attackVector with value PHYSICAL
+
+Number of documents in corpus: 1147
+Number of unique tokens: 1963
+Total number of terms in corpus: 25888
+
+Coherence Scores:
+Num Topics: 2, Coherence Score: 0.31418501123041287
+Num Topics: 4, Coherence Score: 0.37600871440270855
+Num Topics: 6, Coherence Score: 0.3633105670737637
+Num Topics: 8, Coherence Score: 0.4483088207074392
+Num Topics: 10, Coherence Score: 0.38469488983778904
+Num Topics: 12, Coherence Score: 0.4496308522211712
+Num Topics: 14, Coherence Score: 0.4542348838345557
+Num Topics: 16, Coherence Score: 0.3855660286024438
+Num Topics: 18, Coherence Score: 0.38883113160424093
+
+Optimal number of topics: 14
+
+Top 10 words for each topic in the optimal model:
+Topic: 0 
+Words: 0.066*"snapdragon" + 0.021*"iot" + 0.015*"mobile" + 0.015*"user" + 0.012*"digital" + 0.012*"voice" + 0.011*"session" + 0.011*"smartphones" + 0.011*"series" + 0.010*"industrial"
+
+Topic: 1 
+Words: 0.109*"versions" + 0.036*"earlier" + 0.029*"huawei" + 0.021*"device" + 0.021*"certain" + 0.020*"mate" + 0.018*"function" + 0.018*"allow" + 0.016*"exploit" + 0.016*"software"
+
+Topic: 2 
+Words: 0.024*"bypass" + 0.018*"authentication" + 0.017*"access" + 0.017*"information" + 0.017*"affected" + 0.017*"boot" + 0.017*"device" + 0.015*"physically" + 0.015*"security" + 0.012*"feature"
+
+Topic: 3 
+Words: 0.022*"access" + 0.018*"bios" + 0.018*"cve" + 0.015*"nextcloud" + 0.014*"physical" + 0.013*"device" + 0.012*"allow" + 0.012*"app" + 0.012*"write" + 0.011*"exists"
+
+Topic: 4 
+Words: 0.038*"access" + 0.027*"device" + 0.023*"physical" + 0.020*"interface" + 0.015*"root" + 0.015*"devices" + 0.014*"arbitrary" + 0.014*"commands" + 0.013*"allow" + 0.012*"execute"
+
+Topic: 5 
+Words: 0.060*"usb" + 0.042*"kernel" + 0.040*"device" + 0.033*"linux" + 0.033*"drivers" + 0.020*"use" + 0.020*"free" + 0.019*"malicious" + 0.018*"driver" + 0.018*"hid"
+
+Topic: 6 
+Words: 0.048*"earlier" + 0.041*"bizhub" + 0.032*"access" + 0.022*"ibm" + 0.021*"physical" + 0.019*"windows" + 0.019*"bypass" + 0.014*"information" + 0.014*"security" + 0.013*"file"
+
+Topic: 7 
+Words: 0.092*"issue" + 0.056*"ios" + 0.042*"access" + 0.040*"fixed" + 0.037*"addressed" + 0.033*"device" + 0.033*"able" + 0.031*"improved" + 0.029*"ipados" + 0.027*"screen"
+
+Topic: 8 
+Words: 0.027*"authentication" + 0.019*"memory" + 0.018*"access" + 0.016*"service" + 0.016*"denial" + 0.015*"device" + 0.014*"allow" + 0.013*"cause" + 0.013*"information" + 0.011*"physical"
+
+Topic: 9 
+Words: 0.032*"privileges" + 0.031*"user" + 0.030*"bounds" + 0.028*"access" + 0.028*"privilege" + 0.028*"needed" + 0.024*"device" + 0.022*"execution" + 0.021*"escalation" + 0.020*"local"
+
+Topic: 10 
+Words: 0.038*"device" + 0.030*"software" + 0.027*"samsung" + 0.025*"devices" + 0.023*"access" + 0.016*"boot" + 0.016*"issue" + 0.015*"discovered" + 0.015*"mobile" + 0.014*"physical"
+
+Topic: 11 
+Words: 0.018*"access" + 0.012*"osca" + 0.012*"code" + 0.012*"device" + 0.011*"firmware" + 0.011*"version" + 0.011*"physical" + 0.010*"xiaomi" + 0.010*"allow" + 0.010*"exploit"
+
+Topic: 12 
+Words: 0.044*"android" + 0.036*"prior" + 0.028*"versions" + 0.020*"user" + 0.019*"access" + 0.017*"device" + 0.017*"password" + 0.016*"bypass" + 0.016*"physical" + 0.016*"needed"
+
+Topic: 13 
+Words: 0.060*"access" + 0.050*"physical" + 0.029*"user" + 0.026*"intel" + 0.025*"potentially" + 0.023*"improper" + 0.023*"allow" + 0.021*"information" + 0.019*"prior" + 0.018*"enable"
+
+
+Dominant Topics:
+    Dominant_Topic  Perc_Contribution                                                                                      Topic_Keywords
+0                3             0.9749                           access, bios, cve, nextcloud, physical, device, allow, app, write, exists
+1                3             0.8082                           access, bios, cve, nextcloud, physical, device, allow, app, write, exists
+2                4             0.9454             access, device, physical, interface, root, devices, arbitrary, commands, allow, execute
+3                3             0.6676                           access, bios, cve, nextcloud, physical, device, allow, app, write, exists
+4                8             0.7220        authentication, memory, access, service, denial, device, allow, cause, information, physical
+5                8             0.7117        authentication, memory, access, service, denial, device, allow, cause, information, physical
+6               13             0.9536             access, physical, user, intel, potentially, improper, allow, information, prior, enable
+7               13             0.9484             access, physical, user, intel, potentially, improper, allow, information, prior, enable
+8                6             0.9768                earlier, bizhub, access, ibm, physical, windows, bypass, information, security, file
+9                5             0.9420                              usb, kernel, device, linux, drivers, use, free, malicious, driver, hid
+10              13             0.7144             access, physical, user, intel, potentially, improper, allow, information, prior, enable
+11              13             0.9596             access, physical, user, intel, potentially, improper, allow, information, prior, enable
+12               7             0.5079                        issue, ios, access, fixed, addressed, device, able, improved, ipados, screen
+13               2             0.6147  bypass, authentication, access, information, affected, boot, device, physically, security, feature
+14              13             0.6376             access, physical, user, intel, potentially, improper, allow, information, prior, enable
+15              13             0.6453             access, physical, user, intel, potentially, improper, allow, information, prior, enable
+16               6             0.7333                earlier, bizhub, access, ibm, physical, windows, bypass, information, security, file
+17               6             0.9643                earlier, bizhub, access, ibm, physical, windows, bypass, information, security, file
+18               2             0.4420  bypass, authentication, access, information, affected, boot, device, physically, security, feature
+19               4             0.4684             access, device, physical, interface, root, devices, arbitrary, commands, allow, execute
+20               6             0.5728                earlier, bizhub, access, ibm, physical, windows, bypass, information, security, file
+21               0             0.9381             snapdragon, iot, mobile, user, digital, voice, session, smartphones, series, industrial
+22               7             0.9596                        issue, ios, access, fixed, addressed, device, able, improved, ipados, screen
+23               7             0.9038                        issue, ios, access, fixed, addressed, device, able, improved, ipados, screen
+24               4             0.9821             access, device, physical, interface, root, devices, arbitrary, commands, allow, execute
+25               4             0.8394             access, device, physical, interface, root, devices, arbitrary, commands, allow, execute
+26               4             0.7830             access, device, physical, interface, root, devices, arbitrary, commands, allow, execute
+27               2             0.4173  bypass, authentication, access, information, affected, boot, device, physically, security, feature
+28               4             0.9613             access, device, physical, interface, root, devices, arbitrary, commands, allow, execute
+29               1             0.9454                versions, earlier, huawei, device, certain, mate, function, allow, exploit, software
+30               6             0.9896                earlier, bizhub, access, ibm, physical, windows, bypass, information, security, file
+31               6             0.9873                earlier, bizhub, access, ibm, physical, windows, bypass, information, security, file
+32              12             0.6583                  android, prior, versions, user, access, device, password, bypass, physical, needed
+33              12             0.3605                  android, prior, versions, user, access, device, password, bypass, physical, needed
+34              13             0.5931             access, physical, user, intel, potentially, improper, allow, information, prior, enable
+35               7             0.8839                        issue, ios, access, fixed, addressed, device, able, improved, ipados, screen
+36               7             0.8839                        issue, ios, access, fixed, addressed, device, able, improved, ipados, screen
+37               7             0.8839                        issue, ios, access, fixed, addressed, device, able, improved, ipados, screen
+38               7             0.8839                        issue, ios, access, fixed, addressed, device, able, improved, ipados, screen
+39               7             0.8839                        issue, ios, access, fixed, addressed, device, able, improved, ipados, screen
+40               7             0.8839                        issue, ios, access, fixed, addressed, device, able, improved, ipados, screen
+41               7             0.8839                        issue, ios, access, fixed, addressed, device, able, improved, ipados, screen
+42               7             0.8839                        issue, ios, access, fixed, addressed, device, able, improved, ipados, screen
+43              12             0.9668                  android, prior, versions, user, access, device, password, bypass, physical, needed
+44              11             0.5464                     access, osca, code, device, firmware, version, physical, xiaomi, allow, exploit
+45               1             0.7016                versions, earlier, huawei, device, certain, mate, function, allow, exploit, software
+46               8             0.9613        authentication, memory, access, service, denial, device, allow, cause, information, physical
+47               2             0.9226  bypass, authentication, access, information, affected, boot, device, physically, security, feature
+48               8             0.7213        authentication, memory, access, service, denial, device, allow, cause, information, physical
+49               8             0.9613        authentication, memory, access, service, denial, device, allow, cause, information, physical
+
+
+Shape of topic distribution matrix: (1147, 14)
+Sample topic distribution for a document:
+[0.         0.         0.         0.97490221 0.         0.
+ 0.         0.         0.         0.         0.         0.
+ 0.         0.        ]
+
+Model and dictionary saved. You can load them later using:
+lda_model = LdaModel.load('lda_output/lda_model_attackVector_PHYSICAL.gensim')
+dictionary = corpora.Dictionary.load('lda_output/dictionary_attackVector_PHYSICAL.gensim')

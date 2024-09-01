@@ -1,0 +1,19 @@
+Analysis for integrityImpact with value NONE
+
+Number of documents: 34202
+Total number of words: 851233
+
+Word2Vec Topics:
+Topic 0: issue, running, mode, operations, threat, potential, following, include, cluster, associated
+Topic 1: versions, series, firmware, junos, networks, scalance, simatic, intel, evo, adobe
+Topic 2: check, snapdragon, code, missing, vector, parameter, xml, value, end, implementation
+Topic 3: network, privileged, supported, exploitable, easily, high, low, difficult
+Topic 4: information, user, access, file, remote, disclosure, allow, data, sensitive, attackers
+Topic 5: tensorflow, fixed, impacts, cve, source, note, patch, addressed, github, upgrade
+Topic 6: cvss, oracle, successful, mysql, product, result, attacks, java, unauthorized, base
+Topic 7: service, denial, cause, read, crafted, memory, dos, function, bounds, crash
+Topic 8: server, affected, exploit, device, request, http, open, multiple, specially, specific
+Topic 9: prior, version, discovered, earlier, android, component, security, affects, vulnerable, exists
+
+Word2Vec model saved. You can load it later using:
+model = Word2Vec.load('word2vec_output/word2vec_model_integrityImpact_NONE.model')

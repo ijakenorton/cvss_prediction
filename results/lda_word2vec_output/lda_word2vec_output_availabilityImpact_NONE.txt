@@ -1,0 +1,67 @@
+Analysis for availabilityImpact with value NONE
+
+Number of documents in corpus: 44572
+Number of unique tokens: 15729
+Total number of terms in corpus: 1063707
+
+Word2Vec-based Coherence Scores:
+Num Topics: 2, Coherence Score: 0.1834766859602597
+Num Topics: 4, Coherence Score: 0.223182624236991
+Num Topics: 6, Coherence Score: 0.23145835436190723
+Num Topics: 8, Coherence Score: 0.24349231450663258
+Num Topics: 10, Coherence Score: 0.2322859673512479
+Num Topics: 12, Coherence Score: 0.23414825625993588
+Num Topics: 14, Coherence Score: 0.24908805349989543
+Num Topics: 16, Coherence Score: 0.22883068001311688
+Num Topics: 18, Coherence Score: 0.23618433650031134
+
+Optimal number of topics: 14
+
+Top 10 words for each topic in the optimal model:
+Topic: 0 
+Words: 0.059*"android" + 0.052*"needed" + 0.043*"information" + 0.038*"disclosure" + 0.036*"user" + 0.036*"privileges" + 0.035*"execution" + 0.030*"possible" + 0.029*"local" + 0.027*"exploitation"
+
+Topic: 1 
+Words: 0.047*"java" + 0.018*"security" + 0.016*"microsoft" + 0.012*"snapdragon" + 0.012*"code" + 0.012*"information" + 0.010*"kernel" + 0.010*"server" + 0.010*"web" + 0.009*"spoofing"
+
+Topic: 2 
+Words: 0.032*"plugin" + 0.029*"request" + 0.026*"attackers" + 0.025*"wordpress" + 0.021*"csrf" + 0.019*"vulnerable" + 0.018*"forgery" + 0.016*"unauthenticated" + 0.016*"including" + 0.015*"versions"
+
+Topic: 3 
+Words: 0.075*"versions" + 0.056*"prior" + 0.035*"access" + 0.028*"version" + 0.016*"improper" + 0.014*"issue" + 0.014*"control" + 0.012*"user" + 0.012*"allow" + 0.011*"series"
+
+Topic: 4 
+Words: 0.066*"information" + 0.053*"ibm" + 0.049*"sensitive" + 0.027*"force" + 0.023*"obtain" + 0.021*"allow" + 0.017*"remote" + 0.017*"access" + 0.016*"potentially" + 0.016*"disclosure"
+
+Topic: 5 
+Words: 0.056*"issue" + 0.023*"user" + 0.022*"macos" + 0.022*"fixed" + 0.020*"ios" + 0.019*"addressed" + 0.017*"malicious" + 0.016*"able" + 0.016*"improved" + 0.015*"information"
+
+Topic: 6 
+Words: 0.016*"issue" + 0.015*"users" + 0.014*"user" + 0.014*"version" + 0.012*"versions" + 0.011*"server" + 0.007*"use" + 0.007*"password" + 0.006*"discovered" + 0.006*"source"
+
+Topic: 7 
+Words: 0.067*"xss" + 0.054*"site" + 0.053*"cross" + 0.051*"scripting" + 0.028*"php" + 0.023*"html" + 0.023*"arbitrary" + 0.020*"parameter" + 0.020*"web" + 0.020*"stored"
+
+Topic: 8 
+Words: 0.078*"earlier" + 0.037*"information" + 0.035*"disclosure" + 0.030*"windows" + 0.025*"exploitation" + 0.022*"versions" + 0.019*"xml" + 0.019*"file" + 0.017*"memory" + 0.016*"affected"
+
+Topic: 9 
+Words: 0.031*"attack" + 0.030*"leads" + 0.027*"manipulation" + 0.026*"identifier" + 0.026*"remotely" + 0.025*"affected" + 0.025*"file" + 0.024*"public" + 0.023*"vdb" + 0.023*"unknown"
+
+Topic: 10 
+Words: 0.034*"user" + 0.025*"web" + 0.025*"allow" + 0.024*"interface" + 0.024*"malicious" + 0.022*"exploit" + 0.021*"affected" + 0.016*"based" + 0.016*"browser" + 0.016*"crafted"
+
+Topic: 11 
+Words: 0.067*"oracle" + 0.050*"access" + 0.047*"cvss" + 0.042*"data" + 0.031*"attacks" + 0.027*"unauthorized" + 0.026*"accessible" + 0.025*"successful" + 0.019*"component" + 0.018*"base"
+
+Topic: 12 
+Words: 0.052*"plugin" + 0.043*"site" + 0.043*"wordpress" + 0.041*"cross" + 0.039*"scripting" + 0.029*"stored" + 0.021*"escape" + 0.021*"users" + 0.018*"page" + 0.015*"xss"
+
+Topic: 13 
+Words: 0.042*"file" + 0.038*"files" + 0.019*"read" + 0.018*"directory" + 0.018*"path" + 0.016*"access" + 0.016*"server" + 0.015*"traversal" + 0.014*"arbitrary" + 0.014*"attackers"
+
+
+Models saved. You can load them later using:
+lda_model = LdaModel.load('lda_word2vec_output/lda_model_availabilityImpact_NONE.gensim')
+dictionary = corpora.Dictionary.load('lda_word2vec_output/dictionary_availabilityImpact_NONE.gensim')
+w2v_model = Word2Vec.load('lda_word2vec_output/word2vec_model_availabilityImpact_NONE.model')

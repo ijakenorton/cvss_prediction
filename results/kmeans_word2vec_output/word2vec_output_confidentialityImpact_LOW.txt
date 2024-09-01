@@ -1,0 +1,19 @@
+Analysis for confidentialityImpact with value LOW
+
+Number of documents: 22864
+Total number of words: 557756
+
+Word2Vec Topics:
+Topic 0: earlier, injection, contains, feature, example, website, time, forgery, library, console
+Topic 1: cvss, identifier, vdb, confidentiality, supported, score, impacts, integrity, series, ruggedcom
+Topic 2: site, cross, scripting, xss, stored, vulnerable, admin, reflected, input, discovered
+Topic 3: user, access, users, affected, allow, information, attacks, authenticated, exploit, attack
+Topic 4: server, application, disclosure, force, files, credentials, api, use, view, jenkins
+Topic 5: web, arbitrary, attackers, remote, code, malicious, html, execute, inject, javascript
+Topic 6: versions, issue, version, prior, affects, open, security, problematic, classified, update
+Topic 7: management, ibm, interface, based, manager, network, software, cisco, services, conduct
+Topic 8: plugin, page, wordpress, php, file, parameter, component, escape, content, field
+Topic 9: data, oracle, successful, read, unauthorized, accessible, enterprise, result, product, service
+
+Word2Vec model saved. You can load it later using:
+model = Word2Vec.load('word2vec_output/word2vec_model_confidentialityImpact_LOW.model')

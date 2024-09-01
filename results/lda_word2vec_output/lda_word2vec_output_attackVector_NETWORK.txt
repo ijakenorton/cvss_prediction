@@ -1,0 +1,79 @@
+Analysis for attackVector with value NETWORK
+
+Number of documents in corpus: 80331
+Number of unique tokens: 23915
+Total number of terms in corpus: 1926488
+
+Word2Vec-based Coherence Scores:
+Num Topics: 2, Coherence Score: 0.17216728834642303
+Num Topics: 4, Coherence Score: 0.15981325060646567
+Num Topics: 6, Coherence Score: 0.17256752682366858
+Num Topics: 8, Coherence Score: 0.18227379073181912
+Num Topics: 10, Coherence Score: 0.18327329774904583
+Num Topics: 12, Coherence Score: 0.18220044886865824
+Num Topics: 14, Coherence Score: 0.1867183005703347
+Num Topics: 16, Coherence Score: 0.181104402773134
+Num Topics: 18, Coherence Score: 0.1879257714398849
+
+Optimal number of topics: 18
+
+Top 10 words for each topic in the optimal model:
+Topic: 0 
+Words: 0.160*"versions" + 0.141*"prior" + 0.036*"series" + 0.025*"repository" + 0.025*"github" + 0.020*"scalance" + 0.016*"networks" + 0.015*"issue" + 0.013*"affects" + 0.013*"firmware"
+
+Topic: 1 
+Words: 0.054*"service" + 0.046*"denial" + 0.039*"overflow" + 0.035*"buffer" + 0.033*"cause" + 0.024*"function" + 0.021*"memory" + 0.020*"crafted" + 0.020*"discovered" + 0.018*"stack"
+
+Topic: 2 
+Words: 0.034*"user" + 0.025*"password" + 0.020*"issue" + 0.017*"http" + 0.015*"request" + 0.014*"authentication" + 0.014*"discovered" + 0.013*"account" + 0.013*"devices" + 0.012*"login"
+
+Topic: 3 
+Words: 0.057*"plugin" + 0.037*"request" + 0.033*"wordpress" + 0.030*"csrf" + 0.028*"forgery" + 0.027*"site" + 0.027*"attackers" + 0.020*"cross" + 0.019*"versions" + 0.017*"jenkins"
+
+Topic: 4 
+Words: 0.066*"earlier" + 0.039*"issue" + 0.020*"versions" + 0.017*"code" + 0.016*"fixed" + 0.014*"arbitrary" + 0.014*"type" + 0.012*"execution" + 0.011*"content" + 0.011*"addressed"
+
+Topic: 5 
+Words: 0.041*"leads" + 0.035*"manipulation" + 0.035*"attack" + 0.035*"remotely" + 0.034*"identifier" + 0.034*"file" + 0.031*"vdb" + 0.029*"unknown" + 0.027*"classified" + 0.026*"argument"
+
+Topic: 6 
+Words: 0.043*"remote" + 0.029*"allowed" + 0.028*"android" + 0.027*"prior" + 0.027*"google" + 0.026*"crafted" + 0.025*"chrome" + 0.022*"html" + 0.022*"firefox" + 0.022*"execution"
+
+Topic: 7 
+Words: 0.028*"server" + 0.027*"file" + 0.026*"files" + 0.025*"code" + 0.025*"remote" + 0.022*"user" + 0.021*"exists" + 0.019*"execution" + 0.019*"malicious" + 0.018*"crafted"
+
+Topic: 8 
+Words: 0.050*"oracle" + 0.047*"cvss" + 0.038*"access" + 0.028*"server" + 0.026*"data" + 0.026*"attacks" + 0.023*"unauthorized" + 0.021*"successful" + 0.021*"mysql" + 0.019*"versions"
+
+Topic: 9 
+Words: 0.041*"allow" + 0.030*"device" + 0.029*"exploit" + 0.026*"remote" + 0.025*"interface" + 0.024*"affected" + 0.022*"web" + 0.022*"vulnerabilities" + 0.021*"ibm" + 0.020*"user"
+
+Topic: 10 
+Words: 0.036*"cve" + 0.021*"access" + 0.020*"users" + 0.019*"user" + 0.015*"version" + 0.014*"apache" + 0.013*"api" + 0.012*"issue" + 0.010*"enterprise" + 0.009*"server"
+
+Topic: 11 
+Words: 0.056*"arbitrary" + 0.038*"code" + 0.037*"execute" + 0.035*"remote" + 0.034*"php" + 0.033*"attackers" + 0.031*"file" + 0.028*"xss" + 0.023*"html" + 0.021*"upload"
+
+Topic: 12 
+Words: 0.042*"versions" + 0.041*"information" + 0.033*"access" + 0.026*"sensitive" + 0.014*"control" + 0.012*"authentication" + 0.012*"data" + 0.012*"user" + 0.011*"obtain" + 0.009*"issue"
+
+Topic: 13 
+Words: 0.048*"version" + 0.040*"note" + 0.023*"vendor" + 0.019*"center" + 0.016*"way" + 0.012*"management" + 0.012*"early" + 0.012*"software" + 0.012*"disclosure" + 0.011*"respond"
+
+Topic: 14 
+Words: 0.097*"java" + 0.072*"snapdragon" + 0.035*"sdm" + 0.024*"iot" + 0.024*"msm" + 0.019*"embedded" + 0.018*"mdm" + 0.016*"code" + 0.016*"mobile" + 0.015*"sandboxed"
+
+Topic: 15 
+Words: 0.067*"site" + 0.062*"cross" + 0.061*"scripting" + 0.047*"xss" + 0.034*"plugin" + 0.033*"stored" + 0.025*"wordpress" + 0.021*"page" + 0.018*"versions" + 0.017*"users"
+
+Topic: 16 
+Words: 0.109*"injection" + 0.090*"sql" + 0.045*"command" + 0.042*"parameter" + 0.038*"php" + 0.033*"discovered" + 0.024*"contain" + 0.022*"vulnerable" + 0.020*"database" + 0.015*"issue"
+
+Topic: 17 
+Words: 0.019*"version" + 0.013*"users" + 0.013*"server" + 0.012*"source" + 0.010*"open" + 0.010*"issue" + 0.009*"upgrade" + 0.009*"xml" + 0.009*"versions" + 0.008*"client"
+
+
+Models saved. You can load them later using:
+lda_model = LdaModel.load('lda_word2vec_output/lda_model_attackVector_NETWORK.gensim')
+dictionary = corpora.Dictionary.load('lda_word2vec_output/dictionary_attackVector_NETWORK.gensim')
+w2v_model = Word2Vec.load('lda_word2vec_output/word2vec_model_attackVector_NETWORK.model')

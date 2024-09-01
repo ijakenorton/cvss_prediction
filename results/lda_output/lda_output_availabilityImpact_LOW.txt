@@ -1,0 +1,88 @@
+Analysis for availabilityImpact with value LOW
+
+Number of documents in corpus: 2534
+Number of unique tokens: 3356
+Total number of terms in corpus: 81011
+
+Coherence Scores:
+Num Topics: 2, Coherence Score: 0.6291891717219309
+Num Topics: 4, Coherence Score: 0.5469560949086338
+Num Topics: 6, Coherence Score: 0.5635388394488144
+Num Topics: 8, Coherence Score: 0.4971715425796298
+Num Topics: 10, Coherence Score: 0.48953147584804463
+Num Topics: 12, Coherence Score: 0.5491513096762833
+Num Topics: 14, Coherence Score: 0.5314082541212405
+Num Topics: 16, Coherence Score: 0.4873418500661022
+Num Topics: 18, Coherence Score: 0.5289037132458086
+
+Optimal number of topics: 2
+
+Top 10 words for each topic in the optimal model:
+Topic: 0 
+Words: 0.021*"versions" + 0.013*"prior" + 0.013*"user" + 0.013*"issue" + 0.010*"version" + 0.009*"service" + 0.007*"file" + 0.007*"application" + 0.006*"denial" + 0.006*"server"
+
+Topic: 1 
+Words: 0.033*"oracle" + 0.029*"cvss" + 0.029*"java" + 0.025*"access" + 0.020*"unauthorized" + 0.020*"partial" + 0.017*"data" + 0.016*"successful" + 0.015*"service" + 0.015*"affected"
+
+
+Dominant Topics:
+    Dominant_Topic  Perc_Contribution                                                                          Topic_Keywords
+0                0             0.9553       versions, prior, user, issue, version, service, file, application, denial, server
+1                0             0.9424       versions, prior, user, issue, version, service, file, application, denial, server
+2                0             0.5817       versions, prior, user, issue, version, service, file, application, denial, server
+3                0             0.9364       versions, prior, user, issue, version, service, file, application, denial, server
+4                0             0.9169       versions, prior, user, issue, version, service, file, application, denial, server
+5                0             0.9153       versions, prior, user, issue, version, service, file, application, denial, server
+6                0             0.9892       versions, prior, user, issue, version, service, file, application, denial, server
+7                0             0.9879       versions, prior, user, issue, version, service, file, application, denial, server
+8                0             0.9154       versions, prior, user, issue, version, service, file, application, denial, server
+9                0             0.9812       versions, prior, user, issue, version, service, file, application, denial, server
+10               0             0.9858       versions, prior, user, issue, version, service, file, application, denial, server
+11               0             0.5152       versions, prior, user, issue, version, service, file, application, denial, server
+12               0             0.9629       versions, prior, user, issue, version, service, file, application, denial, server
+13               0             0.9412       versions, prior, user, issue, version, service, file, application, denial, server
+14               0             0.7053       versions, prior, user, issue, version, service, file, application, denial, server
+15               0             0.9169       versions, prior, user, issue, version, service, file, application, denial, server
+16               0             0.9826       versions, prior, user, issue, version, service, file, application, denial, server
+17               0             0.9867       versions, prior, user, issue, version, service, file, application, denial, server
+18               0             0.9825       versions, prior, user, issue, version, service, file, application, denial, server
+19               0             0.9833       versions, prior, user, issue, version, service, file, application, denial, server
+20               0             0.9854       versions, prior, user, issue, version, service, file, application, denial, server
+21               0             0.9814       versions, prior, user, issue, version, service, file, application, denial, server
+22               0             0.9837       versions, prior, user, issue, version, service, file, application, denial, server
+23               0             0.5305       versions, prior, user, issue, version, service, file, application, denial, server
+24               0             0.8511       versions, prior, user, issue, version, service, file, application, denial, server
+25               0             0.6115       versions, prior, user, issue, version, service, file, application, denial, server
+26               1             0.5306  oracle, cvss, java, access, unauthorized, partial, data, successful, service, affected
+27               1             0.7893  oracle, cvss, java, access, unauthorized, partial, data, successful, service, affected
+28               0             0.9471       versions, prior, user, issue, version, service, file, application, denial, server
+29               0             0.6103       versions, prior, user, issue, version, service, file, application, denial, server
+30               0             0.9848       versions, prior, user, issue, version, service, file, application, denial, server
+31               0             0.9697       versions, prior, user, issue, version, service, file, application, denial, server
+32               0             0.8367       versions, prior, user, issue, version, service, file, application, denial, server
+33               0             0.9109       versions, prior, user, issue, version, service, file, application, denial, server
+34               0             0.9598       versions, prior, user, issue, version, service, file, application, denial, server
+35               0             0.7378       versions, prior, user, issue, version, service, file, application, denial, server
+36               0             0.8374       versions, prior, user, issue, version, service, file, application, denial, server
+37               0             0.9760       versions, prior, user, issue, version, service, file, application, denial, server
+38               0             0.9838       versions, prior, user, issue, version, service, file, application, denial, server
+39               0             0.9248       versions, prior, user, issue, version, service, file, application, denial, server
+40               1             0.9937  oracle, cvss, java, access, unauthorized, partial, data, successful, service, affected
+41               1             0.9937  oracle, cvss, java, access, unauthorized, partial, data, successful, service, affected
+42               1             0.9937  oracle, cvss, java, access, unauthorized, partial, data, successful, service, affected
+43               1             0.9937  oracle, cvss, java, access, unauthorized, partial, data, successful, service, affected
+44               1             0.9937  oracle, cvss, java, access, unauthorized, partial, data, successful, service, affected
+45               1             0.9937  oracle, cvss, java, access, unauthorized, partial, data, successful, service, affected
+46               0             0.9710       versions, prior, user, issue, version, service, file, application, denial, server
+47               0             0.7452       versions, prior, user, issue, version, service, file, application, denial, server
+48               0             0.6140       versions, prior, user, issue, version, service, file, application, denial, server
+49               0             0.7778       versions, prior, user, issue, version, service, file, application, denial, server
+
+
+Shape of topic distribution matrix: (2534, 2)
+Sample topic distribution for a document:
+[0.95524853 0.04475144]
+
+Model and dictionary saved. You can load them later using:
+lda_model = LdaModel.load('lda_output/lda_model_availabilityImpact_LOW.gensim')
+dictionary = corpora.Dictionary.load('lda_output/dictionary_availabilityImpact_LOW.gensim')

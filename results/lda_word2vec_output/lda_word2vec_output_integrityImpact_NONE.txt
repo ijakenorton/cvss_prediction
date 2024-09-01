@@ -1,0 +1,73 @@
+Analysis for integrityImpact with value NONE
+
+Number of documents in corpus: 34202
+Number of unique tokens: 14156
+Total number of terms in corpus: 831011
+
+Word2Vec-based Coherence Scores:
+Num Topics: 2, Coherence Score: 0.20778189905815653
+Num Topics: 4, Coherence Score: 0.27154692074077
+Num Topics: 6, Coherence Score: 0.249560854818534
+Num Topics: 8, Coherence Score: 0.2881647556787357
+Num Topics: 10, Coherence Score: 0.27620853889940516
+Num Topics: 12, Coherence Score: 0.2556620494807484
+Num Topics: 14, Coherence Score: 0.25869885607371257
+Num Topics: 16, Coherence Score: 0.2955913759742139
+Num Topics: 18, Coherence Score: 0.28464481678825837
+
+Optimal number of topics: 16
+
+Top 10 words for each topic in the optimal model:
+Topic: 0 
+Words: 0.047*"file" + 0.019*"files" + 0.017*"application" + 0.017*"crafted" + 0.016*"directory" + 0.015*"traversal" + 0.013*"read" + 0.012*"service" + 0.011*"user" + 0.010*"request"
+
+Topic: 1 
+Words: 0.022*"server" + 0.011*"path" + 0.010*"users" + 0.009*"access" + 0.009*"user" + 0.009*"client" + 0.009*"key" + 0.009*"issue" + 0.009*"authentication" + 0.008*"files"
+
+Topic: 2 
+Words: 0.068*"service" + 0.059*"denial" + 0.030*"cause" + 0.021*"remote" + 0.017*"attackers" + 0.017*"crafted" + 0.012*"version" + 0.010*"guest" + 0.009*"crash" + 0.009*"specially"
+
+Topic: 3 
+Words: 0.054*"cvss" + 0.044*"oracle" + 0.041*"server" + 0.039*"mysql" + 0.027*"access" + 0.024*"java" + 0.024*"successful" + 0.022*"attacks" + 0.021*"component" + 0.021*"base"
+
+Topic: 4 
+Words: 0.035*"access" + 0.021*"information" + 0.018*"plugin" + 0.017*"attackers" + 0.017*"user" + 0.015*"users" + 0.014*"issue" + 0.013*"sensitive" + 0.011*"file" + 0.011*"credentials"
+
+Topic: 5 
+Words: 0.098*"snapdragon" + 0.032*"sdm" + 0.030*"cve" + 0.029*"iot" + 0.025*"msm" + 0.020*"mobile" + 0.018*"mdm" + 0.016*"consumer" + 0.016*"connectivity" + 0.015*"auto"
+
+Topic: 6 
+Words: 0.025*"server" + 0.022*"versions" + 0.020*"http" + 0.012*"request" + 0.012*"requests" + 0.011*"version" + 0.009*"users" + 0.008*"issue" + 0.007*"use" + 0.006*"configured"
+
+Topic: 7 
+Words: 0.065*"needed" + 0.064*"android" + 0.059*"information" + 0.057*"disclosure" + 0.044*"privileges" + 0.042*"execution" + 0.041*"user" + 0.040*"local" + 0.039*"possible" + 0.038*"exploitation"
+
+Topic: 8 
+Words: 0.030*"sql" + 0.027*"injection" + 0.025*"xml" + 0.023*"attack" + 0.020*"leads" + 0.017*"affected" + 0.017*"manipulation" + 0.017*"file" + 0.017*"identifier" + 0.016*"php"
+
+Topic: 9 
+Words: 0.041*"earlier" + 0.029*"user" + 0.023*"read" + 0.023*"malicious" + 0.022*"information" + 0.021*"file" + 0.020*"affected" + 0.018*"versions" + 0.017*"sensitive" + 0.016*"remote"
+
+Topic: 10 
+Words: 0.035*"tensorflow" + 0.024*"version" + 0.020*"source" + 0.018*"open" + 0.017*"access" + 0.016*"user" + 0.016*"platform" + 0.016*"intel" + 0.014*"enable" + 0.014*"issue"
+
+Topic: 11 
+Words: 0.165*"versions" + 0.096*"prior" + 0.026*"series" + 0.020*"issue" + 0.019*"junos" + 0.019*"networks" + 0.017*"juniper" + 0.013*"service" + 0.012*"simatic" + 0.012*"affects"
+
+Topic: 12 
+Words: 0.037*"device" + 0.029*"cause" + 0.028*"affected" + 0.027*"exploit" + 0.027*"allow" + 0.026*"service" + 0.021*"condition" + 0.021*"cisco" + 0.020*"denial" + 0.020*"kernel"
+
+Topic: 13 
+Words: 0.057*"issue" + 0.030*"fixed" + 0.029*"macos" + 0.024*"addressed" + 0.023*"ios" + 0.022*"scalance" + 0.020*"improved" + 0.020*"able" + 0.018*"memory" + 0.016*"app"
+
+Topic: 14 
+Words: 0.042*"discovered" + 0.037*"service" + 0.036*"denial" + 0.033*"function" + 0.031*"overflow" + 0.029*"cause" + 0.029*"buffer" + 0.028*"issue" + 0.022*"pointer" + 0.021*"null"
+
+Topic: 15 
+Words: 0.069*"information" + 0.047*"ibm" + 0.047*"sensitive" + 0.030*"allow" + 0.027*"force" + 0.023*"obtain" + 0.021*"user" + 0.017*"remote" + 0.016*"access" + 0.012*"server"
+
+
+Models saved. You can load them later using:
+lda_model = LdaModel.load('lda_word2vec_output/lda_model_integrityImpact_NONE.gensim')
+dictionary = corpora.Dictionary.load('lda_word2vec_output/dictionary_integrityImpact_NONE.gensim')
+w2v_model = Word2Vec.load('lda_word2vec_output/word2vec_model_integrityImpact_NONE.model')

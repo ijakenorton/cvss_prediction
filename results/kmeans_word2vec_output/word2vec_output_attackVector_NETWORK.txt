@@ -1,0 +1,19 @@
+Analysis for attackVector with value NETWORK
+
+Number of documents: 80331
+Total number of words: 1961382
+
+Word2Vec Topics:
+Topic 0: parameter, function, input, improper, validation, leads, check, vector, path, insufficient
+Topic 1: versions, prior, discovered, manager, open, vdb, supported, series, source, platform
+Topic 2: user, remote, site, access, code, arbitrary, affected, file, attackers, allow
+Topic 3: incorrect, aka, resource, commit, core, related, node, potential, exist, included
+Topic 4: version, security, cve, use, api, control, password, identifier, update, configuration
+Topic 5: cross, scripting, plugin, xss, php, injection, sql, wordpress, affects, component
+Topic 6: issue, vulnerable, management, earlier, exists, based, contain, multiple, functionality, module
+Topic 7: cause, denial, overflow, buffer, memory, disclosure, crash, snapdragon, bounds, stack
+Topic 8: server, service, http, network, device, authentication, software, dos, cisco, requests
+Topic 9: data, oracle, cvss, attacks, successful, unauthorized, result, ibm, java, product
+
+Word2Vec model saved. You can load it later using:
+model = Word2Vec.load('word2vec_output/word2vec_model_attackVector_NETWORK.model')

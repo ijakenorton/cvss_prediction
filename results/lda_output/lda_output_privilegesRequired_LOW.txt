@@ -1,0 +1,138 @@
+Analysis for privilegesRequired with value LOW
+
+Number of documents in corpus: 34306
+Number of unique tokens: 13315
+Total number of terms in corpus: 846472
+
+Coherence Scores:
+Num Topics: 2, Coherence Score: 0.32095927335299934
+Num Topics: 4, Coherence Score: 0.4312603391849618
+Num Topics: 6, Coherence Score: 0.5271052260650656
+Num Topics: 8, Coherence Score: 0.5534015265671274
+Num Topics: 10, Coherence Score: 0.5780456315837881
+Num Topics: 12, Coherence Score: 0.6192865782520599
+Num Topics: 14, Coherence Score: 0.6187687926434895
+Num Topics: 16, Coherence Score: 0.6202528734513534
+Num Topics: 18, Coherence Score: 0.6269520173490265
+
+Optimal number of topics: 18
+
+Top 10 words for each topic in the optimal model:
+Topic: 0 
+Words: 0.121*"snapdragon" + 0.047*"sdm" + 0.035*"iot" + 0.033*"msm" + 0.025*"mdm" + 0.022*"mobile" + 0.019*"consumer" + 0.019*"apq" + 0.019*"auto" + 0.017*"industrial"
+
+Topic: 1 
+Words: 0.028*"user" + 0.028*"users" + 0.016*"access" + 0.012*"authenticated" + 0.012*"versions" + 0.012*"data" + 0.011*"plugin" + 0.011*"server" + 0.009*"issue" + 0.009*"password"
+
+Topic: 2 
+Words: 0.049*"sql" + 0.031*"injection" + 0.020*"database" + 0.017*"version" + 0.017*"issue" + 0.015*"open" + 0.012*"user" + 0.012*"users" + 0.011*"source" + 0.009*"query"
+
+Topic: 3 
+Words: 0.060*"windows" + 0.045*"privilege" + 0.045*"cve" + 0.037*"elevation" + 0.020*"exists" + 0.019*"file" + 0.016*"aka" + 0.015*"microsoft" + 0.015*"directory" + 0.015*"server"
+
+Topic: 4 
+Words: 0.046*"site" + 0.044*"cross" + 0.043*"scripting" + 0.038*"xss" + 0.029*"stored" + 0.021*"plugin" + 0.017*"wordpress" + 0.017*"attack" + 0.016*"leads" + 0.015*"php"
+
+Topic: 5 
+Words: 0.108*"versions" + 0.101*"prior" + 0.024*"version" + 0.023*"issue" + 0.022*"server" + 0.021*"github" + 0.019*"repository" + 0.018*"enterprise" + 0.015*"starting" + 0.014*"affects"
+
+Topic: 6 
+Words: 0.048*"versions" + 0.036*"malicious" + 0.033*"xss" + 0.028*"javascript" + 0.026*"site" + 0.025*"victim" + 0.022*"content" + 0.022*"affected" + 0.022*"cross" + 0.022*"browser"
+
+Topic: 7 
+Words: 0.051*"tensorflow" + 0.048*"buffer" + 0.041*"overflow" + 0.018*"stack" + 0.014*"commit" + 0.013*"based" + 0.013*"affected" + 0.012*"cause" + 0.012*"https" + 0.012*"heap"
+
+Topic: 8 
+Words: 0.053*"oracle" + 0.042*"cvss" + 0.039*"access" + 0.032*"data" + 0.024*"unauthorized" + 0.023*"attacks" + 0.022*"successful" + 0.020*"affected" + 0.019*"versions" + 0.019*"server"
+
+Topic: 9 
+Words: 0.046*"service" + 0.045*"denial" + 0.043*"kernel" + 0.034*"memory" + 0.030*"linux" + 0.030*"cause" + 0.023*"local" + 0.016*"driver" + 0.015*"use" + 0.014*"issue"
+
+Topic: 10 
+Words: 0.068*"android" + 0.059*"needed" + 0.044*"user" + 0.040*"execution" + 0.037*"local" + 0.037*"privileges" + 0.035*"possible" + 0.032*"exploitation" + 0.031*"additional" + 0.029*"interaction"
+
+Topic: 11 
+Words: 0.076*"ibm" + 0.066*"information" + 0.038*"force" + 0.036*"sensitive" + 0.033*"disclosure" + 0.023*"session" + 0.020*"allow" + 0.020*"credentials" + 0.020*"vulnerable" + 0.019*"user"
+
+Topic: 12 
+Words: 0.049*"access" + 0.047*"user" + 0.035*"local" + 0.028*"version" + 0.027*"privilege" + 0.025*"allow" + 0.025*"escalation" + 0.023*"potentially" + 0.022*"issue" + 0.021*"authenticated"
+
+Topic: 13 
+Words: 0.037*"command" + 0.016*"crafted" + 0.014*"commands" + 0.014*"injection" + 0.013*"firmware" + 0.011*"user" + 0.011*"root" + 0.011*"request" + 0.011*"versions" + 0.010*"specially"
+
+Topic: 14 
+Words: 0.030*"remote" + 0.029*"arbitrary" + 0.028*"file" + 0.026*"allow" + 0.026*"code" + 0.026*"authenticated" + 0.021*"user" + 0.021*"exploit" + 0.019*"files" + 0.018*"execute"
+
+Topic: 15 
+Words: 0.037*"jenkins" + 0.033*"file" + 0.026*"earlier" + 0.021*"permission" + 0.020*"access" + 0.019*"plugin" + 0.019*"credentials" + 0.018*"users" + 0.016*"read" + 0.016*"configuration"
+
+Topic: 16 
+Words: 0.025*"local" + 0.024*"prior" + 0.023*"privileges" + 0.016*"code" + 0.016*"execute" + 0.015*"access" + 0.015*"attackers" + 0.014*"escalate" + 0.013*"release" + 0.013*"affected"
+
+Topic: 17 
+Words: 0.039*"arbitrary" + 0.039*"attackers" + 0.026*"execute" + 0.026*"site" + 0.024*"web" + 0.023*"authenticated" + 0.022*"cross" + 0.021*"scripting" + 0.021*"plugin" + 0.019*"html"
+
+
+Dominant Topics:
+    Dominant_Topic  Perc_Contribution                                                                               Topic_Keywords
+0               17             0.9498      arbitrary, attackers, execute, site, web, authenticated, cross, scripting, plugin, html
+1               17             0.4582      arbitrary, attackers, execute, site, web, authenticated, cross, scripting, plugin, html
+2               14             0.7047           remote, arbitrary, file, allow, code, authenticated, user, exploit, files, execute
+3               13             0.5085    command, crafted, commands, injection, firmware, user, root, request, versions, specially
+4               13             0.3257    command, crafted, commands, injection, firmware, user, root, request, versions, specially
+5                9             0.6241                     service, denial, kernel, memory, linux, cause, local, driver, use, issue
+6               14             0.5354           remote, arbitrary, file, allow, code, authenticated, user, exploit, files, execute
+7                9             0.5816                     service, denial, kernel, memory, linux, cause, local, driver, use, issue
+8                9             0.4913                     service, denial, kernel, memory, linux, cause, local, driver, use, issue
+9               13             0.4929    command, crafted, commands, injection, firmware, user, root, request, versions, specially
+10               5             0.3380   versions, prior, version, issue, server, github, repository, enterprise, starting, affects
+11               5             0.5210   versions, prior, version, issue, server, github, repository, enterprise, starting, affects
+12              14             0.5702           remote, arbitrary, file, allow, code, authenticated, user, exploit, files, execute
+13               4             0.5704                   site, cross, scripting, xss, stored, plugin, wordpress, attack, leads, php
+14               4             0.3462                   site, cross, scripting, xss, stored, plugin, wordpress, attack, leads, php
+15               1             0.4684          user, users, access, authenticated, versions, data, plugin, server, issue, password
+16              14             0.2527           remote, arbitrary, file, allow, code, authenticated, user, exploit, files, execute
+17               0             0.5462                      snapdragon, sdm, iot, msm, mdm, mobile, consumer, apq, auto, industrial
+18               0             0.4267                      snapdragon, sdm, iot, msm, mdm, mobile, consumer, apq, auto, industrial
+19               1             0.8093          user, users, access, authenticated, versions, data, plugin, server, issue, password
+20              16             0.4517      local, prior, privileges, code, execute, access, attackers, escalate, release, affected
+21              15             0.2826  jenkins, file, earlier, permission, access, plugin, credentials, users, read, configuration
+22               1             0.3212          user, users, access, authenticated, versions, data, plugin, server, issue, password
+23              17             0.4933      arbitrary, attackers, execute, site, web, authenticated, cross, scripting, plugin, html
+24               1             0.5767          user, users, access, authenticated, versions, data, plugin, server, issue, password
+25               4             0.9273                   site, cross, scripting, xss, stored, plugin, wordpress, attack, leads, php
+26               4             0.9141                   site, cross, scripting, xss, stored, plugin, wordpress, attack, leads, php
+27               4             0.8215                   site, cross, scripting, xss, stored, plugin, wordpress, attack, leads, php
+28               9             0.4334                     service, denial, kernel, memory, linux, cause, local, driver, use, issue
+29               4             0.6444                   site, cross, scripting, xss, stored, plugin, wordpress, attack, leads, php
+30               4             0.9213                   site, cross, scripting, xss, stored, plugin, wordpress, attack, leads, php
+31               4             0.9141                   site, cross, scripting, xss, stored, plugin, wordpress, attack, leads, php
+32               8             0.4994    oracle, cvss, access, data, unauthorized, attacks, successful, affected, versions, server
+33               1             0.6905          user, users, access, authenticated, versions, data, plugin, server, issue, password
+34              16             0.4621      local, prior, privileges, code, execute, access, attackers, escalate, release, affected
+35              16             0.6797      local, prior, privileges, code, execute, access, attackers, escalate, release, affected
+36              16             0.4232      local, prior, privileges, code, execute, access, attackers, escalate, release, affected
+37               9             0.5769                     service, denial, kernel, memory, linux, cause, local, driver, use, issue
+38              14             0.5569           remote, arbitrary, file, allow, code, authenticated, user, exploit, files, execute
+39              14             0.6337           remote, arbitrary, file, allow, code, authenticated, user, exploit, files, execute
+40              13             0.3475    command, crafted, commands, injection, firmware, user, root, request, versions, specially
+41              17             0.5236      arbitrary, attackers, execute, site, web, authenticated, cross, scripting, plugin, html
+42              14             0.9213           remote, arbitrary, file, allow, code, authenticated, user, exploit, files, execute
+43              15             0.2275  jenkins, file, earlier, permission, access, plugin, credentials, users, read, configuration
+44              14             0.8711           remote, arbitrary, file, allow, code, authenticated, user, exploit, files, execute
+45              14             0.7092           remote, arbitrary, file, allow, code, authenticated, user, exploit, files, execute
+46              14             0.7093           remote, arbitrary, file, allow, code, authenticated, user, exploit, files, execute
+47              15             0.3422  jenkins, file, earlier, permission, access, plugin, credentials, users, read, configuration
+48               9             0.7018                     service, denial, kernel, memory, linux, cause, local, driver, use, issue
+49               1             0.4495          user, users, access, authenticated, versions, data, plugin, server, issue, password
+
+
+Shape of topic distribution matrix: (34306, 18)
+Sample topic distribution for a document:
+[0.         0.         0.         0.         0.         0.
+ 0.         0.         0.         0.         0.         0.
+ 0.         0.         0.         0.         0.02797815 0.94979346]
+
+Model and dictionary saved. You can load them later using:
+lda_model = LdaModel.load('lda_output/lda_model_privilegesRequired_LOW.gensim')
+dictionary = corpora.Dictionary.load('lda_output/dictionary_privilegesRequired_LOW.gensim')

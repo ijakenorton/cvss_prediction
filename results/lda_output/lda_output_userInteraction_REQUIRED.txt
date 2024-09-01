@@ -1,0 +1,126 @@
+Analysis for userInteraction with value REQUIRED
+
+Number of documents in corpus: 36673
+Number of unique tokens: 12627
+Total number of terms in corpus: 848424
+
+Coherence Scores:
+Num Topics: 2, Coherence Score: 0.5751621099615669
+Num Topics: 4, Coherence Score: 0.6134128945840449
+Num Topics: 6, Coherence Score: 0.6583100477906951
+Num Topics: 8, Coherence Score: 0.5991350865368748
+Num Topics: 10, Coherence Score: 0.6707179420642186
+Num Topics: 12, Coherence Score: 0.6789241367498563
+Num Topics: 14, Coherence Score: 0.714749686581802
+Num Topics: 16, Coherence Score: 0.6649155523290682
+Num Topics: 18, Coherence Score: 0.6696684871918961
+
+Optimal number of topics: 14
+
+Top 10 words for each topic in the optimal model:
+Topic: 0 
+Words: 0.045*"android" + 0.042*"user" + 0.028*"needed" + 0.024*"privileges" + 0.024*"local" + 0.023*"execution" + 0.020*"product" + 0.018*"information" + 0.017*"possible" + 0.017*"privilege"
+
+Topic: 1 
+Words: 0.045*"prior" + 0.036*"allowed" + 0.033*"chrome" + 0.033*"google" + 0.033*"crafted" + 0.033*"potentially" + 0.032*"remote" + 0.030*"html" + 0.029*"page" + 0.025*"security"
+
+Topic: 2 
+Words: 0.066*"cve" + 0.040*"code" + 0.039*"overflow" + 0.033*"execution" + 0.032*"buffer" + 0.026*"remote" + 0.025*"crafted" + 0.021*"memory" + 0.020*"file" + 0.020*"heap"
+
+Topic: 3 
+Words: 0.021*"user" + 0.020*"users" + 0.018*"version" + 0.014*"server" + 0.013*"versions" + 0.010*"issue" + 0.010*"malicious" + 0.009*"open" + 0.008*"redirect" + 0.008*"application"
+
+Topic: 4 
+Words: 0.030*"xss" + 0.029*"site" + 0.027*"user" + 0.026*"web" + 0.025*"scripting" + 0.024*"cross" + 0.022*"javascript" + 0.021*"arbitrary" + 0.020*"vulnerable" + 0.020*"execute"
+
+Topic: 5 
+Words: 0.067*"xss" + 0.063*"site" + 0.063*"cross" + 0.057*"scripting" + 0.029*"php" + 0.024*"arbitrary" + 0.024*"attackers" + 0.022*"parameter" + 0.019*"remote" + 0.017*"stored"
+
+Topic: 6 
+Words: 0.030*"leads" + 0.029*"attack" + 0.028*"affects" + 0.027*"remotely" + 0.026*"manipulation" + 0.025*"file" + 0.024*"problematic" + 0.024*"identifier" + 0.024*"site" + 0.023*"cross"
+
+Topic: 7 
+Words: 0.051*"user" + 0.040*"earlier" + 0.033*"affected" + 0.031*"versions" + 0.026*"malicious" + 0.025*"file" + 0.024*"exploitation" + 0.023*"interface" + 0.023*"victim" + 0.021*"open"
+
+Topic: 8 
+Words: 0.066*"plugin" + 0.060*"site" + 0.055*"cross" + 0.038*"scripting" + 0.038*"wordpress" + 0.030*"versions" + 0.027*"stored" + 0.026*"xss" + 0.021*"request" + 0.017*"admin"
+
+Topic: 9 
+Words: 0.051*"oracle" + 0.039*"access" + 0.038*"cvss" + 0.036*"attacks" + 0.029*"data" + 0.028*"successful" + 0.024*"unauthorized" + 0.019*"accessible" + 0.018*"java" + 0.016*"base"
+
+Topic: 10 
+Words: 0.066*"code" + 0.051*"execute" + 0.040*"malicious" + 0.035*"arbitrary" + 0.031*"object" + 0.031*"file" + 0.024*"user" + 0.024*"pdf" + 0.022*"remote" + 0.020*"attackers"
+
+Topic: 11 
+Words: 0.034*"file" + 0.029*"service" + 0.022*"denial" + 0.021*"cause" + 0.019*"crafted" + 0.015*"function" + 0.015*"application" + 0.015*"discovered" + 0.015*"issue" + 0.012*"prior"
+
+Topic: 12 
+Words: 0.070*"issue" + 0.035*"macos" + 0.034*"fixed" + 0.032*"addressed" + 0.028*"improved" + 0.027*"ios" + 0.023*"arbitrary" + 0.021*"code" + 0.019*"ipados" + 0.019*"memory"
+
+Topic: 13 
+Words: 0.036*"execute" + 0.035*"malicious" + 0.035*"code" + 0.030*"file" + 0.027*"user" + 0.024*"parsing" + 0.024*"current" + 0.024*"context" + 0.024*"process" + 0.022*"end"
+
+
+Dominant Topics:
+    Dominant_Topic  Perc_Contribution                                                                             Topic_Keywords
+0                4             0.7031         xss, site, user, web, scripting, cross, javascript, arbitrary, vulnerable, execute
+1                3             0.6657      user, users, version, server, versions, issue, malicious, open, redirect, application
+2                3             0.3587      user, users, version, server, versions, issue, malicious, open, redirect, application
+3                5             0.5901          xss, site, cross, scripting, php, arbitrary, attackers, parameter, remote, stored
+4               11             0.6408     file, service, denial, cause, crafted, function, application, discovered, issue, prior
+5               12             0.5905             issue, macos, fixed, addressed, improved, ios, arbitrary, code, ipados, memory
+6                3             0.4184      user, users, version, server, versions, issue, malicious, open, redirect, application
+7                3             0.6903      user, users, version, server, versions, issue, malicious, open, redirect, application
+8                3             0.3367      user, users, version, server, versions, issue, malicious, open, redirect, application
+9                8             0.5987           plugin, site, cross, scripting, wordpress, versions, stored, xss, request, admin
+10               8             0.9656           plugin, site, cross, scripting, wordpress, versions, stored, xss, request, admin
+11               8             0.6627           plugin, site, cross, scripting, wordpress, versions, stored, xss, request, admin
+12               8             0.5977           plugin, site, cross, scripting, wordpress, versions, stored, xss, request, admin
+13               3             0.3807      user, users, version, server, versions, issue, malicious, open, redirect, application
+14               3             0.6319      user, users, version, server, versions, issue, malicious, open, redirect, application
+15               3             0.6978      user, users, version, server, versions, issue, malicious, open, redirect, application
+16              11             0.3257     file, service, denial, cause, crafted, function, application, discovered, issue, prior
+17               8             0.9742           plugin, site, cross, scripting, wordpress, versions, stored, xss, request, admin
+18               4             0.7732         xss, site, user, web, scripting, cross, javascript, arbitrary, vulnerable, execute
+19               8             0.6457           plugin, site, cross, scripting, wordpress, versions, stored, xss, request, admin
+20              11             0.4078     file, service, denial, cause, crafted, function, application, discovered, issue, prior
+21              11             0.6418     file, service, denial, cause, crafted, function, application, discovered, issue, prior
+22               3             0.3329      user, users, version, server, versions, issue, malicious, open, redirect, application
+23               5             0.7091          xss, site, cross, scripting, php, arbitrary, attackers, parameter, remote, stored
+24               8             0.7450           plugin, site, cross, scripting, wordpress, versions, stored, xss, request, admin
+25               4             0.4875         xss, site, user, web, scripting, cross, javascript, arbitrary, vulnerable, execute
+26               8             0.8706           plugin, site, cross, scripting, wordpress, versions, stored, xss, request, admin
+27               5             0.5290          xss, site, cross, scripting, php, arbitrary, attackers, parameter, remote, stored
+28               8             0.7286           plugin, site, cross, scripting, wordpress, versions, stored, xss, request, admin
+29               8             0.6432           plugin, site, cross, scripting, wordpress, versions, stored, xss, request, admin
+30               8             0.9071           plugin, site, cross, scripting, wordpress, versions, stored, xss, request, admin
+31               3             0.5900      user, users, version, server, versions, issue, malicious, open, redirect, application
+32               7             0.5148  user, earlier, affected, versions, malicious, file, exploitation, interface, victim, open
+33               8             0.7726           plugin, site, cross, scripting, wordpress, versions, stored, xss, request, admin
+34               8             0.8968           plugin, site, cross, scripting, wordpress, versions, stored, xss, request, admin
+35               5             0.6940          xss, site, cross, scripting, php, arbitrary, attackers, parameter, remote, stored
+36               8             0.9225           plugin, site, cross, scripting, wordpress, versions, stored, xss, request, admin
+37               8             0.8009           plugin, site, cross, scripting, wordpress, versions, stored, xss, request, admin
+38               8             0.7780           plugin, site, cross, scripting, wordpress, versions, stored, xss, request, admin
+39               8             0.7274           plugin, site, cross, scripting, wordpress, versions, stored, xss, request, admin
+40               8             0.9453           plugin, site, cross, scripting, wordpress, versions, stored, xss, request, admin
+41               8             0.9285           plugin, site, cross, scripting, wordpress, versions, stored, xss, request, admin
+42               8             0.9226           plugin, site, cross, scripting, wordpress, versions, stored, xss, request, admin
+43               8             0.9225           plugin, site, cross, scripting, wordpress, versions, stored, xss, request, admin
+44               4             0.5788         xss, site, user, web, scripting, cross, javascript, arbitrary, vulnerable, execute
+45               1             0.9536         prior, allowed, chrome, google, crafted, potentially, remote, html, page, security
+46               3             0.5711      user, users, version, server, versions, issue, malicious, open, redirect, application
+47               2             0.4063                cve, code, overflow, execution, buffer, remote, crafted, memory, file, heap
+48               5             0.4032          xss, site, cross, scripting, php, arbitrary, attackers, parameter, remote, stored
+49              12             0.5809             issue, macos, fixed, addressed, improved, ios, arbitrary, code, ipados, memory
+
+
+Shape of topic distribution matrix: (36673, 14)
+Sample topic distribution for a document:
+[0.         0.         0.         0.         0.70308876 0.
+ 0.         0.         0.27648002 0.         0.         0.
+ 0.         0.        ]
+
+Model and dictionary saved. You can load them later using:
+lda_model = LdaModel.load('lda_output/lda_model_userInteraction_REQUIRED.gensim')
+dictionary = corpora.Dictionary.load('lda_output/dictionary_userInteraction_REQUIRED.gensim')

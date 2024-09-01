@@ -1,0 +1,19 @@
+Analysis for scope with value CHANGED
+
+Number of documents: 19895
+Total number of words: 519392
+
+Word2Vec Topics:
+Topic 0: versions, version, prior, management, server, earlier, manager, ibm, software, security
+Topic 1: access, data, service, application, network, information, cause, session, disclosure, credentials
+Topic 2: app, api, contains, setup, dom, console, project, database, permission, issues
+Topic 3: issue, remotely, identifier, vdb, github, patch, repository, note, unfiltered_html, cve
+Topic 4: oracle, cvss, successful, unauthorized, result, products, accessible, impact, product, base
+Topic 5: input, based, device, vulnerabilities, improper, insufficient, multiple, validation, resulting, buffer
+Topic 6: plugin, wordpress, escape, high, settings, sanitise, outputting, shortcode, properly, attributes
+Topic 7: user, web, arbitrary, affected, code, attacks, users, allow, remote, attackers
+Topic 8: content, vector, impacts, address, injection, configuration, type, email, action, header
+Topic 9: site, cross, scripting, xss, stored, page, vulnerable, php, parameter, admin
+
+Word2Vec model saved. You can load it later using:
+model = Word2Vec.load('word2vec_output/word2vec_model_scope_CHANGED.model')

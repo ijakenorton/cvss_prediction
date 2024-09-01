@@ -1,0 +1,19 @@
+Analysis for attackVector with value LOCAL
+
+Number of documents: 26224
+Total number of words: 627701
+
+Word2Vec Topics:
+Topic 0: versions, prior, version, exists, linux, discovered, driver, component, contains, contain
+Topic 1: cve, operations, multiple, object, error, race, mode, note, functionality, value
+Topic 2: open, victim, target, required, page, visit
+Topic 3: issue, file, code, service, arbitrary, memory, affected, malicious, execute, crafted
+Topic 4: macos, security, fixed, app, update, addressed, able, improved, ios, ipados
+Topic 5: snapdragon, tensorflow, oracle, sdm, intel, cvss, iot, java, msm, virtualbox
+Topic 6: user, local, execution, privileges, privilege, information, bounds, possible, escalation, disclosure
+Topic 7: needed, android, interaction, exploitation, product, additional, androidversions, alps, requires, patch
+Topic 8: access, allow, windows, exploit, process, elevation, users, device, authenticated, privileged
+Topic 9: context, current, result, leverage, specially, parsing, end, allocated, past
+
+Word2Vec model saved. You can load it later using:
+model = Word2Vec.load('word2vec_output/word2vec_model_attackVector_LOCAL.model')

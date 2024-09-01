@@ -1,0 +1,119 @@
+Analysis for userInteraction with value NONE
+
+Number of documents in corpus: 73571
+Number of unique tokens: 22727
+Total number of terms in corpus: 1794818
+
+Coherence Scores:
+Num Topics: 2, Coherence Score: 0.33960724698764033
+Num Topics: 4, Coherence Score: 0.3967640356927057
+Num Topics: 6, Coherence Score: 0.45458698747337684
+Num Topics: 8, Coherence Score: 0.552367700786903
+Num Topics: 10, Coherence Score: 0.6093176112120111
+Num Topics: 12, Coherence Score: 0.6181994321927273
+Num Topics: 14, Coherence Score: 0.5985085864447404
+Num Topics: 16, Coherence Score: 0.6077327389564365
+Num Topics: 18, Coherence Score: 0.5988858391236975
+
+Optimal number of topics: 12
+
+Top 10 words for each topic in the optimal model:
+Topic: 0 
+Words: 0.112*"snapdragon" + 0.045*"sdm" + 0.034*"iot" + 0.032*"msm" + 0.024*"mdm" + 0.022*"mobile" + 0.019*"consumer" + 0.019*"apq" + 0.017*"industrial" + 0.017*"auto"
+
+Topic: 1 
+Words: 0.039*"arbitrary" + 0.039*"code" + 0.034*"remote" + 0.034*"execute" + 0.029*"allow" + 0.025*"exploit" + 0.021*"device" + 0.020*"affected" + 0.017*"execution" + 0.017*"commands"
+
+Topic: 2 
+Words: 0.047*"oracle" + 0.047*"cvss" + 0.032*"server" + 0.031*"access" + 0.025*"mysql" + 0.023*"data" + 0.022*"unauthorized" + 0.020*"java" + 0.019*"base" + 0.019*"attacks"
+
+Topic: 3 
+Words: 0.103*"versions" + 0.060*"prior" + 0.021*"service" + 0.019*"series" + 0.019*"cause" + 0.017*"denial" + 0.016*"affected" + 0.013*"affects" + 0.013*"device" + 0.012*"dos"
+
+Topic: 4 
+Words: 0.040*"ibm" + 0.037*"overflow" + 0.029*"discovered" + 0.027*"buffer" + 0.026*"function" + 0.024*"force" + 0.024*"stack" + 0.022*"contain" + 0.020*"information" + 0.016*"sensitive"
+
+Topic: 5 
+Words: 0.028*"service" + 0.026*"denial" + 0.021*"issue" + 0.019*"memory" + 0.018*"cause" + 0.017*"kernel" + 0.015*"access" + 0.014*"local" + 0.013*"buffer" + 0.013*"user"
+
+Topic: 6 
+Words: 0.019*"tensorflow" + 0.015*"github" + 0.011*"scalance" + 0.010*"issue" + 0.010*"commit" + 0.010*"function" + 0.010*"version" + 0.010*"affected" + 0.009*"prior" + 0.009*"source"
+
+Topic: 7 
+Words: 0.028*"windows" + 0.024*"privilege" + 0.023*"file" + 0.022*"cve" + 0.021*"files" + 0.020*"earlier" + 0.017*"directory" + 0.016*"server" + 0.016*"path" + 0.015*"information"
+
+Topic: 8 
+Words: 0.038*"leads" + 0.034*"file" + 0.031*"manipulation" + 0.030*"attack" + 0.030*"identifier" + 0.027*"vdb" + 0.027*"remotely" + 0.027*"critical" + 0.025*"public" + 0.024*"unknown"
+
+Topic: 9 
+Words: 0.019*"access" + 0.017*"user" + 0.015*"users" + 0.013*"version" + 0.012*"server" + 0.012*"issue" + 0.010*"versions" + 0.009*"password" + 0.008*"authentication" + 0.007*"data"
+
+Topic: 10 
+Words: 0.050*"sql" + 0.047*"injection" + 0.035*"php" + 0.025*"parameter" + 0.025*"plugin" + 0.020*"vulnerable" + 0.020*"wordpress" + 0.015*"attackers" + 0.013*"admin" + 0.013*"discovered"
+
+Topic: 11 
+Words: 0.060*"needed" + 0.055*"android" + 0.041*"user" + 0.039*"execution" + 0.038*"privileges" + 0.038*"local" + 0.038*"exploitation" + 0.037*"possible" + 0.031*"interaction" + 0.029*"bounds"
+
+
+Dominant Topics:
+    Dominant_Topic  Perc_Contribution                                                                               Topic_Keywords
+0               10             0.9759  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+1               10             0.8852  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+2               10             0.9083  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+3                1             0.5909      arbitrary, code, remote, execute, allow, exploit, device, affected, execution, commands
+4               10             0.7823  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+5                4             0.9461   ibm, overflow, discovered, buffer, function, force, stack, contain, information, sensitive
+6                4             0.7932   ibm, overflow, discovered, buffer, function, force, stack, contain, information, sensitive
+7               10             0.9167  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+8               10             0.7810  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+9               10             0.5704  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+10              10             0.3814  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+11              10             0.9563  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+12              10             0.7639  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+13              10             0.7015  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+14               5             0.9461                   service, denial, issue, memory, cause, kernel, access, local, buffer, user
+15               1             0.4238      arbitrary, code, remote, execute, allow, exploit, device, affected, execution, commands
+16               5             0.5408                   service, denial, issue, memory, cause, kernel, access, local, buffer, user
+17               6             0.6845      tensorflow, github, scalance, issue, commit, function, version, affected, prior, source
+18               5             0.6334                   service, denial, issue, memory, cause, kernel, access, local, buffer, user
+19               5             0.9345                   service, denial, issue, memory, cause, kernel, access, local, buffer, user
+20              10             0.7080  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+21              10             0.9294  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+22              10             0.9167  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+23              10             0.8802  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+24              10             0.5371  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+25              10             0.9295  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+26              10             0.5591  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+27              10             0.9541  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+28              10             0.9583  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+29              10             0.6060  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+30              10             0.4924  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+31               4             0.5528   ibm, overflow, discovered, buffer, function, force, stack, contain, information, sensitive
+32               9             0.4985        access, user, users, version, server, issue, versions, password, authentication, data
+33               9             0.4901        access, user, users, version, server, issue, versions, password, authentication, data
+34               9             0.9833        access, user, users, version, server, issue, versions, password, authentication, data
+35               9             0.6063        access, user, users, version, server, issue, versions, password, authentication, data
+36               9             0.5588        access, user, users, version, server, issue, versions, password, authentication, data
+37               6             0.8021      tensorflow, github, scalance, issue, commit, function, version, affected, prior, source
+38               9             0.8146        access, user, users, version, server, issue, versions, password, authentication, data
+39               9             0.6506        access, user, users, version, server, issue, versions, password, authentication, data
+40               9             0.3065        access, user, users, version, server, issue, versions, password, authentication, data
+41              10             0.8944  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+42              10             0.9542  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+43              10             0.9517  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+44              10             0.9583  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+45              10             0.9583  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+46              10             0.8943  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+47              10             0.9601  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+48              10             0.9517  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+49              10             0.6733  sql, injection, php, parameter, plugin, vulnerable, wordpress, attackers, admin, discovered
+
+
+Shape of topic distribution matrix: (73571, 12)
+Sample topic distribution for a document:
+[0.         0.         0.         0.         0.         0.
+ 0.         0.         0.         0.         0.97587532 0.        ]
+
+Model and dictionary saved. You can load them later using:
+lda_model = LdaModel.load('lda_output/lda_model_userInteraction_NONE.gensim')
+dictionary = corpora.Dictionary.load('lda_output/dictionary_userInteraction_NONE.gensim')
