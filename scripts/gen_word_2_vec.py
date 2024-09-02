@@ -2,6 +2,7 @@ import gensim
 from gensim.models import Word2Vec
 from gensim.parsing.preprocessing import STOPWORDS
 from nltk.corpus import stopwords
+from sklearn.decomposition import PCA
 import nltk
 import numpy as np
 from sklearn.cluster import KMeans
@@ -79,7 +80,6 @@ def train(descriptions, metric, value):
             f.write(f"Topic {i}: {', '.join(top_words)}\n")
 
     # Visualize clusters (2D projection using PCA)
-    from sklearn.decomposition import PCA
 
     pca = PCA(n_components=2)
     two_d = pca.fit_transform(word_vectors)

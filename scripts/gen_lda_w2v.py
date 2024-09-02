@@ -14,7 +14,7 @@ nltk.download("stopwords", quiet=True)
 version = 31
 
 
-def run():
+def run_filtered():
     nvd_data = utils.read_data(f"../data/nvd_{version}_cleaned.pkl")
     data = nvd_data["data"]
     v3_dimensions = utils.v3_dimensions
@@ -23,6 +23,13 @@ def run():
             descriptions = utils.filter_by_metric_score(data, metric, value)
             descriptions = list(map(lambda x: x["description"][0], descriptions))
             train(descriptions, metric, value)
+
+
+def run_all():
+    nvd_data = utils.read_data(f"../data/nvd_{version}_cleaned.pkl")
+    data = nvd_data["data"]
+    descriptions = list(map(lambda x: x["description"][0], data))
+    train(descriptions, "all_metrics", "all_values")
 
 
 def train(descriptions, metric, value):
@@ -104,9 +111,9 @@ def train(descriptions, metric, value):
 
         return model_list, coherence_values
 
-    limit = 20
+    limit = 5
     start = 2
-    step = 2
+    step = 1
 
     # Compute coherence values for different numbers of topics
     model_list, coherence_values = compute_coherence_values(
@@ -162,7 +169,7 @@ def train(descriptions, metric, value):
 
 
 def main():
-    run()
+    run_all()
 
 
 if __name__ == "__main__":
