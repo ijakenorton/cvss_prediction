@@ -82,11 +82,11 @@ def v3_metrics_counts() -> Metrics:
     return metrics
 
 
-def calculate_metric_counts(data, version):
+def calculate_metric_counts(data, version, field="cvssData"):
     metrics = v2_metrics_counts() if version == 2 else v3_metrics_counts()
 
     for cve in data:
-        for metric, value in dict.items(cve["cvssData"]):
+        for metric, value in dict.items(cve[field]):
             if metric == "baseScore":
                 continue
             if metric == "baseSeverity":

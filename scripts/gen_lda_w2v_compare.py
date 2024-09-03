@@ -157,7 +157,23 @@ def train(descriptions, metric, value, metric_values):
         # Save results as JSON
         with open(f"{output_dir}/topic_assignments_{num_classes}.json", "w") as f:
             json.dump(results, f, indent=2)
-
+        # Print and save top words for each topic
+        print(f"\nTop 10 words for each topic (Number of topics: {num_classes}):")
+        topic_words = {}
+        with open(file_name, "a") as f:
+            f.write(
+                f"\nTop 10 words for each topic (Number of topics: {num_classes}):\n"
+            )
+            for idx, topic in model.print_topics(-1, num_words=10):
+                print(f"Topic {idx}:")
+                f.write(f"Topic {idx}:\n")
+                words = [word for word, _ in model.show_topic(idx, topn=10)]
+                topic_words[idx] = words
+                for word in words:
+                    print(f"  - {word}")
+                    f.write(f"  - {word}\n")
+                print()
+                f.write("\n")
         with open(file_name, "a") as f:
 
             # Write the top words for each topic in the optimal model
