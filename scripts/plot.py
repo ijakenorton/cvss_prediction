@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+import numpy as np
+from collections import OrderedDict
 
 
 def plot_comparison(nvd, mitre):
@@ -120,3 +122,99 @@ def plot_metrics(data):
         ax.set_xlabel("Categories")
 
     plt.show()
+
+
+def calculate_percentages(cluster_data):
+    return {
+        metric: {
+            cat: value / sum(cluster_data[metric].values()) * 100
+            for cat, value in cluster_data[metric].items()
+        }
+        for metric in cluster_data
+        if metric != "topic_words"
+    }
+
+
+def plot_all_metrics_grid(topic_counts):
+    topic_counts = OrderedDict(sorted(topic_counts.items(), key=lambda x: int(x[0])))
+    data = {
+        topic: calculate_percentages(counts) for topic, counts in topic_counts.items()
+    }
+    num_clusters = len(data)
+    metrics = [
+        metric for metric in next(iter(data.values())).keys() if metric != "topic_words"
+    ]
+    n_metrics = len(metrics)
+
+    rows = int(np.ceil(np.sqrt(n_metrics + 1)))  # +1 for topic words
+    cols = int(np.ceil((n_metrics + 1) / rows))
+
+    fig, axs = plt.subplots(
+        rows, cols, figsize=(5 * cols, 5 * rows), sharex=False, sharey=False
+    )
+    fig.suptitle(
+        f"Comparison of All Metrics Between {num_clusters} Clusters (in Percentages)",
+        fontsize=16,
+    )
+
+    for i, metric in enumerate(metrics):
+        row = i // cols
+        col = i % cols
+
+        categories = list(next(iter(data.values()))[metric].keys())
+        values = [cluster_data[metric] for cluster_data in data.values()]
+
+        x = np.arange(len(categories))
+        width = 0.8 / num_clusters
+
+        for j, (topic, cluster_data) in enumerate(data.items()):
+            cluster_values = [cluster_data[metric][cat] for cat in categories]
+            axs[row, col].bar(
+                x + j * width - (num_clusters - 1) * width / 2,
+                cluster_values,
+                width,
+                label=f"Cluster {topic}",
+            )
+
+        axs[row, col].set_ylabel("Percentage")
+        axs[row, col].set_title(metric)
+        axs[row, col].set_xticks(x)
+        axs[row, col].set_xticklabels(categories, rotation=90, ha="center")
+        axs[row, col].legend(fontsize="x-small")
+
+        for j, (topic, cluster_data) in enumerate(data.items()):
+            cluster_values = [cluster_data[metric][cat] for cat in categories]
+            for k, v in enumerate(cluster_values):
+                axs[row, col].text(
+                    x[k] + j * width - (num_clusters - 1) * width / 2,
+                    v,
+                    f"{v:.1f}%",
+                    ha="center",
+                    va="bottom",
+                    fontsize=6,
+                    rotation=90,
+                )
+
+        axs[row, col].set_ylim(0, 100)
+
+    # Add topic words to the last subplot
+    topic_words_text = "Top Topic Words:\n\n" + "\n\n".join(
+        [
+            f"Cluster {topic}:\n" + ", ".join(cluster_data["topic_words"])
+            for topic, cluster_data in topic_counts.items()
+        ]
+    )
+    axs[-1, -1].text(0.5, 0.5, topic_words_text, ha="center", va="center", wrap=True)
+    axs[-1, -1].axis("off")
+
+    # Remove any unused subplots
+    for i in range(n_metrics + 1, rows * cols):
+        fig.delaxes(axs.flatten()[i])
+
+    plt.tight_layout()
+    plt.savefig(
+        f"./temp_plots/all_metrics_comparison_grid_with_topics_percentage{num_clusters}.png",
+        dpi=300,
+        bbox_inches="tight",
+    )
+    plt.close()

@@ -1,4 +1,5 @@
 import metric_counts
+import plot
 from pprint import pprint
 import json
 
@@ -31,13 +32,13 @@ def main():
     topics = extract_topics(topic_groups)
 
     for i in x:
-        print(f"topic_assignments_{i}")
-        print(
-            "**************************************************************************"
-        )
-        print(
-            "**************************************************************************"
-        )
+        # print(f"topic_assignments_{i}")
+        # print(
+        #     "**************************************************************************"
+        # )
+        # print(
+        #     "**************************************************************************"
+        # )
         data = read_data(f"../results/lda_compare/topic_assignments_{i}.json")
         topic_data = {}
         for desc in data:
@@ -53,22 +54,12 @@ def main():
             topic_counts[topic] = metric_counts.calculate_metric_counts(
                 topic_data[topic], 3, "metric_value"
             )
-            print("Top 10 topic words")
-            print(topics[i][topic])
-            print()
-            pprint(topic_counts[topic])
-            print(
-                "--------------------------------------------------------------------------"
-            )
-
+            # print(topics[i][topic])
+            # pprint(topic_counts[topic])
             topic_counts[topic]["topic_words"] = topics[i][topic]
 
-        print(
-            "**************************************************************************"
-        )
-        print(
-            "**************************************************************************"
-        )
+        plot.plot_all_metrics_grid(topic_counts)
+        # pprint(topic_counts)
 
 
 if __name__ == "__main__":
