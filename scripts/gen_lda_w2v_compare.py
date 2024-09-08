@@ -83,7 +83,7 @@ def train(descriptions, metric, value, metric_values):
                 random_state=100,
                 chunksize=2000,
                 passes=20,
-                iterations=400,
+                iterations=200,
                 workers=6,
             )
             model_list.append(model)
@@ -158,16 +158,15 @@ def train(descriptions, metric, value, metric_values):
         with open(f"{output_dir}/topic_assignments_{num_classes}.json", "w") as f:
             json.dump(results, f, indent=2)
         # Print and save top words for each topic
-        print(f"\nTop 10 words for each topic (Number of topics: {num_classes}):")
         topic_words = {}
         with open(file_name, "a") as f:
             f.write(
                 f"\nTop 10 words for each topic (Number of topics: {num_classes}):\n"
             )
-            for idx, topic in model.print_topics(-1, num_words=10):
+            for idx, topic in model.print_topics(-1, num_words=20):
                 print(f"Topic {idx}:")
                 f.write(f"Topic {idx}:\n")
-                words = [word for word, _ in model.show_topic(idx, topn=10)]
+                words = [word for word, _ in model.show_topic(idx, topn=20)]
                 topic_words[idx] = words
                 for word in words:
                     print(f"  - {word}")

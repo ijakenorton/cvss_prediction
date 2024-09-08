@@ -11,6 +11,7 @@ import utils
 import os
 import json
 from itertools import product
+from tqdm import tqdm
 
 nltk.download("stopwords", quiet=True)
 version = 31
@@ -25,9 +26,9 @@ def run_all():
 
 
 def train(descriptions, metric, value, metric_values):
-    output_dir = "lda_word2vec_desc_compare_output"
+    output_dir = "lda_word2vec_desc_compare_output_seeds"
     os.makedirs(output_dir, exist_ok=True)
-    file_name = f"{output_dir}/lda_word2vec_output_{metric}_{value}.txt"
+    file_name = f"{output_dir}/lda_word2vec_output_seeds_{metric}_{value}.txt"
 
     custom_stopwords = set(stopwords.words("english")).union(set(STOPWORDS))
     custom_stopwords.update(
@@ -71,14 +72,16 @@ def train(descriptions, metric, value, metric_values):
                     score += w2v_model.wv.similarity(topic_words[i], topic_words[j])
         return score / (len(topic_words) * (len(topic_words) - 1) / 2)
 
-    def run_lda_model(corpus, dictionary, num_topics, alpha, eta, passes, iterations):
+    def run_lda_model(
+        corpus, dictionary, num_topics, alpha, eta, passes, iterations, random_state
+    ):
         model = LdaMulticore(
             corpus=corpus,
             id2word=dictionary,
             num_topics=num_topics,
             alpha=alpha,
             eta=eta,
-            random_state=100,
+            random_state=random_state,
             chunksize=2000,
             passes=passes,
             iterations=iterations,
@@ -96,19 +99,33 @@ def train(descriptions, metric, value, metric_values):
         return model, coherence
 
     # Grid search parameters
-    num_topics_range = range(2, 11, 2)
-    alpha_range = ["symmetric", "asymmetric", 0.1, 0.5, 1.0]
-    eta_range = ["symmetric", 0.1, 0.5, 1.0]
-    passes_range = [10, 20, 30]
-    iterations_range = [200, 400, 600]
-
+    num_topics_range = range(2, 5, 1)
+    alpha_range = ["symmetric"]
+    eta_range = [0.1]
+    passes_range = [30]
+    iterations_range = [200]
+    random_state_range = [0, 50, 100, 150, 200]
+    total_iterations = (
+        len(num_topics_range)
+        * len(alpha_range)
+        * len(eta_range)
+        * len(passes_range)
+        * len(iterations_range)
+        * len(random_state_range)
+    )
+    pbar = tqdm(total=total_iterations, desc="Grid search progress")
     # Run grid search
     results = []
-    for num_topics, alpha, eta, passes, iterations in product(
-        num_topics_range, alpha_range, eta_range, passes_range, iterations_range
+    for num_topics, alpha, eta, passes, iterations, random_state in product(
+        num_topics_range,
+        alpha_range,
+        eta_range,
+        passes_range,
+        iterations_range,
+        random_state_range,
     ):
         model, coherence = run_lda_model(
-            corpus, dictionary, num_topics, alpha, eta, passes, iterations
+            corpus, dictionary, num_topics, alpha, eta, passes, iterations, random_state
         )
         results.append(
             {
@@ -119,9 +136,12 @@ def train(descriptions, metric, value, metric_values):
                 "iterations": iterations,
                 "coherence": coherence,
                 "model": model,
+                "seed": random_state,
             }
         )
+        pbar.update(1)
 
+    pbar.close()
     # Sort results by coherence score
     results.sort(key=lambda x: x["coherence"], reverse=True)
 
@@ -132,13 +152,14 @@ def train(descriptions, metric, value, metric_values):
             f.write(
                 f"Num Topics: {result['num_topics']}, Alpha: {result['alpha']}, Eta: {result['eta']}, "
                 f"Passes: {result['passes']}, Iterations: {result['iterations']}, "
+                f"Seed: {result["seed"]}, "
                 f"Coherence Score: {result['coherence']}\n"
             )
 
     # Save top 5 models
     for i, result in enumerate(results[:5]):
         model = result["model"]
-        model_name = f"lda_model_t{result['num_topics']}_a{result['alpha']}_e{result['eta']}_p{result['passes']}_i{result['iterations']}"
+        model_name = f"lda_model_t{result['num_topics']}_a{result['alpha']}_e{result['eta']}_p{result['passes']}_i{result['iterations']}_seed{result['seed']}"
         model_file = f"{output_dir}/{model_name}.gensim"
         model.save(model_file)
 
@@ -167,10 +188,10 @@ def train(descriptions, metric, value, metric_values):
 
         # Print and save top words for each topic
         with open(file_name, "a") as f:
-            f.write(f"\nTop 10 words for each topic (Model: {model_name}):\n")
-            for idx, topic in model.print_topics(-1, num_words=10):
+            f.write(f"\nTop 50 words for each topic (Model: {model_name}):\n")
+            for idx, topic in model.print_topics(-1, num_words=50):
                 f.write(f"Topic {idx}:\n")
-                words = [word for word, _ in model.show_topic(idx, topn=10)]
+                words = [word for word, _ in model.show_topic(idx, topn=50)]
                 for word in words:
                     f.write(f"  - {word}\n")
                 f.write("\n")
