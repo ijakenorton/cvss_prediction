@@ -102,12 +102,31 @@ databases, I used the same method as the paper \textit{Can the Common Vulnerabil
 	be Trusted? A Bayesian Analysis}~\cite{bayes}. This paper explores the extent to which different
 data sources agree on the scoring of a CVE, aiming to gain insight into the potential for
 establishing a ground truth value. Unfortunately, since that paper was released back in 2016, many
-of the data sources they compared are either unavailable or in archival status. However, following
-their method still allows for insight between the two chosen databases, NVD and MITRE. This analysis
+of the data sources they compared are either unavailable or in archival status. However, I hoped following
+their method would still allow for insight between the two chosen databases, NVD and MITRE. This analysis
 shows that the databases do fundamentally rate CVEs differently (see Figure~\ref{fig:counts}). The
 uncertainty between the two can therefore be an indicator going forward when analysing generated CVE
 scores, as it is likely that the model will also struggle in similar places to where the human
-evaluators did.
+evaluators did. The initial focus of the work on this paper was around the CVSS and the surrounding
+systems, some of the pitfalls behind the system are mentioned in the background, however while
+interesting and damning in some sense, they do not stop progress towards the automation of CVSS
+metric classification. Analysis between MITRE and NVD shows that it is not a system which can be
+consistently rated by different evaluators / evaluation teams. Using a combination of the two
+datasets is not something I will continue with going forward as the difference between the different
+ratings results in confusion during training of the model.
+
+The focus for the remainder of the paper is looking into NVD and via clustering and other dataset
+analysis techniques finding patterns within the data. This will show a multitude of things, it will
+show us the difference in what the models learn to treat as important versus more purely data driven
+techiques. We get much quicker turn around for the analysis, Airey is currently also pursuing
+interpretability from the models themselves, this takes ~48 hours per metric to run the tests. The
+clustering techniques, such as Latent Dirichlet Allocation ( LDA ) take a fraction of the time, ~1
+hour to cluster the entire corpus.
+
+\todo[inline]{Placeholder for when I have more concrete example}
+Additional insights gained are that some types of vulnerabilities
+tend run together, for example cross site scripting and php and wordpress are found together as
+there as many similar vulnerabilities using the same technologies.
 
 
 \begin{figure}[h] \centering
@@ -361,15 +380,16 @@ is to triage the large swathes of new vulnerabilites coming in with an initial C
 on to a deeper dive. This could be in the form of the extra CVSS metrics (Temporal score \&
 Environmental score), or a look into other potential options like the Exploit Prediction Scoring
 System (EPSS~\cite{EPSS}).
+
 \section{Related Work}
 
-
-Johnson et al.\@ in the paper,
+The main paper most similar to the Bayesian Analysis between MITRE and NVD is
 \textit{Can the Common Vulnerability Scoring System be Trusted? A Bayesian
-	Analysis}~\cite{bayes}, conducted a study into the state of CVSS databases and their accuracy in 2016.
+	Analysis}~\cite{bayes} by Johnson et al.\@. They conducted a study into the state of CVSS databases and their accuracy in 2016.
 They found NVD to be the most correct database, and we can trust the Common~Vulnerability~Scoring~System as a
 whole as scorers rate CVEs consistently. This paper will be used as the basis for the database
-comparison in Section~\ref{bayesian_modeling}.
+comparison in Section~\ref{bayesian_modeling}. This continues to be relevant in terms of process,
+not so much in terms of results.
 
 Costa et al.\@ in the paper, \textit{Predicting CVSS Metric via Description
 	Interpretation}~\cite{costa}, tested generation of CVSS from CVE descriptions with a range of large
