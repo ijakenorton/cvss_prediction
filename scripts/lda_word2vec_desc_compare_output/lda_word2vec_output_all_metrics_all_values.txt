@@ -1,6 +1,0 @@
-Analysis for all_metrics with value all_values
-
-Number of documents in corpus: 110244
-Number of unique tokens: 28464
-Total number of terms in corpus: 2653350
-
