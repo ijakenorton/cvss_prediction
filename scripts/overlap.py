@@ -26,8 +26,6 @@ def overlap():
 
 
 def main():
-    # data, nvd_ids = nvd_data_correlation.read_data()
-    # nvd_data = {"data": data, "ids": nvd_ids}
     # data, mitre_ids = mitre_data_correlation.read_data()
     # mitre_data = {"data": data, "ids": mitre_ids}
     # print("writing data to file....")
@@ -37,7 +35,7 @@ def main():
 
     # plot.plot_metrics(nvd_metrics)
     # plot.plot_metrics(mitre_metrics)
-    nvd_overlap, mitre_overlap = overlap()
+    # nvd_overlap, mitre_overlap = overlap()
     # count = 0
     # mitre_count = 0
     # for nvd in nvd_overlap:
@@ -64,12 +62,13 @@ def main():
     #                 # print()
     #                 # print(mitre["description"])
 
-    nvd_counts = metric_counts.calculate_metric_counts(nvd_overlap, 31)
-    mitre_counts = metric_counts.calculate_metric_counts(mitre_overlap, 31)
-
     # plot.plot_comparison(nvd_counts, mitre_counts)
-    plot.plot_percentages(nvd_counts, mitre_counts)
-    # plot.plot_percentages(nvd, mitre)
+    # plot.plot_percentages(nvd_counts, mitre_counts)
+
+    data, nvd_ids = nvd_data_correlation.read_data(31)
+    nvd_data = {"data": data, "ids": nvd_ids}
+    nvd_counts = metric_counts.calculate_metric_counts(nvd_data, 31)
+    plot.plot_metrics(nvd_counts)
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 import metric_counts
 import plot
-from pprint import pprint
 import json
+import utils
 
 
 def read_data(path):
@@ -23,22 +23,23 @@ def extract_topics(topic_data):
     return clean
 
 
+def percentage_plot():
+
+    version = 31
+    nvd_data = utils.read_data(f"../data/nvd_{version}_cleaned.pkl")["data"]
+    nvd_counts = metric_counts.calculate_metric_counts(nvd_data, 31)
+    plot.plot_metrics_percentage(nvd_counts)
+
+
 def main():
     x = range(2, 5, 1)
 
     topic_groups = read_data(
-        f"./lda_word2vec_desc_compare_output/lda_word2vec_topics.json"
+        f"../data/results/new_results/lda_word2vec_desc_compare_output/lda_word2vec_topics.json"
     )["topic_groups"]
     topics = extract_topics(topic_groups)
 
     for i in x:
-        # print(f"topic_assignments_{i}")
-        # print(
-        #     "**************************************************************************"
-        # )
-        # print(
-        #     "**************************************************************************"
-        # )
         data = read_data(f"../results/lda_compare/topic_assignments_{i}.json")
         topic_data = {}
         for desc in data:
@@ -54,12 +55,11 @@ def main():
             topic_counts[topic] = metric_counts.calculate_metric_counts(
                 topic_data[topic], 3, "metric_value"
             )
-            # print(topics[i][topic])
-            # pprint(topic_counts[topic])
             topic_counts[topic]["topic_words"] = topics[i][topic]
-
-        plot.plot_all_metrics_grid(topic_counts)
-        # pprint(topic_counts)
+        version = 31
+        nvd_data = utils.read_data(f"../data/nvd_{version}_cleaned.pkl")["data"]
+        nvd_counts = metric_counts.calculate_metric_counts(nvd_data, version)
+        plot.plot_all_metrics_gt_grid(topic_counts, nvd_counts)
 
 
 if __name__ == "__main__":
