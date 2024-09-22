@@ -1,6 +1,7 @@
 import re
+import json
 from pprint import pprint
-from typing import Dict, List, Set
+from typing import Dict, List, Set, Tuple
 
 TopicDict = Dict[int, List[str]]
 
@@ -38,7 +39,7 @@ def parse_name(name: str):
     return rv
 
 
-def check_duplicates(run: TopicDict) -> Dict[str, int]:
+def check_duplicates(run: TopicDict) -> Tuple[Dict[str, int], int]:
     """
     Process a TopicDict.
 
@@ -74,8 +75,8 @@ def check_duplicates(run: TopicDict) -> Dict[str, int]:
 
 
 def parse_topics():
-    runs = {"seeds": {}, "topics": {}}
-    path = "../data/results/new_results/lda_word2vec_desc_compare_output_seeds/lda_word2vec_output_seeds_all_metrics_all_values.txt"
+    runs = {"seeds": {}, "num_topics": {}}
+    path = "../data/results/lda_word2vec_desc_compare_output_seeds/lda_word2vec_output_seeds_all_metrics_all_values.txt"
     with open(path, "r") as f:
         contents = f.read()
         lines = contents.split("\n")
@@ -95,11 +96,11 @@ def parse_topics():
                             runs["seeds"][seed] = {}
 
                         if num_topics not in runs.keys():
-                            runs["topics"][num_topics] = {}
+                            runs["num_topics"][num_topics] = {}
 
                         run = parse_run(iterator)
                         runs["seeds"][seed][num_topics] = run
-                        runs["topics"][num_topics][seed] = run
+                        runs["num_topics"][num_topics][seed] = run
     return runs
 
 
@@ -115,9 +116,56 @@ def count_dupes(runs):
     return duplicates, totals
 
 
+def create_compatible_json(runs):
+    seed0 = runs["seeds"]["seed0"]
+    seed50 = runs["seeds"]["seed50"]
+    seed100 = runs["seeds"]["seed100"]
+
+    output = {"topic_groups": []}
+
+    output["topic_groups"].append(
+        {
+            "num_topics": 2,
+            "topics": [
+                {"topic_id": 0, "words": seed50["2"][0]},
+                {"topic_id": 1, "words": seed50["2"][1]},
+            ],
+        }
+    )
+    output["topic_groups"].append(
+        {
+            "num_topics": 3,
+            "topics": [
+                {"topic_id": 0, "words": seed0["3"][0]},
+                {"topic_id": 1, "words": seed0["3"][1]},
+                {"topic_id": 2, "words": seed0["3"][2]},
+            ],
+        }
+    )
+    output["topic_groups"].append(
+        {
+            "num_topics": 4,
+            "topics": [
+                {"topic_id": 0, "words": seed100["4"][0]},
+                {"topic_id": 1, "words": seed100["4"][1]},
+                {"topic_id": 2, "words": seed100["4"][2]},
+                {"topic_id": 3, "words": seed100["4"][3]},
+            ],
+        }
+    )
+    with open(
+        "../data/results/lda_word2vec_desc_compare_output_seeds/lda_seeds_topics.json",
+        "w",
+    ) as f:
+        json.dump(output, f)
+
+
 def main():
     runs = parse_topics()
-    count_dupes(runs)
+    # pprint(runs["seeds"]["seed50"])
+    create_compatible_json(runs)
+
+    # count_dupes(runs)
 
 
 if __name__ == "__main__":

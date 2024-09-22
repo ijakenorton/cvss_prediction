@@ -34,13 +34,19 @@ def percentage_plot():
 def main():
     x = range(2, 5, 1)
 
+    # topic_groups = read_data(
+    #     f"../data/results/new_results/lda_word2vec_desc_compare_output/lda_word2vec_topics.json"
+    # )["topic_groups"]
     topic_groups = read_data(
-        f"../data/results/new_results/lda_word2vec_desc_compare_output/lda_word2vec_topics.json"
+        f"../data/results/lda_word2vec_desc_compare_output_seeds/lda_seeds_topics.json"
     )["topic_groups"]
     topics = extract_topics(topic_groups)
 
     for i in x:
-        data = read_data(f"../results/lda_compare/topic_assignments_{i}.json")
+        # data = read_data(f"../results/lda_compare/topic_assignments_{i}.json")
+        data = read_data(
+            f"../data/results/lda_word2vec_desc_compare_output_seeds/topic_assignments_{i}.json"
+        )
         topic_data = {}
         for desc in data:
             desc_topic = desc["topic"]
@@ -53,7 +59,7 @@ def main():
         topic_counts = {}
         for topic in topic_data:
             topic_counts[topic] = metric_counts.calculate_metric_counts(
-                topic_data[topic], 3, "metric_value"
+                topic_data[topic], 3
             )
             topic_counts[topic]["topic_words"] = topics[i][topic]
         version = 31
