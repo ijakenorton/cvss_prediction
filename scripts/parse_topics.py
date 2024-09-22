@@ -76,7 +76,7 @@ def check_duplicates(run: TopicDict) -> Tuple[Dict[str, int], int]:
 
 def parse_topics():
     runs = {"seeds": {}, "num_topics": {}}
-    path = "../data/results/lda_word2vec_desc_compare_output_seeds/lda_word2vec_output_seeds_all_metrics_all_values.txt"
+    path = "./lda_word2vec_attack_vector/lda_word2vec_output_seeds_all_metrics_all_values.txt"
     with open(path, "r") as f:
         contents = f.read()
         lines = contents.split("\n")
@@ -160,12 +160,31 @@ def create_compatible_json(runs):
         json.dump(output, f)
 
 
+def create_single_topic(run):
+
+    print(run)
+    output = {"topic_groups": []}
+
+    topics = []
+    for i, topic in enumerate(run.values()):
+
+        topics.append({"topic_id": i, "words": topic})
+
+    output["topic_groups"].append({"num_topics": len(topics), "topics": topics})
+    with open(
+        "./lda_word2vec_attack_vector/lda_18_topics.json",
+        "w",
+    ) as f:
+        json.dump(output, f)
+
+
 def main():
     runs = parse_topics()
+    run = runs["seeds"]["seed0"]["1"]
+    create_single_topic(run)
     # pprint(runs["seeds"]["seed50"])
-    create_compatible_json(runs)
-
-    # count_dupes(runs)
+    # create_compatible_json(runs)
+    # dupes, count = count_dupes(runs)
 
 
 if __name__ == "__main__":

@@ -26,7 +26,7 @@ def run_all():
 
 
 def train(descriptions, metric, value, metric_values):
-    output_dir = "lda_word2vec_desc_compare_output_seeds"
+    output_dir = "lda_word2vec_attack_vector"
     os.makedirs(output_dir, exist_ok=True)
     file_name = f"{output_dir}/lda_word2vec_output_seeds_{metric}_{value}.txt"
 
@@ -82,7 +82,7 @@ def train(descriptions, metric, value, metric_values):
             alpha=alpha,
             eta=eta,
             random_state=random_state,
-            chunksize=2000,
+            chunksize=4000,
             passes=passes,
             iterations=iterations,
             workers=6,
@@ -99,12 +99,12 @@ def train(descriptions, metric, value, metric_values):
         return model, coherence
 
     # Grid search parameters
-    num_topics_range = range(2, 5, 1)
+    num_topics_range = range(18, 19, 1)
     alpha_range = ["symmetric"]
     eta_range = [0.1]
     passes_range = [30]
     iterations_range = [200]
-    random_state_range = [0, 50, 100, 150, 200]
+    random_state_range = [0]
     total_iterations = (
         len(num_topics_range)
         * len(alpha_range)
@@ -152,7 +152,7 @@ def train(descriptions, metric, value, metric_values):
             f.write(
                 f"Num Topics: {result['num_topics']}, Alpha: {result['alpha']}, Eta: {result['eta']}, "
                 f"Passes: {result['passes']}, Iterations: {result['iterations']}, "
-                f"Seed: {result["seed"]}, "
+                f"Seed: {result['seed']}, "
                 f"Coherence Score: {result['coherence']}\n"
             )
 

@@ -172,7 +172,11 @@ def calculate_percentages(cluster_data):
     }
 
 
-def plot_all_metrics_gt_grid(topic_counts, nvd_counts):
+def plot_all_metrics_gt_grid(
+    topic_counts,
+    nvd_counts,
+    path="./temp_plots/all_metrics_comparison_grid_with_topics_percentage_gt",
+):
     topic_counts = OrderedDict(sorted(topic_counts.items(), key=lambda x: int(x[0])))
     data = {
         topic: calculate_percentages(counts) for topic, counts in topic_counts.items()
@@ -275,7 +279,7 @@ def plot_all_metrics_gt_grid(topic_counts, nvd_counts):
 
     plt.tight_layout()
     plt.savefig(
-        f"./temp_plots/all_metrics_comparison_grid_with_topics_percentage_gt{num_clusters}.png",
+        f"{path}_{num_clusters}.png",
         dpi=300,
         bbox_inches="tight",
     )

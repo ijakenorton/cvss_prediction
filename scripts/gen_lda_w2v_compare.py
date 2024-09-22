@@ -24,13 +24,13 @@ def run_all():
 
 
 def train(descriptions, metric, value, metric_values):
-    output_dir = "lda_word2vec_desc_compare_output"
+    output_dir = "lda_word2vec_attack_vector"
     os.makedirs(output_dir, exist_ok=True)
     file_name = f"{output_dir}/lda_word2vec_output_{metric}_{value}.txt"
 
     custom_stopwords = set(stopwords.words("english")).union(set(STOPWORDS))
     custom_stopwords.update(
-        ["vulnerability", "via", "allows", "attacker", "could", "lead"]
+        ["vulnerability", "via", "allows", "attacker", "could", "lead", "leads"]
     )
 
     def preprocess(text):
@@ -88,11 +88,11 @@ def train(descriptions, metric, value, metric_values):
             )
             model_list.append(model)
 
-            topics = model.print_topics(num_words=10)
+            topics = model.print_topics(num_words=50)
             coherence = np.mean(
                 [
                     compute_coherence_word2vec(
-                        [word for word, _ in model.show_topic(topic_id, topn=10)],
+                        [word for word, _ in model.show_topic(topic_id, topn=50)],
                         w2v_model,
                     )
                     for topic_id in range(model.num_topics)
@@ -102,8 +102,8 @@ def train(descriptions, metric, value, metric_values):
 
         return model_list, coherence_values
 
-    limit = 5
-    start = 2
+    limit = 19
+    start = 18
     step = 1
 
     # Compute coherence values for different numbers of topics
