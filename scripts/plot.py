@@ -113,7 +113,7 @@ def plot_percentages(nvd, mitre):
             color="#ff7f00",
         )  # Orange
 
-        # Adding percentage labels
+        # Addinlot_merged_top_k_category_focu percentage labels
         for bar in bars1:
             height = bar.get_height()
             ax.text(
@@ -286,6 +286,113 @@ def plot_all_metrics_gt_grid(
     plt.close()
 
 
+def plot_merged_top_k_topics_category_focus(
+    topic_counts,
+    nvd_counts,
+    metric,
+    category,
+    k=3,
+    path="./temp_plots/merged_top_k_topics_category_focus",
+):
+    categories = list(next(iter(topic_counts.values()))[metric].keys())
+
+    # Find top k topics for the specified metric and category
+    top_k_topics = sorted(
+        topic_counts.items(),
+        key=lambda x: x[1][metric][category] / sum(x[1][metric].values()),
+        reverse=True,
+    )[:k]
+
+    merged_percentages = []
+    nvd_percentages = []
+
+    for cat in categories:
+        # Merge data from top k topics
+        merged_value = sum(topic_data[metric][cat] for _, topic_data in top_k_topics)
+        merged_percentage = merged_value / sum(nvd_counts[metric].values()) * 100
+        merged_percentages.append(merged_percentage)
+
+        nvd_percentage = (
+            nvd_counts[metric][cat] / sum(nvd_counts[metric].values()) * 100
+        )
+        nvd_percentages.append(nvd_percentage)
+
+    # Create the plot
+    fig, ax = plt.subplots(figsize=(12, 6))
+
+    x = np.arange(len(categories))
+    width = 0.35
+
+    rects1 = ax.bar(
+        x - width / 2,
+        merged_percentages,
+        width,
+        label=f"Top {k} Topics",
+        color="skyblue",
+    )
+    rects2 = ax.bar(
+        x + width / 2, nvd_percentages, width, label="NVD Data", color="orange"
+    )
+
+    # Highlight the focus category
+    focus_index = categories.index(category)
+    ax.bar(
+        x[focus_index] - width / 2, merged_percentages[focus_index], width, color="blue"
+    )
+    ax.bar(x[focus_index] + width / 2, nvd_percentages[focus_index], width, color="red")
+
+    ax.set_ylabel("Percentage")
+    ax.set_title(f"{metric} - Merged Top {k} Topics vs NVD Data (Focus on {category})")
+    ax.set_xticks(x)
+    ax.set_xticklabels(categories, rotation=45, ha="right")
+    ax.legend()
+
+    # Add value labels on the bars
+    def autolabel(rects):
+        for rect in rects:
+            height = rect.get_height()
+            ax.annotate(
+                f"{height:.1f}%",
+                xy=(rect.get_x() + rect.get_width() / 2, height),
+                xytext=(0, 3),  # 3 points vertical offset
+                textcoords="offset points",
+                ha="center",
+                va="bottom",
+                fontsize=8,
+            )
+
+    autolabel(rects1)
+    autolabel(rects2)
+
+    # Add topic numbers and top words
+    topic_info = f"Top {k} Topics for {category}: " + ", ".join(
+        [f"{topic}" for topic, _ in top_k_topics]
+    )
+    topic_words = set()
+    for _, topic_data in top_k_topics:
+        topic_words.update(topic_data["topic_words"][:5])  # Top 5 words from each topic
+    topic_words_text = f"Common Topic Words:\n" + ", ".join(
+        list(topic_words)[:15]
+    )  # Limit to 15 words
+
+    plt.text(
+        0.5,
+        -0.2,
+        topic_info + "\n" + topic_words_text,
+        ha="center",
+        va="center",
+        transform=ax.transAxes,
+        wrap=True,
+        fontsize=8,
+    )
+
+    plt.tight_layout()
+    plt.savefig(f"{path}_{metric}_{category}_k{k}.png", dpi=300, bbox_inches="tight")
+    plt.close()
+
+    print(f"Plot saved as {path}_{metric}_{category}_k{k}.png")
+
+
 def plot_merged_top_k_topics_individual_with_total(
     topic_counts, nvd_counts, k=3, path="./temp_plots/merged_top_k_topics_max"
 ):
@@ -413,10 +520,126 @@ def plot_merged_top_k_topics_individual_with_total(
             print(f"Plot saved as {path}_{metric}_{category}_k{k}.png")
 
 
-# Example usage:
-# plot_merged_top_k_topics_individual_with_total(topic_counts, nvd_counts, k=3)
+def plot_merged_top_k_topics_all_categories(
+    topic_counts,
+    nvd_counts,
+    k=3,
+    path="./temp_plots/merged_top_k_topics_all_categories",
+):
+    metrics = [
+        metric
+        for metric in next(iter(topic_counts.values())).keys()
+        if metric != "topic_words"
+    ]
+
+    for metric in metrics:
+        categories = list(next(iter(topic_counts.values()))[metric].keys())
+
+        merged_percentages = []
+        nvd_percentages = []
+        top_topics_info = {}
+
+        for category in categories:
+            # Find top k topics for this metric and category
+            top_k_topics = sorted(
+                topic_counts.items(),
+                key=lambda x: x[1][metric][category] / sum(x[1][metric].values()),
+                reverse=True,
+            )[:k]
+
+            # Merge data from top k topics
+            merged_value = sum(
+                topic_data[metric][category] for _, topic_data in top_k_topics
+            )
+            merged_percentage = merged_value / sum(nvd_counts[metric].values()) * 100
+            merged_percentages.append(merged_percentage)
+
+            nvd_percentage = (
+                nvd_counts[metric][category] / sum(nvd_counts[metric].values()) * 100
+            )
+            nvd_percentages.append(nvd_percentage)
+
+            # Store top topics info
+            top_topics_info[category] = {
+                "topics": [topic for topic, _ in top_k_topics],
+                "words": set().union(
+                    *[
+                        set(topic_data["topic_words"][:5])
+                        for _, topic_data in top_k_topics
+                    ]
+                ),
+            }
+
+        # Create the plot
+        fig, ax = plt.subplots(figsize=(12, 6 + 0.5 * len(categories)))
+
+        x = np.arange(len(categories))
+        width = 0.35
+
+        rects1 = ax.bar(
+            x - width / 2,
+            merged_percentages,
+            width,
+            label=f"Top {k} Topics",
+            color="skyblue",
+        )
+        rects2 = ax.bar(
+            x + width / 2, nvd_percentages, width, label="NVD Data", color="orange"
+        )
+
+        ax.set_ylabel("Percentage")
+        ax.set_title(f"{metric}\nMerged Top {k} Topics vs NVD Data")
+        ax.set_xticks(x)
+        ax.set_xticklabels(categories, rotation=45, ha="right")
+        ax.legend()
+
+        # Add value labels on the bars
+        def autolabel(rects):
+            for rect in rects:
+                height = rect.get_height()
+                ax.annotate(
+                    f"{height:.1f}%",
+                    xy=(rect.get_x() + rect.get_width() / 2, height),
+                    xytext=(0, 3),  # 3 points vertical offset
+                    textcoords="offset points",
+                    ha="center",
+                    va="bottom",
+                    fontsize=8,
+                )
+
+        autolabel(rects1)
+        autolabel(rects2)
+
+        # Add topic numbers and top words
+        topic_info_text = "\n".join(
+            [
+                f"{cat}: Topics {', '.join(map(str, info['topics']))}"
+                for cat, info in top_topics_info.items()
+            ]
+        )
+        all_words = set().union(*[info["words"] for info in top_topics_info.values()])
+        topic_words_text = f"Common Topic Words: {', '.join(list(all_words)[:20])}"  # Limit to 20 words
+
+        plt.text(
+            0.5,
+            -0.2 - 0.03 * len(categories),
+            topic_info_text + "\n\n" + topic_words_text,
+            ha="center",
+            va="center",
+            transform=ax.transAxes,
+            wrap=True,
+            fontsize=8,
+        )
+
+        plt.tight_layout()
+        plt.savefig(f"{path}_{metric}_k{k}.png", dpi=300, bbox_inches="tight")
+        plt.close()
+
+        print(f"Plot saved as {path}_{metric}_k{k}.png")
+
+
 def plot_merged_top_k_topics_individual(
-    topic_counts, nvd_counts, k=3, path="./temp_plots/merged_top_k_topics"
+    topic_counts, nvd_counts, k=3, path="./temp_plots/merged_top_k_topics_relative"
 ):
     metrics = [
         metric
@@ -442,7 +665,8 @@ def plot_merged_top_k_topics_individual(
             merged_total = sum(
                 sum(topic_data[metric].values()) for _, topic_data in top_k_topics
             )
-            merged_percentage = merged_value / merged_total * 100
+            # merged_percentage = merged_value / merged_total * 100
+            merged_percentage = merged_value / sum(nvd_counts[metric].values()) * 100
 
             nvd_percentage = (
                 nvd_counts[metric][category] / sum(nvd_counts[metric].values()) * 100
@@ -619,7 +843,11 @@ def plot_merged_top_k_topics(
 
 
 def plot_best_fit_topic(
-    topic_counts, nvd_counts, metric, category, path="./temp_plots/best_fit_topic"
+    topic_counts,
+    nvd_counts,
+    metric,
+    category,
+    path="./temp_plots/best_fit_topic_relative",
 ):
     # Find the topic with the highest percentage for the given metric and category
     best_topic = max(
@@ -631,7 +859,7 @@ def plot_best_fit_topic(
 
     # Calculate percentages for the best topic
     best_topic_percentages = {
-        cat: value / sum(best_topic_data[metric].values()) * 100
+        cat: value / sum(nvd_counts[metric].values()) * 100
         for cat, value in best_topic_data[metric].items()
     }
 

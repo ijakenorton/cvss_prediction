@@ -144,18 +144,20 @@ def main():
         nvd_data = utils.read_data(f"../data/nvd_{version}_cleaned.pkl")["data"]
         nvd_counts = metric_counts.calculate_metric_counts(nvd_data, version)
         metrics = metric_counts.v3_metrics_counts()
-        # for metric in metrics:
-        #     for category in metrics[metric]:
-        #         plot.plot_best_fit_topic(
-        #             topic_counts,
-        #             nvd_counts,
-        #             metric,
-        #             category,
-        #         )
-        # plot.plot_merged_top_k_topics_individual(topic_counts, nvd_counts)
-        plot.plot_merged_top_k_topics_individual_with_total(
-            topic_counts, nvd_counts, k=5
-        )
+        for metric in metrics:
+            for category in metrics[metric]:
+                plot.plot_merged_top_k_topics_category_focus(
+                    topic_counts,
+                    nvd_counts,
+                    metric,
+                    category,
+                    k=2,
+                )
+
+        # plot.plot_merged_top_k_topics_all_categories(topic_counts, nvd_counts)
+        # plot.plot_merged_top_k_topics_individual_with_total(
+        #     topic_counts, nvd_counts, k=5
+        # )
 
 
 if __name__ == "__main__":
