@@ -12,6 +12,8 @@ import os
 import json
 from itertools import product
 from tqdm import tqdm
+from collections import defaultdict
+import random
 
 nltk.download("stopwords", quiet=True)
 version = 31
@@ -20,19 +22,39 @@ version = 31
 def run_all():
     nvd_data = utils.read_data(f"../data/nvd_{version}_cleaned.pkl")
     data = nvd_data["data"]
+    data = balance_data_by_integrity_impact(data)
     descriptions = list(map(lambda x: x["description"][0], data))
     metric_values = list(map(lambda x: x["cvssData"], data))
     train(descriptions, "all_metrics", "all_values", metric_values)
 
 
+def balance_data_by_integrity_impact(data, max_per_category=20000):
+    # Group data by integrity impact
+    grouped_data = defaultdict(list)
+    for item in data:
+        integrity_impact = item["cvssData"].get("integrityImpact", "UNKNOWN")
+        grouped_data[integrity_impact].append(item)
+
+    # Balance the data
+    balanced_data = []
+    for impact, items in grouped_data.items():
+        balanced_data.extend(random.sample(items, min(len(items), max_per_category)))
+
+    # Shuffle the balanced data
+    random.shuffle(balanced_data)
+
+    return balanced_data
+
+
 def train(descriptions, metric, value, metric_values):
-    output_dir = "lda_word2vec_attack_vector"
+    num_topics = 10
+    output_dir = f"lda_word2vec_balanced_{num_topics}"
     os.makedirs(output_dir, exist_ok=True)
-    file_name = f"{output_dir}/lda_word2vec_output_seeds_{metric}_{value}.txt"
+    file_name = f"{output_dir}/lda_word2vec_balanced_{metric}_{value}.txt"
 
     custom_stopwords = set(stopwords.words("english")).union(set(STOPWORDS))
     custom_stopwords.update(
-        ["vulnerability", "via", "allows", "attacker", "could", "lead"]
+        ["vulnerability", "via", "allows", "attacker", "could", "lead", "leads"]
     )
 
     def preprocess(text):
@@ -99,7 +121,7 @@ def train(descriptions, metric, value, metric_values):
         return model, coherence
 
     # Grid search parameters
-    num_topics_range = range(18, 19, 1)
+    num_topics_range = range(num_topics, num_topics + 1, 1)
     alpha_range = ["symmetric"]
     eta_range = [0.1]
     passes_range = [30]
@@ -197,6 +219,9 @@ def train(descriptions, metric, value, metric_values):
                 f.write("\n")
 
         with open(file_name, "a") as f:
+            print(
+                f"\nTopic assignments saved to: {output_dir}/topic_assignments_{model_name}.json\n"
+            )
             f.write(
                 f"\nTopic assignments saved to: {output_dir}/topic_assignments_{model_name}.json\n"
             )

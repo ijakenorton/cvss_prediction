@@ -2,6 +2,7 @@ import metric_counts
 import plot
 import json
 import utils
+import os
 from pprint import pprint
 
 
@@ -33,7 +34,7 @@ def percentage_plot():
 
 
 def plot_best_clusters():
-    topic_groups = read_data(f"./lda_word2vec_attack_vector/lda_18_topics.json")[
+    topic_groups = read_data(f"./lda_word2vec_balanced/lda_18_topics.json")[
         "topic_groups"
     ]
     topics = extract_topics(topic_groups)
@@ -109,9 +110,17 @@ def main():
     # )["topic_groups"]
     # topics = extract_topics(topic_groups)
 
-    topic_groups = read_data(f"./lda_word2vec_attack_vector/lda_18_topics.json")[
-        "topic_groups"
-    ]
+    num_topics = 10
+
+    output_dir = f"./temp_plots/counts_{num_topics}/"
+    os.makedirs(output_dir, exist_ok=True)
+
+    for i in range(1, 6):
+        os.makedirs(f"{output_dir}/{i}", exist_ok=True)
+
+    topic_groups = read_data(
+        f"./lda_word2vec_balanced_{num_topics}/lda_balanced_topics.json"
+    )["topic_groups"]
     topics = extract_topics(topic_groups)
     for i in x:
         # data = read_data(f"../results/lda_compare/topic_assignments_{i}.json")
@@ -119,7 +128,7 @@ def main():
         #     f"../data/results/lda_word2vec_desc_compare_output_seeds/topic_assignments_{i}.json"
         # )
         data = read_data(
-            f"./lda_word2vec_attack_vector/topic_assignments_lda_model_t18_asymmetric_e0.1_p30_i200_seed0.json"
+            f"./lda_word2vec_balanced_{num_topics}/topic_assignments_lda_model_t{num_topics}_asymmetric_e0.1_p30_i200_seed0.json"
         )
 
         topic_data = {}
@@ -138,21 +147,35 @@ def main():
                 topic_data[topic], 3
             )
 
-            topic_counts[topic]["topic_words"] = topics[18][topic]
+            topic_counts[topic]["topic_words"] = topics[num_topics][topic]
 
         version = 31
-        nvd_data = utils.read_data(f"../data/nvd_{version}_cleaned.pkl")["data"]
-        nvd_counts = metric_counts.calculate_metric_counts(nvd_data, version)
+        # nvd_data = utils.read_data(f"../data/nvd_{version}_cleaned.pkl")["data"]
+        # nvd_counts = metric_counts.calculate_metric_counts(nvd_data, version)
         metrics = metric_counts.v3_metrics_counts()
-        for metric in metrics:
-            for category in metrics[metric]:
-                plot.plot_merged_top_k_topics_category_focus(
+        for i in range(1, 6):
+            for category in metrics["integrityImpact"]:
+                plot.plot_merged_top_k_topics_category_focus_counts(
                     topic_counts,
-                    nvd_counts,
-                    metric,
+                    "integrityImpact",
                     category,
-                    k=2,
+                    k=i,
+                    num_topics=num_topics,
                 )
+            # plot.plot_merged_top_k_topics_category_focus_balanced(
+            #     topic_counts,
+            #     nvd_counts,
+            #     "integrityImpact",
+            #     category,
+            #     k=1,
+            # )
+            # plot.plot_merged_top_k_topics_category_focus(
+            #     topic_counts,
+            #     nvd_counts,
+            #     "integrityImpact",
+            #     category,
+            #     k=3,
+            # )
 
         # plot.plot_merged_top_k_topics_all_categories(topic_counts, nvd_counts)
         # plot.plot_merged_top_k_topics_individual_with_total(
