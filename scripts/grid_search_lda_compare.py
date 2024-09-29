@@ -1,7 +1,9 @@
 import gensim
 from gensim import corpora
-from gensim.models import LdaMulticore, Word2Vec
+from gensim.models import FastText, LdaMulticore, Word2Vec, KeyedVectors
+from gensim.models.fasttext import load_facebook_vectors
 from gensim.parsing.preprocessing import STOPWORDS
+import gensim.downloader as api
 import nltk
 from nltk.corpus import stopwords
 import numpy as np
@@ -22,10 +24,29 @@ version = 31
 def run_all():
     nvd_data = utils.read_data(f"../data/nvd_{version}_cleaned.pkl")
     data = nvd_data["data"]
-    data = balance_data_by_integrity_impact(data)
+    # data = balance_data_by_integrity_impact(data)
+    data = balance_data_by_confidentiality_impact(data)
     descriptions = list(map(lambda x: x["description"][0], data))
     metric_values = list(map(lambda x: x["cvssData"], data))
     train(descriptions, "all_metrics", "all_values", metric_values)
+
+
+def balance_data_by_confidentiality_impact(data, max_per_category=20000):
+    # Group data by integrity impact
+    grouped_data = defaultdict(list)
+    for item in data:
+        integrity_impact = item["cvssData"].get("integrityImpact", "UNKNOWN")
+        grouped_data[integrity_impact].append(item)
+
+    # Balance the data
+    balanced_data = []
+    for impact, items in grouped_data.items():
+        balanced_data.extend(random.sample(items, min(len(items), max_per_category)))
+
+    # Shuffle the balanced data
+    random.shuffle(balanced_data)
+
+    return balanced_data
 
 
 def balance_data_by_integrity_impact(data, max_per_category=20000):
@@ -47,8 +68,10 @@ def balance_data_by_integrity_impact(data, max_per_category=20000):
 
 
 def train(descriptions, metric, value, metric_values):
-    num_topics = 10
-    output_dir = f"lda_word2vec_balanced_{num_topics}"
+    import num_topics
+
+    num_topics = num_topics.num_topics
+    output_dir = f"lda_word2vec_balanced_CA_{num_topics}"
     os.makedirs(output_dir, exist_ok=True)
     file_name = f"{output_dir}/lda_word2vec_balanced_{metric}_{value}.txt"
 
@@ -83,6 +106,34 @@ def train(descriptions, metric, value, metric_values):
     w2v_model = Word2Vec(
         sentences=texts, vector_size=100, window=5, min_count=2, workers=4
     )
+    # Check if the FastText model is already downloaded
+    # fasttext_vectors_path = os.path.join(os.getcwd(), "fasttext_vectors.kv")
+
+    # # Check if the FastText vectors are already downloaded
+    # if not os.path.exists(fasttext_vectors_path):
+    #     print("Downloading FastText vectors. This may take a while...")
+    #     fasttext_vectors = api.load("fasttext-wiki-news-subwords-300")
+    #     fasttext_vectors.save(fasttext_vectors_path)
+    # else:
+    #     print("Loading existing FastText vectors...")
+    #     fasttext_vectors = KeyedVectors.load(fasttext_vectors_path)
+
+    # # Initialize a new FastText model
+    # w2v_model = FastText(vector_size=300)
+
+    # # Build vocabulary from your texts
+    # w2v_model.build_vocab(texts)
+
+    # # Update the vocabulary with words from the pre-trained vectors
+    # w2v_model.build_vocab([list(fasttext_vectors.key_to_index.keys())], update=True)
+
+    # # Copy word vectors from the pre-trained vectors
+    # for word in w2v_model.wv.key_to_index:
+    #     if word in fasttext_vectors:
+    #         w2v_model.wv[word] = fasttext_vectors[wor]
+
+    # # Continue training on your data
+    # w2v_model.train(texts, total_examples=len(texts), epochs=5)
 
     def compute_coherence_word2vec(topic_words, w2v_model):
         if len(topic_words) < 2:

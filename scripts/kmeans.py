@@ -18,7 +18,7 @@ nvd_data = utils.read_data(f"../data/nvd_{version}_cleaned.pkl")
 data = nvd_data["data"]
 descriptions = list(map(lambda x: x["description"][0], data))
 # print(descriptions.keys())
-true_k = 8
+true_k = 20
 
 evaluations = []
 evaluations_std = []

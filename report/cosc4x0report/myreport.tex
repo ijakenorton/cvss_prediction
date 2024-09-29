@@ -76,7 +76,7 @@
 	important.
 
 	This paper focuses on interpretability and analysis of CVE / CVSS data, with some of the
-	findings used for to aid prediction of CVSS scores by LLMS.
+	findings used to aid prediction of CVSS scores by LLMS.
 
 	I will be focusing on interpretability from the data perspective. When clustering the
 	data we see that there are some useful patterns
@@ -414,6 +414,201 @@ issues and general impression of CVSS.
 
 
 \section{Methods}
+
+\subsection{Latent Dirichlet Allocation Methodology}
+
+Our approach to topic modeling utilizes Latent Dirichlet Allocation (LDA)~\cite{lda_origin} in conjunction with
+Word2Vec~\cite{word2vec} embeddings to analyze Common Vulnerabilities and Exposures (CVE) descriptions. The
+methodology comprises several key steps:
+
+\subsubsection{Data Preprocessing} We begin by preprocessing the CVE descriptions:
+
+\begin{itemize}
+
+	\item Custom stopwords are defined, combining standard English stopwords with domain-specific
+	      terms (e.g., "vulnerability", "attacker").
+
+	\item Each description is tokenized and filtered, removing stopwords and short tokens (length
+	      $\leq 2$).
+
+	\item A dictionary is created from the processed texts, filtering out extremely rare and
+	      extremely common terms.
+
+\end{itemize}
+
+\subsubsection{Word Embedding}
+
+A Word2Vec model is trained on the preprocessed texts:
+
+\begin{itemize} \item Vector size: 100 \item Window size: 5 \item Minimum word count: 2
+\end{itemize}
+
+This embedding captures semantic relationships between words in the CVE context.
+
+
+\subsubsection{Topic Coherence Metric} We define a custom coherence metric based on Word2Vec
+similarities:
+
+\begin{equation}
+
+	Coherence = \frac{\sum_{i=1}^{n}\sum_{j=i+1}^{n} similarity(word_i, word_j)}{\binom{n}{2}}
+
+\end{equation}
+
+where $n$ is the number of top words in a topic (10 in our implementation).
+
+\subsubsection{LDA Model Training}
+
+We employ a grid search approach to optimize LDA hyperparameters:
+
+\begin{itemize}
+
+	\item Number of topics: $[num\_topics, num\_topics + 1)$
+
+	\item $\alpha$: \{"symmetric"\}
+
+	\item $\eta$: \{0.1\}
+
+	\item Number of passes: \{30\}
+
+	\item Number of iterations: \{200\}
+
+\end{itemize}
+
+The LDA model is implemented using Gensim's LdaMulticore, allowing for parallel processing.
+
+\subsubsection{Model Evaluation and Selection}
+
+Models are evaluated based on the average topic coherence:
+
+\begin{equation}
+
+	Score = \frac{1}{T}\sum_{t=1}^{T} Coherence(topic_t)
+
+\end{equation}
+
+where $T$ is the total number of topics.
+
+The top 5 models, ranked by coherence score, are saved for further analysis.
+
+\subsubsection{Topic Assignment and Analysis}
+
+For each saved model:
+
+\begin{itemize}
+
+	\item Topic assignments are generated for each document in the corpus.
+
+	\item Results, including document index, description, assigned topic, and CVSS data, are saved
+	      in JSON format.
+
+	\item The top 50 words for each topic are extracted and saved for interpretation.
+
+\end{itemize}
+
+\subsection{Extended LDA Analysis on Balanced Dataset}
+
+Following the initial LDA model training and evaluation, we perform additional steps to gain deeper insights into the relationship between topics and CVSS metrics:
+
+\subsubsection{Balanced Dataset Analysis}
+
+We run the LDA model on a balanced dataset to mitigate potential biases:
+
+\begin{itemize}
+
+	\item The dataset is balanced by undersampling or oversampling to ensure equal representation of each class within a chosen CVSS metric (e.g., Confidentiality Impact).
+
+	\item The LDA model is then applied to this balanced dataset using the previously determined optimal parameters.
+
+\end{itemize}
+
+\subsubsection{Cluster-Class Association}
+
+For each class within each CVSS metric, we identify the most representative cluster:
+
+\begin{itemize}
+
+	\item Calculate the proportion of documents from each class assigned to each topic cluster.
+
+	\item Use a metric such as lift or odds ratio to determine which cluster best represents each class:
+
+	      \begin{equation}
+
+		      Lift(class, cluster) = \frac{P(class | cluster)}{P(class)}
+
+	      \end{equation}
+
+	\item The cluster with the highest lift for a given class is considered its best representative.
+
+\end{itemize}
+
+\subsubsection{Visualization and Interpretation}
+
+We create visualizations to aid in the interpretation of results:
+
+\begin{itemize}
+
+	\item Generate heatmaps showing the distribution of classes across clusters for each CVSS metric.
+
+	\item Create word clouds or bar charts of the most frequent terms in the representative clusters for each class.
+
+	\item Plot multidimensional scaling (MDS) or t-SNE visualizations of document-topic distributions, colored by CVSS metric classes.
+
+\end{itemize}
+
+Interpretation of these visualizations involves:
+
+\begin{itemize}
+
+	\item Analyzing the semantic themes of representative clusters for each CVSS metric class.
+
+	\item Identifying common vulnerability types or attack vectors associated with specific CVSS ratings.
+
+	\item Examining any unexpected associations between topics and CVSS metrics.
+
+\end{itemize}
+
+\subsubsection{Cluster Merging and Refinement}
+
+To potentially improve class representation, we explore merging related clusters:
+
+\begin{itemize}
+
+	\item Identify clusters with semantic similarity or overlapping representation of CVSS classes.
+
+	\item Merge these clusters by combining their topic-word distributions and reassigning documents.
+
+	\item Recalculate class representation metrics for the merged clusters.
+
+	\item Compare the performance of the merged model to the original in terms of:
+
+	      \begin{itemize}
+
+		      \item Overall topic coherence
+
+		      \item Clarity of class representation
+
+		      \item Interpretability of resulting topics
+
+	      \end{itemize}
+
+\end{itemize}
+
+\subsubsection{Evaluation and Insights}
+
+Finally, we evaluate the effectiveness of our extended analysis:
+
+\begin{itemize}
+
+	\item Assess whether the balanced dataset analysis revealed new insights not apparent in the original model.
+
+	\item Determine if certain CVSS metrics are more clearly represented by topic clusters than others.
+
+	\item Evaluate the impact of cluster merging on the interpretability and usefulness of the model.
+
+	\item Discuss potential applications of these findings in automated CVSS scoring or vulnerability triage systems.
+
+\end{itemize}
 
 \subsection{Hierarchical Bayesian Model} \label{bayesian_modeling}
 

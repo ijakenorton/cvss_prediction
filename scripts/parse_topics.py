@@ -5,13 +5,30 @@ from typing import Dict, List, Set, Tuple
 
 TopicDict = Dict[int, List[str]]
 
-pattern = r"Topic (\d+):"
+pattern = r"(Topic|Cluster) (\d+):"
 sentinel = "THISISTHEEND"
 
 
 def next_item(iterator):
     val = next(iterator)
     return val, val != sentinel
+
+
+def parse_run_cluster(iterator):
+    flag = True
+    current_topic = -1
+    topics = {}
+    while flag:
+        current, flag = next_item(iterator)
+        if "Cluster assignments saved to:" in current:
+            return topics
+        match = re.search(pattern, current)
+        if match:
+            current_topic = int(match.group(2))
+            topics[current_topic] = []
+        elif "-" in current:
+            word = current.split("-")[1].split(" ")[1]
+            topics[current_topic].append(word)
 
 
 def parse_run(iterator):
@@ -24,7 +41,7 @@ def parse_run(iterator):
             return topics
         match = re.search(pattern, current)
         if match:
-            current_topic = int(match.group(1))
+            current_topic = int(match.group(2))
             topics[current_topic] = []
         elif "-" in current:
             topics[current_topic].append(current.split("-")[1])
@@ -74,12 +91,47 @@ def check_duplicates(run: TopicDict) -> Tuple[Dict[str, int], int]:
     return comparison, total_dupes
 
 
-def parse_topics(num_topics):
+def parse_topics_kmeans(num_topics):
 
-    path = f"./lda_word2vec_balanced_{num_topics}/lda_word2vec_balanced_all_metrics_all_values.txt"
+    path = f"./kmeans_fasttext_{num_topics}/kmeans_fasttext_all_metrics_all_values.txt"
     runs = {"seeds": {}, "num_topics": {}}
     with open(path, "r") as f:
         contents = f.read()
+        lines = contents.split("\n")
+        lines.append(sentinel)
+        iterator = iter(lines)
+
+        flag = True
+        while flag:
+            current, flag = next_item(iterator)
+            if "Top 50 words for each cluster" in current:
+                split_line = current.split(" ")
+                for word in split_line:
+                    if "kmeans" in word:
+                        name = word
+                        seed, num_topics = parse_name(name)
+                        if seed not in runs.keys():
+                            runs["seeds"][seed] = {}
+
+                        if num_topics not in runs.keys():
+                            runs["num_topics"][num_topics] = {}
+
+                        run = parse_run_cluster(iterator)
+                        runs["seeds"][seed][num_topics] = run
+                        runs["num_topics"][num_topics][seed] = run
+    return runs
+
+
+def parse_topics(num_topics):
+
+    # path = f"./lda_word2vec_balanced_{num_topics}/lda_word2vec_balanced_all_metrics_all_values.txt"
+    # path = f"./lda_word2vec_balanced_fasttext_{num_topics}/lda_word2vec_balanced_all_metrics_all_values.txt"
+    # path = f"./kmeans_fasttext_{num_topics}/kmeans_fasttext_all_metrics_all_values.txt"
+    path = f"./lda_word2vec_balanced_CA_{num_topics}/lda_word2vec_balanced_all_metrics_all_values.txt"
+    runs = {"seeds": {}, "num_topics": {}}
+    with open(path, "r") as f:
+        contents = f.read()
+        print(contents)
         lines = contents.split("\n")
         lines.append(sentinel)
         iterator = iter(lines)
@@ -162,7 +214,9 @@ def create_compatible_json(runs):
 
 
 def create_single_topic(run, num_topics):
-    path = f"./lda_word2vec_balanced_{num_topics}/lda_balanced_topics.json"
+    path = f"./lda_word2vec_balanced_CA_{num_topics}/lda_balanced_topics.json"
+    # path = f"./lda_word2vec_balanced_fasttext_{num_topics}/lda_balanced_topics.json"
+    # path = f"./kmeans_fasttext_{num_topics}/kmeans_balanced_topics.json"
 
     output = {"topic_groups": []}
 
@@ -180,9 +234,15 @@ def create_single_topic(run, num_topics):
 
 
 def main():
-    num_topics = 10
+
+    import num_topics
+
+    num_topics = num_topics.num_topics
+    run_name = str(num_topics)[0]
     runs = parse_topics(num_topics)
-    run = runs["seeds"]["seed0"]["1"]
+    print(runs)
+    # runs = parse_topics_kmeans(num_topics)
+    run = runs["seeds"]["seed0"][run_name]
     create_single_topic(run, num_topics)
     # pprint(runs["seeds"]["seed50"])
     # create_compatible_json(runs)
