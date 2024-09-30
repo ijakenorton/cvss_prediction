@@ -2,9 +2,9 @@ from typing import TypedDict, List, Literal
 
 
 class MetricNames:
-    attackVector: Literal[" attackVector"] = " attackVector"
-    attackComplexity: Literal[" attackComplexity"] = " attackComplexity"
-    privilegesRequired: Literal[" privilegesRequired"] = " privilegesRequired"
+    attackVector: Literal["attackVector"] = "attackVector"
+    attackComplexity: Literal["attackComplexity"] = "attackComplexity"
+    privilegesRequired: Literal["privilegesRequired"] = "privilegesRequired"
     userInteraction: Literal["userInteraction"] = "userInteraction"
     scope: Literal["scope"] = "scope"
     confidentialityImpact: Literal["confidentialityImpact"] = "confidentialityImpact"

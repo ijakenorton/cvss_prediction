@@ -1,6 +1,6 @@
 import gensim
 from gensim import corpora
-from gensim.models import FastText, LdaMulticore, Word2Vec, KeyedVectors
+from gensim.models import FastText, LdaMulticore, Word2Vec, KeyedVectors, CoherenceModel
 from gensim.models.fasttext import load_facebook_vectors
 from gensim.parsing.preprocessing import STOPWORDS
 import gensim.downloader as api
@@ -23,20 +23,22 @@ version = 31
 
 
 def run_all():
+    import config
+
     nvd_data = utils.read_data(f"../data/nvd_{version}_cleaned.pkl")
     data = nvd_data["data"]
     # data = balance_data_by_integrity_impact(data)
-    data = balance_data_by_metric(data, MetricNames.confidentialityImpact)
+    data = balance_data_by_metric(data, config.current_metric)
     descriptions = list(map(lambda x: x["description"][0], data))
     metric_values = list(map(lambda x: x["cvssData"], data))
     train(descriptions, "all_metrics", "all_values", metric_values)
 
 
 def balance_data_by_metric(data, metric: Metrics_t, max_per_category=20000):
-    # Group data by integrity impact
+    # Group data by metric
     grouped_data = defaultdict(list)
     for item in data:
-        integrity_impact = item["cvssData"].get("integrityImpact", "UNKNOWN")
+        integrity_impact = item["cvssData"].get(metric, "UNKNOWN")
         grouped_data[integrity_impact].append(item)
 
     # Balance the data
@@ -51,10 +53,9 @@ def balance_data_by_metric(data, metric: Metrics_t, max_per_category=20000):
 
 
 def train(descriptions, metric, value, metric_values):
-    import num_topics
+    import config
 
-    num_topics = num_topics.num_topics
-    output_dir = f"lda_word2vec_balanced_CA_{num_topics}"
+    output_dir = f"lda_word2vec_balanced_{config.current_metric}_{config.num_topics}"
     os.makedirs(output_dir, exist_ok=True)
     file_name = f"{output_dir}/lda_word2vec_balanced_{metric}_{value}.txt"
 
@@ -89,34 +90,6 @@ def train(descriptions, metric, value, metric_values):
     w2v_model = Word2Vec(
         sentences=texts, vector_size=100, window=5, min_count=2, workers=4
     )
-    # Check if the FastText model is already downloaded
-    # fasttext_vectors_path = os.path.join(os.getcwd(), "fasttext_vectors.kv")
-
-    # # Check if the FastText vectors are already downloaded
-    # if not os.path.exists(fasttext_vectors_path):
-    #     print("Downloading FastText vectors. This may take a while...")
-    #     fasttext_vectors = api.load("fasttext-wiki-news-subwords-300")
-    #     fasttext_vectors.save(fasttext_vectors_path)
-    # else:
-    #     print("Loading existing FastText vectors...")
-    #     fasttext_vectors = KeyedVectors.load(fasttext_vectors_path)
-
-    # # Initialize a new FastText model
-    # w2v_model = FastText(vector_size=300)
-
-    # # Build vocabulary from your texts
-    # w2v_model.build_vocab(texts)
-
-    # # Update the vocabulary with words from the pre-trained vectors
-    # w2v_model.build_vocab([list(fasttext_vectors.key_to_index.keys())], update=True)
-
-    # # Copy word vectors from the pre-trained vectors
-    # for word in w2v_model.wv.key_to_index:
-    #     if word in fasttext_vectors:
-    #         w2v_model.wv[word] = fasttext_vectors[wor]
-
-    # # Continue training on your data
-    # w2v_model.train(texts, total_examples=len(texts), epochs=5)
 
     def compute_coherence_word2vec(topic_words, w2v_model):
         if len(topic_words) < 2:
@@ -138,24 +111,32 @@ def train(descriptions, metric, value, metric_values):
             alpha=alpha,
             eta=eta,
             random_state=random_state,
-            chunksize=4000,
+            chunksize=2000,
             passes=passes,
             iterations=iterations,
             workers=6,
         )
-        coherence = np.mean(
+        w2v_coherence = np.mean(
             [
                 compute_coherence_word2vec(
-                    [word for word, _ in model.show_topic(topic_id, topn=10)],
+                    [word for word, _ in model.show_topic(topic_id, topn=50)],
                     w2v_model,
                 )
                 for topic_id in range(model.num_topics)
             ]
         )
-        return model, coherence
+        coherence_model_cv = CoherenceModel(
+            model=model, texts=texts, dictionary=dictionary, coherence="c_v"
+        )
+        cv_coherence = coherence_model_cv.get_coherence()
+
+        # Calculate perplexity
+        log_perplexity = model.log_perplexity(corpus)
+        perplexity = np.exp(-log_perplexity)
+        return model, w2v_coherence, cv_coherence, perplexity
 
     # Grid search parameters
-    num_topics_range = range(num_topics, num_topics + 1, 1)
+    num_topics_range = range(config.num_topics, config.num_topics + 1, 1)
     alpha_range = ["symmetric"]
     eta_range = [0.1]
     passes_range = [30]
@@ -169,7 +150,7 @@ def train(descriptions, metric, value, metric_values):
         * len(iterations_range)
         * len(random_state_range)
     )
-    pbar = tqdm(total=total_iterations, desc="Grid search progress")
+    # pbar = tqdm(total=total_iterations, desc="Grid search progress")
     # Run grid search
     results = []
     for num_topics, alpha, eta, passes, iterations, random_state in product(
@@ -180,9 +161,10 @@ def train(descriptions, metric, value, metric_values):
         iterations_range,
         random_state_range,
     ):
-        model, coherence = run_lda_model(
+        model, w2v_coherence, cv_coherence, perplexity = run_lda_model(
             corpus, dictionary, num_topics, alpha, eta, passes, iterations, random_state
         )
+        perplexity = model.log_perplexity(corpus)
         results.append(
             {
                 "num_topics": num_topics,
@@ -190,16 +172,18 @@ def train(descriptions, metric, value, metric_values):
                 "eta": eta,
                 "passes": passes,
                 "iterations": iterations,
-                "coherence": coherence,
+                "w2v_coherence": w2v_coherence,
+                "cv_coherence": cv_coherence,
+                "perplexity": perplexity,
                 "model": model,
                 "seed": random_state,
             }
         )
-        pbar.update(1)
+        # pbar.update(1)
 
-    pbar.close()
+    # pbar.close()
     # Sort results by coherence score
-    results.sort(key=lambda x: x["coherence"], reverse=True)
+    results.sort(key=lambda x: x["cv_coherence"], reverse=True)
 
     # Write grid search results
     with open(file_name, "a") as f:
@@ -209,7 +193,9 @@ def train(descriptions, metric, value, metric_values):
                 f"Num Topics: {result['num_topics']}, Alpha: {result['alpha']}, Eta: {result['eta']}, "
                 f"Passes: {result['passes']}, Iterations: {result['iterations']}, "
                 f"Seed: {result['seed']}, "
-                f"Coherence Score: {result['coherence']}\n"
+                f"Word2Vec Coherence: {result['w2v_coherence']:.4f}, "
+                f"C_v Coherence: {result['cv_coherence']:.4f}, "
+                f"Perplexity: {result['perplexity']:.2f}\n"
             )
 
     # Save top 5 models

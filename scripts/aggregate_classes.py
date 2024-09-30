@@ -111,20 +111,18 @@ def main():
     # )["topic_groups"]
     # topics = extract_topics(topic_groups)
 
-    import num_topics
+    import config
 
     version = 31
-    num_topics = num_topics.num_topics
-    current_metric = "confidentialityImpact"
 
-    output_dir = f"./temp_plots/counts_CA_{num_topics}/"
+    output_dir = f"./temp_plots/counts_{config.current_metric}_{config.num_topics}/"
     os.makedirs(output_dir, exist_ok=True)
 
     for i in range(1, 6):
         os.makedirs(f"{output_dir}/{i}", exist_ok=True)
 
     topic_groups = read_data(
-        f"./lda_word2vec_balanced_CA_{num_topics}/lda_balanced_topics.json"
+        f"./lda_word2vec_balanced_{config.current_metric}_{config.num_topics}/lda_balanced_topics.json"
     )["topic_groups"]
     # topic_groups = read_data(
     #     f"./lda_word2vec_balanced_fasttext_{num_topics}/lda_balanced_topics.json"
@@ -146,7 +144,7 @@ def main():
         #     f"./lda_word2vec_balanced_fasttext_{num_topics}/topic_assignments_lda_model_t{num_topics}_asymmetric_e0.1_p30_i200_seed0.json"
         # )
         data = read_data(
-            f"./lda_word2vec_balanced_CA_{num_topics}/topic_assignments_lda_model_t{num_topics}_asymmetric_e0.1_p30_i200_seed0.json"
+            f"./lda_word2vec_balanced_{config.current_metric}_{config.num_topics}/topic_assignments_lda_model_t{config.num_topics}_asymmetric_e0.1_p30_i200_seed0.json"
         )
         topic_data = {}
         for desc in data:
@@ -167,7 +165,7 @@ def main():
                 topic_data[topic], 3
             )
 
-            topic_counts[topic]["topic_words"] = topics[num_topics][topic]
+            topic_counts[topic]["topic_words"] = topics[config.num_topics][topic]
         # visualize_topics(
         #     topic_counts,
         #     ["confidentialityImpact", "integrityImpact", "availabilityImpact"],
@@ -176,16 +174,16 @@ def main():
         # nvd_data = utils.read_data(f"../data/nvd_{version}_cleaned.pkl")["data"]
         # nvd_counts = metric_counts.calculate_metric_counts(nvd_data, version)
 
-        # metrics = metric_counts.v3_metrics_counts()
-        # for i in range(1, 6):
-        #     for category in metrics[current_metric]:
-        #         plot.plot_merged_top_k_topics_category_focus_counts(
-        #             topic_counts,
-        #             current_metric,
-        #             category,
-        #             k=i,
-        #             num_topics=num_topics,
-        #         )
+        metrics = metric_counts.v3_metrics_counts()
+        for i in range(1, 6):
+            for category in metrics[config.current_metric]:
+                plot.plot_merged_top_k_topics_category_focus_counts(
+                    topic_counts,
+                    config.current_metric,
+                    category,
+                    k=i,
+                    num_topics=config.num_topics,
+                )
 
 
 if __name__ == "__main__":

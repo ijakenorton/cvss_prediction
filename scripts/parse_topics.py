@@ -122,12 +122,12 @@ def parse_topics_kmeans(num_topics):
     return runs
 
 
-def parse_topics(num_topics):
+def parse_topics(num_topics, current_metric):
 
     # path = f"./lda_word2vec_balanced_{num_topics}/lda_word2vec_balanced_all_metrics_all_values.txt"
     # path = f"./lda_word2vec_balanced_fasttext_{num_topics}/lda_word2vec_balanced_all_metrics_all_values.txt"
     # path = f"./kmeans_fasttext_{num_topics}/kmeans_fasttext_all_metrics_all_values.txt"
-    path = f"./lda_word2vec_balanced_CA_{num_topics}/lda_word2vec_balanced_all_metrics_all_values.txt"
+    path = f"./lda_word2vec_balanced_{current_metric}_{num_topics}/lda_word2vec_balanced_all_metrics_all_values.txt"
     runs = {"seeds": {}, "num_topics": {}}
     with open(path, "r") as f:
         contents = f.read()
@@ -212,8 +212,8 @@ def create_compatible_json(runs):
         json.dump(output, f)
 
 
-def create_single_topic(run, num_topics):
-    path = f"./lda_word2vec_balanced_CA_{num_topics}/lda_balanced_topics.json"
+def create_single_topic(run, num_topics, current_metric):
+    path = f"./lda_word2vec_balanced_{current_metric}_{num_topics}/lda_balanced_topics.json"
     # path = f"./lda_word2vec_balanced_fasttext_{num_topics}/lda_balanced_topics.json"
     # path = f"./kmeans_fasttext_{num_topics}/kmeans_balanced_topics.json"
 
@@ -234,14 +234,13 @@ def create_single_topic(run, num_topics):
 
 def main():
 
-    import num_topics
+    import config
 
-    num_topics = num_topics.num_topics
-    run_name = str(num_topics)[0]
-    runs = parse_topics(num_topics)
+    run_name = str(config.num_topics)[0]
+    runs = parse_topics(config.num_topics, config.current_metric)
     # runs = parse_topics_kmeans(num_topics)
     run = runs["seeds"]["seed0"][run_name]
-    create_single_topic(run, num_topics)
+    create_single_topic(run, config.num_topics, config.current_metric)
     # pprint(runs["seeds"]["seed50"])
     # create_compatible_json(runs)
     # dupes, count = count_dupes(runs)
