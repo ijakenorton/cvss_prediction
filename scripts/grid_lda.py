@@ -1,6 +1,6 @@
 import gensim
 from gensim import corpora
-from gensim.models import FastText, LdaMulticore, Word2Vec, KeyedVectors, CoherenceModel
+from gensim.models import LdaModel, LdaMulticore, Word2Vec, KeyedVectors, CoherenceModel
 from gensim.models.fasttext import load_facebook_vectors
 from gensim.parsing.preprocessing import STOPWORDS
 import gensim.downloader as api
@@ -55,7 +55,7 @@ def balance_data_by_metric(data, metric: Metrics_t, max_per_category=20000):
 def train(descriptions, metric, value, metric_values):
     import config
 
-    output_dir = f"lda_word2vec_balanced_{config.current_metric}_{config.num_topics}"
+    output_dir = f"lda_word2vec_grid_search_{config.current_metric}_{config.num_topics}"
     os.makedirs(output_dir, exist_ok=True)
     file_name = f"{output_dir}/lda_word2vec_balanced_{metric}_{value}.txt"
 
@@ -102,45 +102,61 @@ def train(descriptions, metric, value, metric_values):
         return score / (len(topic_words) * (len(topic_words) - 1) / 2)
 
     def run_lda_model(
-        corpus, dictionary, num_topics, alpha, eta, passes, iterations, random_state
+        corpus,
+        dictionary,
+        num_topics,
+        alpha,
+        eta,
+        passes,
+        iterations,
+        random_state,
+        chunk_size,
+        update_every,
     ):
-        model = LdaMulticore(
+        model = LdaModel(
             corpus=corpus,
             id2word=dictionary,
             num_topics=num_topics,
             alpha=alpha,
             eta=eta,
             random_state=random_state,
-            chunksize=2000,
+            chunksize=chunk_size,
             passes=passes,
             iterations=iterations,
-            workers=6,
+            update_every=update_every,  # Determines online learning. Set to 1 for pure online learning.
+            eval_every=None,  # Disable perplexity evaluation for speed
         )
+
+        # Calculate custom Word2Vec coherence
         w2v_coherence = np.mean(
             [
                 compute_coherence_word2vec(
-                    [word for word, _ in model.show_topic(topic_id, topn=50)],
+                    [word for word, _ in model.show_topic(topic_id, topn=10)],
                     w2v_model,
                 )
                 for topic_id in range(model.num_topics)
             ]
         )
+
+        # Calculate C_v coherence
         coherence_model_cv = CoherenceModel(
             model=model, texts=texts, dictionary=dictionary, coherence="c_v"
         )
         cv_coherence = coherence_model_cv.get_coherence()
 
         # Calculate perplexity
-        log_perplexity = model.log_perplexity(corpus)
-        perplexity = np.exp(-log_perplexity)
+        perplexity = np.exp(-model.log_perplexity(corpus))
+
         return model, w2v_coherence, cv_coherence, perplexity
 
     # Grid search parameters
     num_topics_range = range(config.num_topics, config.num_topics + 1, 1)
-    alpha_range = ["symmetric"]
-    eta_range = [0.1]
-    passes_range = [30]
-    iterations_range = [200]
+    alpha_range = ["symmetric", "asymmetric", "auto"]  # Try different alpha settings
+    eta_range = [None, "auto", 0.1, 0.01]  # Try different eta settings
+    passes_range = [1, 2, 5]  # Fewer passes for online learning
+    chunk_size_range = [2000, 4000, 8000]  # Try different chunk sizes
+    update_every_range = [1, 2]  # 1 for pure online, 2 for mini-batch
+    iterations_range = [50, 100, 200]
     random_state_range = [0]
     total_iterations = (
         len(num_topics_range)
@@ -149,20 +165,42 @@ def train(descriptions, metric, value, metric_values):
         * len(passes_range)
         * len(iterations_range)
         * len(random_state_range)
+        * len(chunk_size_range)
+        * len(update_every_range)
     )
-    # pbar = tqdm(total=total_iterations, desc="Grid search progress")
+    pbar = tqdm(total=total_iterations, desc="Grid search progress")
     # Run grid search
     results = []
-    for num_topics, alpha, eta, passes, iterations, random_state in product(
+    for (
+        num_topics,
+        alpha,
+        eta,
+        passes,
+        chunk_size,
+        update_every,
+        iterations,
+        random_state,
+    ) in product(
         num_topics_range,
         alpha_range,
         eta_range,
         passes_range,
+        chunk_size_range,
+        update_every_range,
         iterations_range,
         random_state_range,
     ):
         model, w2v_coherence, cv_coherence, perplexity = run_lda_model(
-            corpus, dictionary, num_topics, alpha, eta, passes, iterations, random_state
+            corpus,
+            dictionary,
+            num_topics,
+            alpha,
+            eta,
+            passes,
+            iterations,
+            random_state,
+            chunk_size,
+            update_every,
         )
         results.append(
             {
@@ -170,6 +208,8 @@ def train(descriptions, metric, value, metric_values):
                 "alpha": alpha,
                 "eta": eta,
                 "passes": passes,
+                "chunk_size": chunk_size,
+                "update_every": update_every,
                 "iterations": iterations,
                 "w2v_coherence": w2v_coherence,
                 "cv_coherence": cv_coherence,
@@ -178,7 +218,7 @@ def train(descriptions, metric, value, metric_values):
                 "seed": random_state,
             }
         )
-        # pbar.update(1)
+        pbar.update(1)
 
     # pbar.close()
     # Sort results by coherence score
@@ -190,7 +230,8 @@ def train(descriptions, metric, value, metric_values):
         for result in results:
             f.write(
                 f"Num Topics: {result['num_topics']}, Alpha: {result['alpha']}, Eta: {result['eta']}, "
-                f"Passes: {result['passes']}, Iterations: {result['iterations']}, "
+                f"Passes: {result['passes']}, Chunk Size: {result['chunk_size']}, "
+                f"Update Every: {result['update_every']}, Iterations: {result['iterations']}, "
                 f"Seed: {result['seed']}, "
                 f"Word2Vec Coherence: {result['w2v_coherence']:.4f}, "
                 f"C_v Coherence: {result['cv_coherence']:.4f}, "
