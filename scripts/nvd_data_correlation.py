@@ -2,6 +2,7 @@ import os
 import json
 import pandas as pd
 from pprint import pprint
+import matplotlib.pyplot as plt
 import utils
 
 
@@ -46,7 +47,6 @@ def read_data(version_number: int):
             index += 1
 
     print("\n\t100%")
-
     return data, ids
 
 

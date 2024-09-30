@@ -9,6 +9,7 @@ from nltk.corpus import stopwords
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+from cvss_types import Metrics_t, MetricNames
 import utils
 import os
 import json
@@ -25,31 +26,13 @@ def run_all():
     nvd_data = utils.read_data(f"../data/nvd_{version}_cleaned.pkl")
     data = nvd_data["data"]
     # data = balance_data_by_integrity_impact(data)
-    data = balance_data_by_confidentiality_impact(data)
+    data = balance_data_by_metric(data, MetricNames.confidentialityImpact)
     descriptions = list(map(lambda x: x["description"][0], data))
     metric_values = list(map(lambda x: x["cvssData"], data))
     train(descriptions, "all_metrics", "all_values", metric_values)
 
 
-def balance_data_by_confidentiality_impact(data, max_per_category=20000):
-    # Group data by integrity impact
-    grouped_data = defaultdict(list)
-    for item in data:
-        integrity_impact = item["cvssData"].get("integrityImpact", "UNKNOWN")
-        grouped_data[integrity_impact].append(item)
-
-    # Balance the data
-    balanced_data = []
-    for impact, items in grouped_data.items():
-        balanced_data.extend(random.sample(items, min(len(items), max_per_category)))
-
-    # Shuffle the balanced data
-    random.shuffle(balanced_data)
-
-    return balanced_data
-
-
-def balance_data_by_integrity_impact(data, max_per_category=20000):
+def balance_data_by_metric(data, metric: Metrics_t, max_per_category=20000):
     # Group data by integrity impact
     grouped_data = defaultdict(list)
     for item in data:

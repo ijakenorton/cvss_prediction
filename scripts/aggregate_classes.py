@@ -168,11 +168,11 @@ def main():
             )
 
             topic_counts[topic]["topic_words"] = topics[num_topics][topic]
-        visualize_topics(
-            topic_counts,
-            ["confidentialityImpact", "integrityImpact", "availabilityImpact"],
-            num_topics,
-        )
+        # visualize_topics(
+        #     topic_counts,
+        #     ["confidentialityImpact", "integrityImpact", "availabilityImpact"],
+        #     num_topics,
+        # )
         # nvd_data = utils.read_data(f"../data/nvd_{version}_cleaned.pkl")["data"]
         # nvd_counts = metric_counts.calculate_metric_counts(nvd_data, version)
 

@@ -130,7 +130,7 @@ there as many similar vulnerabilities using the same technologies.
 
 
 \begin{figure}[h] \centering
-	\includegraphics[width=0.8\textwidth]{figures/cve_year.pdf}
+	\includegraphics[width=0.8\textwidth]{figures/cves_year.pdf}
 	\caption{\label{fig:cve_year}Number of new CVEs by year}
 \end{figure}
 
@@ -450,9 +450,7 @@ This embedding captures semantic relationships between words in the CVE context.
 similarities:
 
 \begin{equation}
-
 	Coherence = \frac{\sum_{i=1}^{n}\sum_{j=i+1}^{n} similarity(word_i, word_j)}{\binom{n}{2}}
-
 \end{equation}
 
 where $n$ is the number of top words in a topic (10 in our implementation).
@@ -482,9 +480,7 @@ The LDA model is implemented using Gensim's LdaMulticore, allowing for parallel 
 Models are evaluated based on the average topic coherence:
 
 \begin{equation}
-
 	Score = \frac{1}{T}\sum_{t=1}^{T} Coherence(topic_t)
-
 \end{equation}
 
 where $T$ is the total number of topics.
@@ -533,9 +529,7 @@ For each class within each CVSS metric, we identify the most representative clus
 	\item Use a metric such as lift or odds ratio to determine which cluster best represents each class:
 
 	      \begin{equation}
-
 		      Lift(class, cluster) = \frac{P(class | cluster)}{P(class)}
-
 	      \end{equation}
 
 	\item The cluster with the highest lift for a given class is considered its best representative.

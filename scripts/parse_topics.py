@@ -131,7 +131,6 @@ def parse_topics(num_topics):
     runs = {"seeds": {}, "num_topics": {}}
     with open(path, "r") as f:
         contents = f.read()
-        print(contents)
         lines = contents.split("\n")
         lines.append(sentinel)
         iterator = iter(lines)
@@ -240,7 +239,6 @@ def main():
     num_topics = num_topics.num_topics
     run_name = str(num_topics)[0]
     runs = parse_topics(num_topics)
-    print(runs)
     # runs = parse_topics_kmeans(num_topics)
     run = runs["seeds"]["seed0"][run_name]
     create_single_topic(run, num_topics)

@@ -1,4 +1,28 @@
-from typing import TypedDict, List
+from typing import TypedDict, List, Literal
+
+
+class MetricNames:
+    attackVector: Literal[" attackVector"] = " attackVector"
+    attackComplexity: Literal[" attackComplexity"] = " attackComplexity"
+    privilegesRequired: Literal[" privilegesRequired"] = " privilegesRequired"
+    userInteraction: Literal["userInteraction"] = "userInteraction"
+    scope: Literal["scope"] = "scope"
+    confidentialityImpact: Literal["confidentialityImpact"] = "confidentialityImpact"
+    integrityImpact: Literal["integrityImpact"] = "integrityImpact"
+    availabilityImpact: Literal["availabilityImpact"] = "availabilityImpact"
+
+
+# Define a type that includes all possible metric values
+Metrics_t = Literal[
+    "attackVector",
+    "attackComplexity",
+    "privilegesRequired",
+    "userInteraction",
+    "scope",
+    "confidentialityImpact",
+    "integrityImpact",
+    "availabilityImpact",
+]
 
 
 class ConfusionMatrixInfo(TypedDict):
