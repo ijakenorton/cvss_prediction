@@ -20,6 +20,7 @@
 %\usepackage{cosc4x0style}
 
 \usepackage{hyperref}
+\usepackage{fvextra}
 \usepackage{csquotes}
 \usepackage{biblatex}
 \usepackage{listings}
@@ -30,7 +31,6 @@
 \usepackage{dirtytalk}
 \usepackage{xcolor}
 \addbibresource{refs.bib}
-\usepackage{fvextra}
 \usepackage{listings}
 \usepackage[margin=1in]{geometry}
 % To compile the final version of the report (which will remove all the todo content)
@@ -421,7 +421,8 @@ the CVSS system, namely, \say{lack of justification for its underlying formula, 
 	severity}~\cite{ubiquitous}.  This paper mainly relates to Section~\ref{discussion} exposing the
 issues and general impression of CVSS.
 
-\section{Motivation}
+\section{Methods}
+\subsection{Motivation}
 
 Clustering and analysis of the data makes sense in many ways. As the data is already grouped into
 Common Weakness Enumeration \todo[inline]{Maybe comparsion between my clusters and the CWEs those
@@ -447,7 +448,7 @@ The process of clustering vulnerability descriptions using K-means consists of f
 	\item The analysis begins by loading vulnerability descriptions from a dataset.
 
 	\item TF-IDF (Term Frequency-Inverse Document Frequency) vectorization is employed to convert
-	      the text descriptions into numerical features. This technique helps capture the importance
+	      the text descriptions into numerical features~\cite{tfidf}. This technique helps capture the importance
 	      of words within the context of the entire corpus.
 
 \end{itemize}
@@ -489,6 +490,7 @@ The process of clustering vulnerability descriptions using K-means consists of f
 
 \end{itemize}
 
+Below are the example topics gained from the initial kmeans clustering:
 \begin{itemize}
 
 	\item Cluster 0: vulnerability allows user service access attacker versions prior discovered issue
@@ -545,8 +547,8 @@ learning models to read.
 	\textbf{'description'}: 'The SvelteKit framework offers developers an option to '
 	'create simple REST APIs. This is done by defining a '
 	'`+server.js` file, containing endpoint handlers for '
-	'different HTTP methods.\n'
-	'\n'
+	'different HTTP methods.'
+	''
 	'SvelteKit provides out-of-the-box cross-site request forgery '
 	'(CSRF) protection to its users. The protection is '
 	'implemented at `kit/src/runtime/server/respond.js`. While '
@@ -555,8 +557,8 @@ learning models to read.
 	'versions prior to 1.15.2 by simply specifying an upper-cased '
 	'`Content-Type` header value. The browser will not send '
 	'uppercase characters, but this check does not block all '
-	'expected CORS requests.\n'
-	'\n'
+	'expected CORS requests.'
+	''
 	'If abused, this issue will allow malicious requests to be '
 	'submitted from third-party domains, which can allow '
 	"execution of operations within the context of the victim's "
@@ -569,8 +571,8 @@ learning models to read.
 	'`SameSite` attribute explicitly and the user visits a '
 	'malicious site with Firefox/Safari with tracking protections '
 	'turned off; and/or if the user is visiting a malicious site '
-	'with a very outdated browser.\n'
-	'\n'
+	'with a very outdated browser.'
+	''
 	'SvelteKit 1.15.2 contains a patch for this issue. It is also '
 	'recommended to explicitly set `SameSite` to a value other '
 	'than `None` on authentication cookies especially if the '
@@ -593,7 +595,6 @@ This was a good indicator that it is worth looking into these clusters further.
 \end{figure}
 
 
-\section{Methods}
 
 
 \subsection{Latent Dirichlet Allocation Methodology}
@@ -617,6 +618,10 @@ methodology comprises several key steps:
 
 \end{itemize}
 
+This data processing is necessary due to this type of topic discovery relying on word distributions,
+and therefore word frequencies. As a result stop words just muddy the water and put more interesting
+and relevant topic words further down.
+
 \subsubsection{Word Embedding}
 
 A Word2Vec model is trained on the preprocessed texts:
@@ -631,8 +636,9 @@ also other options in using something like pretrained fasttext~\cite{fasttext} a
 \cite{nvd_clustering_fasttext}
 
 
-\subsubsection{Topic Coherence Metric} We define a custom coherence metric based on Word2Vec
-similarities:
+\subsubsection{Topic Coherence Metric}
+
+We define a custom coherence metric based on Word2Vec similarities:
 
 \begin{equation}
 	Coherence = \frac{\sum_{i=1}^{n}\sum_{j=i+1}^{n} similarity(word_i, word_j)}{\binom{n}{2}}
@@ -641,6 +647,10 @@ similarities:
 where $n$ is the number of top words in a topic (10 in our implementation).
 
 \subsubsection{LDA Model Training}
+
+\todo[inline]{Update with the actual parameters, unsure if worth including the two different grid
+	search I did one for 14 - 20  clusters, and one for 100 clusters as I thought that was likely what I would
+	go with}
 
 We employ a grid search approach to optimize LDA hyperparameters:
 
@@ -722,6 +732,8 @@ For each class within each CVSS metric, we identify the most representative clus
 
 \end{itemize}
 
+\todo[inline]{pretty sure I dont need to spell this out and would just show it but its here for
+	now...}
 \subsubsection{Visualization and Interpretation}
 
 We create visualizations to aid in the interpretation of results:
@@ -780,21 +792,65 @@ To potentially improve class representation, we explore merging related clusters
 
 As is obvious from figure~\ref{fig:nvd_data}, the classes for each metric are highly imbalanced.
 This is just a reality of the data and so is something that we have to contend with. This aspect
-made graphing and interpreting the outcome of the clustering somewhat awkward. The approach th
+made graphing and interpreting the outcome of the clustering somewhat awkward. The approach in the
+end due is to choose the most balanced classes first as they are easier to interpret. From there I
+went on to fully balance the classes that could be down to 20000 CVEs for each class on the metric,
+as you will see in the results that makes the interpration of the results easier and more honest,
+even if it is actually showing the same thing.
 
-Finally, we evaluate the effectiveness of our extended analysis:
+\subsection{Results}
 
-\begin{itemize}
+The main results will be shown in graph form, generally the graphs show the count of each of the
+classes in relation to each other when focusing on a specific metric.
 
-	\item Assess whether the balanced dataset analysis revealed new insights not apparent in the original model.
+\begin{figure}[h] \centering
+	\includegraphics[width=0.8\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_NONE_k1.png}
+	\caption{\label{fig:integrityImpact_20_NONE}The counts of the documents within the best topic in
+		relation to integrityImpact with target class \texttt{NONE}}
+\end{figure}
 
-	\item Determine if certain CVSS metrics are more clearly represented by topic clusters than others.
+\begin{figure}[h] \centering
+	\includegraphics[width=0.8\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_LOW_k1.png}
+	\caption{\label{fig:integrityImpact_20_LOW}The counts of the documents within the best topic in
+		relation to integrityImpact with target class \texttt{LOW}}
+\end{figure}
 
-	\item Evaluate the impact of cluster merging on the interpretability and usefulness of the model.
 
-	\item Discuss potential applications of these findings in automated CVSS scoring or vulnerability triage systems.
+\begin{figure}[h] \centering
+	\includegraphics[width=0.8\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_HIGH_k1.png}
+	\caption{\label{fig:integrityImpact_20_HIGH}The counts of the documents within the best topic in
+		relation to integrityImpact with target class \texttt{HIGH}}
+\end{figure}
 
-\end{itemize}
+So this metric refers to the integrity of the data, generally this would be a problem if the data
+itself has been corrupted or changed leading to many potential issues.
+
+The trend groups we get for this seem reasonable. When trying to focus on \texttt{NONE} we see things relating
+to denial of service attacks and system crashes. While this is something to worry about, it usually
+will not effect the integrity of the data.
+
+The \texttt{LOW} category refers to a similar topic as shown above in the kmeans clustering example.
+Essentially a cross site scripting issue, often related to WordPress plugins. This makes sense as
+this could cause some data integrity issues likely generally scoped to the user in question, not to
+the application as a whole.
+
+The \texttt{HIGH} when focused relates to some kind of sql / database injection based issue,
+something more severe. So far this all aligns with what we would expect to be prevailed classes.
+
+Something to note is this is relating to the whole corpus and so is not biased towards more recent
+trends, something that could be interesting to look into given that the data is there.
+
+% \begin{itemize}
+
+% 	\item Assess whether the balanced dataset analysis revealed new insights not apparent in the original model.
+
+% 	\item Determine if certain CVSS metrics are more clearly represented by topic clusters than others.
+
+% 	\item Evaluate the impact of cluster merging on the interpretability and usefulness of the model.
+
+% 	\item Discuss potential applications of these findings in automated CVSS scoring or vulnerability triage systems.
+
+% \end{itemize}
 
 \subsection{Hierarchical Bayesian Model} \label{bayesian_modeling}
 

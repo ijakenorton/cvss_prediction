@@ -1,4 +1,4 @@
-# What have was I planning to do?
+# What  was I planning to do?
 
 From an interpretability standpoint, I wanted to find out if the data had patterns within that we
 could pick up with more traditional clustering means. This way it might be easier to actually be
@@ -39,6 +39,12 @@ Should I show some of the early graphs showing the misleading percentages?
 
 Should I have the comparison between the two different types of CVES, e.g. the short description of
 wordpress vs the verbose description of sveltekit
+
+I did a grid search on some different hyperparameters, for online / minibatch learning. They
+resulted in worse results though over all, should I include it? Thought I should mimic the common
+trend from a popular paper
+
+For future angles, look into time based things? Or not enough data / hard to interpret
 
 # Process for final results
 
