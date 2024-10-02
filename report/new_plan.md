@@ -35,6 +35,8 @@ documents are clustered into?
 Should I compare each topic with the same number of clusters, or can I just say which for each I
 think is best?
 
+Should I show some of the early graphs showing the misleading percentages?
+
 Should I have the comparison between the two different types of CVES, e.g. the short description of
 wordpress vs the verbose description of sveltekit
 
