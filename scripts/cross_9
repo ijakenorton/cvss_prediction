@@ -1,0 +1,91 @@
+Parsing nvd data...
+[{'date': '2021-12-20T21:15:08.210',
+  'description': 'Cross-Site Request Forgery (CSRF) vulnerability leading to '
+                 'Cross-Site Scripting (XSS) discovered in tarteaucitron.js – '
+                 'Cookies legislation & GDPR WordPress plugin (versions <= '
+                 '1.5.4), vulnerable parameters "tarteaucitronEmail" and '
+                 '"tarteaucitronPass".',
+  'id': 'CVE-2021-36887'},
+ {'date': '2021-05-24T11:15:08.213',
+  'description': 'The Hotjar Connecticator WordPress plugin through 1.1.1 is '
+                 'vulnerable to Stored Cross-Site Scripting (XSS) in the '
+                 "'hotjar script' textarea. The request did include a CSRF "
+                 'nonce that was properly verified by the server and this '
+                 'vulnerability could only be exploited by administrator '
+                 'users.',
+  'id': 'CVE-2021-24301'},
+ {'date': '2023-06-22T13:15:10.020',
+  'description': 'Cross-Site Request Forgery (CSRF) vulnerability in '
+                 'UpdraftPlus.Com, DavidAnderson UpdraftPlus WordPress Backup '
+                 'Plugin <=\xa01.23.3 versions leads to sitewide Cross-Site '
+                 'Scripting (XSS).',
+  'id': 'CVE-2023-32960'},
+ {'date': '2023-08-18T14:15:22.330',
+  'description': 'Cross-Site Request Forgery (CSRF) leading to Stored '
+                 'Cross-Site Scripting (XSS) vulnerability in realmag777 WOLF '
+                 '– WordPress Posts Bulk Editor and Manager Professional '
+                 'plugin <=\xa01.0.6 versions.',
+  'id': 'CVE-2023-31218'},
+ {'date': '2022-09-01T17:15:08.540',
+  'description': 'Cross-Site Request Forgery (CSRF) vulnerability leading to '
+                 'Stored Cross-Site Scripting (XSS) in CallRail, Inc. CallRail '
+                 'Phone Call Tracking plugin <= 0.4.9 at WordPress.',
+  'id': 'CVE-2022-36796'},
+ {'date': '2022-09-23T16:15:11.187',
+  'description': 'Multiple Stored Cross-Site Scripting (XSS) via Cross-Site '
+                 'Request Forgery (CSRF) vulnerability in 3D Tag Cloud plugin '
+                 '<= 3.8 at WordPress.',
+  'id': 'CVE-2022-36417'},
+ {'date': '2022-09-30T17:15:11.887',
+  'description': 'Cross-Site Scripting (XSS) via Cross-Site Request Forgery '
+                 '(CSRF) vulnerability in Booking Ultra Pro plugin <= 1.1.4 at '
+                 'WordPress.',
+  'id': 'CVE-2021-36855'},
+ {'date': '2022-04-12T17:15:08.013',
+  'description': 'Cross-Site Request Forgery (CSRF) vulnerability leading to '
+                 'Reflected Cross-Site Scripting (XSS) in CalderaWP License '
+                 'Manager (WordPress plugin) <= 1.2.11.',
+  'id': 'CVE-2021-36914'},
+ {'date': '2022-04-28T17:15:39.140',
+  'description': 'Cross-Site Request Forgery (CSRF) leading to Stored '
+                 "Cross-Site Scripting (XSS) in Mufeng's Hermit 音乐播放器 plugin "
+                 '<= 3.1.6 on WordPress via &title parameter.',
+  'id': 'CVE-2022-29413'},
+ {'date': '2023-11-06T10:15:08.470',
+  'description': 'Cross-Site Request Forgery (CSRF) leading to a Stored '
+                 'Cross-Site Scripting (XSS) vulnerability in Nazmul Hossain '
+                 'Nihal Login Screen Manager plugin <=\xa03.5.2 versions.',
+  'id': 'CVE-2023-47182'},
+ {'date': '2022-05-20T21:15:10.783',
+  'description': "Cross-Site Scripting (XSS) vulnerability in KubiQ's PNG to "
+                 'JPG plugin <= 4.0 at WordPress via Cross-Site Request '
+                 'Forgery (CSRF). Vulnerable parameter &jpg_quality.',
+  'id': 'CVE-2022-29430'},
+ {'date': '2022-11-08T19:15:15.500',
+  'description': 'Cross-Site Request Forgery (CSRF) vulnerability leading to '
+                 "Stored Cross-Site Scripting (XSS) in Vladimir Anokhin's "
+                 'Shortcodes Ultimate plugin <= 5.12.0 on WordPress.',
+  'id': 'CVE-2022-41136'},
+ {'date': '2022-11-08T19:15:18.937',
+  'description': 'Cross-Site Request Forgery (CSRF) vulnerability leading to '
+                 'Cross-Site Scripting (XSS) in David Anderson Testimonial '
+                 'Slider plugin <= 1.3.1 on WordPress.',
+  'id': 'CVE-2022-44741'},
+ {'date': '2022-11-18T19:15:29.300',
+  'description': 'Cross-Site Request Forgery (CSRF) vulnerability leading to '
+                 'Stored Cross-Site Scripting (XSS) in Mantenimiento web '
+                 'plugin <= 0.13 on WordPress.',
+  'id': 'CVE-2022-38075'},
+ {'date': '2022-11-18T23:15:25.190',
+  'description': 'Cross-Site Scripting (XSS) via Cross-Site Request Forgery '
+                 '(CSRF) vulnerability in Store Locator plugin <= 1.4.5 on '
+                 'WordPress.',
+  'id': 'CVE-2022-41615'},
+ {'date': '2023-06-13T15:15:11.607',
+  'description': 'Cross-Site Request Forgery (CSRF) vulnerability in Ali Irani '
+                 'Auto Upload Images plugin <=\xa03.3 versions\xa0allows '
+                 'Stored Cross-Site Scripting (XSS).',
+  'id': 'CVE-2022-42880'}]
+16
+
+	100%

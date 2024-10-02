@@ -99,17 +99,7 @@ def plot_best_clusters():
 
 
 def main():
-    # plot_best_clusters()
-    # x = range(2, 5, 1)
     x = range(1, 2, 1)
-
-    # topic_groups = read_data(
-    #     f"../data/results/new_results/lda_word2vec_desc_compare_output/lda_word2vec_topics.json"
-    # )["topic_groups"]
-    # topic_groups = read_data(
-    #     f"../data/results/lda_word2vec_desc_compare_output_seeds/lda_seeds_topics.json"
-    # )["topic_groups"]
-    # topics = extract_topics(topic_groups)
 
     import config
 
@@ -124,12 +114,6 @@ def main():
     topic_groups = read_data(
         f"./lda_word2vec_balanced_{config.current_metric}_{config.num_topics}/lda_balanced_topics.json"
     )["topic_groups"]
-    # topic_groups = read_data(
-    #     f"./lda_word2vec_balanced_fasttext_{num_topics}/lda_balanced_topics.json"
-    # )["topic_groups"]
-    # topic_groups = read_data(
-    #     f"./kmeans_fasttext_{num_topics}/kmeans_balanced_topics.json"
-    # )["topic_groups"]
     topics = extract_topics(topic_groups)
     for i in x:
         # data = read_data(f"../results/lda_compare/topic_assignments_{i}.json")
@@ -166,11 +150,14 @@ def main():
             )
 
             topic_counts[topic]["topic_words"] = topics[config.num_topics][topic]
-        # visualize_topics(
-        #     topic_counts,
-        #     ["confidentialityImpact", "integrityImpact", "availabilityImpact"],
-        #     num_topics,
-        # )
+
+        # try:
+        visualize_topics(
+            topic_counts,
+            ["confidentialityImpact", "integrityImpact", "availabilityImpact"],
+            config.num_topics,
+        )
+
         # nvd_data = utils.read_data(f"../data/nvd_{version}_cleaned.pkl")["data"]
         # nvd_counts = metric_counts.calculate_metric_counts(nvd_data, version)
 

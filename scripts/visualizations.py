@@ -31,20 +31,10 @@ def create_heatmap(topic_counts, metric, num_topics):
     plt.xlabel("Topics")
     plt.ylabel("Categories")
     plt.tight_layout()
-    plt.savefig(f"./temp_plots/heatmap_{metric}.png", dpi=300, bbox_inches="tight")
+
+    path = f"./temp_plots/counts_{metric}_{num_topics}/heatmap_{metric}.png"
+    plt.savefig(path, dpi=300, bbox_inches="tight")
     plt.close()
-
-
-def prepare_data_for_tsne(topic_counts, metric):
-    X = []
-    y = []
-    for topic, data in topic_counts.items():
-        topic_distribution = [data[metric][cat] for cat in data[metric]]
-        X.append(topic_distribution)
-        y.append(
-            max(data[metric], key=data[metric].get)
-        )  # Use the most common category as the label
-    return np.array(X), np.array(y)
 
 
 def create_tsne_visualization(topic_counts, metric, num_topics):
@@ -54,8 +44,19 @@ def create_tsne_visualization(topic_counts, metric, num_topics):
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
 
-    # Apply t-SNE
-    tsne = TSNE(n_components=2, random_state=42)
+    # Adjust perplexity based on number of topics
+    perplexity = min(30, num_topics - 1)  # perplexity should be less than num_topics
+
+    # Apply t-SNE with adjusted perplexity
+    tsne = TSNE(n_components=2, random_state=42, perplexity=perplexity)
+
+    # Check if we have enough samples for t-SNE
+    if num_topics < 4:
+        print(
+            f"Warning: Not enough topics ({num_topics}) for t-SNE visualization. Skipping t-SNE for {metric}."
+        )
+        return
+
     X_tsne = tsne.fit_transform(X_scaled)
 
     # Create scatter plot
@@ -70,11 +71,26 @@ def create_tsne_visualization(topic_counts, metric, num_topics):
     for i, (x, y) in enumerate(X_tsne):
         plt.annotate(str(i), (x, y), xytext=(5, 5), textcoords="offset points")
 
-    plt.title(f"t-SNE Visualization of Topics for {metric}")
+    plt.title(f"t-SNE Visualization of Topics for {metric} (perplexity={perplexity})")
     plt.legend()
     plt.tight_layout()
-    plt.savefig(f"./temp_plots/tsne_{metric}.png", dpi=300, bbox_inches="tight")
+
+    path = f"./temp_plots/counts_{metric}_{num_topics}/tsne_{metric}.png"
+    plt.savefig(path, dpi=300, bbox_inches="tight")
     plt.close()
+
+
+# The prepare_data_for_tsne function remains the same
+def prepare_data_for_tsne(topic_counts, metric):
+    X = []
+    y = []
+    for topic, data in topic_counts.items():
+        topic_distribution = [data[metric][cat] for cat in data[metric]]
+        X.append(topic_distribution)
+        y.append(
+            max(data[metric], key=data[metric].get)
+        )  # Use the most common category as the label
+    return np.array(X), np.array(y)
 
 
 def visualize_topics(topic_counts, metrics, num_topics):

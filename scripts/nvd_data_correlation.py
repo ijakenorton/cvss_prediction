@@ -6,10 +6,24 @@ import matplotlib.pyplot as plt
 import utils
 
 
+def match_cluster_words(text, cluster, min_matches=3):
+    # Convert the text and cluster words to lowercase for case-insensitive matching
+    text = text.lower()
+    cluster_words = [word.lower() for word in cluster.split()]
+
+    # Count how many cluster words are in the text
+    matches = sum(1 for word in cluster_words if word in text)
+
+    # Return True if the number of matches is at least min_matches
+    return matches >= min_matches
+
+
 def read_data(version_number: int):
     data = []
     ids = set()
+    examples = []
 
+    dates = {}
     index = 0
 
     print("Parsing nvd data...")
@@ -27,6 +41,20 @@ def read_data(version_number: int):
                         for d in cve["descriptions"]:
                             if d["lang"] == "en":
                                 desc.append(d["value"])
+                                cluster = "site cross scripting xss plugin stored vulnerability wordpress forgery csrf"
+                                if match_cluster_words(d["value"], cluster, 5):
+                                    examples.append(
+                                        {
+                                            "id": cve["id"],
+                                            "description": d["value"],
+                                        }
+                                    )
+                                    year = cve["published"].split("-")[0]
+                                    if year in dates.keys():
+                                        dates[year] += 1
+                                    else:
+                                        dates[year] = 1
+
                         cvss_data = cve["metrics"][f"cvssMetricV{version_number}"][0][
                             "cvssData"
                         ]
@@ -45,6 +73,10 @@ def read_data(version_number: int):
                         ids.add(cve["id"])
 
             index += 1
+
+    pprint(examples)
+    pprint(dates)
+    print(len(examples))
 
     print("\n\t100%")
     return data, ids
