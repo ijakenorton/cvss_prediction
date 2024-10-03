@@ -423,19 +423,15 @@ issues and general impression of CVSS.
 
 \section{Methods}
 \subsection{Motivation}
-
+\todo[inline]{Maybe comparsion between my clusters and the CWEs those documents are clustered into?}
 Clustering and analysis of the data makes sense in many ways. As the data is already grouped into
-Common Weakness Enumeration \todo[inline]{Maybe comparsion between my clusters and the CWEs those
-	documents are clustered into?}, it is likely that there is some sort of pattern we can find.
+Common Weakness Enumeration~\cite{CWE} , it is likely that there are some sort of patterns we can find. As a result
 
 \subsection*{Initial Exploration}
 
 The data may be in clusterable in relation to different metrics. As a low stakes exploration, run
 kmeans\cite{kmeans} with k = num\_metrics(8).
 
-This is a positive step as these show some clusters that make sense together, the output is shown
-below, for each of the clusters 0 - 7 these are the cluster top 10 words closest to the cluster
-centriod:
 
 \section{K-Means Clustering of Vulnerability Descriptions}
 
@@ -479,16 +475,6 @@ The process of clustering vulnerability descriptions using K-means consists of f
 \end{itemize}
 
 \subsection{Interpretation}
-
-\begin{itemize}
-
-	\item Following the clustering process, the top 10 most characteristic terms for each cluster
-	      are extracted and printed.
-
-	\item This approach provides an interpretable summary of what each cluster represents, offering
-	      insights into the common themes or types of vulnerabilities present in the dataset.
-
-\end{itemize}
 
 Below are the example topics gained from the initial kmeans clustering:
 \begin{itemize}
@@ -792,13 +778,25 @@ To potentially improve class representation, we explore merging related clusters
 
 As is obvious from figure~\ref{fig:nvd_data}, the classes for each metric are highly imbalanced.
 This is just a reality of the data and so is something that we have to contend with. This aspect
-made graphing and interpreting the outcome of the clustering somewhat awkward. The approach in the
-end due is to choose the most balanced classes first as they are easier to interpret. From there I
-went on to fully balance the classes that could be down to 20000 CVEs for each class on the metric,
-as you will see in the results that makes the interpration of the results easier and more honest,
-even if it is actually showing the same thing.
+made finding a well defined cluster for each topic difficult as well as making the graphing and
+interpreting the outcome of the clustering somewhat awkward.
+
+As an example, if we take look at priveleges a graph of the best cluster for
+\texttt{priviledgesRequired} for the with a focus on the \texttt{HIGH} class (ref graph here) we can see
+that even though we are trying to find the cluster with the best representation of \texttt{HIGH},
+i.e. in this case best refers to the cluster with the distribution most skewed towards the
+
+The approach in the end due is to
+choose the most balanced classes first as they are easier to interpret. From there I went on to
+fully balance the classes that could be down to 20000 CVEs for each class on the metric, as you will
+see in the results that makes the interpration of the results easier and more honest, even if it is
+actually showing the same thing.
 
 \subsection{Results}
+Ideally after this process we would compare the clusters with the assigned CWE, unfortunately due to the
+nature of both the topics based on some k-words and the CWE also being a description of a type of
+vulnerability I do not have time to automate the cross referencing between both my found clusters
+and
 
 The main results will be shown in graph form, generally the graphs show the count of each of the
 classes in relation to each other when focusing on a specific metric.

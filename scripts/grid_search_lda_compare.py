@@ -27,10 +27,10 @@ def run_all():
 
     nvd_data = utils.read_data(f"../data/nvd_{version}_cleaned.pkl")
     data = nvd_data["data"]
-    # data = balance_data_by_integrity_impact(data)
-    data = balance_data_by_metric(data, config.current_metric)
+    # data = balance_data_by_metric(data, config.current_metric)
     descriptions = list(map(lambda x: x["description"][0], data))
     metric_values = list(map(lambda x: x["cvssData"], data))
+
     train(descriptions, "all_metrics", "all_values", metric_values)
 
 
@@ -55,9 +55,9 @@ def balance_data_by_metric(data, metric: Metrics_t, max_per_category=20000):
 def train(descriptions, metric, value, metric_values):
     import config
 
-    output_dir = f"lda_word2vec_balanced_{config.current_metric}_{config.num_topics}"
+    output_dir = f"./unbalanced/lda_word2vec_unbalanced_{config.current_metric}_{config.num_topics}"
     os.makedirs(output_dir, exist_ok=True)
-    file_name = f"{output_dir}/lda_word2vec_balanced_{metric}_{value}.txt"
+    file_name = f"{output_dir}/lda_word2vec_unbalanced_{metric}_{value}.txt"
 
     custom_stopwords = set(stopwords.words("english")).union(set(STOPWORDS))
     custom_stopwords.update(

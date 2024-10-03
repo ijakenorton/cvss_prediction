@@ -30,7 +30,7 @@ Data imbalance -> did not handle to start with, but helps to interpret the data 
 unsure if it means that have to take it with grain of salt
 
 Maybe comparsion between my clusters and the CWEs those
-documents are clustered into?
+documents are clustered into? cant be done chief, too hard to aggregate the data for the time being
 
 Should I compare each topic with the same number of clusters, or can I just say which for each I
 think is best?

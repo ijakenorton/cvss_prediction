@@ -98,12 +98,8 @@ def plot_best_clusters():
     # plot.plot_all_metrics_gt_grid(topic_counts, nvd_counts, "18_only_best_topics")
 
 
-def main():
-    x = range(1, 2, 1)
-
+def create_topic_data():
     import config
-
-    version = 31
 
     output_dir = f"./temp_plots/counts_{config.current_metric}_{config.num_topics}/"
     os.makedirs(output_dir, exist_ok=True)
@@ -115,62 +111,70 @@ def main():
         f"./lda_word2vec_balanced_{config.current_metric}_{config.num_topics}/lda_balanced_topics.json"
     )["topic_groups"]
     topics = extract_topics(topic_groups)
-    for i in x:
-        # data = read_data(f"../results/lda_compare/topic_assignments_{i}.json")
-        # data = read_data(
-        #     f"../data/results/lda_word2vec_desc_compare_output_seeds/topic_assignments_{i}.json"
-        # )
-        # data = read_data(
-        #     f"./lda_word2vec_balanced_{num_topics}/topic_assignments_lda_model_t{num_topics}_asymmetric_e0.1_p30_i200_seed0.json"
-        # )
+    # data = read_data(f"../results/lda_compare/topic_assignments_{i}.json")
+    # data = read_data(
+    #     f"../data/results/lda_word2vec_desc_compare_output_seeds/topic_assignments_{i}.json"
+    # )
+    # data = read_data(
+    #     f"./lda_word2vec_balanced_{num_topics}/topic_assignments_lda_model_t{num_topics}_asymmetric_e0.1_p30_i200_seed0.json"
+    # )
 
-        # data = read_data(
-        #     f"./lda_word2vec_balanced_fasttext_{num_topics}/topic_assignments_lda_model_t{num_topics}_asymmetric_e0.1_p30_i200_seed0.json"
-        # )
-        data = read_data(
-            f"./lda_word2vec_balanced_{config.current_metric}_{config.num_topics}/topic_assignments_lda_model_t{config.num_topics}_asymmetric_e0.1_p30_i200_seed0.json"
+    # data = read_data(
+    #     f"./lda_word2vec_balanced_fasttext_{num_topics}/topic_assignments_lda_model_t{num_topics}_asymmetric_e0.1_p30_i200_seed0.json"
+    # )
+    data = read_data(
+        f"./lda_word2vec_balanced_{config.current_metric}_{config.num_topics}/topic_assignments_lda_model_t{config.num_topics}_asymmetric_e0.1_p30_i200_seed0.json"
+    )
+    topic_data = {}
+    for desc in data:
+        if "topic" in desc.keys():
+            desc_topic = desc["topic"]
+        else:
+            desc_topic = desc["cluster"]
+        if desc_topic in topic_data.keys():
+            topic_data[desc_topic].append(desc)
+        else:
+            topic_data[desc_topic] = []
+
+            topic_data[desc_topic].append(desc)
+    topic_counts = {}
+    for topic in topic_data:
+
+        topic_counts[topic] = metric_counts.calculate_metric_counts(
+            topic_data[topic], 3
         )
-        topic_data = {}
-        for desc in data:
-            if "topic" in desc.keys():
-                desc_topic = desc["topic"]
-            else:
-                desc_topic = desc["cluster"]
-            if desc_topic in topic_data.keys():
-                topic_data[desc_topic].append(desc)
-            else:
-                topic_data[desc_topic] = []
 
-                topic_data[desc_topic].append(desc)
-        topic_counts = {}
-        for topic in topic_data:
+        topic_counts[topic]["topic_words"] = topics[config.num_topics][topic]
 
-            topic_counts[topic] = metric_counts.calculate_metric_counts(
-                topic_data[topic], 3
+    return topic_counts, data
+
+
+def main():
+
+    import config
+
+    topic_counts, data = create_topic_data()
+
+    # try:
+    visualize_topics(
+        topic_counts,
+        ["confidentialityImpact", "integrityImpact", "availabilityImpact"],
+        config.num_topics,
+    )
+
+    # nvd_data = utils.read_data(f"../data/nvd_{version}_cleaned.pkl")["data"]
+    # nvd_counts = metric_counts.calculate_metric_counts(nvd_data, version)
+
+    metrics = metric_counts.v3_metrics_counts()
+    for i in range(1, 6):
+        for category in metrics[config.current_metric]:
+            plot.plot_merged_top_k_topics_category_focus_counts(
+                topic_counts,
+                config.current_metric,
+                category,
+                k=i,
+                num_topics=config.num_topics,
             )
-
-            topic_counts[topic]["topic_words"] = topics[config.num_topics][topic]
-
-        # try:
-        visualize_topics(
-            topic_counts,
-            ["confidentialityImpact", "integrityImpact", "availabilityImpact"],
-            config.num_topics,
-        )
-
-        # nvd_data = utils.read_data(f"../data/nvd_{version}_cleaned.pkl")["data"]
-        # nvd_counts = metric_counts.calculate_metric_counts(nvd_data, version)
-
-        metrics = metric_counts.v3_metrics_counts()
-        for i in range(1, 6):
-            for category in metrics[config.current_metric]:
-                plot.plot_merged_top_k_topics_category_focus_counts(
-                    topic_counts,
-                    config.current_metric,
-                    category,
-                    k=i,
-                    num_topics=config.num_topics,
-                )
 
 
 if __name__ == "__main__":

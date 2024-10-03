@@ -1,4 +1,4 @@
 from cvss_types import MetricNames, Metrics_t
 
-num_topics = 18
+num_topics = 100
 current_metric: Metrics_t = MetricNames.availabilityImpact

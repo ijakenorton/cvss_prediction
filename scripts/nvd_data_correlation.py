@@ -25,6 +25,7 @@ def read_data(version_number: int):
 
     dates = {}
     index = 0
+    weaknesses = []
 
     print("Parsing nvd data...")
     for _, _, files in os.walk("../nvd/"):
@@ -40,6 +41,23 @@ def read_data(version_number: int):
 
                         for d in cve["descriptions"]:
                             if d["lang"] == "en":
+                                if "weaknesses" in cve.keys():
+                                    weaknesses.append(cve["weaknesses"])
+                                else:
+                                    weaknesses.append(
+                                        [
+                                            {
+                                                "description": [
+                                                    {
+                                                        "lang": "en",
+                                                        "value": "EMPTY",
+                                                    }
+                                                ],
+                                                "source": "nvd@nist.gov",
+                                                "type": "Primary",
+                                            }
+                                        ]
+                                    )
                                 desc.append(d["value"])
                                 cluster = "site cross scripting xss plugin stored vulnerability wordpress forgery csrf"
                                 if match_cluster_words(d["value"], cluster, 5):
@@ -74,10 +92,14 @@ def read_data(version_number: int):
 
             index += 1
 
-    pprint(examples)
-    pprint(dates)
-    print(len(examples))
+    # pprint(examples)
+    # pprint(dates)
+    # print(len(examples))
 
+    utils.write_data(weaknesses, "../data/cwes.pkl")
+    print("count weaknesses", len(weaknesses))
+    print("count ids", len(ids))
+    print("count data", len(data))
     print("\n\t100%")
     return data, ids
 

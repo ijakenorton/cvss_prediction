@@ -294,7 +294,7 @@ def plot_merged_top_k_topics_category_focus_counts(
     path="./temp_plots/counts/merged_top_k_topics_category_focus_counts",
     num_topics=18,
 ):
-    path = f"./temp_plots/counts_{metric}_{num_topics}/{k}/merged_top_k_topics_category_focus_counts"
+    path = f"./temp_plots/unbalanced/counts_{metric}_{num_topics}/{k}/merged_top_k_topics_category_focus_counts"
     categories = list(next(iter(topic_counts.values()))[metric].keys())
 
     # Find top k topics for the specified metric and category

@@ -217,9 +217,23 @@ def filter_by_metric_score(data, metric, score):
     return data
 
 
+def ids(version=31):
+
+    nvd_data = read_data(f"../data/nvd_{version}_cleaned.pkl")
+    data = nvd_data["data"]
+    ids = list(map(lambda x: x["id"], data))
+    return ids
+
+
 def write_data(data, path):
     with open(path, "wb") as file:
         pickle.dump(data, file)
+
+
+def read_pkl(path):
+    with open(path, "rb") as file:
+        data = pickle.load(file)
+    return data
 
 
 def read_data(path) -> CvssData:
