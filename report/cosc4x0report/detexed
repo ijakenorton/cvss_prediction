@@ -1,0 +1,806 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	The Common Vulnerability Scoring System is designed to produce scores for software
+	vulnerabilities. Such a system is needed in order to triage the sheer number of new
+	vulnerabilities being released every year. We cannot keep up with the amount of CVSS scores that
+	need to be produced, as such we need a way to automatically predict them. There is precedent to
+	using machine learning, specifically in more recent times, large language models (LLMs) to
+	accurately predict these CVSS scores. However, there is a general focus on only using the
+	National Vulnerability Database (NVD), it would be ideal if there was more than one source for
+	the ratings, not only for cross validation, but also for an increase in training data volume.
+	Unfortuntately this exercise was not fruitful, and I will also continue to use NVD as the data
+	source moving forward, however it is useful to look into this issue.
+	Before we use any extra data sources, it will be interesting to do a comparison between the
+	different sources, to see if we can get an estimated accuracy for each of the metrics within the
+	scoring system. Additionally we should know how good of a system CVSS is and whether or not
+	there are better alternatives. However, the ability to predict a metric based on a short text
+	description is still useful, and a focus on the interpretability of such a system remains
+	important.
+
+	This paper focuses on interpretability and analysis of CVE / CVSS data, with some of the
+	findings used to aid prediction of CVSS scores by LLMS.
+
+	I will be focusing on interpretability from the data perspective. When clustering the
+	data we see that there are some useful patterns
+	[inline]Just some place holder for when figure out what we are doing with the clustering
+	stuff
+
+
+
+Introduction
+
+
+Last year there were 29,065 new vulnerabilities as show by Figure . This is a
+number that is only going up year on year. These vulnerabilities are recorded using the Common
+Vulnerabilities and Exposure system (CVE ). From these CVEs, CVSS scores can be computed.
+The National Vulnerability Database (NVD , more on the databases in
+Section ) takes CVEs and enriches them with CVSS data. They are not the only place
+to do so, however in terms of research they are often the main or sole data provider (E.g.).  I explored other options, and landed on the MITRE
+database (details here Section , as it is the main database for CVEs,
+with a decent number enriched with CVSS scores. As a guideline to my investigation between the two
+databases, I used the same method as the paper Can the Common Vulnerability Scoring System
+	be Trusted? A Bayesian Analysis . This paper explores the extent to which different
+data sources agree on the scoring of a CVE, aiming to gain insight into the potential for
+establishing a ground truth value. Unfortunately, since that paper was released back in 2016, many
+of the data sources they compared are either unavailable or in archival status. However, I hoped following
+their method would still allow for insight between the two chosen databases, NVD and MITRE. This analysis
+shows that the databases do fundamentally rate CVEs differently (see Figure ). The
+uncertainty between the two can therefore be an indicator going forward when analysing generated CVE
+scores, as it is likely that the model will also struggle in similar places to where the human
+evaluators did. The initial focus of the work on this paper was around the CVSS and the surrounding
+systems, some of the pitfalls behind the system are mentioned in the background, however while
+interesting and damning in some sense, they do not stop progress towards the automation of CVSS
+metric classification. Analysis between MITRE and NVD shows that it is not a system which can be
+consistently rated by different evaluators / evaluation teams. Using a combination of the two
+datasets is not something I will continue with going forward as the difference between the different
+ratings results in confusion during training of the model.
+
+The focus for the remainder of the paper is looking into NVD and via clustering and other dataset
+analysis techniques finding patterns within the data. This will show a multitude of things, it will
+show us the difference in what the models learn to treat as important versus more purely data driven
+techiques. We get much quicker turn around for the analysis, Airey is currently also pursuing
+interpretability from the models themselves, this takes  48 hours per metric to run the tests. The
+clustering techniques, such as Latent Dirichlet Allocation ( LDA ) take a fraction of the time,  1
+hour to cluster the entire corpus.
+
+[inline]Placeholder for when I have more concrete example
+Additional insights gained are that some types of vulnerabilities
+tend run together, for example cross site scripting and php and wordpress are found together as
+there as many similar vulnerabilities using the same technologies.
+
+
+ 		Number of new CVEs by year
+
+
+Background
+
+Vulnerabilities are stored in a consistent system called Common Vulnerabilities and
+Exposures (CVE ).
+
+Here is an example CVE
+
+	Unique Identifier: CVE-2024-38526
+	Source: GitHub, Inc.
+	Published:06/25/2024
+	Updated:06/26/2024
+
+	Description: pdoc provides API Documentation for Python Projects. Documentation
+	      generated with pdoc -math linked to JavaScript files from polyfill.io. The polyfill.io
+	      CDN has been sold and now serves malicious code. This issue has been fixed in pdoc 14.5.1.
+
+
+Sourced from https://nvd.nist.gov/vuln/detail/CVE-2024-38526NVD CVE-2024-38526
+	Detail 
+
+
+This has a unique identifier, which is given by one of the CVE numbering authorities (CNA ), such as
+GitHub, Google or any of these, https://www.cve.org/PartnerInformation/ListofPartnersCVE list of
+	partners .
+The description is the most important part in our case. This should provide information about the
+vulnerability. What can be exploited (device / software component)? How is the product affected if
+the vulnerability is exploited? Ideally there would be a part of the description that relates to every metric,
+unfortunately these descriptions are not necessarily suited to machine learning as the people
+writing the descriptions are expecting a lot of intrinsic knowledge.
+
+The Common Vulnerability Scoring System
+
+CVSS scoring is a high level way to break up vulnerabilities into different categories.
+Organisations can use it to choose which vulnerability to focus on first. CVSS is broken up into
+three distinct sections: base, temporal and environmental scores.
+
+For brevity I will only show the specifics of CVSS 3.1  as this is by far the most commonly used
+version, even if it is not the most recent.
+
+Base Score
+
+
+
+	Attack Vector: Defines the avenues of attack that the vulnerability is open to. The more
+	      open a component is, the higher the score. This can have the values: Network,
+	      Adjacent, Local and Physical.
+
+	Attack Complexity: Describes how complex the attack is to orchestrate. Encompasses
+	      questions like, what are the prerequisites? How much domain knowledge / background work is
+	      necessary? How much effort does the attacker need to invest to succeed? This can have the
+	      values: Low or High. Low gives a higher base score.
+
+	Priviledges Required: The degree of privileges the user needs to complete the attack.
+	      Ranging from: None, Low (e.g.User level privilege), High
+	      (e.g.Administrator). The lower the privilege the higher the base score.
+
+	User Interaction: Describes if the exploit requires another human user to make the attack
+	      possible, E.g.clicking a phishing link. This is either None or
+	      Required, the score is highest when no user interaction is required.
+
+	Scope: Defines if the attack can leak into other security scopes. E.g. access to one
+	      machine gives the ability to elevate privileges on other parts of the system. This can take
+	      Unchanged or Changed, the score being highest when a scope change occurs.
+
+	Confidentiality Impact: Detemines what is the impact on the information access /
+	      disclosure to the attacker. This can be: High, Low or None with
+	      High adding the most to the base score.
+
+	Integrity Impact: Refers to the integrity of the information within the component. I.e.	      could the data have been modified by the attacker. This has: High, Low or
+	      None, as categories with High adding the most to the base score.
+
+	Availability Impact: Refers to the impact of the attack on the availability of the
+	      component. E.g.the attacker taking the component off the network, denying the users
+	      access. This can be: High, Low and None with High adding
+	      the most to the base score.
+
+
+This is a summarized version of the
+https://www.first.org/cvss/v3.1/specification-document3.1 specification document
+	provided by the  Forum of Incident Response and Security Teams (FIRST) .  
+
+
+
+Temporal
+
+
+
+	Exploit Code Maturity: The state of the attack itself, e.g.has this exploit been pulled
+	      off in the wild or is it currently academic.
+
+	Remidiation Level: Whether the exploit in question has a patch availabile.
+
+	Report Confidence: The degree of confidence in the CVE report itself, the report may be in
+	      early stages where not all of the information is known.
+
+
+This is a summarized version of the
+https://www.first.org/cvss/v3.1/specification-document3.1 specification document
+	provided by the Forum of Incident Response and Security Teams (FIRST) .  
+
+
+Temporal metrics would be useful in general for a CVSS score, however NVD do not store these
+temporal metrics. As far as I can tell there is no reason given for this specifically, though
+discourse
+https://security.stackexchange.com/questions/270257/cvss-v3-and-v3-1-missing-temporal-metrics-exploit-code-maturity-and-remediation
+(Stack exchange post)  around the subject suggests that this is due to a lack
+of verifiable reporting. From my perspective, both remidiation level and report confidence feel like
+they could have scores attributed to them, however finding verifiable reports on the exploits seen
+in the wild is difficult. There are two relatively new organisations on this front,
+Cybersecurity  Infrastructure Security Agency (CISA,
+https://www.cisa.gov/known-exploited-vulnerabilities-catalogpublic sector) and
+inthewild.org (https://inthewild.io/private sector ).
+
+Data Options
+
+I will be using NVD and MITRE as the sources of data. In 2016 when Johnson et al.did their paper
+on CVSS , they had access to five different databases. Unfortunately only two of these
+remain for modern data. There are others, but they are either in archival or proprietary status.
+
+National Vulnerability Database 
+The National Vulnerability Database is the defacto standard dataset used for CVSS generation
+research .  This makes a lot of sense as it is built
+for the purpose with a team dedicated to enriching CVEs with CVSS scores. The dataset I am using was
+retrieved using the NVD API in March 2024 and contains 100000 CVEs enriched with CVSS scores. This
+comes in a consistently formatted JSON dump.
+
+MITRE Database  
+MITRE is the defacto database for the storage of CVEs themselves, their database contains 40000
+CVEs enriched with CVSS 3.1 scores. These are in a JSON dump retrieved in March 2024. The
+format for usage is a bit more cumbersome to use. The CVSS scores are only stored as CVSS vector
+strings (a simple text encoding ). These are not hard to parse, though they are stored slightly
+different between versions, as well as sometimes being inconsistent (5000 had temporal metrics within
+the vector strings in the MITRE database).
+
+Priliminary Data exploration
+
+The scorers for both NVD and MITRE do rate CVEs reasonably similar, one pattern you can see as shown
+by Fig , is that NVD generally give the most common categorical output more ratings.
+They are less spread out across the full range of values. In addition, if we look at the
+Attack Complexity metric, there is a reasonably large difference in how they are rated,
+MITRE rate a lot more of the metrics with a Low score. This points to some of the
+difficulty with this kind of rating system, while in theory there is a true value for these metrics,
+it requires knowledge of the whole space around each of the vulnerabilities, this knowledge will
+always vary marker to marker. The model will not have direct access to this knowledge; however, it
+is hoped that it will be able to trace relationships between the different vulnerabilities and learn
+this intrinsically.
+
+
+
+		[][c]
+	Comparison of CVSS ratings between MITRE and NVD
+
+Evolution of CVSS and Its Identity Crisis
+
+When CVSS 2.0 was released, it was promoted as a framework to help IT management prioritize and
+remediate vulnerabilities posing the greatest risk. The initial goal was to provide a comprehensive
+method for assessing risk, as indicated by its original documentation:
+
+
+
+Currently, IT management must identify and assess vulnerabilities across many disparate
+	hardware and software platforms. They need to prioritize these vulnerabilities and remediate those
+	that pose the greatest risk. But when there are so many to fix, with each being scored using
+	different scales, how can IT managers convert this mountain of vulnerability data into
+	actionable information? The Common Vulnerability Scoring System (CVSS) is an open framework that
+	addresses this issue. 
+
+
+However, by the time CVSS 3.1 was released, the framework's focus had shifted, partly due to
+complaints about CVSS being a poor judge of risk. The authors stated:
+
+CVSS measures severity, not risk. 
+
+
+The identity crisis is a problem because the original stance, that it can be used as a primary
+prioritisation tool, has lured parts of the industry into doing just that. As mentioned by Henry
+Howland in , there are many large, mainly US based places mandating the sole use of
+CVSS base score for remediation. Payment Card Industry Data Security Standard , the
+Department of Defense Joint Special Access Program implementation Guide  to name a few.
+
+This change in stance has created confusion about the true purpose of CVSS.
+
+CVSS Formula
+
+
+How CVSS is computed under-the-hood is confusing at best. CVSS 3.1 is not explained to the same
+depth as version 2.0, but my understanding is that it followed a similar process. This is that
+process summarised from
+https://www.first.org/cvss/v2/faq#Explanation-of-CVSS-v2-formula-and-metric-valued-developmentCVSS
+	version 2 FAQ: 
+
+
+	Divide the six metrics into two groups:
+
+	      
+	      Impact (3 metrics)
+	      Exploitability (3 metrics)
+	      
+	Create sub-vectors for each group:
+	      
+	      Impact sub-vector: 27 possible values ()
+	      Exploitability sub-vector: 26 possible values ( for no impact)
+	      
+	Develop and apply a series of rules to order the sub-vectors. These rules
+	      are primarily based on the severity of components, e.g.vectors with more
+	      Complete
+	      components are rated higher.
+
+	Assign scores to the ordered sub-vectors based on the derived rules and review by the
+	      Special Interest Group (SIG).
+
+	Apply weightings to the sub-vectors:
+	      
+	      Impact: 0.6
+	      Exploitability: 0.4
+	      
+	 Develop a formula that approximates the scores derived from the ordered
+	      sub-vectors. Ensure the formula produces scores with 0.5 error from the originally
+	      defined vector score and does not exceed the maximum value of 10.
+
+	Test and refine the formula through iterations, ensuring it aligns with desired values and
+	      corrects any issues, such as scores exceeding 10.
+
+
+This is process is inherently inaccurate, it is not a system designed to give precise scores. If we
+look at  above, the formula ( shows the CVSS 3.1 base score formula for
+reference) which produces the score, does not match exactly the experts decision. There is a lot of
+rounding and approximation going on. This is designed to make a system which is easy to use and
+quick to complete by security professionals. There is a space for CVSS, however this along with the
+other mentioned reasons outlines the issues with using CVSS as a sole metric for prioritization. Perhaps an option
+is to triage the large swathes of new vulnerabilites coming in with an initial CVSS score, then move
+on to a deeper dive. This could be in the form of the extra CVSS metrics (Temporal score 
+Environmental score), or a look into other potential options like the Exploit Prediction Scoring
+System (EPSS ).
+
+Related Work
+
+The main paper most similar to the Bayesian Analysis between MITRE and NVD is
+Can the Common Vulnerability Scoring System be Trusted? A Bayesian
+	Analysis  by Johnson et al.. They conducted a study into the state of CVSS databases and their accuracy in 2016.
+They found NVD to be the most correct database, and we can trust the Common Vulnerability Scoring System as a
+whole as scorers rate CVEs consistently. This paper will be used as the basis for the database
+comparison in Section . This continues to be relevant in terms of process,
+not so much in terms of results.
+
+Costa et al.in the paper, Predicting CVSS Metric via Description
+	Interpretation , tested generation of CVSS from CVE descriptions with a range of large
+language encoder-only models. They achieved state-of-the-art results with the DistilBERT
+model . They also improved the score with text preprocessing (e.g.lemmatization)
+and looked into interpretability of the models using Shapley values. This paper is relevant to
+Section  as much of the process around training and inferring CVSS scores is
+based on their work.
+
+Jiang and Atif in the paper, An Approach to Discover and Assess
+	Vulnerability Severity Automatically in Cyber-Physical Systems , create a novel
+pipeline for vulnerability assessment. They used multiple data sources and a majority voting system
+to decrease the chance of badly scored CVEs. This paper relates in that it shows a use case for
+multiple data sources, though less so on the methods used.
+
+Henry Howland in the paper, CVSS: Ubiquitous and Broken  broke down issues with
+the CVSS system, namely, lack of justification for its underlying formula, inconsistencies
+	in its specification document, and no correlation to exploited vulnerabilities in the wild,
+	it is unable to provide a meaningful metric for describing a vulnerability’s
+	severity .  This paper mainly relates to Section  exposing the
+issues and general impression of CVSS.
+
+
+Methods
+
+Hierarchical Bayesian Model 
+Analysis between the NVD  and MITRE  databases is conducted using a
+hierarchical Bayesian model. This model type is particularly suitable when the population is
+expected to share similarities in some respects while differing in others. In this context, while
+the databases share common knowledge about vulnerabilities, they differ in the experience of the
+individuals rating the metrics .
+
+Our model builds upon the original framework presented in Section 4.1 of . It assumes
+the existence of a true value for each CVSS dimension, acknowledging that the database sample may
+deviate from this true value. These potential inaccuracies are represented using confusion matrices
+(see Equation ).
+
+A key distinction from the original model is the variability in the number of categorical choices
+for each CVSS metric. While the original model consistently used three variables for each CVSS
+metric, our adapted model accommodates between two to four categorical choices, depending on the
+specific CVSS dimension being evaluated.
+
+Confusion Matrix
+
+Below is an example of the confusion matrix for the CVSS dimension Confidentiality Impact:
+
+
+
+where  denotes the probability that the database correctly assigns the score None
+when the actual value is indeed None. Conversely,  and  represent
+instances where None was not the true value, indicating an incorrect score assignment by
+the database.
+
+Prior Distributions
+
+For categorical variables, we employ uninformative priors using Dirichlet distributions. This
+approach provides a uniform prior over the probability space for all categorical options, minimizing
+the influence of prior beliefs on the results. The impact of these priors is negligible for
+categorical metrics with more options than the number of categories.
+
+The confusion matrices also utilize Dirichlet distribution priors. However, we incorporate a slight
+initial belief to reflect that the individuals producing scores are not acting entirely randomly and
+are likely to be correct more often than not. These priors remain weak given the thousands of
+observations in our dataset.
+
+Parameter Estimation
+
+Our parameter estimation follows the Bayesian approach, updating prior beliefs with observations to
+produce posterior beliefs. We employ Markov Chain Monte Carlo (MCMC) methods, which allow for
+simulating data based on the previously created distribution by sampling values that the model
+believes are likely from the target distribution. This technique enables accurate sampling without
+requiring all data points.
+
+For implementation, we utilized the PyMC library , which fulfills the same functions as
+JAGS in the original paper . PyMC facilitates the modeling process and provides robust
+tools for Bayesian inference and MCMC sampling.
+
+This methodology provides a comprehensive framework for analyzing and comparing vulnerability
+scoring across different databases, accounting for the inherent uncertainties and variations in
+expert assessments.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CVSS Prediction 
+Cody Airey -a classmate of mine- has been working on a similar problem. He has been repoducing
+results from Costa et al. . My choice of model for CVSS prediction will very much
+bootstrap off his work. So far, a strong contender for state-of-the-art model for predicting CVSS
+metrics from CVE descriptions is the DistilBERT model . This is a variant of
+BERT , a pre-trained deep bidirectional transformer large language model developed by
+Google. DistilBERT has advantages over other BERT models in terms of performance, but also on speed
+of training as well as size / memory footprint of the model.
+
+Training
+
+The model is trained separately for each metric. Following Airey's method, each of the eight models
+were trained on five different data splits to allow for a standard deviation to be calculated, in
+order to aid in reducing the chance of a lucky data split effecting the results. The
+difference between Costa et al. Airey's work, and mine is that this model was trained on a
+combination of NVD and MITRE data as opposed to just using NVD. This was converted to the same
+format, a CSV containing the descriptions and the CVSS scores. This does mean there are now
+40000 duplicate CVEs and 140000 CVEs enriched with CVSS scores total.
+
+Results
+
+Bayesian Analysis
+
+The results for the database analysis will be shown through the confusion matrices for the estimated
+accuracy of both NVD and MITRE. Unfortunately it is difficult to compare my results to the original
+paper  as they are on a totally different dataset. However, I will note that in general the estimated
+accuracy for both datasets is much lower than the scores from the original study. Across the board NVD
+often had 90% accuracy for the highest accuracy field of any metric, with Confidentiality as
+a clear outlier as seen from Table .
+
+Some general trends are that NVD (see Figure ) have more extreme
+estimated accuracies. They do better for the higher frequency options, for the Low option
+on Attack Complexity for example, NVD have 98% estimated accuracy and 66% for
+High versus MITRE (see Figure ), Low scored
+87% and 75% for High. Instead of further analysing in this way, I will point out some of
+my worries around these results, not that they are wrong per se, but that they do not really tell us
+anything extra than that shown by in Figure , except perhaps it is helpful to see
+the results in a percentage estimated accuracy instead of a proportion. Unfortunately this is
+outside of my strengths, I did some cursory exploration into if doing this sort of analysis
+between two populations like this does make sense, the discourse here  suggests
+that such a thing can be done, though it also suggests the need for more informative priors. This
+may apply in my case, and I intend on getting an expert opinion closer to home, however that will be
+after this report.
+
+Johnson et al.talk about the reliability of their results saying this in section 7.1 of :
+ 
+
+
+reliability concerns
+	are discussed. In this study we use five different scoring instruments - the databases. If some of
+	these are generally correct, but some are generally incorrect, will not the scores of the
+	incorrect ones still affect our beliefs about the actual values, thus worsening reliability? It
+	turns out that this is not the case. In a simulation, two scorers were set up to be completely
+	aligned, scoring 90% complete impact in one of the CIA dimensions, while a third was unaligned
+	and scoring only 10% complete impact. Initially, all scorers are equally credible, but the
+	gradual accrual of evidence impacts scorer credibility (as well as beliefs about the actual CVSS
+	score distributions). Thus, as the third scorer rarely matched the other two, its credibility
+	eroded, thus shrinking the weight of its advise . 
+
+
+Unfortunately in my case I do not have the advantage of a potential third or more scorer. This leads
+me to believe that there is a chance that incorrect scores can end up corrupting the results.
+
+
+
+		[][c]
+	Confusion Matrices for NVD for CVSS version 3.1
+
+
+		[][c]
+	Confusion Matrices for MITRE for CVSS version 3.1
+
+
+			Confusion Matrices for NVD on CVSS version 2.0 from Johnson et al.
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CVSS Prediction
+
+Below, Table   Table  show the results of the
+DistilBERT model trained on a combination of NVD and MITRE data. Unfortunately this has
+a purely negative effect on all metrics, with the caveat that some of the standard deviations are
+lower. Additional note is that the balanced accuracy for some metrics looks a bit weird, I believe that
+is due to the model not outputing some of the categorical options for that metric. This applies to
+all the balanced accuracy scores, apart from the Priorities Required (PR) and Confidentiality (C) as
+seen on Table   Table . As this
+was done only recently I have not looked into this issue in-depth to see why this is happening, but
+I will in the future. As to why the model performs worse, my theory is that the added data, and
+therefore the overlapping CVEs with different scores confuse the model. I thought that adding the
+additional data may have given the model a better chance of generalising, however this
+does not appear to be the case.
+The uncertainty between the two databases can serve as an indicator when
+analyzing generated CVE scores. It suggests that the model may encounter similar challenges to those
+faced by human evaluators. The lowest score for my model is in the Availability Impact
+category, which is also low for Cody's model. This observation indicates a correlation between the
+machine learning models' difficulties and the issues faced by human scorers. Attack Complexity also
+presents challenges, likely due to data imbalance, as the dataset is heavily skewed towards the
+Low score, thereby incentivizing the model to output Low scores (see
+Figures  , ,  for
+reference).
+
+
+		
+	
+	
+	Comparison of the effects of the X pre-trained models on the CVSS v3.1 dataset (Part 1).
+	
+
+		
+	
+	
+	Comparison of the effects of the X pre-trained models on the CVSS v3.1 dataset (Part 2).
+	
+
+Discussion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Exploit Prediction Scoring System
+
+EPSS is developed by FIRST, the same group who govern the CVSS standard. It has a different take
+on the problem, focusing on a data driven model designed to give a daily estimate of the probability
+	of exploitation activity being observed over the next 30 days . If the data shown on the model
+page is to be believed, it is a promising system (some of their findings Figure ,
+Figure ). Unfortunately, while good to keep in mind for the industry, it is less useful
+for our purposes. This is a pretrained and uninterpretable model, from the outside at least.
+Analysis could be done on the output of the model in relation to CVEs, but that will not be a focus
+going forward.
+
+
+Future Work
+
+Despite the disadvantages of CVSS, I will continue to focus on it in my studies. My focus will pivot
+towards the interpretability of large language models, particularly from the perspective of data.
+The CVE dataset is messy, with many poorly written CVE descriptions that are not useful for machine
+learning models. I plan to clean up this dataset by identifying and removing low-quality entries. To
+achieve this, I will perform clustering and general analysis of the CVE descriptions to better
+understand the dataset and develop heuristics for filtering it.
+
+Conclusion
+
+The Common Vulnerability Scoring System (CVSS) is integral in prioritizing and managing the
+ever-growing number of software vulnerabilities. While the current approach heavily relies on
+manually assigned scores from the National Vulnerability Database (NVD), it may be worth using the
+MITRE database as well. However, the findings are very much inconclusive, it is possible that adding
+the extra data during model training is worth it, but so far it has only been to the detriment of
+performance. One key issue is the variability in CVSS scores between different databases, such as NVD
+and MITRE, which suggests a lack of consistency in the scoring process. This inconsistency can
+confuse automated systems and reduce the overall reliability of the predicted scores.
+
+In conclusion, while CVSS remains a crucial tool for vulnerability management, its current
+implementation has limitations that need to be addressed. The integration of machine learning models
+offers a promising solution to automate and enhance the accuracy of CVSS scoring. However the focus
+should be on predicting the distinct categorical variable for each metric, as this is a universally
+interesting classification task and will be more able to apply to changes in the CVSS standard.
+Future research should focus on refining these models, and focusing on interpretability, whether
+through LLM interpretability methods, or through more traditional databased clustering.
+
+[title=References]
+
+
+
+
+
+CVSS figures from other versions
+
+Below is a collection of confusion matrics which are results from the Bayesian analysis of CVSS
+versions 2.0  3.0 for both the NVD and MITRE databases. Version 2.0 for MITRE is especially rough
+as there was very little data.
+
+
+		[][c]
+	Confusion matrix of estimated accuracy for CVSS metrics for version 2.0 for NVD
+
+
+		[][c]
+	Confusion matrix of estimated accuracy for CVSS
+	metrics for version 2.0 for MITRE
+
+
+		[][c]
+	Confusion matrix of estimated accuracy for CVSS metrics for version 3.0 for NVD
+
+
+		[][c]
+	Confusion matrix of estimated accuracy for CVSS
+	metrics for version 3.0 for MITRE
+
+
+
+CVSS 3.1 Base Score formula 
+Below is a formulaic representation of the CVSS 3.1 base score formula.
+		
+	
+
+	
+
+	
+	
+
+Exploit Prediction Scoring System diagrams for reference
+
+Below are two graphs from FIRST, the creator of EPSS. These show some of the results they have
+found for this system, especially when comparing EPSS to CVSS in terms of effeciency of effort if
+you use EPSS to guide remediation of vulnerabilities.
+
+
+		[][c]
+	Comparing Metrics: CVSS 7+ vs. EPSS 10%+ sourced from
+
+
+		[][c]
+	EPSS score compared to CVSS Base Score (NVD) sourced from
+	
+
+Aims and Objectives
+
+Original
+
+Aims
+The primary aim of this research is to develop sophisticated predictive models capable of accurately determining
+the severity levels of security threats based on the CVSS. This will involve a comprehensive review and comparison
+of current datasets, with a focus on leveraging natural language descriptions provided in security vulnerability reports.
+The project intends to utilize advanced transformer-based models to achieve this goal, contributing to the field of
+cybersecurity by enhancing the precision of threat severity assessments.
+
+Objectives
+[noitemsep]
+	Conduct a comprehensive literature review to understand the current landscape of CVSS score prediction and the methodologies employed in existing models.
+	Replicate successful methodologies to verify the accuracy of CVSS score databases, with a particular focus on alignment with recent CVSS standards and datasets.
+	Explore opportunities for enhancing existing methodologies, including the investigation of data amalgamation from multiple databases to ascertain improvements in model performance.
+	Experiment with various model architectures to identify the most effective approach in terms of predictive accuracy, specifically focusing on metrics such as the F1 score and balanced accuracy.
+
+Timeline
+[noitemsep]
+	March: Initiate the project with a literature review, system environment setup, and resource gathering.
+	March-April: Replicate existing methodologies to validate findings and ensure alignment with current standards.
+	May-June: Generate preliminary results and compile an interim report detailing findings and methodologies.
+	July-August: Conduct experiments with various data source combinations and model architectures to identify optimal configurations.
+	September-October: Finalize experimental work, analyze results, and prepare the comprehensive final report.
+
+Revised
+
+Aims
+
+The primary aim of this research is to develop sophisticated predictive models capable of accurately determining
+the severity levels of security threats based on the CVSS. This will involve a comprehensive review and comparison
+of current datasets, with a focus on leveraging natural language descriptions provided in security vulnerability reports.
+The project intends to utilize advanced transformer-based models to achieve this goal, contributing to the field of
+cybersecurity by enhancing the precision of threat severity assessments.
+
+Objectives
+[noitemsep]
+
+	Conduct a comprehensive literature review to understand the current landscape of CVSS
+	      score prediction and the methodologies employed in existing models.
+
+	Replicate successful methodologies to verify the accuracy of CVSS score databases, with a
+	      particular focus on alignment with recent CVSS standards and datasets.
+
+	Explore opportunities for enhancing existing methodologies, including the investigation of
+	      data amalgamation from multiple databases to ascertain improvements in model performance.
+
+	Look into data cleaning and clustering, to improve the efficacy of the models, as well as
+	      a look into interpretability though data analysis.
+
+

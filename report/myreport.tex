@@ -91,7 +91,7 @@
 \section{Introduction}
 
 
-Last year there were 29,065 new vulnerabilities as show by Figure~\ref{fig:cve_year}. This is a
+Last year there were 29,065 new vulnerabilities as show by Figure~\ref{fig:cves_per_year}. This is a
 number that is only going up year on year. These vulnerabilities are recorded using the Common
 Vulnerabilities and Exposure system (CVE~\cite{CVE}). From these CVEs, CVSS scores can be computed.
 The National Vulnerability Database (NVD~\cite{NVD}, more on the databases in
@@ -133,7 +133,7 @@ there as many similar vulnerabilities using the same technologies.
 
 \begin{figure}[h] \centering
 	\includegraphics[width=0.8\textwidth]{figures/cves_year.pdf}
-	\caption{\label{fig:cve_year}Number of new CVEs by year}
+	\caption{\label{fig:cves_per_year}Number of new CVEs by year}
 \end{figure}
 
 
@@ -422,15 +422,17 @@ the CVSS system, namely, \say{lack of justification for its underlying formula, 
 issues and general impression of CVSS.
 
 \section{Methods}
+
 \subsection{Motivation}
+
 \todo[inline]{Maybe comparsion between my clusters and the CWEs those documents are clustered into?}
+
 Clustering and analysis of the data makes sense in many ways. As the data is already grouped into
-Common Weakness Enumeration~\cite{CWE} , it is likely that there are some sort of patterns we can find. As a result
-
-\subsection*{Initial Exploration}
-
-The data may be in clusterable in relation to different metrics. As a low stakes exploration, run
-kmeans\cite{kmeans} with k = num\_metrics(8).
+Common Weakness Enumeration~\cite{CWE} , it is likely that there are some sort of patterns we can
+find. As a somewhat arbitrary place to start, choose K as 8 due to that being the number of CVSS
+metrics. For this I hoping to see the data would naturally have some clusters based on the general
+theme of the vulnerability / description, e.g. a cluster based generally around SQL injection /
+databases in general.
 
 
 \section{K-Means Clustering of Vulnerability Descriptions}
@@ -439,15 +441,12 @@ The process of clustering vulnerability descriptions using K-means consists of f
 
 \subsection{Data Preparation}
 
-\begin{itemize}
+The analysis begins by loading vulnerability descriptions from a dataset and using TF-IDF
+(Term Frequency-Inverse Document Frequency) vectorization to convert the text
+descriptions into numerical features~\cite{tfidf}. This technique helps capture the
+importance of words within the context of the entire corpus often used in information
+retrieval.
 
-	\item The analysis begins by loading vulnerability descriptions from a dataset.
-
-	\item TF-IDF (Term Frequency-Inverse Document Frequency) vectorization is employed to convert
-	      the text descriptions into numerical features~\cite{tfidf}. This technique helps capture the importance
-	      of words within the context of the entire corpus.
-
-\end{itemize}
 
 \subsection{Clustering}
 
@@ -464,15 +463,12 @@ The process of clustering vulnerability descriptions using K-means consists of f
 
 \subsection{Evaluation}
 
-\begin{itemize}
 
-	\item To assess the stability of the results, the clustering process is repeated multiple times
-	      with different random seeds.
+To assess the stability of the results, the clustering process is repeated multiple times
+with different random seeds. I did record a coherency score, but as this was just for exploratory
+purposes, the important part was if there was at least some indicator of this being a positive
+direction of inquiry.
 
-	\item The average training time across these runs is measured and reported as a performance
-	      metric.
-
-\end{itemize}
 
 \subsection{Interpretation}
 
@@ -498,94 +494,56 @@ Below are the example topics gained from the initial kmeans clustering:
 	\item Cluster 7: cvss oracle mysql vulnerability attacks server access base unauthorized score
 \end{itemize}
 
-The most promising from this initial set is cluster 4, highlighted in red above. Cross-site
+The most promising from this initial set is cluster four, highlighted in red above. Cross-site
 scripting, XSS and wordpress plugins is a common trend within CVEs.
-Figure~\ref{fig:cross_site_per_year} shows the counts per year of CVEs containing at least five of the
+Figure~\ref{fig:cross_site_per_year} shows the counts per year of CVEs published containing at least five of the
 words from that cluster. Five is arbitrary, this is more here just to show a potential insight in
 looking at these trends. In this case, from ~2019 to 2023 there is a large increase in these types
-of vulnerabilities, mainly in WordPress plugins.
+of vulnerabilities, mainly in WordPress plugins. You may notice the trend matches with the general
+trend of CVE publishes \ref{fig:cves_per_year}, this is a positive result, in that, the clustering
+is still following the underlying distribution and has not failed to capture the overall trend.
 
 Here are some example of the descriptions, for you viewing pleasure:
 
-\begin{Verbatim}[breaklines=true, breakanywhere=true, commandchars=\\\{\}]
-	[
-	\{\textbf{'description'}: 'Auth. (contributor+) Stored Cross-Site Scripting (XSS) '
-	'vulnerability in Codeat Glossary plugin <=~2.1.27 '
-	'versions.',
-	\textbf{'id'}: 'CVE-2023-24378'\},
-	\{\textbf{'description'}: 'Auth. (admin+) Stored Cross-Site Scripting (XSS) '
-	'vulnerability in E4J s.R.L. VikBooking Hotel Booking Engine '
-	'& PMS plugin <=~1.5.11 versions.',
-	\textbf{'id'}: 'CVE-2023-24396'\},
-	\{\textbf{'description'}: 'Auth. (admin+) Stored Cross-Site Scripting (XSS) '
-	'vulnerability in PINPOINT.WORLD Pinpoint Booking System '
-	'plugin <=~2.9.9.2.8 versions.',
-	\textbf{'id'}: 'CVE-2023-25062'\}
-	]
-\end{Verbatim}
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|p{0.2\textwidth}|p{0.7\textwidth}|}
+		\hline
+		\textbf{CVE ID} & \textbf{Description}                                                    \\
+		\hline
 
-\todo[inline]{ Some of this section should probably be moved elsewhere...}
-There are many such descriptions following the sort of format, highly succint and good for machine
-learning models to read.
+		CVE-2023-24378  & Auth. (contributor+) Stored Cross-Site Scripting (XSS) vulnerability in
+		Codeat Glossary plugin $\leq$~2.1.27 versions.                                            \\
 
-\begin{Verbatim}[breaklines=true, breakanywhere=true, commandchars=\\\{\}]
-	\{
-	\textbf{'description'}: 'The SvelteKit framework offers developers an option to '
-	'create simple REST APIs. This is done by defining a '
-	'`+server.js` file, containing endpoint handlers for '
-	'different HTTP methods.'
-	''
-	'SvelteKit provides out-of-the-box cross-site request forgery '
-	'(CSRF) protection to its users. The protection is '
-	'implemented at `kit/src/runtime/server/respond.js`. While '
-	'the implementation does a sufficient job of mitigating '
-	'common CSRF attacks, the protection can be bypassed in '
-	'versions prior to 1.15.2 by simply specifying an upper-cased '
-	'`Content-Type` header value. The browser will not send '
-	'uppercase characters, but this check does not block all '
-	'expected CORS requests.'
-	''
-	'If abused, this issue will allow malicious requests to be '
-	'submitted from third-party domains, which can allow '
-	"execution of operations within the context of the victim's "
-	'session, and in extreme scenarios can lead to unauthorized '
-	'access to users’ accounts. This may lead to all POST '
-	'operations requiring authentication being allowed in the '
-	'following cases: If the target site sets `SameSite=None` on '
-	'its auth cookie and the user visits a malicious site in a '
-	"Chromium-based browser; if the target site doesn't set the "
-	'`SameSite` attribute explicitly and the user visits a '
-	'malicious site with Firefox/Safari with tracking protections '
-	'turned off; and/or if the user is visiting a malicious site '
-	'with a very outdated browser.'
-	''
-	'SvelteKit 1.15.2 contains a patch for this issue. It is also '
-	'recommended to explicitly set `SameSite` to a value other '
-	'than `None` on authentication cookies especially if the '
-	'upgrade cannot be done in a timely manner.',
-	\}
-\end{Verbatim}
+		\hline
 
-This on the otherhand is the opposite, it shows an example of a description which is very much human
-read-able and great for someone who is not used to the space, unfortunately this does add a lot of
-noise to the description which is not ideal for our purposes.
+		CVE-2023-24396  & Auth. (admin+) Stored Cross-Site Scripting (XSS) vulnerability in E4J
+		s.R.L. VikBooking Hotel Booking Engine \& PMS plugin $\leq$~1.5.11 versions.              \\
 
-This was a good indicator that it is worth looking into these clusters further.
+		\hline
+
+		CVE-2023-25062  & Auth. (admin+) Stored Cross-Site Scripting (XSS) vulnerability in
+		PINPOINT.WORLD Pinpoint Booking System plugin $\leq$~2.9.9.2.8 versions.                  \\
+
+		\hline
+	\end{tabular}
+	\caption{CVE Descriptions for Various WordPress Plugins}
+	\label{tab:cve-descriptions}
+\end{table}
+
+This was a good indicator that it is worth looking into clustering further.
 
 \begin{figure}[H]
 	\centering
 
 	\includegraphics[width=0.8\textwidth]{figures/cross_site_per_year.png}
-	\caption{\label{fig:cross_site_per_year}CVEs with descriptions containing at least 5 of the
-		words from cluster 5}
+	\caption{\label{fig:cross_site_per_year}CVEs with descriptions containing at least five of the
+		words from cluster four}
 \end{figure}
-
-
-
 
 \subsection{Latent Dirichlet Allocation Methodology}
 
-Our approach to topic modeling utilizes Latent Dirichlet Allocation (LDA)~\cite{lda_origin} in conjunction with
+My next approach to topic modeling utilizes Latent Dirichlet Allocation (LDA)~\cite{lda_origin} in conjunction with
 Word2Vec~\cite{word2vec} embeddings to analyze Common Vulnerabilities and Exposures (CVE) descriptions. The
 methodology comprises several key steps:
 
@@ -630,7 +588,7 @@ We define a custom coherence metric based on Word2Vec similarities:
 	Coherence = \frac{\sum_{i=1}^{n}\sum_{j=i+1}^{n} similarity(word_i, word_j)}{\binom{n}{2}}
 \end{equation}
 
-where $n$ is the number of top words in a topic (10 in our implementation).
+where $n$ is the number of top words in a topic (10 in my implementation).
 
 \subsubsection{LDA Model Training}
 
@@ -858,14 +816,14 @@ expected to share similarities in some respects while differing in others. In th
 the databases share common knowledge about vulnerabilities, they differ in the experience of the
 individuals rating the metrics~\cite{bayes}.
 
-Our model builds upon the original framework presented in Section 4.1 of~\cite{bayes}. It assumes
+The model builds upon the original framework presented in Section 4.1 of~\cite{bayes}. It assumes
 the existence of a true value for each CVSS dimension, acknowledging that the database sample may
 deviate from this true value. These potential inaccuracies are represented using confusion matrices
 (see Equation~\ref{confusion_matrix_formula}).
 
 A key distinction from the original model is the variability in the number of categorical choices
 for each CVSS metric. While the original model consistently used three variables for each CVSS
-metric, our adapted model accommodates between two to four categorical choices, depending on the
+metric, my adapted model accommodates between two to four categorical choices, depending on the
 specific CVSS dimension being evaluated.
 
 \subsubsection{Confusion Matrix}

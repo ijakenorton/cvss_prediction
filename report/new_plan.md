@@ -85,4 +85,62 @@ there.
 does that overlap matter.
 
 
+# Future work
 
+<!-- \begin{table}[h] -->
+<!-- 	\centering -->
+<!-- 	\begin{tabular}{|p{0.2\textwidth}|p{0.7\textwidth}|} -->
+<!-- 		\hline -->
+<!-- 		\textbf{CVE ID} & \textbf{Description}                                                                                                                           \\ -->
+<!-- 		\hline -->
+<!-- 		CVE-2023-24378  & Auth. (contributor+) Stored Cross-Site Scripting (XSS) vulnerability in Codeat Glossary plugin <=~2.1.27 versions.                             \\ -->
+<!-- 		\hline -->
+<!-- 		CVE-2023-24396  & Auth. (admin+) Stored Cross-Site Scripting (XSS) vulnerability in E4J s.R.L. VikBooking Hotel Booking Engine \& PMS plugin <=~1.5.11 versions. \\ -->
+<!-- 		\hline -->
+<!-- 		CVE-2023-25062  & Auth. (admin+) Stored Cross-Site Scripting (XSS) vulnerability in PINPOINT.WORLD Pinpoint Booking System plugin <=~2.9.9.2.8 versions.         \\ -->
+<!-- 		\hline -->
+<!-- 	\end{tabular} -->
+<!-- 	\caption{CVE Descriptions for Various WordPress Plugins} -->
+<!-- 	\label{tab:cve-descriptions} -->
+<!-- \end{table} -->
+<!-- \todo[inline]{ Some of this section should probably be moved elsewhere...} -->
+<!-- There are many such descriptions following the sort of format, highly succint and good for machine -->
+<!-- learning models to read. -->
+
+<!-- \begin{Verbatim}[breaklines=true, breakanywhere=true, commandchars=\\\{\}] -->
+<!-- 	\{ -->
+<!-- 	\textbf{'description'}: 'The SvelteKit framework offers developers an option to ' -->
+<!-- 	'create simple REST APIs. This is done by defining a ' -->
+<!-- 	'`+server.js` file, containing endpoint handlers for ' -->
+<!-- 	'different HTTP methods.' -->
+<!-- 	'' -->
+<!-- 	'SvelteKit provides out-of-the-box cross-site request forgery ' -->
+<!-- 	'(CSRF) protection to its users. The protection is ' -->
+<!-- 	'implemented at `kit/src/runtime/server/respond.js`. while ' -->
+<!-- 	'the implementation does a sufficient job of mitigating ' -->
+<!-- 	'common csrf attacks, the protection can be bypassed in ' -->
+<!-- 	'versions prior to 1.15.2 by simply specifying an upper-cased ' -->
+<!-- 	'`content-type` header value. the browser will not send ' -->
+<!-- 	'uppercase characters, but this check does not block all ' -->
+<!-- 	'expected cors requests.' -->
+<!-- 	'' -->
+<!-- 	'if abused, this issue will allow malicious requests to be ' -->
+<!-- 	'submitted from third-party domains, which can allow ' -->
+<!-- 	"execution of operations within the context of the victim's " -->
+<!-- 	'session, and in extreme scenarios can lead to unauthorized ' -->
+<!-- 	'access to users’ accounts. this may lead to all post ' -->
+<!-- 	'operations requiring authentication being allowed in the ' -->
+<!-- 	'following cases: if the target site sets `samesite=none` on ' -->
+<!-- 	'its auth cookie and the user visits a malicious site in a ' -->
+<!-- 	"chromium-based browser; if the target site doesn't set the " -->
+<!-- 	'`samesite` attribute explicitly and the user visits a ' -->
+<!-- 	'malicious site with firefox/safari with tracking protections ' -->
+<!-- 	'turned off; and/or if the user is visiting a malicious site ' -->
+<!-- 	'with a very outdated browser.' -->
+<!-- 	'' -->
+<!-- 	'sveltekit 1.15.2 contains a patch for this issue. it is also ' -->
+<!-- 	'recommended to explicitly set `samesite` to a value other ' -->
+<!-- 	'than `none` on authentication cookies especially if the ' -->
+<!-- 	'upgrade cannot be done in a timely manner.', -->
+<!-- 	\} -->
+<!-- \end{verbatim} -->

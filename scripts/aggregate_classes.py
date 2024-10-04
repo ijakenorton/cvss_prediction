@@ -108,7 +108,7 @@ def create_topic_data():
         os.makedirs(f"{output_dir}/{i}", exist_ok=True)
 
     topic_groups = read_data(
-        f"./lda_word2vec_balanced_{config.current_metric}_{config.num_topics}/lda_balanced_topics.json"
+        f"./unbalanced/lda_word2vec_unbalanced_{config.current_metric}_{config.num_topics}/lda_unbalanced_topics.json"
     )["topic_groups"]
     topics = extract_topics(topic_groups)
     # data = read_data(f"../results/lda_compare/topic_assignments_{i}.json")
@@ -123,7 +123,7 @@ def create_topic_data():
     #     f"./lda_word2vec_balanced_fasttext_{num_topics}/topic_assignments_lda_model_t{num_topics}_asymmetric_e0.1_p30_i200_seed0.json"
     # )
     data = read_data(
-        f"./lda_word2vec_balanced_{config.current_metric}_{config.num_topics}/topic_assignments_lda_model_t{config.num_topics}_asymmetric_e0.1_p30_i200_seed0.json"
+        f"./unbalanced/lda_word2vec_unbalanced_{config.current_metric}_{config.num_topics}/topic_assignments_lda_model_t{config.num_topics}_asymmetric_e0.1_p30_i200_seed0.json"
     )
     topic_data = {}
     for desc in data:
