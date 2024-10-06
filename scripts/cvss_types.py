@@ -1,4 +1,4 @@
-from typing import TypedDict, List, Literal
+from typing import TypedDict, List, Literal, Tuple, Iterator
 
 
 class MetricNames:
@@ -10,6 +10,21 @@ class MetricNames:
     confidentialityImpact: Literal["confidentialityImpact"] = "confidentialityImpact"
     integrityImpact: Literal["integrityImpact"] = "integrityImpact"
     availabilityImpact: Literal["availabilityImpact"] = "availabilityImpact"
+
+    def metrics(self):
+        return [
+            "attackVector",
+            "attackComplexity",
+            "privilegesRequired",
+            "userInteraction",
+            "scope",
+            "confidentialityImpact",
+            "integrityImpact",
+            "availabilityImpact",
+        ]
+
+    def __iter__(self):
+        return iter(self.metrics())
 
 
 # Define a type that includes all possible metric values

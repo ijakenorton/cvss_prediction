@@ -98,32 +98,35 @@ def plot_best_clusters():
     # plot.plot_all_metrics_gt_grid(topic_counts, nvd_counts, "18_only_best_topics")
 
 
-def create_topic_data():
+def create_topic_data(current_metric=None, num_topics=None):
     import config
 
-    output_dir = f"./temp_plots/counts_{config.current_metric}_{config.num_topics}/"
+    if not current_metric:
+        current_metric = config.current_metric
+
+    if not num_topics:
+        num_topics = config.num_topics
+    prefix = ""
+    balanced = "balanced"
+
+    if not config.balanced:
+        prefix = "unbalanced/"
+        balanced = "unbalanced"
+
+    output_dir = f"./temp_plots{prefix}/counts_{current_metric}_{num_topics}/"
     os.makedirs(output_dir, exist_ok=True)
 
     for i in range(1, 6):
         os.makedirs(f"{output_dir}/{i}", exist_ok=True)
 
     topic_groups = read_data(
-        f"./unbalanced/lda_word2vec_unbalanced_{config.current_metric}_{config.num_topics}/lda_unbalanced_topics.json"
+        f"./{prefix}lda_word2vec_{balanced}_{current_metric}_{num_topics}/lda_{balanced}_topics.json"
     )["topic_groups"]
-    topics = extract_topics(topic_groups)
-    # data = read_data(f"../results/lda_compare/topic_assignments_{i}.json")
-    # data = read_data(
-    #     f"../data/results/lda_word2vec_desc_compare_output_seeds/topic_assignments_{i}.json"
-    # )
-    # data = read_data(
-    #     f"./lda_word2vec_balanced_{num_topics}/topic_assignments_lda_model_t{num_topics}_asymmetric_e0.1_p30_i200_seed0.json"
-    # )
 
-    # data = read_data(
-    #     f"./lda_word2vec_balanced_fasttext_{num_topics}/topic_assignments_lda_model_t{num_topics}_asymmetric_e0.1_p30_i200_seed0.json"
-    # )
+    topics = extract_topics(topic_groups)
+
     data = read_data(
-        f"./unbalanced/lda_word2vec_unbalanced_{config.current_metric}_{config.num_topics}/topic_assignments_lda_model_t{config.num_topics}_asymmetric_e0.1_p30_i200_seed0.json"
+        f"./{prefix}lda_word2vec_{balanced}_{current_metric}_{num_topics}/topic_assignments_lda_model_t{num_topics}_asymmetric_e0.1_p30_i200_seed0.json"
     )
     topic_data = {}
     for desc in data:
@@ -144,7 +147,7 @@ def create_topic_data():
             topic_data[topic], 3
         )
 
-        topic_counts[topic]["topic_words"] = topics[config.num_topics][topic]
+        topic_counts[topic]["topic_words"] = topics[num_topics][topic]
 
     return topic_counts, data
 

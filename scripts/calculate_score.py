@@ -1,18 +1,122 @@
 import numpy as np
+import os
+import math
+from pprint import pprint
+from sklearn.metrics import (
+    normalized_mutual_info_score,
+    adjusted_mutual_info_score,
+    homogeneity_score,
+    completeness_score,
+    v_measure_score,
+)
+from collections import defaultdict
+import matplotlib.pyplot as plt
 from sklearn.metrics import f1_score
-from collections import Counter
 import aggregate_classes
+import metric_counts
 
-num_topics = [14, 16, 18, 20, 50, 75, 100]
+
+def calculate_best_normalized_entropy(topic_counts, metric):
+    best_score = -1  # Initialize with a value lower than the possible range (0 to 1)
+    best_topic = None
+
+    for topic_num, topic_data in topic_counts.items():
+        category_counts = topic_data[metric]
+        total_count = sum(category_counts.values())
+
+        if total_count == 0:
+            continue  # Skip topics with no counts to avoid division by zero
+
+        entropy = 0
+        for count in category_counts.values():
+            if count > 0:
+                p = count / total_count
+                entropy -= p * math.log2(p)
+
+        # Normalize the entropy
+        max_entropy = math.log2(len(category_counts))
+        normalized_entropy = entropy / max_entropy if max_entropy > 0 else 1
+        score = 1 - normalized_entropy  # Higher score means lower entropy
+
+        if score > best_score:
+            best_score = score
+            best_topic = topic_num
+
+    if best_topic is None:
+        return None, 0  # Return None and 0 if no valid topics were found
+
+    return best_topic, best_score
 
 
-def calculate_purity_balanced(topic_counts, balanced_counts, metric):
-    categories = list(balanced_counts[metric].keys())
+def calculate_nmi_for_metric(topic_assignments, true_labels):
+    """
+    Calculate Normalized Mutual Information score.
 
+    :param topic_assignments: List of topic assignments for each document
+    :param true_labels: List of true category labels for each document
+    :return: NMI score
+    """
+    return adjusted_mutual_info_score(true_labels, topic_assignments)
+
+
+def calculate_v_measure(topic_assignments, true_labels):
+    """
+    Calculate V-measure and its components for topic modeling results.
+
+    :param topic_assignments: List of topic assignments for each document
+    :param true_labels: List of true category labels for each document
+    :return: Dictionary containing homogeneity, completeness, and V-measure scores
+    """
+    homogeneity = homogeneity_score(true_labels, topic_assignments)
+    completeness = completeness_score(true_labels, topic_assignments)
+    v_measure = v_measure_score(true_labels, topic_assignments)
+
+    return {
+        "homogeneity": homogeneity,
+        "completeness": completeness,
+        "v_measure": v_measure,
+    }
+
+
+def evaluate_topic_model_for_metric(topic_counts, balanced_counts, metric):
+    """
+    Evaluate the topic model for a single metric.
+
+    :param topic_counts: Dictionary of topic assignments and counts for the metric
+    :param balanced_counts: Dictionary of balanced counts for the metric's classes
+    :param metric: The name of the metric being evaluated
+    :return: NMI score for the metric
+    """
+    true_labels = []
+    topic_assignments = []
+
+    # Create true labels based on balanced counts
+    for category, count in balanced_counts[metric].items():
+        true_labels.extend([category] * count)
+
+    # Create topic assignments based on topic counts
+    for topic, counts in topic_counts.items():
+        for category, count in counts[metric].items():
+            topic_assignments.extend([topic] * count)
+
+    # Ensure both lists have the same length
+    min_length = min(len(true_labels), len(topic_assignments))
+    true_labels = true_labels[:min_length]
+    topic_assignments = topic_assignments[:min_length]
+
+    return calculate_v_measure(topic_assignments, true_labels)
+
+
+def calculate_purity(topic_counts, metric, score):
     # Find the best topic for this metric
-    best_topic = max(topic_counts.items(), key=lambda x: max(x[1][metric].values()))
-
-    best_topic_num, best_topic_data = best_topic
+    best_topic_num = -1
+    best_count = 0
+    best_topic_data = {}
+    for topic_num, topic_count in topic_counts.items():
+        if topic_count[metric][score] > best_count:
+            best_count = topic_count[metric][score]
+            best_topic_num = topic_num
+            best_topic_data = topic_count
 
     total_count = sum(best_topic_data[metric].values())
     max_category_count = max(best_topic_data[metric].values())
@@ -22,101 +126,122 @@ def calculate_purity_balanced(topic_counts, balanced_counts, metric):
     return best_topic_num, purity
 
 
-def calculate_f1_score_balanced(topic_counts, balanced_data, metric):
-    categories = list(balanced_data[metric].keys())
+def calculate_f1_score(topic_counts, ground_truth_counts, metric, score):
 
     # Find the best topic for this metric
-    best_topic = max(topic_counts.items(), key=lambda x: max(x[1][metric].values()))
+    best_topic_num = -1
+    best_count = 0
+    best_topic_data = {}
+    for topic_num, topic_count in topic_counts.items():
+        if topic_count[metric][score] > best_count:
+            best_count = topic_count[metric][score]
+            best_topic_num = topic_num
+            best_topic_data = topic_count
 
-    best_topic_num, best_topic_data = best_topic
-
-    # Create true labels and predicted labels
     true_labels = []
     predicted_labels = []
 
-    for category, count in balanced_data[metric].items():
+    for category, count in ground_truth_counts[metric].items():
         true_labels.extend([category] * count)
         predicted_category = max(
             best_topic_data[metric], key=best_topic_data[metric].get
         )
         predicted_labels.extend([predicted_category] * count)
 
-    # Calculate F1 score
     f1 = f1_score(true_labels, predicted_labels, average="weighted")
 
     return best_topic_num, f1
 
 
-def evaluate_topic_model_balanced(topic_counts, balanced_data):
-    metrics = [metric for metric in balanced_data.keys() if metric != "topic_words"]
-
-    results = {}
-
-    for metric in metrics:
-        best_topic_purity, purity = calculate_purity_balanced(
-            topic_counts, balanced_data, metric
+def evaluate_topic_model(topic_counts, ground_truth_data, metric, num_topics):
+    ground_truth_counts = metric_counts.calculate_metric_counts(ground_truth_data, 3)
+    results = {metric: {}}
+    for score in ground_truth_counts[metric]:
+        best_topic_purity, purity = calculate_purity(topic_counts, metric, score)
+        best_topic_entropy, entropy = calculate_best_normalized_entropy(
+            topic_counts, metric
         )
-        best_topic_f1, f1 = calculate_f1_score_balanced(
-            topic_counts, balanced_data, metric
+        v_measure = evaluate_topic_model_for_metric(
+            topic_counts, ground_truth_counts, metric
         )
-
-        results[metric] = {
+        results[metric][score] = {
             "best_topic_purity": best_topic_purity,
             "purity": purity,
-            "best_topic_f1": best_topic_f1,
-            "f1_score": f1,
+            "best_topic_entropy": best_topic_entropy,
+            "entropy": entropy,
         }
+
+    print(f"Metric: {metric}, Topics: {num_topics} entropy score {v_measure}")
 
     return results
 
 
-# Function to plot the results
-def plot_topic_model_performance_balanced(topic_numbers, evaluation_results):
+def plot_topic_model_performance(topic_numbers, evaluation_results, metric):
+    import config
+
+    prefix = ""
+    if not config.balanced:
+        prefix = "unbalanced/"
     metrics = list(evaluation_results[topic_numbers[0]].keys())
 
-    fig, axs = plt.subplots(len(metrics), 2, figsize=(15, 5 * len(metrics)))
-    fig.suptitle(
-        "Topic Model Performance Across Different Numbers of Topics (Balanced Data)"
-    )
+    # Separate plots for Purity and F1 Score
+    for measure in ["purity", "entropy"]:
+        fig, axs = plt.subplots(
+            len(metrics), 1, figsize=(15, 6 * len(metrics)), squeeze=False
+        )
+        fig.suptitle(
+            f"Topic Model Performance - {measure.capitalize()} Across Different Numbers of Topics",
+            fontsize=20,
+            fontweight="bold",
+        )
 
-    for i, metric in enumerate(metrics):
-        purity_scores = [
-            results[metric]["purity"] for results in evaluation_results.values()
-        ]
-        f1_scores = [
-            results[metric]["f1_score"] for results in evaluation_results.values()
-        ]
+        for i, metric in enumerate(metrics):
+            ax = axs[i, 0]
+            scores = evaluation_results[topic_numbers[0]][metric]
+            categories = list(scores.keys())
 
-        axs[i, 0].plot(topic_numbers, purity_scores, marker="o")
-        axs[i, 0].set_title(f"{metric} - Purity")
-        axs[i, 0].set_xlabel("Number of Topics")
-        axs[i, 0].set_ylabel("Purity Score")
+            for category in categories:
+                category_scores = [
+                    evaluation_results[n][metric][category][measure]
+                    for n in topic_numbers
+                ]
+                ax.plot(topic_numbers, category_scores, marker="o", label=category)
 
-        axs[i, 1].plot(topic_numbers, f1_scores, marker="o")
-        axs[i, 1].set_title(f"{metric} - F1 Score")
-        axs[i, 1].set_xlabel("Number of Topics")
-        axs[i, 1].set_ylabel("F1 Score")
+            ax.set_title(f"{metric} - {measure.capitalize()}")
+            ax.set_xlabel("Number of Topics")
+            ax.set_ylabel(f"{measure.capitalize()} Score")
+            ax.legend(title="Categories", bbox_to_anchor=(1.05, 1), loc="upper left")
+            ax.grid(True, linestyle="--", alpha=0.7)
 
-    plt.tight_layout()
-    plt.savefig("topic_model_performance_balanced.png")
-    plt.close()
+        plt.tight_layout()
+        outpath = f"./topic_eval/{prefix}topic_model_performance_{measure}_ground_truth_{metric}.png"
+        print(f"outputting graph to: {outpath}")
+        plt.savefig(
+            outpath,
+            dpi=300,
+            bbox_inches="tight",
+        )
+        plt.close()
 
 
-# Example usage:
-# balanced_data = {
-#     "attackComplexity": {"HIGH": 20000, "LOW": 20000},
-#     "attackVector": {"NETWORK": 20000, "ADJACENT_NETWORK": 20000, "LOCAL": 20000, "PHYSICAL": 20000},
-#     # ... other metrics ...
-# }
-# evaluation_results = evaluate_topic_model_balanced(topic_counts, balanced_data)
-# for metric, scores in evaluation_results.items():
-#     print(f"{metric}:")
-#     print(f"  Best Topic (Purity): {scores['best_topic_purity']}, Purity: {scores['purity']:.4f}")
-#     print(f"  Best Topic (F1): {scores['best_topic_f1']}, F1 Score: {scores['f1_score']:.4f}")
-#     print()
+topic_numbers = [14, 16, 18, 20, 50, 75, 100]
+metric_names = [
+    "privilegesRequired",
+    "userInteraction",
+    "confidentialityImpact",
+    "integrityImpact",
+    "availabilityImpact",
+]
 
-num_topics = [14, 16, 18, 20, 50, 75, 100]
 # To compare different numbers of topics:
-# topic_numbers = [10, 20, 30, 40, 50]
-# all_evaluation_results = {n: evaluate_topic_model_balanced(...) for n in topic_numbers}
-# plot_topic_model_performance_balanced(topic_numbers, all_evaluation_results)
+for metric in metric_names:
+    all_evaluation_results = {
+        n: evaluate_topic_model(
+            *aggregate_classes.create_topic_data(current_metric=metric, num_topics=n),
+            metric,
+            n,
+        )
+        for n in topic_numbers
+    }
+
+    plot_topic_model_performance(topic_numbers, all_evaluation_results, metric)

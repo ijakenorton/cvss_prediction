@@ -244,8 +244,7 @@ version, even if it is not the most recent.
 Temporal metrics would be useful in general for a CVSS score, however NVD do not store these
 temporal metrics. As far as I can tell there is no reason given for this specifically, though
 discourse
-\href{https://security.stackexchange.com/questions/270257/cvss-v3-and-v3-1-missing-temporal-metrics-exploit-code-maturity-and-remediation
-}{(Stack exchange post)}~\cite{stack_exchange} around the subject suggests that this is due to a lack
+\href{https://security.stackexchange.com/questions/270257/cvss-v3-and-v3-1-missing-temporal-metrics-exploit-code-maturity-and-remediation}{(Stack exchange post)}~\cite{stack_exchange} around the subject suggests that this is due to a lack
 of verifiable reporting. From my perspective, both remidiation level and report confidence feel like
 they could have scores attributed to them, however finding verifiable reports on the exploits seen
 in the wild is difficult. There are two relatively new organisations on this front,
@@ -543,11 +542,27 @@ This was a good indicator that it is worth looking into clustering further.
 
 \subsection{Latent Dirichlet Allocation Methodology}
 
-My next approach to topic modeling utilizes Latent Dirichlet Allocation (LDA)~\cite{lda_origin} in conjunction with
-Word2Vec~\cite{word2vec} embeddings to analyze Common Vulnerabilities and Exposures (CVE) descriptions. The
-methodology comprises several key steps:
+My next approach to topic modeling utilizes Latent Dirichlet Allocation (LDA)~\cite{lda_origin} in
+conjunction with Word2Vec~\cite{word2vec} embeddings to analyze Common Vulnerabilities and Exposures
+(CVE) descriptions. As an unsupervised learning method, LDA is well-suited for exploring large
+collections of text data without predefined categories~\cite{lda_origin, latent_handbook}. This is
+particularly valuable in the CVE context, where we aim to discover latent themes in vulnerability
+descriptions without prior knowledge of these themes. LDA's soft clustering approach allows CVE
+descriptions to belong to multiple topics with varying probabilities~\cite{latent_handbook}, which is beneficial given
+the multi-faceted nature of many vulnerabilities. Furthermore, LDA produces human-interpretable
+topics~\cite{lda_origin}, facilitating easier derivation of insights from the clustering results.
+The paper \say{Security trend analysis with CVE topic models, by Neuhaus \&
+	Zimmerman(2010)}\cite{cve_topic_modelling} uses this technique to great effect on the NVD dataset up
+to 2009, unfortunately I only discovered this paperly late in the day, however I will be doing some
+follow up with similar process to them in future work. In addition to this extra step, there are
+many extra steps to be investigated that will not be covered in this report. However, as this is a
+480 project that will be carried on into next year, this baseline of research will provide a strong
+starting point.
+todo[inline]{Should I omit or move the section about future work somewhere else?}
 
-\subsubsection{Data Preprocessing} We begin by preprocessing the CVE descriptions:
+The methodology comprises several key steps:
+
+\subsubsection{Data Preprocessing} I begin by preprocessing the CVE descriptions:
 
 \begin{itemize}
 
@@ -577,12 +592,14 @@ This embedding captures semantic relationships between words in the CVE context.
 
 The parameters chosen here just felt like reasonable defaults and have not been explored. There are
 also other options in using something like pretrained fasttext~\cite{fasttext} as used in
-\cite{nvd_clustering_fasttext}
+\cite{nvd_clustering_fasttext}.
 
-
+\todo[inline]{As I haven't really used these in a rigorous way, I am unsure if I should keep this
+	in, I have not gone into detail on these as I feel like it may be wasted effort if I do not use them
+	too much }
 \subsubsection{Topic Coherence Metric}
 
-We define a custom coherence metric based on Word2Vec similarities:
+I define a custom coherence metric based on Word2Vec similarities:
 
 \begin{equation}
 	Coherence = \frac{\sum_{i=1}^{n}\sum_{j=i+1}^{n} similarity(word_i, word_j)}{\binom{n}{2}}
@@ -590,13 +607,23 @@ We define a custom coherence metric based on Word2Vec similarities:
 
 where $n$ is the number of top words in a topic (10 in my implementation).
 
+In addition I have kept track of the C-V coherence score used as default by Gensim, which comes from
+\cite{cv_coherence}
+
+Also have used perplexity
 \subsubsection{LDA Model Training}
 
 \todo[inline]{Update with the actual parameters, unsure if worth including the two different grid
 	search I did one for 14 - 20  clusters, and one for 100 clusters as I thought that was likely what I would
 	go with}
 
-We employ a grid search approach to optimize LDA hyperparameters:
+I have done many different iterations of the models with varying numbers of clusters and
+hyperparameters. In grid search attempts I found that the different coherences metrics did not agree
+with each other in addition as we are searching for unknown topics in a unsupervised fashion, it is
+dubious how helpful these measures of fit are in any case. My results of such exploration will be
+found in the appendices. The hyperparameters below are broadly matching what I found to be the best,
+however the main metric came from looking at the actual clustering results, and the biggest impact
+came from the number of clusters. This number ranged from 14 - 200
 
 \begin{itemize}
 
@@ -612,19 +639,20 @@ We employ a grid search approach to optimize LDA hyperparameters:
 
 \end{itemize}
 
-The LDA model is implemented using Gensim's LdaMulticore, allowing for parallel processing.
+The LDA model is implemented using Gensim's LdaMulticore\cite{gensim}, allowing for parallel
+processing. In general I found Gensim very nice to work with, the model training was fast and the
+API made sense.
 
-\subsubsection{Model Evaluation and Selection}
+% \subsubsection{Model Evaluation and Selection}
 
-Models are evaluated based on the average topic coherence:
+% Models are evaluated based on the average topic coherence:
 
-\begin{equation}
-	Score = \frac{1}{T}\sum_{t=1}^{T} Coherence(topic_t)
-\end{equation}
+% \begin{equation}
+% 	Score = \frac{1}{T}\sum_{t=1}^{T} Coherence(topic_t)
+% \end{equation}
 
-where $T$ is the total number of topics.
+% where $T$ is the total number of topics.
 
-The top 5 models, ranked by coherence score, are saved for further analysis.
 
 \subsubsection{Topic Assignment and Analysis}
 
@@ -666,43 +694,91 @@ For each class within each CVSS metric, we identify the most representative clus
 
 	\item Calculate the proportion of documents from each class assigned to each topic cluster.
 
-	\item Use a metric such as lift or odds ratio to determine which cluster best represents each class:
+	\item The cluster with the highest count for a given class is considered its best representative.
 
-	      \begin{equation}
-		      Lift(class, cluster) = \frac{P(class | cluster)}{P(class)}
-	      \end{equation}
-
-	\item The cluster with the highest lift for a given class is considered its best representative.
+	\item Calculate the purity score for all the different numbers of topics
 
 \end{itemize}
 
-\todo[inline]{pretty sure I dont need to spell this out and would just show it but its here for
-	now...}
-\subsubsection{Visualization and Interpretation}
+With the best cluster from a given set discovered, we now need to decided which number of clusters
+provides the best overall fit. A rudimentary approach is to just use the purity score.
 
-We create visualizations to aid in the interpretation of results:
+\section{Purity as a Cluster Evaluation Metric}
 
-\begin{itemize}
+Purity is a simple external evaluation measure for cluster quality, particularly useful when
+predefined classes are available for the data.
 
-	\item Generate heatmaps showing the distribution of classes across clusters for each CVSS metric.
+\subsection{Definition and Calculation}
 
-	\item Bar charts of the most frequent terms in the representative clusters for each class.
+For a set of clusters $\Omega = \{\omega_1, \omega_2, ..., \omega_K\}$ and a set of classes $C = \{c_1, c_2, ..., c_J\}$, purity is defined as:
 
-	\item Plot multidimensional scaling (MDS) or t-SNE visualizations of document-topic distributions, colored by CVSS metric classes.
+\begin{equation}
+	\text{purity}(\Omega, C) = \frac{1}{N} \sum_{k=1}^K \max_j |\omega_k \cap c_j|
+\end{equation}
 
-\end{itemize}
+where $N$ is the total number of objects, and $|\omega_k \cap c_j|$ is the number of objects in cluster $\omega_k$ that belong to class $c_j$.
 
-Interpretation of these visualizations involves:
+\subsection{Interpretation}
 
-\begin{itemize}
+Purity ranges from 0 to 1, where 1 indicates perfect purity. A higher purity value generally
+suggests better clustering quality with respect to the ground truth classes\cite{purity_info_ret}.
 
-	\item Analyzing the semantic themes of representative clusters for each CVSS metric class.
+In the context of topic modeling for CVSS metrics, high purity would indicate that each discovered
+topic strongly corresponds to a specific CVSS category.
 
-	\item Identifying common vulnerability types or attack vectors associated with specific CVSS ratings.
+\subsection{Limitations}
 
-	\item Examining any unexpected associations between topics and CVSS metrics.
+It's important to note that purity tends to increase as the number of clusters increases, with a
+trivial solution of perfect purity when each object is in its own cluster \cite{v-measure}.
+Therefore, it should be interpreted cautiously, especially when comparing models with different
+numbers of topics however as seen by
+figures~\ref{fig:purity_integrity}, \ref{fig:purity_20_availability}, \ref{fig:purity_20_confidentiality}
 
-\end{itemize}
+\begin{figure}[h] \centering
+	\includegraphics[width=0.8\textwidth]{figures/purity/topic_model_performance_purity_ground_truth_integrityImpact.png}
+	\caption{\label{fig:purity_integrity}Figures showing the purity score
+		for when the topics have been assigned with a focus on integrityImpact, split by the different
+		possible classes}
+\end{figure}
+\begin{figure}[h] \centering
+	\includegraphics[width=0.8\textwidth]{figures/purity/topic_model_performance_purity_ground_truth_availabilityImpact.png}
+	\caption{\label{fig:purity_20_availability}Figures showing the purity score
+		for when the topics have been assigned with a focus on availabilityImpact, split by the different
+		possible classes}
+\end{figure}
+\begin{figure}[h] \centering
+	\includegraphics[width=0.8\textwidth]{figures/purity/topic_model_performance_purity_ground_truth_confidentialityImpact.png}
+	\caption{\label{fig:purity_20_confidentiality}Figures showing the purity score
+		for when the topics have been assigned with a focus on confidentialityImpact, split by the different
+		possible classes}
+\end{figure}
+% \todo[inline]{pretty sure I dont need to spell this out and would just show it but its here for
+% 	now...}
+% \subsubsection{Visualization and Interpretation}
+
+% We create visualizations to aid in the interpretation of results:
+
+% \begin{itemize}
+
+% 	\item Generate heatmaps showing the distribution of classes across clusters for each CVSS metric.
+
+% 	\item Bar charts of the most frequent terms in the representative clusters for each class.
+
+% 	\item Plot multidimensional scaling (MDS) or t-SNE visualizations of document-topic distributions, colored by CVSS metric classes.
+
+% \end{itemize}
+
+% Interpretation of these visualizations involves:
+
+% \begin{itemize}
+
+% 	\item Analyzing the semantic themes of representative clusters for each CVSS metric class.
+
+% 	\item Identifying common vulnerability types or attack vectors associated with specific CVSS ratings.
+
+% 	\item Examining any unexpected associations between topics and CVSS metrics.
+
+% \end{itemize}
 
 \subsubsection{Cluster Merging and Refinement}
 
@@ -730,6 +806,10 @@ To potentially improve class representation, we explore merging related clusters
 
 \end{itemize}
 
+The current merging approach is possibly a bit crude, Neuhaus \&
+Zimmerman(2010)\cite{cve_topic_modelling} merged the clusters based on the similarity of the topic
+words found by the model, this is something I intend to try in future work.
+
 \subsubsection{Evaluation and Insights}
 
 \subsection{Elephant in the Room, Data Imbalance}
@@ -751,6 +831,7 @@ see in the results that makes the interpration of the results easier and more ho
 actually showing the same thing.
 
 \subsection{Results}
+
 Ideally after this process we would compare the clusters with the assigned CWE, unfortunately due to the
 nature of both the topics based on some k-words and the CWE also being a description of a type of
 vulnerability I do not have time to automate the cross referencing between both my found clusters
