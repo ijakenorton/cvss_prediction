@@ -76,9 +76,18 @@ def plot_diagnostics(trace):
 def compute_metropolis_hastings():
 
     nvd, mitre = counts(read_data())
+<<<<<<< Updated upstream
     print(nvd, mitre)
     exit()
 
+=======
+    print(nvd)
+    print()
+    print()
+    print()
+    print(mitre)
+    exit()
+>>>>>>> Stashed changes
     nvd_observed = {
         metric: np.array(list(data.values())) for metric, data in nvd.items()
     }
