@@ -291,6 +291,98 @@ def plot_merged_top_k_topics_category_focus_counts(
     metric,
     category,
     k=3,
+    num_topics=18,
+):
+    import config
+
+    prefix = "" if config.balanced else "unbalanced/"
+    path = f"./temp_plots/{prefix}counts_{metric}_{num_topics}/{k}/merged_top_k_topics_category_focus_counts"
+
+    categories = list(next(iter(topic_counts.values()))[metric].keys())
+
+    # Find top k topics for the specified metric and category
+    top_k_topics = sorted(
+        topic_counts.items(),
+        key=lambda x: x[1][metric][category],
+        reverse=True,
+    )[:k]
+
+    merged_counts = []
+    for cat in categories:
+        merged_value = sum(topic_data[metric][cat] for _, topic_data in top_k_topics)
+        merged_counts.append(merged_value)
+
+    # Create the plot
+    fig, ax = plt.subplots(figsize=(14, 8))  # Increased figure size
+    x = np.arange(len(categories))
+    width = 0.4  # Decreased bar width
+
+    rects = ax.bar(x, merged_counts, width, label=f"Top {k} Topics", color="skyblue")
+
+    # Highlight the focus category
+    focus_index = categories.index(category)
+    ax.bar(x[focus_index], merged_counts[focus_index], width, color="blue")
+
+    ax.set_ylabel("Count", fontsize=16)  # Increased font size
+    ax.set_title(
+        f"{metric} - Merged Top {k} Topics Counts (Focus on {category})", fontsize=20
+    )  # Increased font size
+    ax.set_xticks(x)
+    ax.set_xticklabels(
+        categories, rotation=45, ha="right", fontsize=12
+    )  # Increased font size
+    ax.tick_params(axis="y", labelsize=12)  # Increased y-axis tick label font size
+    ax.legend(fontsize=14)  # Increased legend font size
+
+    # Add value labels on the bars
+    def autolabel(rects):
+        for rect in rects:
+            height = rect.get_height()
+            ax.annotate(
+                f"{height}",
+                xy=(rect.get_x() + rect.get_width() / 2, height),
+                xytext=(0, 3),
+                textcoords="offset points",
+                ha="center",
+                va="bottom",
+                fontsize=10,  # Increased font size
+            )
+
+    autolabel(rects)
+
+    # Add topic numbers and top words
+    topic_info = f"Top {k} Topics for {category}: " + ", ".join(
+        [f"{topic}" for topic, _ in top_k_topics]
+    )
+    topic_words = set()
+    top_k = 5 if k != 1 else 10
+    for _, topic_data in top_k_topics:
+        topic_words.update(topic_data["topic_words"][:top_k])
+
+    topic_words_text = f"Common Topic Words:\n" + ", ".join(list(topic_words)[:15])
+
+    plt.text(
+        0.5,
+        -0.25,  # Moved text slightly lower
+        topic_info + "\n" + topic_words_text,
+        ha="center",
+        va="center",
+        transform=ax.transAxes,
+        wrap=True,
+        fontsize=12,  # Increased font size
+    )
+
+    plt.tight_layout()
+    plt.savefig(f"{path}_{metric}_{category}_k{k}.png", dpi=300, bbox_inches="tight")
+    plt.close()
+    print(f"Plot saved as {path}_{metric}_{category}_k{k}.png")
+
+
+def plot_merged_top_k_topics_category_focus_counts(
+    topic_counts,
+    metric,
+    category,
+    k=3,
     path="./temp_plots/counts/merged_top_k_topics_category_focus_counts",
     num_topics=18,
 ):
@@ -387,113 +479,113 @@ def plot_merged_top_k_topics_category_focus_counts(
 
 # Example usage:
 # plot_merged_top_k_topics_category_focus_counts(topic_counts, "attackComplexity", "HIGH", k=3)
-def plot_merged_top_k_topics_category_focus_balanced(
-    topic_counts,
-    nvd_counts,
-    metric,
-    category,
-    k=1,
-    balanced_count=20000,
-    path="./temp_plots/merged_top_k_topics_category_focus_balanced",
-):
-    categories = list(next(iter(topic_counts.values()))[metric].keys())
+# def plot_merged_top_k_topics_category_focus_balanced(
+#     topic_counts,
+#     nvd_counts,
+#     metric,
+#     category,
+#     k=1,
+#     balanced_count=20000,
+#     path="./temp_plots/merged_top_k_topics_category_focus_balanced",
+# ):
+#     categories = list(next(iter(topic_counts.values()))[metric].keys())
 
-    # Find top k topics for the specified metric and category
-    top_k_topics = sorted(
-        topic_counts.items(),
-        key=lambda x: x[1][metric][category] / sum(x[1][metric].values()),
-        reverse=True,
-    )[:k]
+#     # Find top k topics for the specified metric and category
+#     top_k_topics = sorted(
+#         topic_counts.items(),
+#         key=lambda x: x[1][metric][category] / sum(x[1][metric].values()),
+#         reverse=True,
+#     )[:k]
 
-    merged_percentages = []
-    nvd_percentages = []
+#     merged_percentages = []
+#     nvd_percentages = []
 
-    for cat in categories:
-        # Merge data from top k topics
-        merged_value = sum(topic_data[metric][cat] for _, topic_data in top_k_topics)
-        merged_percentage = merged_value / (balanced_count * len(categories)) * 100
-        merged_percentages.append(merged_percentage)
+#     for cat in categories:
+#         # Merge data from top k topics
+#         merged_value = sum(topic_data[metric][cat] for _, topic_data in top_k_topics)
+#         merged_percentage = merged_value / (balanced_count * len(categories)) * 100
+#         merged_percentages.append(merged_percentage)
 
-        # Use balanced count for NVD data
-        nvd_percentage = balanced_count / (balanced_count * len(categories)) * 100
-        nvd_percentages.append(nvd_percentage)
+#         # Use balanced count for NVD data
+#         nvd_percentage = balanced_count / (balanced_count * len(categories)) * 100
+#         nvd_percentages.append(nvd_percentage)
 
-    # Create the plot
-    fig, ax = plt.subplots(figsize=(12, 6))
+#     # Create the plot
+#     fig, ax = plt.subplots(figsize=(12, 6))
 
-    x = np.arange(len(categories))
-    width = 0.35
+#     x = np.arange(len(categories))
+#     width = 0.35
 
-    rects1 = ax.bar(
-        x - width / 2,
-        merged_percentages,
-        width,
-        label=f"Top {k} Topics",
-        color="skyblue",
-    )
-    rects2 = ax.bar(
-        x + width / 2, nvd_percentages, width, label="Balanced NVD Data", color="orange"
-    )
+#     rects1 = ax.bar(
+#         x - width / 2,
+#         merged_percentages,
+#         width,
+#         label=f"Top {k} Topics",
+#         color="skyblue",
+#     )
+#     rects2 = ax.bar(
+#         x + width / 2, nvd_percentages, width, label="Balanced NVD Data", color="orange"
+#     )
 
-    # Highlight the focus category
-    focus_index = categories.index(category)
-    ax.bar(
-        x[focus_index] - width / 2, merged_percentages[focus_index], width, color="blue"
-    )
-    ax.bar(x[focus_index] + width / 2, nvd_percentages[focus_index], width, color="red")
+#     # Highlight the focus category
+#     focus_index = categories.index(category)
+#     ax.bar(
+#         x[focus_index] - width / 2, merged_percentages[focus_index], width, color="blue"
+#     )
+#     ax.bar(x[focus_index] + width / 2, nvd_percentages[focus_index], width, color="red")
 
-    ax.set_ylabel("Percentage")
-    ax.set_title(
-        f"{metric} - Merged Top {k} Topics vs Balanced NVD Data (Focus on {category})"
-    )
-    ax.set_xticks(x)
-    ax.set_xticklabels(categories, rotation=45, ha="right")
-    ax.legend()
+#     ax.set_ylabel("Percentage")
+#     ax.set_title(
+#         f"{metric} - Merged Top {k} Topics vs Balanced NVD Data (Focus on {category})"
+#     )
+#     ax.set_xticks(x)
+#     ax.set_xticklabels(categories, rotation=45, ha="right")
+#     ax.legend()
 
-    # Add value labels on the bars
-    def autolabel(rects):
-        for rect in rects:
-            height = rect.get_height()
-            ax.annotate(
-                f"{height:.1f}%",
-                xy=(rect.get_x() + rect.get_width() / 2, height),
-                xytext=(0, 3),  # 3 points vertical offset
-                textcoords="offset points",
-                ha="center",
-                va="bottom",
-                fontsize=8,
-            )
+#     # Add value labels on the bars
+#     def autolabel(rects):
+#         for rect in rects:
+#             height = rect.get_height()
+#             ax.annotate(
+#                 f"{height:.1f}%",
+#                 xy=(rect.get_x() + rect.get_width() / 2, height),
+#                 xytext=(0, 3),  # 3 points vertical offset
+#                 textcoords="offset points",
+#                 ha="center",
+#                 va="bottom",
+#                 fontsize=8,
+#             )
 
-    autolabel(rects1)
-    autolabel(rects2)
+#     autolabel(rects1)
+#     autolabel(rects2)
 
-    # Add topic numbers and top words
-    topic_info = f"Top {k} Topics for {category}: " + ", ".join(
-        [f"{topic}" for topic, _ in top_k_topics]
-    )
-    topic_words = set()
-    for _, topic_data in top_k_topics:
-        topic_words.update(topic_data["topic_words"][:5])  # Top 5 words from each topic
-    topic_words_text = f"Common Topic Words:\n" + ", ".join(
-        list(topic_words)[:15]
-    )  # Limit to 15 words
+#     # Add topic numbers and top words
+#     topic_info = f"Top {k} Topics for {category}: " + ", ".join(
+#         [f"{topic}" for topic, _ in top_k_topics]
+#     )
+#     topic_words = set()
+#     for _, topic_data in top_k_topics:
+#         topic_words.update(topic_data["topic_words"][:5])  # Top 5 words from each topic
+#     topic_words_text = f"Common Topic Words:\n" + ", ".join(
+#         list(topic_words)[:15]
+#     )  # Limit to 15 words
 
-    plt.text(
-        0.5,
-        -0.2,
-        topic_info + "\n" + topic_words_text,
-        ha="center",
-        va="center",
-        transform=ax.transAxes,
-        wrap=True,
-        fontsize=8,
-    )
+#     plt.text(
+#         0.5,
+#         -0.2,
+#         topic_info + "\n" + topic_words_text,
+#         ha="center",
+#         va="center",
+#         transform=ax.transAxes,
+#         wrap=True,
+#         fontsize=8,
+#     )
 
-    plt.tight_layout()
-    plt.savefig(f"{path}_{metric}_{category}_k{k}.png", dpi=300, bbox_inches="tight")
-    plt.close()
+#     plt.tight_layout()
+#     plt.savefig(f"{path}_{metric}_{category}_k{k}.png", dpi=300, bbox_inches="tight")
+#     plt.close()
 
-    print(f"Plot saved as {path}_{metric}_{category}_k{k}.png")
+#     print(f"Plot saved as {path}_{metric}_{category}_k{k}.png")
 
 
 # Example usage:

@@ -30,6 +30,7 @@
 \usepackage{booktabs}
 \usepackage{dirtytalk}
 \usepackage{xcolor}
+\usepackage{soul}
 \addbibresource{refs.bib}
 \usepackage{listings}
 \usepackage[margin=1in]{geometry}
@@ -60,78 +61,105 @@
 
 \begin{abstract}
 
-	The Common Vulnerability Scoring System is designed to produce scores for software
-	vulnerabilities. Such a system is needed in order to triage the sheer number of new
-	vulnerabilities being released every year. We cannot keep up with the amount of CVSS scores that
-	need to be produced, as such we need a way to automatically predict them. There is precedent to
-	using machine learning, specifically in more recent times, large language models (LLMs) to
-	accurately predict these CVSS scores. However, there is a general focus on only using the
-	National Vulnerability Database (NVD), it would be ideal if there was more than one source for
-	the ratings, not only for cross validation, but also for an increase in training data volume.
-	Unfortuntately this exercise was not fruitful, and I will also continue to use NVD as the data
-	source moving forward, however it is useful to look into this issue.
-	Before we use any extra data sources, it will be interesting to do a comparison between the
-	different sources, to see if we can get an estimated accuracy for each of the metrics within the
-	scoring system. Additionally we should know how good of a system CVSS is and whether or not
-	there are better alternatives. However, the ability to predict a metric based on a short text
-	description is still useful, and a focus on the interpretability of such a system remains
-	important.
-
-	This paper focuses on interpretability and analysis of CVE / CVSS data, with some of the
-	findings used to aid prediction of CVSS scores by LLMS.
-
-	I will be focusing on interpretability from the data perspective. When clustering the
-	data we see that there are some useful patterns
-	\todo[inline]{Just some place holder for when figure out what we are doing with the clustering
-		stuff}
+	The Common Vulnerability Scoring System (CVSS) is designed to produce scores for software
+	vulnerabilities, serving as a crucial tool for triaging the increasing number of new
+	vulnerabilities released each year. As manual scoring cannot keep pace with this growth, there
+	is a need for automated prediction methods. While machine learning, particularly large language
+	models (LLMs), has shown promise in predicting CVSS scores. The primary motivator for this paper
+	is an exploration into the CVE and CVSS processes to serve as a springboard for research next
+	year for masters. As such there are many unanswered questions resulting from this exploration.
+	Research has primarily focused on using the National Vulnerability Database (NVD) as a single
+	data source. This paper explores the potential of using multiple data sources for
+	cross-validation and increased training data volume, specifically comparing NVD with the MITRE
+	database. The analysis reveals differences in how these databases rate Common Vulnerabilities
+	and Exposures (CVEs), highlighting the challenges in establishing a consistent ground truth for
+	CVSS scores. While the combination of multiple datasets did not yield the expected improvements
+	in prediction accuracy, this investigation provides valuable insights into the complexities of
+	CVSS scoring across different evaluation teams. The next focus of this paper is on enhancing the
+	interpretability and analysis of CVE/CVSS data through clustering techniques and other dataset
+	analysis methods. I employ Latent Dirichlet Allocation (LDA) and other clustering approaches to
+	uncover patterns within the vulnerability descriptions. This data-driven analysis not only
+	complements LLM-based prediction methods but also offers faster turnaround times for identifying
+	trends and relationships within the data. The findings demonstrate that certain types of
+	vulnerabilities tend to cluster together, such as cross-site scripting, PHP, and
+	WordPress-related issues. These insights contribute to a deeper understanding of the underlying
+	structure of vulnerability data and may inform more nuanced approaches to automated CVSS scoring
+	and vulnerability management.
 
 \end{abstract}
 
 
 \section{Introduction}
 
+In 2023, 29,065 new vulnerabilities were recorded, as illustrated in Figure~\ref{fig:cves_per_year}.
+This number continues to rise year on year, underscoring the growing challenge of managing and
+prioritizing software vulnerabilities. These vulnerabilities are documented using the Common
+Vulnerabilities and Exposure system (CVE~\cite{CVE}), with CVSS scores derived from these entries to
+indicate severity and impact. The National Vulnerability Database (NVD~\cite{NVD} serves as the
+primary source for CVSS-enriched CVE data and is widely used in research (e.g., \cite{costa,
+	nvd_example1, nvd_example2}). However, to explore the potential benefits of multiple data sources,
+we also investigated the MITRE database~\cite{MITRE}, which is the main repository for CVEs and
+includes a significant number of entries with CVSS scores.The initial comparison between NVD and
+MITRE databases employed a methodology inspired by the paper \say{Can the Common Vulnerability
+	Scoring System be Trusted? A Bayesian Analysis}~\cite{bayes}. This approach aimed to assess the
+agreement between different data sources in scoring CVEs and explore the feasibility of establishing
+a ground truth. The analysis revealed differences in how these databases rate CVEs (see Figure
+\ref{fig:counts}), highlighting the subjective nature of CVSS scoring and the challenges in
+achieving consistency across different evaluation teams. While the comparison of multiple datasets
+did not yield the anticipated improvements in CVSS prediction, it provided valuable insights into
+the variability of human-assigned scores. This variability suggests that automated prediction models
+may face similar challenges in areas where human evaluators disagree. Given these findings, the
+focus of the research shifted towards enhancing the interpretability and analysis of the CVE/CVSS
+data itself. I employed clustering techniques, primarily Latent Dirichlet Allocation
+(LDA~\cite{lda_origin}), along with other dataset analysis methods to uncover patterns within the
+vulnerability descriptions. This approach offers several advantages:
 
-Last year there were 29,065 new vulnerabilities as show by Figure~\ref{fig:cves_per_year}. This is a
-number that is only going up year on year. These vulnerabilities are recorded using the Common
-Vulnerabilities and Exposure system (CVE~\cite{CVE}). From these CVEs, CVSS scores can be computed.
-The National Vulnerability Database (NVD~\cite{NVD}, more on the databases in
-Section~\ref{NVD_SECTION}) takes CVEs and enriches them with CVSS data. They are not the only place
-to do so, however in terms of research they are often the main or sole data provider (E.g.\@
-\cite{costa, nvd_example1, nvd_example2}).  I explored other options, and landed on the MITRE
-database~\cite{MITRE}(details here Section~\ref{MITRE_SECTION}, as it is the main database for CVEs,
-with a decent number enriched with CVSS scores. As a guideline to my investigation between the two
-databases, I used the same method as the paper \textit{Can the Common Vulnerability Scoring System
-	be Trusted? A Bayesian Analysis}~\cite{bayes}. This paper explores the extent to which different
-data sources agree on the scoring of a CVE, aiming to gain insight into the potential for
-establishing a ground truth value. Unfortunately, since that paper was released back in 2016, many
-of the data sources they compared are either unavailable or in archival status. However, I hoped following
-their method would still allow for insight between the two chosen databases, NVD and MITRE. This analysis
-shows that the databases do fundamentally rate CVEs differently (see Figure~\ref{fig:counts}). The
-uncertainty between the two can therefore be an indicator going forward when analysing generated CVE
-scores, as it is likely that the model will also struggle in similar places to where the human
-evaluators did. The initial focus of the work on this paper was around the CVSS and the surrounding
-systems, some of the pitfalls behind the system are mentioned in the background, however while
-interesting and damning in some sense, they do not stop progress towards the automation of CVSS
-metric classification. Analysis between MITRE and NVD shows that it is not a system which can be
-consistently rated by different evaluators / evaluation teams. Using a combination of the two
-datasets is not something I will continue with going forward as the difference between the different
-ratings results in confusion during training of the model.
+\begin{enumerate}
 
-The focus for the remainder of the paper is looking into NVD and via clustering and other dataset
-analysis techniques finding patterns within the data. This will show a multitude of things, it will
-show us the difference in what the models learn to treat as important versus more purely data driven
-techiques. We get much quicker turn around for the analysis, Airey is currently also pursuing
-interpretability from the models themselves, this takes ~48 hours per metric to run the tests. The
-clustering techniques, such as Latent Dirichlet Allocation ( LDA ) take a fraction of the time, ~1
-hour to cluster the entire corpus.
+	\item It provides a data-driven perspective that complements the LLM-based prediction methods.
 
-\todo[inline]{Placeholder for when I have more concrete example}
-Additional insights gained are that some types of vulnerabilities
-tend run together, for example cross site scripting and php and wordpress are found together as
-there as many similar vulnerabilities using the same technologies.
+	\item The clustering techniques offer faster analysis times compared to complex LLM interpretability
+	      methods, with LDA processing the entire corpus in approximately one hour.
+
+	\item It reveals inherent groupings and relationships within the data that may not be immediately apparent
+	      through other analysis methods.
+
+\end{enumerate}
+
+The clustering analysis has yielded interesting insights, such as the tendency for certain types of
+vulnerabilities to cluster together. For example the analysis of the integrity impact metric revealed meaningful patterns that align with expert knowledge in the field:
+
+\todo[inline]{Unsure if this makes sense here as I haven't introduced what all the CVSS terms mean
+	yet....}
+\begin{itemize}
+
+	\item Vulnerabilities classified as having no impact (\texttt{NONE}) on data integrity often
+	      clustered around denial of service attacks and system crashes. While these are serious
+	      issues, they typically do not directly affect data integrity.
+
+	\item Low impact (\texttt{LOW}) on integrity was frequently associated with cross-site scripting
+	      vulnerabilities, particularly in WordPress plugins. This classification makes sense as such
+	      vulnerabilities can cause localized data integrity issues, often limited to individual user
+	      interactions rather than compromising the entire application.
+
+	\item High impact (\texttt{HIGH}) integrity issues clustered around SQL injection and
+	      database-related vulnerabilities. This aligns with the severe nature of these attacks, which
+	      can directly manipulate or corrupt data at the database level.
+
+\end{itemize}
 
 
-\begin{figure}[h] \centering
+These findings not only contribute to a deeper understanding of the structure of vulnerability data
+but also have potential implications for improving automated CVSS scoring systems and refining
+vulnerability management strategies. By identifying these natural groupings, I can develop more
+nuanced approaches to vulnerability classification and prioritization.
+
+In the following sections, I will detail my methodology, present my findings from both the
+database comparison and clustering analyses, and discuss the implications of these results for the
+field of vulnerability assessment and management.
+
+
+\begin{figure}[ht] \centering
 	\includegraphics[width=0.8\textwidth]{figures/cves_year.pdf}
 	\caption{\label{fig:cves_per_year}Number of new CVEs by year}
 \end{figure}
@@ -144,9 +172,13 @@ Exposures (CVE~\cite{CVE}).
 
 \subsubsection*{Here is an example CVE}
 \begin{itemize}
+
 	\item   Unique Identifier: CVE-2024-38526
+
 	\item   Source: GitHub, Inc.
+
 	\item   Published: 06/25/2024
+
 	\item   Updated: 06/26/2024
 
 	\item   Description: pdoc provides API Documentation for Python Projects. Documentation
@@ -220,7 +252,6 @@ version, even if it is not the most recent.
 {\footnotesize This is a summarized version of the
 \href{https://www.first.org/cvss/v3.1/specification-document}{3.1 specification document
 	provided by the  Forum of Incident Response and Security Teams (FIRST)}~\cite{CVSS_31}. } \\
-
 
 \subsubsection*{Temporal}
 
@@ -422,8 +453,285 @@ issues and general impression of CVSS.
 
 \section{Methods}
 
-\subsection{Motivation}
+\subsection{Hierarchical Bayesian Model} \label{bayesian_modeling}
 
+Analysis between the NVD~\cite{NVD} and MITRE~\cite{MITRE} databases is conducted using a
+hierarchical Bayesian model. This model type is particularly suitable when the population is
+expected to share similarities in some respects while differing in others. In this context, while
+the databases share common knowledge about vulnerabilities, they differ in the experience of the
+individuals rating the metrics~\cite{bayes}.
+
+The model builds upon the original framework presented in Section 4.1 of~\cite{bayes}. It assumes
+the existence of a true value for each CVSS dimension, acknowledging that the database sample may
+deviate from this true value. These potential inaccuracies are represented using confusion matrices
+(see Equation~\ref{confusion_matrix_formula}).
+
+A key distinction from the original model is the variability in the number of categorical choices
+for each CVSS metric. While the original model consistently used three variables for each CVSS
+metric, my adapted model accommodates between two to four categorical choices, depending on the
+specific CVSS dimension being evaluated.
+
+\subsubsection{Confusion Matrix}
+
+Below is an example of the confusion matrix for the CVSS dimension \texttt{Confidentiality Impact}:
+
+\begin{equation}\label{confusion_matrix_formula}
+	\Pi_{ci} = \begin{bmatrix}
+		\pi_{nn} & \pi_{nl} & \pi_{nh} \\
+		\pi_{ln} & \pi_{ll} & \pi_{lh} \\
+		\pi_{hn} & \pi_{hl} & \pi_{hh} \\
+	\end{bmatrix}
+\end{equation}
+
+where $\pi_{nn}$ denotes the probability that the database correctly assigns the score \texttt{None}
+when the actual value is indeed \texttt{None}. Conversely, $\pi_{nl}$ and $\pi_{nh}$ represent
+instances where \texttt{None} was not the true value, indicating an incorrect score assignment by
+the database.
+
+\subsubsection{Prior Distributions}
+
+For categorical variables, we employ uninformative priors using Dirichlet distributions. This
+approach provides a uniform prior over the probability space for all categorical options, minimizing
+the influence of prior beliefs on the results. The impact of these priors is negligible for
+categorical metrics with more options than the number of categories.
+
+The confusion matrices also utilize Dirichlet distribution priors. However, we incorporate a slight
+initial belief to reflect that the individuals producing scores are not acting entirely randomly and
+are likely to be correct more often than not. These priors remain weak given the thousands of
+observations in our dataset.
+
+\subsubsection{Parameter Estimation}
+
+Our parameter estimation follows the Bayesian approach, updating prior beliefs with observations to
+produce posterior beliefs. We employ Markov Chain Monte Carlo (MCMC) methods, which allow for
+simulating data based on the previously created distribution by sampling values that the model
+believes are likely from the target distribution. This technique enables accurate sampling without
+requiring all data points.
+
+For implementation, we utilized the PyMC library~\cite{pymc}, which fulfills the same functions as
+JAGS in the original paper~\cite{bayes}. PyMC facilitates the modeling process and provides robust
+tools for Bayesian inference and MCMC sampling.
+
+This methodology provides a comprehensive framework for analyzing and comparing vulnerability
+scoring across different databases, accounting for the inherent uncertainties and variations in
+expert assessments.
+
+
+\subsection{CVSS Prediction} \label{cvss_prediction}
+
+Cody Airey --a classmate of mine-- has been working on a similar problem. He has been repoducing
+results from Costa et al.\@~\cite{costa}. My choice of model for CVSS prediction will very much
+bootstrap off his work. So far, a strong contender for state-of-the-art model for predicting CVSS
+metrics from CVE descriptions is the DistilBERT model~\cite{distilbert}. This is a variant of
+BERT~\cite{BERT}, a pre-trained deep bidirectional transformer large language model developed by
+Google. DistilBERT has advantages over other BERT models in terms of performance, but also on speed
+of training as well as size / memory footprint of the model.
+
+\subsubsection{Training}
+
+The model is trained separately for each metric. Following Airey's method, each of the eight models
+were trained on five different data splits to allow for a standard deviation to be calculated, in
+order to aid in reducing the chance of a \textit{lucky} data split effecting the results. The
+difference between Costa et al.\@ \& Airey's work, and mine is that this model was trained on a
+combination of NVD and MITRE data as opposed to just using NVD. This was converted to the same
+format, a CSV containing the descriptions and the CVSS scores. This does mean there are now
+$\sim$40000 duplicate CVEs and $\sim$140000 CVEs enriched with CVSS scores total.
+
+\section{Results}
+
+\subsection{Bayesian Analysis}
+
+The results for the database analysis will be shown through the confusion matrices for the estimated
+accuracy of both NVD and MITRE. Unfortunately it is difficult to compare my results to the original
+paper~\cite{bayes} as they are on a totally different dataset. However, I will note that in general the estimated
+accuracy for both datasets is much lower than the scores from the original study. Across the board NVD
+often had $\sim$90\% accuracy for the highest accuracy field of any metric, with Confidentiality as
+a clear outlier as seen from Table~\ref{fig:johnson_confusion_matrices}.
+
+Some general trends are that NVD (see Figure~\ref{fig:nvd_31_confusion_matrices}) have more extreme
+estimated accuracies. They do better for the higher frequency options, for the \texttt{Low} option
+on \texttt{Attack Complexity} for example, NVD have 98\% estimated accuracy and 66\% for
+\texttt{High} versus MITRE (see Figure~\ref{fig:mitre_31_confusion_matrices}), \texttt{Low} scored
+87\% and 75\% for \texttt{High}. Instead of further analysing in this way, I will point out some of
+my worries around these results, not that they are wrong per se, but that they do not really tell us
+anything extra than that shown by in Figure~\ref{fig:counts}, except perhaps it is helpful to see
+the results in a percentage estimated accuracy instead of a proportion. Unfortunately this is
+outside of my strengths, I did some cursory exploration into if doing this sort of analysis
+between two populations like this does make sense, the discourse here~\cite{stat_modeling} suggests
+that such a thing can be done, though it also suggests the need for more informative priors. This
+may apply in my case, and I intend on getting an expert opinion closer to home, however that will be
+after this report.
+
+Johnson et al.\@ talk about the reliability of their results saying this in section 7.1 of~\cite{bayes}:\\ \\
+
+\textit{\say{reliability concerns
+		are discussed. In this study we use five different scoring instruments - the databases. If some of
+		these are generally correct, but some are generally incorrect, will not the scores of the
+		incorrect ones still affect our beliefs about the actual values, thus worsening reliability? It
+		turns out that this is not the case. In a simulation, two scorers were set up to be completely
+		aligned, scoring 90\% complete impact in one of the CIA dimensions, while a third was unaligned
+		and scoring only 10\% complete impact. Initially, all scorers are equally credible, but the
+		gradual accrual of evidence impacts scorer credibility (as well as beliefs about the actual CVSS
+		score distributions). Thus, as the third scorer rarely matched the other two, its credibility
+		eroded, thus shrinking the weight of its advise~\cite{bayes}.}} \\
+
+Unfortunately in my case I do not have the advantage of a potential third or more scorer. This leads
+me to believe that there is a chance that incorrect scores can end up corrupting the results.
+
+\bigskip
+
+\begin{figure}[H]
+	\centering
+	\makebox[\textwidth][c]{\includegraphics[width=1.5\textwidth]{figures/nvd_31_titles.pdf}}
+	\caption{\label{fig:nvd_31_confusion_matrices}Confusion Matrices for NVD for CVSS version 3.1}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\makebox[\textwidth][c]{\includegraphics[width=1.5\textwidth]{figures/mitre_31_titles.pdf}}
+	\caption{\label{fig:mitre_31_confusion_matrices}Confusion Matrices for MITRE for CVSS version 3.1}
+\end{figure}
+
+\begin{table}
+	\label{fig:johnson_confusion_matrices}
+	\centering
+	\caption{Confusion Matrices for NVD on CVSS version 2.0 from Johnson et al.\@ \cite{bayes}}
+	\[
+		\begin{array}{c|c}
+			\textbf{Access vector}  & \textbf{Access complexity} \\
+			\hline
+			\begin{tabular}{l|ccc}
+				  & N    & A    & L    \\
+				\hline
+				N & 0.99 & 0    & 0    \\
+				A & 0.21 & 0.71 & 0.08 \\
+				L & 0.05 & 0.0  & 0.95 \\
+			\end{tabular}
+			                        &
+			\begin{tabular}{l|ccc}
+				  & L    & M    & H    \\
+				\hline
+				L & 0.54 & 0.29 & 0.17 \\
+				M & 0.02 & 0.88 & 0.1  \\
+				H & 0.01 & 0.08 & 0.91 \\
+			\end{tabular}
+			\\
+			\textbf{Authentication} & \textbf{Confidentiality}   \\
+			\hline
+			\begin{tabular}{l|ccc}
+				  & N    & S    & M    \\
+				\hline
+				N & 0.99 & 0.01 & 0    \\
+				S & 0.04 & 0.95 & 0.01 \\
+				M & 0.19 & 0.2  & 0.6  \\
+			\end{tabular}
+			                        &
+			\begin{tabular}{l|ccc}
+				  & C   & P    & N    \\
+				\hline
+				C & 0.4 & 0.2  & 0.2  \\
+				P & 0.2 & 0.4  & 0.19 \\
+				N & 0.2 & 0.21 & 0.4  \\
+			\end{tabular}
+			\\
+			\textbf{Integrity}      & \textbf{Availability}      \\
+			\hline
+			\begin{tabular}{l|ccc}
+				  & C    & P    & N    \\
+				\hline
+				C & 0.91 & 0.08 & 0.01 \\
+				P & 0.05 & 0.93 & 0.02 \\
+				N & 0.02 & 0.07 & 0.92 \\
+			\end{tabular}
+			                        &
+			\begin{tabular}{l|ccc}
+				  & C    & P    & N    \\
+				\hline
+				C & 0.92 & 0.07 & 0.01 \\
+				P & 0.07 & 0.91 & 0.02 \\
+				N & 0.02 & 0.11 & 0.87 \\
+			\end{tabular}
+		\end{array}
+	\]
+\end{table}
+
+\subsection{CVSS Prediction}
+
+Below, Table~\ref{tab:distil_part1} \& Table~\ref{tab:distil_part2} show the results of the
+DistilBERT model trained on a combination of NVD and MITRE data. Unfortunately this has
+a purely negative effect on all metrics, with the caveat that some of the standard deviations are
+lower. Additional note is that the balanced accuracy for some metrics looks a bit weird, I believe that
+is due to the model not outputing some of the categorical options for that metric. This applies to
+all the balanced accuracy scores, apart from the Priorities Required (PR) and Confidentiality (C) as
+seen on Table~\ref{tab:distil_part1} \& Table~\ref{tab:distil_part2}. As this
+was done only recently I have not looked into this issue in-depth to see why this is happening, but
+I will in the future. As to why the model performs worse, my theory is that the added data, and
+therefore the overlapping CVEs with different scores confuse the model. I thought that adding the
+additional data may have given the model a better chance of generalising, however this
+does not appear to be the case.
+The uncertainty between the two databases can serve as an indicator when
+analyzing generated CVE scores. It suggests that the model may encounter similar challenges to those
+faced by human evaluators. The lowest score for my model is in the Availability Impact
+category, which is also low for Cody's model. This observation indicates a correlation between the
+machine learning models' difficulties and the issues faced by human scorers. Attack Complexity also
+presents challenges, likely due to data imbalance, as the dataset is heavily skewed towards the
+\texttt{Low} score, thereby incentivizing the model to output \texttt{Low} scores (see
+Figures~~\ref{fig:counts},~\ref{fig:nvd_31_confusion_matrices},~\ref{fig:mitre_31_confusion_matrices} for
+reference).
+
+\begin{table}[H]
+	\centering
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{llcccc}
+			\toprule
+			\textbf{Metric} & \textbf{Model}  & \textbf{AV}           & \textbf{AC}           & \textbf{PR}           & \textbf{UI}           \\
+			\midrule
+			\multirow{2}{*}{Accuracy}
+			                & DistilBERT-Cody & \textbf{91.28 ± 0.26} & \textbf{95.64 ± 0.68} & \textbf{82.77 ± 0.24} & \textbf{93.86 ± 0.19} \\
+			                & DistilBERT-Jake & 72.81 ± 0.32          & 92.62 ± 0.15          & 81.18 ± 0.18          & 66.35 ± 0.24          \\
+			\midrule
+			\multirow{2}{*}{F1}
+			                & DistilBERT-Cody & \textbf{90.98 ± 0.31} & \textbf{93.85 ± 1.39} & \textbf{82.53 ± 0.26} & \textbf{93.82 ± 0.19} \\
+			                & DistilBERT-Jake & 61.36 ± 0.42          & 89.08 ± 0.22          & 80.96 ± 0.19          & 52.93 ± 0.31          \\
+			\midrule
+			\multirow{2}{*}{Bal Acc}
+			                & DistilBERT-Cody & \textbf{67.88 ± 2.11} & \textbf{55.82 ± 7.23} & \textbf{75.98 ± 0.47} & \textbf{92.46 ± 0.21} \\
+			                & DistilBERT-Jake & 25.00 ± 0.00          & 50.00 ± 0.00          & 75.18 ± 0.31          & 50.00 ± 0.00          \\
+			\bottomrule
+		\end{tabular}
+	}
+	\caption{Comparison of the effects of the pre-trained models on the CVSS v3.1 dataset (Part 1).}
+	\label{tab:distil_part1}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{llcccc}
+			\toprule
+			\textbf{Metric} & \textbf{Model}  & \textbf{S}            & \textbf{C}            & \textbf{I}            & \textbf{A}            \\
+			\midrule
+			\multirow{2}{*}{Accuracy}
+			                & DistilBERT-Cody & \textbf{96.38 ± 0.09} & \textbf{86.24 ± 0.20} & \textbf{87.15 ± 0.10} & \textbf{88.70 ± 0.10} \\
+			                & DistilBERT-Jake & 80.21 ± 0.16          & 82.45 ± 0.11          & 45.71 ± 0.26          & 52.53 ± 0.23          \\
+			\midrule
+			\multirow{2}{*}{F1}
+			                & DistilBERT-Cody & \textbf{96.30 ± 0.10} & \textbf{86.09 ± 0.21} & \textbf{87.11 ± 0.10} & \textbf{88.04 ± 0.11} \\
+			                & DistilBERT-Jake & 71.40 ± 0.22          & 82.34 ± 0.12          & 28.68 ± 0.28          & 36.18 ± 0.27          \\
+			\midrule
+			\multirow{2}{*}{Bal Acc}
+			                & DistilBERT-Cody & \textbf{91.57 ± 0.43} & \textbf{82.70 ± 0.36} & \textbf{85.81 ± 0.10} & \textbf{64.01 ± 0.13} \\
+			                & DistilBERT-Jake & 50.00 ± 0.00          & 79.85 ± 0.23          & 33.33 ± 0.00          & 33.33 ± 0.00          \\
+			\bottomrule
+		\end{tabular}
+	}
+	\caption{Comparison of the effects of the pre-trained models on the CVSS v3.1 dataset (Part 2).}
+	\label{tab:distil_part2}
+\end{table}
+
+\subsection{Motivation for clustering}
+
+\todo[inline]{Add in text to smooth over the transition between the two sections}
 \todo[inline]{Maybe comparsion between my clusters and the CWEs those documents are clustered into?}
 
 Clustering and analysis of the data makes sense in many ways. As the data is already grouped into
@@ -710,13 +1018,15 @@ predefined classes are available for the data.
 
 \subsection{Definition and Calculation}
 
-For a set of clusters $\Omega = \{\omega_1, \omega_2, ..., \omega_K\}$ and a set of classes $C = \{c_1, c_2, ..., c_J\}$, purity is defined as:
+For a set of clusters $\Omega = \{\omega_1, \omega_2, ..., \omega_K\}$ and a set of classes $C =
+	\{c_1, c_2, ..., c_J\}$, purity is defined as:
 
 \begin{equation}
 	\text{purity}(\Omega, C) = \frac{1}{N} \sum_{k=1}^K \max_j |\omega_k \cap c_j|
 \end{equation}
 
-where $N$ is the total number of objects, and $|\omega_k \cap c_j|$ is the number of objects in cluster $\omega_k$ that belong to class $c_j$.
+where $N$ is the total number of objects, and $|\omega_k \cap c_j|$ is the number of objects in
+cluster $\omega_k$ that belong to class $c_j$.
 
 \subsection{Interpretation}
 
@@ -731,84 +1041,33 @@ topic strongly corresponds to a specific CVSS category.
 It's important to note that purity tends to increase as the number of clusters increases, with a
 trivial solution of perfect purity when each object is in its own cluster \cite{v-measure}.
 Therefore, it should be interpreted cautiously, especially when comparing models with different
-numbers of topics however as seen by
-figures~\ref{fig:purity_integrity}, \ref{fig:purity_20_availability}, \ref{fig:purity_20_confidentiality}
+numbers of topics however as seen by figures~\ref{fig:purity_integrity},
+\ref{fig:purity_20_availability}, \ref{fig:purity_20_confidentiality} this effect did not present
+itself too strongly, though it does lead to incentivising picking the number of topics around the
+elbow of the curve, as any minor increase in the purity score could just be based on the inherent
+increase in the purity score as the number of topics increase.
 
-\begin{figure}[h] \centering
+\begin{figure}[ht] \centering
 	\includegraphics[width=0.8\textwidth]{figures/purity/topic_model_performance_purity_ground_truth_integrityImpact.png}
 	\caption{\label{fig:purity_integrity}Figures showing the purity score
 		for when the topics have been assigned with a focus on integrityImpact, split by the different
 		possible classes}
 \end{figure}
-\begin{figure}[h] \centering
+
+\begin{figure}[ht] \centering
 	\includegraphics[width=0.8\textwidth]{figures/purity/topic_model_performance_purity_ground_truth_availabilityImpact.png}
 	\caption{\label{fig:purity_20_availability}Figures showing the purity score
 		for when the topics have been assigned with a focus on availabilityImpact, split by the different
 		possible classes}
 \end{figure}
-\begin{figure}[h] \centering
+
+\begin{figure}[ht] \centering
 	\includegraphics[width=0.8\textwidth]{figures/purity/topic_model_performance_purity_ground_truth_confidentialityImpact.png}
 	\caption{\label{fig:purity_20_confidentiality}Figures showing the purity score
 		for when the topics have been assigned with a focus on confidentialityImpact, split by the different
 		possible classes}
 \end{figure}
-% \todo[inline]{pretty sure I dont need to spell this out and would just show it but its here for
-% 	now...}
-% \subsubsection{Visualization and Interpretation}
 
-% We create visualizations to aid in the interpretation of results:
-
-% \begin{itemize}
-
-% 	\item Generate heatmaps showing the distribution of classes across clusters for each CVSS metric.
-
-% 	\item Bar charts of the most frequent terms in the representative clusters for each class.
-
-% 	\item Plot multidimensional scaling (MDS) or t-SNE visualizations of document-topic distributions, colored by CVSS metric classes.
-
-% \end{itemize}
-
-% Interpretation of these visualizations involves:
-
-% \begin{itemize}
-
-% 	\item Analyzing the semantic themes of representative clusters for each CVSS metric class.
-
-% 	\item Identifying common vulnerability types or attack vectors associated with specific CVSS ratings.
-
-% 	\item Examining any unexpected associations between topics and CVSS metrics.
-
-% \end{itemize}
-
-\subsubsection{Cluster Merging and Refinement}
-
-To potentially improve class representation, we explore merging related clusters:
-
-\begin{itemize}
-
-	\item Identify clusters with semantic similarity or overlapping representation of CVSS classes.
-
-	\item Merge these clusters by combining their topic-word distributions and reassigning documents.
-
-	\item Recalculate class representation metrics for the merged clusters.
-
-	\item Compare the performance of the merged model to the original in terms of:
-
-	      \begin{itemize}
-
-		      \item Overall topic coherence
-
-		      \item Clarity of class representation
-
-		      \item Interpretability of resulting topics
-
-	      \end{itemize}
-
-\end{itemize}
-
-The current merging approach is possibly a bit crude, Neuhaus \&
-Zimmerman(2010)\cite{cve_topic_modelling} merged the clusters based on the similarity of the topic
-words found by the model, this is something I intend to try in future work.
 
 \subsubsection{Evaluation and Insights}
 
@@ -819,7 +1078,7 @@ This is just a reality of the data and so is something that we have to contend w
 made finding a well defined cluster for each topic difficult as well as making the graphing and
 interpreting the outcome of the clustering somewhat awkward.
 
-As an example, if we take look at priveleges a graph of the best cluster for
+As an example, if we take look at privileges a graph of the best cluster for
 \texttt{priviledgesRequired} for the with a focus on the \texttt{HIGH} class (ref graph here) we can see
 that even though we are trying to find the cluster with the best representation of \texttt{HIGH},
 i.e. in this case best refers to the cluster with the distribution most skewed towards the
@@ -830,410 +1089,222 @@ fully balance the classes that could be down to 20000 CVEs for each class on the
 see in the results that makes the interpration of the results easier and more honest, even if it is
 actually showing the same thing.
 
-\subsection{Results}
-
-Ideally after this process we would compare the clusters with the assigned CWE, unfortunately due to the
-nature of both the topics based on some k-words and the CWE also being a description of a type of
-vulnerability I do not have time to automate the cross referencing between both my found clusters
-and
-
-The main results will be shown in graph form, generally the graphs show the count of each of the
-classes in relation to each other when focusing on a specific metric.
-
-\begin{figure}[h] \centering
-	\includegraphics[width=0.8\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_NONE_k1.png}
-	\caption{\label{fig:integrityImpact_20_NONE}The counts of the documents within the best topic in
-		relation to integrityImpact with target class \texttt{NONE}}
-\end{figure}
-
-\begin{figure}[h] \centering
-	\includegraphics[width=0.8\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_LOW_k1.png}
-	\caption{\label{fig:integrityImpact_20_LOW}The counts of the documents within the best topic in
-		relation to integrityImpact with target class \texttt{LOW}}
-\end{figure}
-
-
-\begin{figure}[h] \centering
-	\includegraphics[width=0.8\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_HIGH_k1.png}
-	\caption{\label{fig:integrityImpact_20_HIGH}The counts of the documents within the best topic in
-		relation to integrityImpact with target class \texttt{HIGH}}
-\end{figure}
-
-So this metric refers to the integrity of the data, generally this would be a problem if the data
-itself has been corrupted or changed leading to many potential issues.
-
-The trend groups we get for this seem reasonable. When trying to focus on \texttt{NONE} we see things relating
-to denial of service attacks and system crashes. While this is something to worry about, it usually
-will not effect the integrity of the data.
-
-The \texttt{LOW} category refers to a similar topic as shown above in the kmeans clustering example.
-Essentially a cross site scripting issue, often related to WordPress plugins. This makes sense as
-this could cause some data integrity issues likely generally scoped to the user in question, not to
-the application as a whole.
-
-The \texttt{HIGH} when focused relates to some kind of sql / database injection based issue,
-something more severe. So far this all aligns with what we would expect to be prevailed classes.
-
-Something to note is this is relating to the whole corpus and so is not biased towards more recent
-trends, something that could be interesting to look into given that the data is there.
-
-% \begin{itemize}
-
-% 	\item Assess whether the balanced dataset analysis revealed new insights not apparent in the original model.
-
-% 	\item Determine if certain CVSS metrics are more clearly represented by topic clusters than others.
-
-% 	\item Evaluate the impact of cluster merging on the interpretability and usefulness of the model.
-
-% 	\item Discuss potential applications of these findings in automated CVSS scoring or vulnerability triage systems.
-
-% \end{itemize}
-
-\subsection{Hierarchical Bayesian Model} \label{bayesian_modeling}
-
-Analysis between the NVD~\cite{NVD} and MITRE~\cite{MITRE} databases is conducted using a
-hierarchical Bayesian model. This model type is particularly suitable when the population is
-expected to share similarities in some respects while differing in others. In this context, while
-the databases share common knowledge about vulnerabilities, they differ in the experience of the
-individuals rating the metrics~\cite{bayes}.
-
-The model builds upon the original framework presented in Section 4.1 of~\cite{bayes}. It assumes
-the existence of a true value for each CVSS dimension, acknowledging that the database sample may
-deviate from this true value. These potential inaccuracies are represented using confusion matrices
-(see Equation~\ref{confusion_matrix_formula}).
-
-A key distinction from the original model is the variability in the number of categorical choices
-for each CVSS metric. While the original model consistently used three variables for each CVSS
-metric, my adapted model accommodates between two to four categorical choices, depending on the
-specific CVSS dimension being evaluated.
-
-\subsubsection{Confusion Matrix}
-
-Below is an example of the confusion matrix for the CVSS dimension \texttt{Confidentiality Impact}:
-
-\begin{equation}\label{confusion_matrix_formula}
-	\Pi_{ci} = \begin{bmatrix}
-		\pi_{nn} & \pi_{nl} & \pi_{nh} \\
-		\pi_{ln} & \pi_{ll} & \pi_{lh} \\
-		\pi_{hn} & \pi_{hl} & \pi_{hh} \\
-	\end{bmatrix}
-\end{equation}
-
-where $\pi_{nn}$ denotes the probability that the database correctly assigns the score \texttt{None}
-when the actual value is indeed \texttt{None}. Conversely, $\pi_{nl}$ and $\pi_{nh}$ represent
-instances where \texttt{None} was not the true value, indicating an incorrect score assignment by
-the database.
-
-\subsubsection{Prior Distributions}
-
-For categorical variables, we employ uninformative priors using Dirichlet distributions. This
-approach provides a uniform prior over the probability space for all categorical options, minimizing
-the influence of prior beliefs on the results. The impact of these priors is negligible for
-categorical metrics with more options than the number of categories.
-
-The confusion matrices also utilize Dirichlet distribution priors. However, we incorporate a slight
-initial belief to reflect that the individuals producing scores are not acting entirely randomly and
-are likely to be correct more often than not. These priors remain weak given the thousands of
-observations in our dataset.
-
-\subsubsection{Parameter Estimation}
-
-Our parameter estimation follows the Bayesian approach, updating prior beliefs with observations to
-produce posterior beliefs. We employ Markov Chain Monte Carlo (MCMC) methods, which allow for
-simulating data based on the previously created distribution by sampling values that the model
-believes are likely from the target distribution. This technique enables accurate sampling without
-requiring all data points.
-
-For implementation, we utilized the PyMC library~\cite{pymc}, which fulfills the same functions as
-JAGS in the original paper~\cite{bayes}. PyMC facilitates the modeling process and provides robust
-tools for Bayesian inference and MCMC sampling.
-
-This methodology provides a comprehensive framework for analyzing and comparing vulnerability
-scoring across different databases, accounting for the inherent uncertainties and variations in
-expert assessments.
-
-% \subsection{Hierarchical Bayesian Model} \label{bayesian_modeling}
-
-% Analysis between the NVD~\cite{NVD} and MITRE~\cite{MITRE} databases is done with a hierarchical
-% bayesian model. This type of model is suitable when you expect the population to be similar in some
-% respects but different in others. In this case, they share common knowledge towards the
-% vulnerability, but differ in the experience of the people rating the metrics~\cite{bayes}.  The
-% model is similar to the original model (see section 4.1 of~\cite{bayes}), it assumes that there
-% exists a true value for each CVSS dimension, but the database sample may not be that true value.
-% These inaccuracies are represented with a confusion matrix (see
-% equation~\ref{confusion_matrix_formula}). The difference from the original paper is that there is no
-% longer consistently three variables for each CVSS metric, varying from two to four categorical
-% choices. \\
-
-% \bigskip
-
-% Below is the confusion matrix of the CVSS dimension \texttt{Confidentiality Impact}
-
-
-% \begin{equation}\label{confusion_matrix_formula}
-% 	\Pi_ci = \begin{bmatrix}
-% 		\pi_{nn} & \pi_{nl} & \pi_{nh} \\
-% 		\pi_{ln} & \pi_{ll} & \pi_{lh} \\
-% 		\pi_{hn} & \pi_{lh} & \pi_{hh} \\
-% 	\end{bmatrix}
-% \end{equation}
-% \\
-% where $\pi_{nn}$ denotes the probability that the current database correctly assigns the random
-% vulnerability the score \texttt{None} when the actual value is the same. $\pi_{nl}$ and $\pi_{nh}$ represent
-% when \texttt{None} was not the actual truth value, i.e.\@ the database produced the wrong score.
-
-% \subsubsection{Priors}
-
-% The priors for the categorical variables were set up with uninformative priors using a Dirichlet
-% distribution. This will give a uniform prior over the probability space for all categorical options.
-% This is done to not colour the outcome of the results based on prior belief, though, this prior will
-% have little impact for any categorical metric which has more than the number of options for that
-% metric.
-
-% The confusion matrices also need priors, as before using Dirichlet distribution.
-% However, we do want to add some initial belief to this, as the people producing scores are
-% not acting completely randomly, and are likely to be right more often than not. These are still weak priors
-% as the number of observations is in the thousands.
-
-% \subsubsection{Estimation}
-
-% This follows the Bayesian approach where to estimate the parameters: you take the prior beliefs,
-% take an observation, and update these beliefs to produce posterior beliefs. In this case, the method
-% involves using Markov Chain Monte Carlo methods. Broadly, this allows for simulating the data, based
-% on the previously created distribution, by sampling values that the model has high belief would be
-% from the target distribution. This allows for accurate sampling without having all of the data. The
-% original paper used JAGS~\cite{JAGS} and R. As I am more familiar with Python I did try
-% pyjags (a python wrapper around JAGS~\cite{pyjags}), however I did not find great success. Instead I used the pymc
-% library~\cite{pymc} to help with the modelling. It fulfilled the same tasks that JAGS did with the
-% original paper~\cite{bayes}.
-
-\subsection{CVSS Prediction} \label{cvss_prediction}
-
-Cody Airey --a classmate of mine-- has been working on a similar problem. He has been repoducing
-results from Costa et al.\@~\cite{costa}. My choice of model for CVSS prediction will very much
-bootstrap off his work. So far, a strong contender for state-of-the-art model for predicting CVSS
-metrics from CVE descriptions is the DistilBERT model~\cite{distilbert}. This is a variant of
-BERT~\cite{BERT}, a pre-trained deep bidirectional transformer large language model developed by
-Google. DistilBERT has advantages over other BERT models in terms of performance, but also on speed
-of training as well as size / memory footprint of the model.
-
-\subsubsection{Training}
-
-The model is trained separately for each metric. Following Airey's method, each of the eight models
-were trained on five different data splits to allow for a standard deviation to be calculated, in
-order to aid in reducing the chance of a \textit{lucky} data split effecting the results. The
-difference between Costa et al.\@ \& Airey's work, and mine is that this model was trained on a
-combination of NVD and MITRE data as opposed to just using NVD. This was converted to the same
-format, a CSV containing the descriptions and the CVSS scores. This does mean there are now
-$\sim$40000 duplicate CVEs and $\sim$140000 CVEs enriched with CVSS scores total.
 
 \section{Results}
 
-\subsection{Bayesian Analysis}
+The clustering analysis using Latent Dirichlet Allocation (LDA) yielded insights into the patterns
+of vulnerabilities as they relate to the Common Vulnerability Scoring System (CVSS) metrics,
+particularly the integrity impact metric. While an ideal analysis would involve comparing our
+clusters with the assigned Common Weakness Enumeration (CWE), the time constraints and the complex
+nature of both our topic-based clusters and the CWE descriptions made automated cross-referencing
+unfeasible for the time begin. This limitation presents an opportunity for future research to bridge this gap.
 
-The results for the database analysis will be shown through the confusion matrices for the estimated
-accuracy of both NVD and MITRE. Unfortunately it is difficult to compare my results to the original
-paper~\cite{bayes} as they are on a totally different dataset. However, I will note that in general the estimated
-accuracy for both datasets is much lower than the scores from the original study. Across the board NVD
-often had $\sim$90\% accuracy for the highest accuracy field of any metric, with Confidentiality as
-a clear outlier as seen from Table~\ref{fig:johnson_confusion_matrices}.
+\subsection{Methodology and Presentation}
 
-Some general trends are that NVD (see Figure~\ref{fig:nvd_31_confusion_matrices}) have more extreme
-estimated accuracies. They do better for the higher frequency options, for the \texttt{Low} option
-on \texttt{Attack Complexity} for example, NVD have 98\% estimated accuracy and 66\% for
-\texttt{High} versus MITRE (see Figure~\ref{fig:mitre_31_confusion_matrices}), \texttt{Low} scored
-87\% and 75\% for \texttt{High}. Instead of further analysing in this way, I will point out some of
-my worries around these results, not that they are wrong per se, but that they do not really tell us
-anything extra than that shown by in Figure~\ref{fig:counts}, except perhaps it is helpful to see
-the results in a percentage estimated accuracy instead of a proportion. Unfortunately this is
-outside of my strengths, I did some cursory exploration into if doing this sort of analysis
-between two populations like this does make sense, the discourse here~\cite{stat_modeling} suggests
-that such a thing can be done, though it also suggests the need for more informative priors. This
-may apply in my case, and I intend on getting an expert opinion closer to home, however that will be
-after this report.
+The primary results of the analysis are presented in graphical form. Each graph shows the
+distribution of documents across the three classes of integrity impact (\texttt{NONE}, \texttt{LOW},
+\texttt{HIGH}) for the topic cluster that best represents each target class. This approach allows us
+to visualize how well this clustering method separates vulnerabilities based on their integrity impact.
 
-Johnson et al.\@ talk about the reliability of their results saying this in section 7.1 of~\cite{bayes}:\\ \\
+\subsection{Integrity Impact Analysis}
 
-\textit{\say{reliability concerns
-		are discussed. In this study we use five different scoring instruments - the databases. If some of
-		these are generally correct, but some are generally incorrect, will not the scores of the
-		incorrect ones still affect our beliefs about the actual values, thus worsening reliability? It
-		turns out that this is not the case. In a simulation, two scorers were set up to be completely
-		aligned, scoring 90\% complete impact in one of the CIA dimensions, while a third was unaligned
-		and scoring only 10\% complete impact. Initially, all scorers are equally credible, but the
-		gradual accrual of evidence impacts scorer credibility (as well as beliefs about the actual CVSS
-		score distributions). Thus, as the third scorer rarely matched the other two, its credibility
-		eroded, thus shrinking the weight of its advise~\cite{bayes}.}} \\
+The integrity impact metric in CVSS refers to the degree to which a vulnerability, if exploited, could affect the trustworthiness and veracity of data. A high integrity impact implies that data could be significantly corrupted or altered, potentially leading to serious consequences for the affected system or its users.
 
-Unfortunately in my case I do not have the advantage of a potential third or more scorer. This leads
-me to believe that there is a chance that incorrect scores can end up corrupting the results.
+\subsubsection{\texttt{NONE} Category}
+Figure \ref{fig:integrityImpact_20_NONE} shows the distribution for the cluster best representing the \texttt{NONE} category of integrity impact.
 
-\bigskip
-
-\begin{figure}[H]
+\begin{figure}[ht]
 	\centering
-	\makebox[\textwidth][c]{\includegraphics[width=1.5\textwidth]{figures/nvd_31_titles.pdf}}
-	\caption{\label{fig:nvd_31_confusion_matrices}Confusion Matrices for NVD for CVSS version 3.1}
+	\includegraphics[width=0.8\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_NONE_k1.png}
+	\caption{The counts of the documents within the best topic in relation to integrityImpact with target class \texttt{NONE}}
+	\label{fig:integrityImpact_20_NONE}
 \end{figure}
 
-\begin{figure}[H]
+In this cluster, we observe a predominance of vulnerabilities related to denial of service attacks
+and system crashes. While these issues are serious and can affect system availability, they
+typically do not directly compromise data integrity. This aligns with the expectations for
+vulnerabilities classified as having no integrity impact.
+
+Key findings:
+\begin{itemize}
+
+	\item The cluster shows a clear majority of \texttt{NONE}-rated vulnerabilities.
+
+	\item Common terms in this cluster likely include "denial of service", "crash", and
+	      "availability".
+
+	\item This result supports the effectiveness of our clustering in identifying vulnerabilities
+	      with no integrity impact.
+
+\end{itemize}
+
+\subsubsection{\texttt{LOW} Category}
+
+Figure \ref{fig:integrityImpact_20_LOW} represents the distribution for the cluster best representing the \texttt{LOW} category of integrity impact.
+
+\begin{figure}[ht]
 	\centering
-	\makebox[\textwidth][c]{\includegraphics[width=1.5\textwidth]{figures/mitre_31_titles.pdf}}
-	\caption{\label{fig:mitre_31_confusion_matrices}Confusion Matrices for MITRE for CVSS version 3.1}
+	\includegraphics[width=0.8\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_LOW_k1.png}
+	\caption{The counts of the documents within the best topic in relation to integrityImpact with target class \texttt{LOW}}
+	\label{fig:integrityImpact_20_LOW}
 \end{figure}
 
-\begin{table}
-	\label{fig:johnson_confusion_matrices}
+This cluster predominantly features cross-site scripting (XSS) vulnerabilities, often associated
+with WordPress plugins. These types of vulnerabilities can indeed cause data integrity issues, but
+they are usually limited in scope, typically affecting individual user interactions rather than
+compromising the entire application's data integrity.
+
+Key findings:
+\begin{itemize}
+
+	\item The cluster shows a majority of \texttt{LOW}-rated vulnerabilities, with some overlap into
+	      other categories.
+
+	\item Common terms likely include "cross-site scripting", "XSS", "WordPress", and "plugin".
+
+	\item This cluster aligns with our earlier k-means clustering results, providing validation for
+	      our LDA approach.
+
+\end{itemize}
+
+\subsubsection{\texttt{HIGH} Category}
+
+Figure \ref{fig:integrityImpact_20_HIGH} shows the distribution for the cluster best representing the \texttt{HIGH} category of integrity impact.
+
+\begin{figure}[ht]
 	\centering
-	\caption{Confusion Matrices for NVD on CVSS version 2.0 from Johnson et al.\@ \cite{bayes}}
-	\[
-		\begin{array}{c|c}
-			\textbf{Access vector}  & \textbf{Access complexity} \\
-			\hline
-			\begin{tabular}{l|ccc}
-				  & N    & A    & L    \\
-				\hline
-				N & 0.99 & 0    & 0    \\
-				A & 0.21 & 0.71 & 0.08 \\
-				L & 0.05 & 0.0  & 0.95 \\
-			\end{tabular}
-			                        &
-			\begin{tabular}{l|ccc}
-				  & L    & M    & H    \\
-				\hline
-				L & 0.54 & 0.29 & 0.17 \\
-				M & 0.02 & 0.88 & 0.1  \\
-				H & 0.01 & 0.08 & 0.91 \\
-			\end{tabular}
-			\\
-			\textbf{Authentication} & \textbf{Confidentiality}   \\
-			\hline
-			\begin{tabular}{l|ccc}
-				  & N    & S    & M    \\
-				\hline
-				N & 0.99 & 0.01 & 0    \\
-				S & 0.04 & 0.95 & 0.01 \\
-				M & 0.19 & 0.2  & 0.6  \\
-			\end{tabular}
-			                        &
-			\begin{tabular}{l|ccc}
-				  & C   & P    & N    \\
-				\hline
-				C & 0.4 & 0.2  & 0.2  \\
-				P & 0.2 & 0.4  & 0.19 \\
-				N & 0.2 & 0.21 & 0.4  \\
-			\end{tabular}
-			\\
-			\textbf{Integrity}      & \textbf{Availability}      \\
-			\hline
-			\begin{tabular}{l|ccc}
-				  & C    & P    & N    \\
-				\hline
-				C & 0.91 & 0.08 & 0.01 \\
-				P & 0.05 & 0.93 & 0.02 \\
-				N & 0.02 & 0.07 & 0.92 \\
-			\end{tabular}
-			                        &
-			\begin{tabular}{l|ccc}
-				  & C    & P    & N    \\
-				\hline
-				C & 0.92 & 0.07 & 0.01 \\
-				P & 0.07 & 0.91 & 0.02 \\
-				N & 0.02 & 0.11 & 0.87 \\
-			\end{tabular}
-		\end{array}
-	\]
-\end{table}
+	\includegraphics[width=0.8\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_HIGH_k1.png}
+	\caption{The counts of the documents within the best topic in relation to integrityImpact with target class \texttt{HIGH}}
+	\label{fig:integrityImpact_20_HIGH}
+\end{figure}
 
-\subsection{CVSS Prediction}
+In this cluster, we see a concentration of SQL injection and database-related vulnerabilities. These
+types of attacks have the potential to severely compromise data integrity by allowing unauthorized
+modification or corruption of database contents.
 
-Below, Table~\ref{tab:distil_part1} \& Table~\ref{tab:distil_part2} show the results of the
-DistilBERT model trained on a combination of NVD and MITRE data. Unfortunately this has
-a purely negative effect on all metrics, with the caveat that some of the standard deviations are
-lower. Additional note is that the balanced accuracy for some metrics looks a bit weird, I believe that
-is due to the model not outputing some of the categorical options for that metric. This applies to
-all the balanced accuracy scores, apart from the Priorities Required (PR) and Confidentiality (C) as
-seen on Table~\ref{tab:distil_part1} \& Table~\ref{tab:distil_part2}. As this
-was done only recently I have not looked into this issue in-depth to see why this is happening, but
-I will in the future. As to why the model performs worse, my theory is that the added data, and
-therefore the overlapping CVEs with different scores confuse the model. I thought that adding the
-additional data may have given the model a better chance of generalising, however this
-does not appear to be the case.
-The uncertainty between the two databases can serve as an indicator when
-analyzing generated CVE scores. It suggests that the model may encounter similar challenges to those
-faced by human evaluators. The lowest score for my model is in the Availability Impact
-category, which is also low for Cody's model. This observation indicates a correlation between the
-machine learning models' difficulties and the issues faced by human scorers. Attack Complexity also
-presents challenges, likely due to data imbalance, as the dataset is heavily skewed towards the
-\texttt{Low} score, thereby incentivizing the model to output \texttt{Low} scores (see
-Figures~~\ref{fig:counts},~\ref{fig:nvd_31_confusion_matrices},~\ref{fig:mitre_31_confusion_matrices} for
-reference).
+Key findings:
+\begin{itemize}
 
-\begin{table}[H]
-	\centering
-	\resizebox{\textwidth}{!}{%
-		\begin{tabular}{llcccc}
-			\toprule
-			\textbf{Metric} & \textbf{Model}  & \textbf{AV}           & \textbf{AC}           & \textbf{PR}           & \textbf{UI}           \\
-			\midrule
-			\multirow{2}{*}{Accuracy}
-			                & DistilBERT-Cody & \textbf{91.28 ± 0.26} & \textbf{95.64 ± 0.68} & \textbf{82.77 ± 0.24} & \textbf{93.86 ± 0.19} \\
-			                & DistilBERT-Jake & 72.81 ± 0.32          & 92.62 ± 0.15          & 81.18 ± 0.18          & 66.35 ± 0.24          \\
-			\midrule
-			\multirow{2}{*}{F1}
-			                & DistilBERT-Cody & \textbf{90.98 ± 0.31} & \textbf{93.85 ± 1.39} & \textbf{82.53 ± 0.26} & \textbf{93.82 ± 0.19} \\
-			                & DistilBERT-Jake & 61.36 ± 0.42          & 89.08 ± 0.22          & 80.96 ± 0.19          & 52.93 ± 0.31          \\
-			\midrule
-			\multirow{2}{*}{Bal Acc}
-			                & DistilBERT-Cody & \textbf{67.88 ± 2.11} & \textbf{55.82 ± 7.23} & \textbf{75.98 ± 0.47} & \textbf{92.46 ± 0.21} \\
-			                & DistilBERT-Jake & 25.00 ± 0.00          & 50.00 ± 0.00          & 75.18 ± 0.31          & 50.00 ± 0.00          \\
-			\bottomrule
-		\end{tabular}
-	}
-	\caption{Comparison of the effects of the X pre-trained models on the CVSS v3.1 dataset (Part 1).}
-	\label{tab:distil_part1}
-\end{table}
+	\item The cluster shows a strong representation of \texttt{HIGH}-rated vulnerabilities.
 
-\begin{table}[H]
-	\centering
-	\resizebox{\textwidth}{!}{%
-		\begin{tabular}{llcccc}
-			\toprule
-			\textbf{Metric} & \textbf{Model}  & \textbf{S}            & \textbf{C}            & \textbf{I}            & \textbf{A}            \\
-			\midrule
-			\multirow{2}{*}{Accuracy}
-			                & DistilBERT-Cody & \textbf{96.38 ± 0.09} & \textbf{86.24 ± 0.20} & \textbf{87.15 ± 0.10} & \textbf{88.70 ± 0.10} \\
-			                & DistilBERT-Jake & 80.21 ± 0.16          & 82.45 ± 0.11          & 45.71 ± 0.26          & 52.53 ± 0.23          \\
-			\midrule
-			\multirow{2}{*}{F1}
-			                & DistilBERT-Cody & \textbf{96.30 ± 0.10} & \textbf{86.09 ± 0.21} & \textbf{87.11 ± 0.10} & \textbf{88.04 ± 0.11} \\
-			                & DistilBERT-Jake & 71.40 ± 0.22          & 82.34 ± 0.12          & 28.68 ± 0.28          & 36.18 ± 0.27          \\
-			\midrule
-			\multirow{2}{*}{Bal Acc}
-			                & DistilBERT-Cody & \textbf{91.57 ± 0.43} & \textbf{82.70 ± 0.36} & \textbf{85.81 ± 0.10} & \textbf{64.01 ± 0.13} \\
-			                & DistilBERT-Jake & 50.00 ± 0.00          & 79.85 ± 0.23          & 33.33 ± 0.00          & 33.33 ± 0.00          \\
-			\bottomrule
-		\end{tabular}
-	}
-	\caption{Comparison of the effects of the X pre-trained models on the CVSS v3.1 dataset (Part 2).}
-	\label{tab:distil_part2}
-\end{table}
+	\item Common terms likely include "SQL injection", "database", and possibly specific database
+	      technology names.
+
+	\item The prevalence of these severe vulnerabilities in this cluster aligns with cybersecurity
+	      expert expectations for high-impact integrity issues.
+
+\end{itemize}
+
+\subsection{Cluster Merging and Refinement}
+
+In an attempt to enhance class representation and potentially improve the overall performance of our topic model, we explored the concept of merging related clusters. This process involved several steps:
+
+\begin{itemize}
+	\item Identifying clusters with semantic similarity or overlapping representation of CVSS classes.
+	\item Merging these clusters by combining their topic-word distributions and reassigning documents.
+	\item Recalculating class representation metrics for the merged clusters.
+	\item Comparing the performance of the merged model to the original in terms of:
+	      \begin{itemize}
+		      \item Overall topic coherence
+		      \item Clarity of class representation
+		      \item Interpretability of resulting topics
+	      \end{itemize}
+\end{itemize}
+
+\subsubsection{Methodology}
+
+Our approach to cluster merging was based on a simple similarity metric between topic-word distributions. Clusters were merged if their similarity exceeded a predefined threshold. While this method is straightforward to implement, it is admittedly crude and may not capture all the nuances of semantic similarity between topics.
+
+It's worth noting that more sophisticated approaches exist. For instance, Neuhaus \& Zimmerman (2010)~\cite{cve_topic_modelling} merged clusters based on the similarity of the topic words found by their model. This approach, which we intend to explore in future work, potentially offers a more nuanced way of identifying truly related topics.
+
+\subsubsection{Results}
+
+To illustrate the effects of cluster merging, we present the following figures:
+
+% Insert figures here
+% \begin{figure}[ht]
+% \centering
+% \includegraphics[width=0.8\textwidth]{path_to_original_cluster_figure}
+% \caption{Distribution of CVSS classes in original clusters}
+% \label{fig:original_clusters}
+% \end{figure}
+
+% \begin{figure}[ht]
+% \centering
+% \includegraphics[width=0.8\textwidth]{path_to_merged_cluster_figure}
+% \caption{Distribution of CVSS classes in merged clusters}
+% \label{fig:merged_clusters}
+% \end{figure}
+
+Contrary to our initial expectations, the process of merging clusters did not lead to improved
+results. Instead, I observed the following effects:
+
+\begin{itemize}
+
+	\item \textbf{Decreased Cluster Purity:} The merged clusters showed a higher mix of different
+	      CVSS classes compared to the original clusters. This indicates that the merging process
+	      combined not only semantically similar vulnerabilities but also those with different CVSS
+	      ratings.
+
+	\item \textbf{Reduced Interpretability:} The larger, merged clusters became more difficult to
+	      interpret. The defining characteristics of individual clusters became diluted, making it
+	      harder to assign clear semantic meanings to each cluster.
+
+	\item \textbf{Loss of Granularity:} While the original clusters often represented specific types
+	      of vulnerabilities or attack vectors, the merged clusters tended to group broader categories
+	      together, losing some of the nuanced distinctions that were valuable in the original model.
+
+	\item \textbf{Decreased Topic Coherence:} The overall topic coherence of the model decreased
+	      after merging, suggesting that the combined topics were less internally consistent than the
+	      original, more granular topics.
+
+\end{itemize}
+
+\subsubsection{Interpretation and Future Directions}
+
+These results suggest that our initial clustering approach was already capturing meaningful
+distinctions between different types of vulnerabilities and their associated CVSS ratings. The
+process of merging clusters, at least with the current methodology, appears to obscure these
+distinctions rather than enhance them.
+
+However, this does not necessarily mean that cluster merging is inherently unhelpful. Instead, it suggests that more sophisticated merging strategies may be needed to preserve the valuable information captured in the original clusters while still allowing for the combination of truly related topics.
+
+For future work, I propose the following directions:
+
+\begin{itemize}
+	\item Implementing the cluster merging approach of Neuhaus \& Zimmerman (2010), which focuses on the similarity of topic words rather than overall distribution similarity.
+	\item Exploring hierarchical topic modeling approaches, which might allow for the representation of both fine-grained and broader topic categories simultaneously.
+	\item Investigating dynamic topic modeling techniques to capture how vulnerability types and their CVSS ratings evolve over time, potentially revealing patterns in how initially distinct vulnerability categories merge or diverge over time.
+\end{itemize}
+
+The current merging approach is possibly a bit crude, Neuhaus \&
+Zimmerman(2010)\cite{cve_topic_modelling} merged the clusters based on the similarity of the topic
+words found by the model, this is something I intend to try in future work.
+
+\subsection{Overall Observations}
+
+\begin{enumerate}
+
+	\item Our clustering approach successfully differentiated between vulnerabilities with varying
+	      levels of integrity impact, as evidenced by the distinct profiles of each cluster.
+
+	\item The results align well with expert knowledge in the field of cybersecurity, suggesting
+	      that our unsupervised learning approach can capture meaningful patterns in vulnerability
+	      data.
+
+	\item While our current analysis provides a static view of the vulnerability landscape, the
+	      temporal aspect of the data presents an opportunity for future research. Analyzing how these
+	      clusters and trends have evolved over time could provide additional insights into the
+	      changing nature of cybersecurity threats.
+
+	\item The overlap between categories in some clusters (particularly visible in the \texttt{LOW}
+	      category) highlights the complexity of vulnerability classification and the potential for
+	      ambiguity in CVSS scoring.
+
+\end{enumerate}
 
 
 \section{Discussion}\label{discussion}
-
-% \subsubsection*{Case Study: Curl Library Vulnerability}
-
-% A practical example of the issues with CVSS scoring can be seen with a vulnerability in the curl
-% library~\cite{curl_library}. The vulnerability was described as an integer overflow in
-% \texttt{tool\_operate.c}, which could result in undefined behaviour if a user entered a value
-% exceeding the integer limit~\cite{curlcve}. Initially, this vulnerability received a CVSS score of
-% 9.8. Daniel Stenberg, the original founder of curl, disagreed with this high score, arguing that it
-% was a bug fixed back in 2019~\cite{curl1}. Despite his efforts, the CVE (Common Vulnerabilities and
-% Exposures) entry remained. Stenberg successfully disputed the score and NVD lowered the score to
-% 3.3~\cite{curl2}. Stenberg was eventually somewhat successful in mitigating this issue, however it
-% took a good chunk of his valuable time, as well as all others involved. This example highlights the
-% time-consuming nature of rectifying CVSS scores and the potential for initial misratings.
 
 
 \subsubsection{Exploit Prediction Scoring System}
@@ -1250,31 +1321,128 @@ going forward.
 
 \subsection{Future Work}
 
-Despite the disadvantages of CVSS, I will continue to focus on it in my studies. My focus will pivot
-towards the interpretability of large language models, particularly from the perspective of data.
-The CVE dataset is messy, with many poorly written CVE descriptions that are not useful for machine
-learning models. I plan to clean up this dataset by identifying and removing low-quality entries. To
-achieve this, I will perform clustering and general analysis of the CVE descriptions to better
-understand the dataset and develop heuristics for filtering it.
+Despite the challenges associated with CVSS, it remains a crucial system in vulnerability
+management, warranting continued research. Our future work will focus on several key areas:
+
+\begin{itemize}
+
+	\item \textbf{Enhancing LLM Interpretability:} We will pivot towards improving the
+	      interpretability of large language models, particularly from a data-centric perspective.
+	      This involves developing techniques to better understand how these models process and
+	      interpret CVE descriptions.
+
+	\item \textbf{Dataset Refinement:} The CVE dataset contains numerous poorly written descriptions
+	      that hinder machine learning model performance. We plan to develop robust methods for
+	      identifying and filtering out low-quality entries, potentially using the insights gained
+	      from our clustering analysis.
+
+	\item \textbf{Advanced Clustering Techniques:} Building on our current work, we aim to explore
+	      more sophisticated clustering approaches. This includes implementing the cluster merging
+	      method proposed by Neuhaus \& Zimmerman (2010)~\cite{cve_topic_modelling}, which focuses on
+	      the similarity of topic words.
+
+	\item \textbf{Temporal Analysis:} We intend to investigate how vulnerability patterns and their
+	      CVSS ratings evolve over time. This could involve applying dynamic topic modeling techniques
+	      to capture temporal trends in the data.
+
+	\item \textbf{Integration of Multiple Data Sources:} While our initial attempts to combine NVD
+	      and MITRE data did not yield improvements, we believe there's potential in developing more
+	      nuanced methods for integrating multiple data sources. This could involve techniques for
+	      resolving discrepancies between databases or using ensemble methods that leverage the
+	      strengths of each source.
+
+	\item \textbf{Hierarchical Topic Modeling:} To address the limitations observed in our cluster
+	      merging experiments, we plan to explore hierarchical topic modeling approaches. These could
+	      potentially capture both fine-grained distinctions between vulnerability types and broader
+	      categorical relationships.
+
+\end{itemize}
+
+Through these efforts, we aim to develop a more robust, data-driven approach to vulnerability
+analysis and CVSS scoring that can adapt to the evolving landscape of cybersecurity threats.
 
 \section{Conclusion}
 
-The Common Vulnerability Scoring System (CVSS) is integral in prioritizing and managing the
-ever-growing number of software vulnerabilities. While the current approach heavily relies on
-manually assigned scores from the National Vulnerability Database (NVD), it may be worth using the
-MITRE database as well. However, the findings are very much inconclusive, it is possible that adding
-the extra data during model training is worth it, but so far it has only been to the detriment of
-performance. One key issue is the variability in CVSS scores between different databases, such as NVD
-and MITRE, which suggests a lack of consistency in the scoring process. This inconsistency can
-confuse automated systems and reduce the overall reliability of the predicted scores.
+The Common Vulnerability Scoring System (CVSS) plays a vital role in prioritizing and managing the
+ever-increasing number of software vulnerabilities. Our research has highlighted both the strengths
+and limitations of current CVSS implementation and scoring practices.
 
-In conclusion, while CVSS remains a crucial tool for vulnerability management, its current
-implementation has limitations that need to be addressed. The integration of machine learning models
-offers a promising solution to automate and enhance the accuracy of CVSS scoring. However the focus
-should be on predicting the distinct categorical variable for each metric, as this is a universally
-interesting classification task and will be more able to apply to changes in the CVSS standard.
-Future research should focus on refining these models, and focusing on interpretability, whether
-through LLM interpretability methods, or through more traditional databased clustering.
+Key findings from our study include:
+
+\begin{itemize}
+
+	\item \textbf{Database Variability:} We observed significant variability in CVSS scores between
+	      different databases, such as NVD and MITRE. This inconsistency underscores the subjective
+	      nature of vulnerability scoring and the challenges in establishing a reliable ground truth.
+
+	\item \textbf{Clustering Insights:} Our application of Latent Dirichlet Allocation (LDA) for
+	      clustering CVE descriptions revealed meaningful patterns in vulnerability types and their
+	      associated CVSS ratings. This demonstrates the potential of unsupervised learning techniques
+	      in capturing latent structures within vulnerability data.
+
+	\item \textbf{Cluster Merging Limitations:} Our experiments with cluster merging, while not
+	      yielding immediate improvements, provided valuable insights into the robustness of our
+	      initial clustering and the complexity of semantic relationships between vulnerability types.
+
+	\item \textbf{Data Quality Importance:} The analysis highlighted the critical role of data
+	      quality in both manual and automated CVSS scoring processes. Poorly written or inconsistent
+	      CVE descriptions pose significant challenges for accurate vulnerability assessment.
+
+\end{itemize}
+
+While CVSS remains a crucial tool for vulnerability management, our research suggests that its
+current implementation has limitations that need to be addressed. The integration of machine
+learning models, particularly those focused on natural language processing and topic modeling,
+offers promising avenues for automating and enhancing the accuracy of CVSS scoring.
+
+Moving forward, we advocate for a two-pronged approach:
+
+\begin{enumerate}
+
+	\item \textbf{Improving Categorical Prediction:} Focus on developing models that can accurately
+	      predict the distinct categorical variables for each CVSS metric. This approach is more
+	      likely to generalize across different versions of the CVSS standard and provide actionable
+	      insights for vulnerability management.
+
+	\item \textbf{Enhancing Interpretability:} Invest in methods that improve the interpretability
+	      of both machine learning models and the underlying vulnerability data. This includes
+	      refining clustering techniques, developing better data visualization tools, and creating
+	      more transparent scoring processes.
+
+\end{enumerate}
+
+By combining advanced machine learning techniques with domain expertise in cybersecurity, we can
+work towards a more consistent, accurate, and interpretable system for assessing and prioritizing
+software vulnerabilities. This improved system would not only enhance the efficiency of
+vulnerability management but also contribute to a more secure digital ecosystem overall.
+
+% \subsection{Future Work}
+
+% Despite the disadvantages of CVSS, I will continue to focus on it in my studies. My focus will pivot
+% towards the interpretability of large language models, particularly from the perspective of data.
+% The CVE dataset is messy, with many poorly written CVE descriptions that are not useful for machine
+% learning models. I plan to clean up this dataset by identifying and removing low-quality entries. To
+% achieve this, I will perform clustering and general analysis of the CVE descriptions to better
+% understand the dataset and develop heuristics for filtering it.
+
+% \section{Conclusion}
+
+% The Common Vulnerability Scoring System (CVSS) is integral in prioritizing and managing the
+% ever-growing number of software vulnerabilities. While the current approach heavily relies on
+% manually assigned scores from the National Vulnerability Database (NVD), it may be worth using the
+% MITRE database as well. However, the findings are very much inconclusive, it is possible that adding
+% the extra data during model training is worth it, but so far it has only been to the detriment of
+% performance. One key issue is the variability in CVSS scores between different databases, such as NVD
+% and MITRE, which suggests a lack of consistency in the scoring process. This inconsistency can
+% confuse automated systems and reduce the overall reliability of the predicted scores.
+
+% In conclusion, while CVSS remains a crucial tool for vulnerability management, its current
+% implementation has limitations that need to be addressed. The integration of machine learning models
+% offers a promising solution to automate and enhance the accuracy of CVSS scoring. However the focus
+% should be on predicting the distinct categorical variable for each metric, as this is a universally
+% interesting classification task and will be more able to apply to changes in the CVSS standard.
+% Future research should focus on refining these models, and focusing on interpretability, whether
+% through LLM interpretability methods, or through more traditional databased clustering.
 
 \printbibliography[title={References}]
 

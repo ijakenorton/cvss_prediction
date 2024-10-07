@@ -127,7 +127,17 @@ def parse_topics(num_topics, current_metric):
     # path = f"./lda_word2vec_balanced_{num_topics}/lda_word2vec_balanced_all_metrics_all_values.txt"
     # path = f"./lda_word2vec_balanced_fasttext_{num_topics}/lda_word2vec_balanced_all_metrics_all_values.txt"
     # path = f"./kmeans_fasttext_{num_topics}/kmeans_fasttext_all_metrics_all_values.txt"
-    path = f"./unbalanced/lda_word2vec_unbalanced_{current_metric}_{num_topics}/lda_word2vec_unbalanced_all_metrics_all_values.txt"
+
+    import config
+
+    prefix = ""
+    balanced = "balanced"
+
+    if not config.balanced:
+        prefix = "unbalanced/"
+        balanced = "unbalanced"
+
+    path = f"./{prefix}lda_word2vec_{balanced}_{current_metric}_{num_topics}/lda_word2vec_{balanced}_all_metrics_all_values.txt"
     runs = {"seeds": {}, "num_topics": {}}
     with open(path, "r") as f:
         contents = f.read()
@@ -213,7 +223,16 @@ def create_compatible_json(runs):
 
 
 def create_single_topic(run, num_topics, current_metric):
-    path = f"./unbalanced/lda_word2vec_unbalanced_{current_metric}_{num_topics}/lda_unbalanced_topics.json"
+
+    import config
+
+    prefix = ""
+    balanced = "balanced"
+
+    if not config.balanced:
+        prefix = "unbalanced/"
+        balanced = "unbalanced"
+    path = f"./{prefix}lda_word2vec_{balanced}_{current_metric}_{num_topics}/lda_{balanced}_topics.json"
     # path = f"./lda_word2vec_balanced_fasttext_{num_topics}/lda_balanced_topics.json"
     # path = f"./kmeans_fasttext_{num_topics}/kmeans_balanced_topics.json"
 

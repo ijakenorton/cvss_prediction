@@ -7,6 +7,6 @@ if [ $# -gt 0 ]; then
 fi
 
 
-# python grid_search_lda_compare.py && \
+python grid_search_lda_compare.py && \
 python ./parse_topics.py && \
 python ./aggregate_classes.py 

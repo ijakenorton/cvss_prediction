@@ -113,7 +113,8 @@ def create_topic_data(current_metric=None, num_topics=None):
         prefix = "unbalanced/"
         balanced = "unbalanced"
 
-    output_dir = f"./temp_plots{prefix}/counts_{current_metric}_{num_topics}/"
+    output_dir = f"./temp_plots/{prefix}counts_{current_metric}_{num_topics}/"
+    print(output_dir)
     os.makedirs(output_dir, exist_ok=True)
 
     for i in range(1, 6):
@@ -159,11 +160,11 @@ def main():
     topic_counts, data = create_topic_data()
 
     # try:
-    visualize_topics(
-        topic_counts,
-        ["confidentialityImpact", "integrityImpact", "availabilityImpact"],
-        config.num_topics,
-    )
+    # visualize_topics(
+    #     topic_counts,
+    #     ["confidentialityImpact", "integrityImpact", "availabilityImpact"],
+    #     config.num_topics,
+    # )
 
     # nvd_data = utils.read_data(f"../data/nvd_{version}_cleaned.pkl")["data"]
     # nvd_counts = metric_counts.calculate_metric_counts(nvd_data, version)

@@ -55,9 +55,18 @@ def balance_data_by_metric(data, metric: Metrics_t, max_per_category=20000):
 def train(descriptions, metric, value, metric_values):
     import config
 
-    output_dir = f"./unbalanced/lda_word2vec_unbalanced_{config.current_metric}_{config.num_topics}"
+    prefix = ""
+    balanced = "balanced"
+
+    if not config.balanced:
+        prefix = "unbalanced/"
+        balanced = "unbalanced"
+
+    output_dir = (
+        f"./{prefix}lda_word2vec_{balanced}_{config.current_metric}_{config.num_topics}"
+    )
     os.makedirs(output_dir, exist_ok=True)
-    file_name = f"{output_dir}/lda_word2vec_unbalanced_{metric}_{value}.txt"
+    file_name = f"{output_dir}/lda_word2vec_{balanced}_{metric}_{value}.txt"
 
     custom_stopwords = set(stopwords.words("english")).union(set(STOPWORDS))
     custom_stopwords.update(
