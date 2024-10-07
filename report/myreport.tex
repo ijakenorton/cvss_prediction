@@ -72,29 +72,25 @@
 	vulnerabilities, serving as a crucial tool for triaging the increasing number of new
 	vulnerabilities released each year. As manual scoring cannot keep pace with this growth, there
 	is a need for automated prediction methods. While machine learning, particularly large language
-	models (LLMs), has shown promise in predicting CVSS scores. 
-	\notedme{$\leftarrow$ Not a sentence.}
-	The primary motivator for this paper
-	is an exploration into the CVE and CVSS processes to serve as a springboard for research next
-	year for \change[masters]{a Master's thesis}. As such there are many unanswered questions resulting from this exploration.
-	\notedme{You shouldn't be sounding like you're making excuses for not having answers: change this to something like "This paper aims to explore the CVE and CVSS processes to provide a foundation for future research." (Actually AI suggested that quote, but it looks reasonable.)}
-	Research\notedme{whose?} has primarily focused on using the National Vulnerability Database (NVD) as a single
-	data source. This paper explores the potential of using multiple data sources for
+	models (LLMs), have shown promise in predicting CVSS metrics given there descriptions. This
+	paper aims to explore the CVE and CVSS processes to provide a foundation for future research.
+	research\notedme{whose?} has primarily focused on using the National Vulnerability Database (NVD) as
+	a single data source. This paper explores the potential of using multiple data sources for
 	cross-validation and increased training data volume, specifically comparing NVD with the MITRE
-	database. The analysis reveals differences in how these databases rate Common Vulnerabilities
-	and Exposures (CVEs), highlighting the challenges in establishing a consistent ground truth for
-	CVSS scores. While the combination of multiple datasets did not yield the expected improvements
-	in prediction accuracy, this investigation provides valuable insights into the complexities of
-	CVSS scoring across different evaluation teams. The next focus of this paper is on enhancing the
+	database. The analysis reveals differences in how these databases rate Common Vulnerabilities and
+	Exposures (CVEs), highlighting the challenges in establishing a consistent ground truth for CVSS
+	scores. While the combination of multiple datasets did not yield the expected improvements in
+	prediction accuracy, this investigation provides valuable insights into the complexities of CVSS
+	scoring across different evaluation teams. The next focus of this paper is on enhancing the
 	interpretability and analysis of CVE/CVSS data through clustering techniques and other dataset
 	analysis methods. I employ Latent Dirichlet Allocation (LDA) and other clustering approaches to
 	uncover patterns within the vulnerability descriptions. This data-driven analysis not only
 	complements LLM-based prediction methods but also offers faster turnaround times for identifying
 	trends and relationships within the data. The findings demonstrate that certain types of
-	vulnerabilities tend to cluster together, such as cross-site scripting, PHP, and
-	WordPress-related issues. These insights contribute to a deeper understanding of the underlying
-	structure of vulnerability data and may inform more nuanced approaches to automated CVSS scoring
-	and vulnerability management.
+	vulnerabilities tend to cluster together, such as cross-site scripting, PHP, and WordPress-related
+	issues. These insights contribute to a deeper understanding of the underlying structure of
+	vulnerability data and may inform more nuanced approaches to automated CVSS scoring and
+	vulnerability management.
 
 \end{abstract}
 
