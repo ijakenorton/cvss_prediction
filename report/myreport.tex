@@ -160,7 +160,7 @@ field of vulnerability assessment and management.
 
 
 \begin{figure}[ht] \centering
-	\includegraphics[width=0.8\textwidth]{figures/cves_year.pdf}
+	\includegraphics[width=0.8\textwidth]{figures/cves_per_year.pdf}
 	\caption{\label{fig:cves_per_year}Number of new CVEs by year}
 \end{figure}
 
@@ -328,7 +328,7 @@ this intrinsically.
 
 \begin{figure}
 	\centering
-	\makebox[\textwidth][c]{\includegraphics[width=0.8\textwidth]{figures/nvd_data.png}}
+	\makebox[\textwidth][c]{\includegraphics[width=0.8\textwidth]{figures/nvd_data.pdf}}
 	\caption{\label{fig:nvd_data}Distribution of Metric ratings for NVD}
 \end{figure}
 
@@ -843,7 +843,7 @@ This was a good indicator that it is worth looking into clustering further.
 \begin{figure}[H]
 	\centering
 
-	\includegraphics[width=0.8\textwidth]{figures/cross_site_per_year.png}
+	\includegraphics[width=0.8\textwidth]{figures/cross_site_per_year.pdf}
 	\caption{\label{fig:cross_site_per_year}CVEs with descriptions containing at least five of the
 		words from cluster four}
 \end{figure}
@@ -902,10 +902,11 @@ The parameters chosen here just felt like reasonable defaults and have not been 
 also other options in using something like pretrained fasttext~\cite{fasttext} as used in
 \cite{nvd_clustering_fasttext}.
 
+\subsubsection{Topic Coherence Metric}
+
 \todo[inline]{As I haven't really used these in a rigorous way, I am unsure if I should keep this
 	in, I have not gone into detail on these as I feel like it may be wasted effort if I do not use them
 	too much }
-\subsubsection{Topic Coherence Metric}
 
 I define a custom coherence metric based on Word2Vec similarities:
 
@@ -918,24 +919,23 @@ where $n$ is the number of top words in a topic (10 in my implementation).
 In addition I have kept track of the C-V coherence score used as default by Gensim, which comes from
 \cite{cv_coherence}
 
-Also have used perplexity
+\todo[inline]{Also have used perplexity, as a score as that was the common way in the original lda
+	paper.... I haven't really used it though, just interesting in how unstable it was compared with the
+	other coherence style metrics...}
 \subsubsection{LDA Model Training}
 
-\todo[inline]{Update with the actual parameters, unsure if worth including the two different grid
-	search I did one for 14 - 20  clusters, and one for 100 clusters as I thought that was likely what I would
-	go with}
 
-I have done many different iterations of the models with varying numbers of clusters and
+I have done many different iterations of the models with varying numbers of topics and
 hyperparameters. In grid search attempts I found that the different coherences metrics did not agree
 with each other in addition as we are searching for unknown topics in a unsupervised fashion, it is
 dubious how helpful these measures of fit are in any case. My results of such exploration will be
 found in the appendices. The hyperparameters below are broadly matching what I found to be the best,
 however the main metric came from looking at the actual clustering results, and the biggest impact
-came from the number of clusters. This number ranged from 14 - 200
+came from the number of topics.
 
 \begin{itemize}
 
-	\item Number of topics: $[num\_topics, num\_topics + 1)$
+	\item Number of topics: \{20 40 60 80 100\}
 
 	\item $\alpha$: \{\say{symmetric}\}
 
@@ -1048,22 +1048,22 @@ elbow of the curve, as any minor increase in the purity score could just be base
 increase in the purity score as the number of topics increase.
 
 \begin{figure}[ht] \centering
-	\includegraphics[width=0.8\textwidth]{figures/purity/topic_model_performance_purity_ground_truth_integrityImpact.png}
-	\caption{\label{fig:purity_integrity}Figures showing the purity score
+	\includegraphics[width=1\textwidth]{figures/purity/topic_model_performance_purity_ground_truth_integrityImpact.pdf}
+	\caption{\label{fig:purity_integrity}The purity score
 		for when the topics have been assigned with a focus on integrityImpact, split by the different
 		possible classes}
 \end{figure}
 
 \begin{figure}[ht] \centering
-	\includegraphics[width=0.8\textwidth]{figures/purity/topic_model_performance_purity_ground_truth_availabilityImpact.png}
-	\caption{\label{fig:purity_20_availability}Figures showing the purity score
+	\includegraphics[width=1\textwidth]{figures/purity/topic_model_performance_purity_ground_truth_availabilityImpact.pdf}
+	\caption{\label{fig:purity_20_availability}The purity score
 		for when the topics have been assigned with a focus on availabilityImpact, split by the different
 		possible classes}
 \end{figure}
 
 \begin{figure}[ht] \centering
-	\includegraphics[width=0.8\textwidth]{figures/purity/topic_model_performance_purity_ground_truth_confidentialityImpact.png}
-	\caption{\label{fig:purity_20_confidentiality}Figures showing the purity score
+	\includegraphics[width=1\textwidth]{figures/purity/topic_model_performance_purity_ground_truth_confidentialityImpact.pdf}
+	\caption{\label{fig:purity_20_confidentiality}The purity score
 		for when the topics have been assigned with a focus on confidentialityImpact, split by the different
 		possible classes}
 \end{figure}
@@ -1078,10 +1078,11 @@ This is just a reality of the data and so is something that we have to contend w
 made finding a well defined cluster for each topic difficult as well as making the graphing and
 interpreting the outcome of the clustering somewhat awkward.
 
-As an example, if we take look at privileges a graph of the best cluster for
-\texttt{priviledgesRequired} for the with a focus on the \texttt{HIGH} class (ref graph here) we can see
-that even though we are trying to find the cluster with the best representation of \texttt{HIGH},
-i.e. in this case best refers to the cluster with the distribution most skewed towards the
+As an example, if we take look at figure~\ref{fig:priviledgesRequired_BAD} Privileges Required  of
+the best cluster for \texttt{priviledgesRequired} for the with a focus on the \texttt{HIGH} class we
+can see that even though we are trying to find the cluster with the best representation of
+\texttt{HIGH}, i.e. in this case best refers to the cluster with the distribution most skewed
+towards the
 
 The approach in the end due is to
 choose the most balanced classes first as they are easier to interpret. From there I went on to
@@ -1089,6 +1090,15 @@ fully balance the classes that could be down to 20000 CVEs for each class on the
 see in the results that makes the interpration of the results easier and more honest, even if it is
 actually showing the same thing.
 
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/privilegesRequired/merged_top_k_topics_category_focus_counts_privilegesRequired_HIGH_k1.pdf}
+
+	\caption{The counts of the documents within the best topic in relation to Privileges Required with
+		target class \texttt{HIGH}}
+
+	\label{fig:priviledgesRequired_BAD}
+\end{figure}
 
 \section{Results}
 
@@ -1108,16 +1118,24 @@ to visualize how well this clustering method separates vulnerabilities based on 
 
 \subsection{Integrity Impact Analysis}
 
-The integrity impact metric in CVSS refers to the degree to which a vulnerability, if exploited, could affect the trustworthiness and veracity of data. A high integrity impact implies that data could be significantly corrupted or altered, potentially leading to serious consequences for the affected system or its users.
+The integrity impact metric in CVSS refers to the degree to which a vulnerability, if exploited,
+could affect the trustworthiness and veracity of data. A high integrity impact implies that data
+could be significantly corrupted or altered, potentially leading to serious consequences for the
+affected system or its users.
 
-\subsubsection{\texttt{NONE} Category}
-Figure \ref{fig:integrityImpact_20_NONE} shows the distribution for the cluster best representing the \texttt{NONE} category of integrity impact.
+\subsubsection{NONE Category}
+
+Figure \ref{fig:integrityImpact_60_NONE} shows the distribution for the cluster best representing
+the \texttt{NONE} category of integrity impact.
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.8\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_NONE_k1.png}
-	\caption{The counts of the documents within the best topic in relation to integrityImpact with target class \texttt{NONE}}
-	\label{fig:integrityImpact_20_NONE}
+	\includegraphics[width=0.8\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_NONE_k1.pdf}
+
+	\caption{The counts of the documents within the best topic in relation to integrityImpact with
+		target class \texttt{NONE}}
+
+	\label{fig:integrityImpact_60_NONE}
 \end{figure}
 
 In this cluster, we observe a predominance of vulnerabilities related to denial of service attacks
@@ -1138,15 +1156,15 @@ Key findings:
 
 \end{itemize}
 
-\subsubsection{\texttt{LOW} Category}
+\subsubsection{LOW Category}
 
-Figure \ref{fig:integrityImpact_20_LOW} represents the distribution for the cluster best representing the \texttt{LOW} category of integrity impact.
+Figure \ref{fig:integrityImpact_60_LOW} represents the distribution for the cluster best representing the \texttt{LOW} category of integrity impact.
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.8\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_LOW_k1.png}
+	\includegraphics[width=0.8\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_LOW_k1.pdf}
 	\caption{The counts of the documents within the best topic in relation to integrityImpact with target class \texttt{LOW}}
-	\label{fig:integrityImpact_20_LOW}
+	\label{fig:integrityImpact_60_LOW}
 \end{figure}
 
 This cluster predominantly features cross-site scripting (XSS) vulnerabilities, often associated
@@ -1167,15 +1185,15 @@ Key findings:
 
 \end{itemize}
 
-\subsubsection{\texttt{HIGH} Category}
+\subsubsection{HIGH Category}
 
-Figure \ref{fig:integrityImpact_20_HIGH} shows the distribution for the cluster best representing the \texttt{HIGH} category of integrity impact.
+Figure \ref{fig:integrityImpact_60_HIGH} shows the distribution for the cluster best representing the \texttt{HIGH} category of integrity impact.
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.8\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_HIGH_k1.png}
+	\includegraphics[width=0.8\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_HIGH_k1.pdf}
 	\caption{The counts of the documents within the best topic in relation to integrityImpact with target class \texttt{HIGH}}
-	\label{fig:integrityImpact_20_HIGH}
+	\label{fig:integrityImpact_60_HIGH}
 \end{figure}
 
 In this cluster, we see a concentration of SQL injection and database-related vulnerabilities. These
@@ -1194,6 +1212,14 @@ Key findings:
 	      expert expectations for high-impact integrity issues.
 
 \end{itemize}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/integrityImpact/integrityImpact_NONE_60_BAD.pdf}
+	\caption{The counts of the documents within the best topic in relation to integrityImpact with
+		target class \texttt{NONE}, for the number of clusters (60) with the lowest purity}
+	\label{fig:integrityImpact_60_NONE_BAD}
+\end{figure}
 
 \subsection{Cluster Merging and Refinement}
 

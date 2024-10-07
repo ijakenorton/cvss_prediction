@@ -171,8 +171,6 @@ def evaluate_topic_model(topic_counts, ground_truth_data, metric, num_topics):
             "entropy": entropy,
         }
 
-    print(f"Metric: {metric}, Topics: {num_topics} entropy score {v_measure}")
-
     return results
 
 
@@ -185,7 +183,7 @@ def plot_topic_model_performance(topic_numbers, evaluation_results, metric):
     metrics = list(evaluation_results[topic_numbers[0]].keys())
 
     # Separate plots for Purity and F1 Score
-    for measure in ["purity", "entropy"]:
+    for measure in ["purity"]:
         fig, axs = plt.subplots(
             len(metrics), 1, figsize=(15, 6 * len(metrics)), squeeze=False
         )
@@ -214,17 +212,13 @@ def plot_topic_model_performance(topic_numbers, evaluation_results, metric):
             ax.grid(True, linestyle="--", alpha=0.7)
 
         plt.tight_layout()
-        outpath = f"./topic_eval/{prefix}topic_model_performance_{measure}_ground_truth_{metric}.png"
+        outpath = f"./topic_eval/{prefix}topic_model_performance_{measure}_ground_truth_{metric}.pdf"
         print(f"outputting graph to: {outpath}")
-        plt.savefig(
-            outpath,
-            dpi=300,
-            bbox_inches="tight",
-        )
+        plt.savefig(outpath, dpi=300, bbox_inches="tight", format="pdf")
         plt.close()
 
 
-topic_numbers = [14, 16, 18, 20, 50, 75, 100]
+topic_numbers = [20, 40, 60, 80, 100]
 metric_names = [
     "privilegesRequired",
     "userInteraction",

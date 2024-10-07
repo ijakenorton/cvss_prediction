@@ -2,9 +2,6 @@ import matplotlib.pyplot as plt
 
 # Your dictionary
 data = {
-    "1988": 2,
-    "1989": 3,
-    "1990": 11,
     "1991": 15,
     "1992": 14,
     "1993": 13,
@@ -38,7 +35,6 @@ data = {
     "2021": 21950,
     "2022": 26431,
     "2023": 30949,
-    "2024": 5534,
 }
 
 # Create lists for years and values
@@ -46,19 +42,19 @@ years = list(data.keys())
 values = list(data.values())
 
 # Create the bar chart
-plt.figure(figsize=(15, 8))
+plt.figure(figsize=(17, 11))
 plt.bar(years, values)
 
 # Customize the chart
 plt.title("CVE Disclosures per Year", fontsize=16)
-plt.xlabel("Year", fontsize=12)
+plt.xlabel("Year", fontsize=14)
 plt.ylabel("Number of CVE Disclosures", fontsize=12)
-plt.xticks(rotation=90)
+plt.xticks(fontsize=12, rotation=90)
 
 # Add value labels on top of each bar
 for i, v in enumerate(values):
-    plt.text(i, v, str(v), ha="center", va="bottom")
+    plt.text(i, v, str(v), ha="center", va="bottom", rotation=90)
 
 # Adjust layout and display the chart
 plt.tight_layout()
-plt.show()
+plt.savefig("./cves_per_year.pdf", dpi=300, bbox_inches="tight", format="pdf")
