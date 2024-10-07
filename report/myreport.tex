@@ -18,10 +18,11 @@
 \documentclass[12pt]{article}
 \usepackage[draft]{cosc4x0style}
 %\usepackage{cosc4x0style}
+\usepackage[T1]{fontenc}
 
 \usepackage{hyperref}
 \usepackage{fvextra}
-\usepackage{csquotes}
+\usepackage{csquotes} 
 \usepackage{biblatex}
 \usepackage{listings}
 \usepackage{float}
@@ -54,6 +55,12 @@
 % Date, change the \today to a set date if you want to be precise
 \reportdate{\today}
 
+% Dave's editing macros
+\newcommand{\note}[2][red]{\textcolor{#1}{#2}}
+\newcommand{\notedme}[1]{\note[blue]{[<Dave> #1]}}
+\newenvironment{scaffold}{\color{red}}{}
+\newcommand{\change}[2][]{\textcolor{orange}{#2}}
+
 \begin{document}
 
 
@@ -65,10 +72,13 @@
 	vulnerabilities, serving as a crucial tool for triaging the increasing number of new
 	vulnerabilities released each year. As manual scoring cannot keep pace with this growth, there
 	is a need for automated prediction methods. While machine learning, particularly large language
-	models (LLMs), has shown promise in predicting CVSS scores. The primary motivator for this paper
+	models (LLMs), has shown promise in predicting CVSS scores. 
+	\notedme{$\leftarrow$ Not a sentence.}
+	The primary motivator for this paper
 	is an exploration into the CVE and CVSS processes to serve as a springboard for research next
-	year for masters. As such there are many unanswered questions resulting from this exploration.
-	Research has primarily focused on using the National Vulnerability Database (NVD) as a single
+	year for \change[masters]{a Master's thesis}. As such there are many unanswered questions resulting from this exploration.
+	\notedme{You shouldn't be sounding like you're making excuses for not having answers: change this to something like "This paper aims to explore the CVE and CVSS processes to provide a foundation for future research." (Actually AI suggested that quote, but it looks reasonable.)}
+	Research\notedme{whose?} has primarily focused on using the National Vulnerability Database (NVD) as a single
 	data source. This paper explores the potential of using multiple data sources for
 	cross-validation and increased training data volume, specifically comparing NVD with the MITRE
 	database. The analysis reveals differences in how these databases rate Common Vulnerabilities
