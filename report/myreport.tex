@@ -35,7 +35,7 @@
 \usepackage{soul}
 \addbibresource{refs.bib}
 \usepackage{listings}
-\usepackage[margin=1in]{geometry}
+\usepackage{geometry}
 % To compile the final version of the report (which will remove all the todo content)
 
 % Specify project code 480 or 490 \papercode{480}
@@ -129,8 +129,6 @@ vulnerability descriptions. This approach offers several advantages:
 The clustering analysis has yielded interesting insights, such as the tendency for certain types of
 vulnerabilities to cluster together. For example the analysis of the integrity impact metric revealed meaningful patterns that align with expert knowledge in the field:
 
-\todo[inline]{Unsure if this makes sense here as I haven't introduced what all the CVSS terms mean
-	yet.... also repetition for later..}
 \begin{itemize}
 
 	\item Vulnerabilities classified as having no impact (\texttt{NONE}) on data integrity often
@@ -159,9 +157,6 @@ The following report will try to answer these questions:
 	\item What are the important keywords for each category?
 \end{itemize}
 
-In the following sections, I will detail my methodology, present my findings from both the
-database comparison and clustering analyses, and discuss the implications of these results for the
-field of vulnerability assessment and management.
 
 
 \begin{figure}[ht] \centering
@@ -445,11 +440,9 @@ multiple data sources, though less so on the methods used.
 % 	severity}~\cite{ubiquitous}.  This paper mainly relates to Section~\ref{discussion} exposing the
 % issues and general impression of CVSS.
 
-\section{Exploratory Study on NVD and MITRE}
+\section{Is there scoring consistency between MITRE and NVD?}
 
-
-
-\subsubsection{Priliminary Data exploration}
+\subsubsection*{Priliminary Data exploration}
 
 The scorers for both NVD and MITRE do rate CVEs reasonably similar, one pattern you can see as shown
 by Figure~\ref{fig:counts}, is that NVD generally give the most common categorical output more ratings.
@@ -627,7 +620,8 @@ after this report.
 \end{table}
 
 
-\section{CVSS Prediction}\label{cvss_prediction}
+\section{Can we improve the LLMs classifier performance when we augment the NVD dataset with data
+  from the MITRE dataset?}\label{cvss_prediction}
 \todo[inline]{This section is still sort of a side part of the report, unsure if should be fleshed
 	out a bit more or just left as is or something else as I haven't persured this aspect further}
 
@@ -678,19 +672,19 @@ for reference).
 	\resizebox{\textwidth}{!}{%
 		\begin{tabular}{llcccc}
 			\toprule
-			\textbf{Metric} & \textbf{Model}  & \textbf{AV}           & \textbf{AC}           & \textbf{PR}           & \textbf{UI}           \\
+			\textbf{Metric} & \textbf{Model} & \textbf{AV}           & \textbf{AC}           & \textbf{PR}           & \textbf{UI}           \\
 			\midrule
 			\multirow{2}{*}{Accuracy}
-			                & DistilBERT-Cody & \textbf{91.28 ± 0.26} & \textbf{95.64 ± 0.68} & \textbf{82.77 ± 0.24} & \textbf{93.86 ± 0.19} \\
-			                & DistilBERT-Jake & 72.81 ± 0.32          & 92.62 ± 0.15          & 81.18 ± 0.18          & 66.35 ± 0.24          \\
+			                & NVD            & \textbf{91.28 ± 0.26} & \textbf{95.64 ± 0.68} & \textbf{82.77 ± 0.24} & \textbf{93.86 ± 0.19} \\
+			                & NVD and MITRE  & 72.81 ± 0.32          & 92.62 ± 0.15          & 81.18 ± 0.18          & 66.35 ± 0.24          \\
 			\midrule
 			\multirow{2}{*}{F1}
-			                & DistilBERT-Cody & \textbf{90.98 ± 0.31} & \textbf{93.85 ± 1.39} & \textbf{82.53 ± 0.26} & \textbf{93.82 ± 0.19} \\
-			                & DistilBERT-Jake & 61.36 ± 0.42          & 89.08 ± 0.22          & 80.96 ± 0.19          & 52.93 ± 0.31          \\
+			                & NVD            & \textbf{90.98 ± 0.31} & \textbf{93.85 ± 1.39} & \textbf{82.53 ± 0.26} & \textbf{93.82 ± 0.19} \\
+			                & NVD and MITRE  & 61.36 ± 0.42          & 89.08 ± 0.22          & 80.96 ± 0.19          & 52.93 ± 0.31          \\
 			\midrule
 			\multirow{2}{*}{Bal Acc}
-			                & DistilBERT-Cody & \textbf{67.88 ± 2.11} & \textbf{55.82 ± 7.23} & \textbf{75.98 ± 0.47} & \textbf{92.46 ± 0.21} \\
-			                & DistilBERT-Jake & 25.00 ± 0.00          & 50.00 ± 0.00          & 75.18 ± 0.31          & 50.00 ± 0.00          \\
+			                & NVD            & \textbf{67.88 ± 2.11} & \textbf{55.82 ± 7.23} & \textbf{75.98 ± 0.47} & \textbf{92.46 ± 0.21} \\
+			                & NVD and MITRE  & 25.00 ± 0.00          & 50.00 ± 0.00          & 75.18 ± 0.31          & 50.00 ± 0.00          \\
 			\bottomrule
 		\end{tabular}
 	}
@@ -708,19 +702,19 @@ for reference).
 	\resizebox{\textwidth}{!}{%
 		\begin{tabular}{llcccc}
 			\toprule
-			\textbf{Metric} & \textbf{Model}  & \textbf{S}            & \textbf{C}            & \textbf{I}            & \textbf{A}            \\
+			\textbf{Metric} & \textbf{Model} & \textbf{S}            & \textbf{C}            & \textbf{I}            & \textbf{A}            \\
 			\midrule
 			\multirow{2}{*}{Accuracy}
-			                & DistilBERT-Cody & \textbf{96.38 ± 0.09} & \textbf{86.24 ± 0.20} & \textbf{87.15 ± 0.10} & \textbf{88.70 ± 0.10} \\
-			                & DistilBERT-Jake & 80.21 ± 0.16          & 82.45 ± 0.11          & 45.71 ± 0.26          & 52.53 ± 0.23          \\
+			                & NVD            & \textbf{96.38 ± 0.09} & \textbf{86.24 ± 0.20} & \textbf{87.15 ± 0.10} & \textbf{88.70 ± 0.10} \\
+			                & NVD and MITRE  & 80.21 ± 0.16          & 82.45 ± 0.11          & 45.71 ± 0.26          & 52.53 ± 0.23          \\
 			\midrule
 			\multirow{2}{*}{F1}
-			                & DistilBERT-Cody & \textbf{96.30 ± 0.10} & \textbf{86.09 ± 0.21} & \textbf{87.11 ± 0.10} & \textbf{88.04 ± 0.11} \\
-			                & DistilBERT-Jake & 71.40 ± 0.22          & 82.34 ± 0.12          & 28.68 ± 0.28          & 36.18 ± 0.27          \\
+			                & NVD            & \textbf{96.30 ± 0.10} & \textbf{86.09 ± 0.21} & \textbf{87.11 ± 0.10} & \textbf{88.04 ± 0.11} \\
+			                & NVD and MITRE  & 71.40 ± 0.22          & 82.34 ± 0.12          & 28.68 ± 0.28          & 36.18 ± 0.27          \\
 			\midrule
 			\multirow{2}{*}{Bal Acc}
-			                & DistilBERT-Cody & \textbf{91.57 ± 0.43} & \textbf{82.70 ± 0.36} & \textbf{85.81 ± 0.10} & \textbf{64.01 ± 0.13} \\
-			                & DistilBERT-Jake & 50.00 ± 0.00          & 79.85 ± 0.23          & 33.33 ± 0.00          & 33.33 ± 0.00          \\
+			                & NVD            & \textbf{91.57 ± 0.43} & \textbf{82.70 ± 0.36} & \textbf{85.81 ± 0.10} & \textbf{64.01 ± 0.13} \\
+			                & NVD and MITRE  & 50.00 ± 0.00          & 79.85 ± 0.23          & 33.33 ± 0.00          & 33.33 ± 0.00          \\
 			\bottomrule
 		\end{tabular}
 	}
@@ -734,10 +728,9 @@ for reference).
 	\end{tablenotes}
 \end{table}
 
-\section{Clustering}
-
-\todo[inline]{Add in text to smooth over the transition between the two sections}
-\todo[inline]{Maybe comparsion between my clusters and the CWEs those documents are clustered into?}
+\todo[inline]{Dont think this is the perfect question but leaving for now}
+% \section{What are the important keywords for each category?}
+\section{In pursuit of keywords}
 
 This next section is the continuation of the exploratory study with a focus on what are the
 contributing factors for each metric / class for said metric. Clustering and analysis of the data
@@ -928,33 +921,91 @@ also other options in using something like pretrained fasttext~\cite{fasttext} a
 
 \subsubsection*{LDA Model Training}
 
-
 I have done many different iterations of the models with varying numbers of topics and
 hyperparameters. In grid search attempts I found that the different coherences metrics did not agree
-with each other. In addition, as we are searching for unknown topics in a unsupervised fashion, it is
-dubious how helpful these measures of fit are in any case. My results of such exploration will be
+with each other. In addition, as we are searching for unknown topics in a unsupervised fashion, it
+is dubious how helpful these measures of fit are in any case. My results of such exploration will be
 found in the appendices. The hyperparameters below are broadly matching what I found to be the best,
 however the main metric came from looking at the actual clustering results, and the biggest impact
 came from the number of topics, with the final models being picked by their purity score (as
-described in Section~\ref{sec:purity})
+described in Section~\ref{sec:purity}) The key hyperparameters used in the LDA model training are as
+follows:
 
 \begin{itemize}
 
-	\item Number of topics: \{20 40 60 80 100\}
+	\item Number of topics: {20, 40, 60, 80, 100}
 
-	\item $\alpha$: \{\say{symmetric}\}
+	      \begin{itemize}
 
-	\item $\eta$: \{0.1\}
+		      \item This parameter determines the number of topics the model attempts to discover in
+		            the corpus.
 
-	\item Number of passes: \{30\}
+		      \item The broad range allows for exploration of both coarse-grained and fine-grained
+		            topic structures, which is crucial for identifying potential sub-categories within
+		            CVSS metrics or broader themes across different metrics.
 
-	\item Number of iterations: \{200\}
+	      \end{itemize}
+
+	\item $\alpha$: {\say{symmetric}}
+
+	      \begin{itemize}
+
+		      \item Controls the prior distribution over topic mixtures for each document.
+
+		      \item The "symmetric" setting assumes all topics are equally likely a priori for each
+		            document, providing an unbiased starting point for topic discovery in CVSS
+		            vulnerability descriptions.
+
+	      \end{itemize}
+
+	\item $\eta$: {0.1}
+
+	      \begin{itemize}
+
+		      \item This is the prior for word distributions over topics.
+
+		      \item The relatively small value of 0.1 can lead to more specific and distinct topics,
+		            potentially helping in distinguishing between different CVSS categories more
+		            clearly.
+
+	      \end{itemize}
+
+	\item Number of passes: {30}
+
+	      \begin{itemize}
+
+		      \item Represents the number of times the model cycles through the entire corpus during
+		            training.
+
+		      \item 30 passes allow the model to refine its topic assignments multiple times,
+		            providing sufficient iterations to capture the underlying topic structure of CVSS
+		            data without overfitting.
+
+	      \end{itemize}
+
+	\item Number of iterations: {200}
+
+	      \begin{itemize}
+
+		      \item Sets the maximum number of iterations for each document during the inference
+		            process.
+
+		      \item 200 iterations allow for thorough topic inference for each document, which is
+		            particularly important for CVSS vulnerability descriptions that might contain
+		            complex or technical language.
+
+	      \end{itemize}
 
 \end{itemize}
 
-The LDA model is implemented using Gensim's LdaMulticore\cite{gensim}, allowing for parallel
-processing. In general I found Gensim very nice to work with, the model training was fast and the
-API made sense.
+This set of hyperparameters collectively defines a thorough exploration of the topic space, allowing
+for the discovery of both broad and specific themes in the CVSS data. The wide range of topic
+numbers (20 to 100) was particularly impactful in identifying the optimal granularity for
+representing the vulnerability descriptions. The LDA model is implemented using Gensim's
+LdaMulticore\cite{gensim}, allowing for parallel processing. In general I found Gensim very nice to
+work with, the model training was fast and the API made sense. The combination of Gensim's efficient
+implementation and these carefully chosen hyperparameters facilitated a comprehensive exploration of
+the topic structure in the CVSS vulnerability descriptions.
 
 % \subsubsection{Model Evaluation and Selection}
 
