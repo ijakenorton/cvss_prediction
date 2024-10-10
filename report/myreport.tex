@@ -1695,7 +1695,83 @@ system availability.\todo[inline]{talk about an example of a bad case}
 % 		target class \texttt{NONE}, for the number of clusters (60) with the lowest purity}
 % 	\label{fig:integrityImpact_60_NONE_BAD}
 % \end{figure}
+\subsection{Discussion of CVSS Impact Metrics}
 
+Our analysis of the three CVSS impact metrics - Integrity, Confidentiality, and Availability -
+reveals intriguing patterns and distinctions in how different types of vulnerabilities are
+categorized. However, it's crucial to note the significant data imbalance in the Availability Impact
+metric, which influences our interpretations and comparisons.
+
+\subsubsection{Cross-Metric Comparisons}
+
+\begin{itemize}
+
+	\item \textbf{Web Application Vulnerabilities:} Cross-site scripting (XSS) and related web
+	      vulnerabilities consistently appear in the LOW categories for both Integrity and
+	      Confidentiality impacts. For Availability, these vulnerabilities predominantly fall into the
+	      NONE category. This pattern underscores the nature of XSS attacks, primarily affecting data
+	      integrity and confidentiality at the client-side but rarely causing system-wide availability
+	      issues.
+
+	\item \textbf{Remote Code Execution:} Vulnerabilities allowing remote code execution or
+	      arbitrary command injection are categorized as HIGH impact across all three metrics. This
+	      consistency emphasizes the severe and multi-faceted threat posed by such vulnerabilities.
+
+	\item \textbf{Denial of Service:} Terms related to denial of service (DoS) attacks are prominent
+	      in the NONE category for both Integrity and Confidentiality impacts. However, their absence
+	      from the Availability impact categories, particularly in the HIGH category where we might
+	      expect them, highlights the data imbalance issue in the Availability metric.
+
+\end{itemize}
+
+\subsubsection{Metric-Specific Observations}
+
+\begin{itemize}
+
+	\item \textbf{Integrity Impact:} The progression from NONE to HIGH in Integrity Impact shows a
+	      clear escalation from system crashes to XSS to remote code execution, aligning well with
+	      expected severity levels for integrity breaches.
+
+	\item \textbf{Confidentiality Impact:} The Confidentiality metric effectively differentiates
+	      between vulnerabilities affecting individual user data (LOW impact, often web-related) and
+	      those exposing system-wide information (HIGH impact, often involving remote access).
+
+	\item \textbf{Availability Impact:} The severe underrepresentation of LOW Availability Impact
+	      vulnerabilities significantly affects our analysis. The NONE and HIGH categories are more
+	      reliably represented, showing a distinction between vulnerabilities that don't typically
+	      affect system uptime (web vulnerabilities in NONE category) and those that could lead to
+	      system-wide disruptions (remote code execution in HIGH category). However, the lack of a
+	      well-defined LOW category limits our ability to observe a clear progression of severity in
+	      this metric.
+
+\end{itemize}
+
+\subsubsection{Implications for Vulnerability Assessment}
+
+\begin{itemize}
+
+	\item \textbf{Contextual Importance:} Our analysis reinforces the importance of context in
+	      vulnerability assessment. The same vulnerability type can have varying impacts across
+	      different security aspects, emphasizing the need for a multi-dimensional approach to
+	      security scoring.
+
+	\item \textbf{Data Imbalance Considerations:} The Availability Impact metric highlights the
+	      challenges posed by imbalanced datasets in vulnerability classification. This imbalance
+	      affects our model's ability to accurately categorize and interpret LOW impact availability
+	      vulnerabilities, underscoring the need for careful data curation and potentially specialized
+	      modeling techniques for underrepresented classes.
+
+	\item \textbf{Severity Nuances:} Where data is sufficiently representative, our clustering
+	      results capture nuances in severity levels effectively. The distinction between LOW and HIGH
+	      impacts often lies in the scope of the vulnerability - whether it affects individual
+	      sessions or has system-wide implications.
+
+	\item \textbf{Alignment with Expert Knowledge:} For well-represented categories, the topic
+	      distributions largely align with cybersecurity expert expectations. However, the data
+	      imbalance in Availability Impact suggests that our model may not fully capture the nuances
+	      experts consider for this metric, particularly for low-impact availability issues.
+
+\end{itemize}
 
 \subsection{Cluster Merging and Refinement}
 
