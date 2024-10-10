@@ -1033,13 +1033,12 @@ development.
 \todo[inline]{Dont think this is the perfect title but leaving for now}
 \section{Important keywords for each class}
 
-This next section is the continuation of the exploratory study with a focus on what are the
+\change[This next section is the continuation of the exploratory study with a focus on what are the]{In this section we explore the}
 contributing factors for each metric / class for said metric. Clustering and analysis of the data
-makes sense in many ways. As the data is already grouped into Common Weakness Enumeration~\cite{CWE}
-, it is likely that there are some sort of patterns we can find. As a somewhat arbitrary place to
-start, choose K as 8 due to that being the number of CVSS metrics. For this I was hoping to see the
+makes sense in many ways. As the data is already grouped into Common Weakness Enumeration~\cite{CWE}, it is likely that there are some sort of patterns we can find. As a somewhat arbitrary place to
+start, choose K\notedme{Context not explained, and I'massuming should be $K$ anyway?} as 8 due to that being the number of CVSS metrics. For this I was hoping to see the
 data would naturally have some clusters based on the general theme of the vulnerability /
-description, e.g. a cluster based generally around SQL injection / databases in general.
+description, e.g.\@ a cluster based generally around SQL injection / databases in general.\notedme{This paragraph needs elaboration: it's missing details at the moment.}
 
 
 \subsection{K-Means Clustering of Vulnerability Descriptions}
@@ -1080,7 +1079,7 @@ direction of inquiry.
 
 \subsubsection{Interpretation}
 
-Below are the example topics gained from the initial kmeans clustering:
+Below are the example topics gained from the initial kmeans\notedme{terminology should be consistent: above this is `K-means'} clustering:
 \begin{itemize}
 
 	\item Cluster 0: vulnerability allows user service access attacker versions prior discovered issue
@@ -1094,7 +1093,7 @@ Below are the example topics gained from the initial kmeans clustering:
 	\item \textcolor{red}{Cluster 4: site cross scripting xss plugin stored vulnerability wordpress
 		      forgery csrf}
 
-	\item Cluster 5:sql injection php parameter v1 vulnerability contain discovered
+	\item Cluster 5: sql injection php parameter v1 vulnerability contain discovered
 	      admin vulnerable
 
 	\item Cluster 6: manipulation identifier leads vdb vulnerability classified unknown remotely attack disclosed
@@ -1103,15 +1102,15 @@ Below are the example topics gained from the initial kmeans clustering:
 \end{itemize}
 
 The most promising from this initial set is cluster four, highlighted in red above. Cross-site
-scripting (XSS) and wordpress plugins are a common trend within CVEs.
+scripting (XSS) and WordPress plugins are a common trend within CVEs.
 Figure~\ref{fig:cross_site_per_year} shows the counts per year of CVEs published containing at least five of the
 words from that cluster. Five is arbitrary, this is more here just to show a potential insight in
-looking at these trends. In this case, from ~2019 to 2023 there is a large increase in these types
+looking at these trends. In this case, from 2019 to 2023 there is a large increase in these types
 of vulnerabilities, mainly in WordPress plugins. You may notice the trend matches with the general
 trend of CVEs published (Figure~\ref{fig:cves_per_year}), this is a positive result, in that, the clustering
 is still following the underlying distribution and has not failed to capture the overall trend.
 
-Here are some example of the descriptions, for you viewing pleasure:
+Here are some example of the descriptions, for your viewing pleasure:\notedme{a bit too informal, and had a grammatical error, but I fixed that.}
 
 \begin{table}[h]
 	\centering
@@ -1139,7 +1138,7 @@ Here are some example of the descriptions, for you viewing pleasure:
 	\label{tab:cve-descriptions}
 \end{table}
 
-This was a good indicator that it is worth looking into clustering further.
+This\notedme{what is? Also all tables and figures should be floated top (t)} was a good indicator that it is worth looking into clustering further.
 
 \begin{figure}[H]
 	\centering
@@ -1161,11 +1160,11 @@ descriptions to belong to multiple topics with varying probabilities~\cite{laten
 the multi-faceted nature of many vulnerabilities. Furthermore, LDA produces human-interpretable
 topics~\cite{lda_origin}, facilitating easier derivation of insights from the clustering results.
 The paper \say{Security trend analysis with CVE topic models, by Neuhaus \&
-	Zimmerman(2010)}\cite{cve_topic_modelling} uses this technique to great effect on the NVD
+	Zimmerman (2010)}\cite{cve_topic_modelling} uses this technique to great effect on the NVD
 dataset (the analysis was for data ending in 2009) giving precedence to LDA being effective for this
 sort of task.
 
-The methodology comprises several key steps:
+The methodology comprises several key steps:\notedme{You can't colon into subsections. Say something like "The methodology comprises several key steps, which are detailed in the subsections below." (AI actually made that quote, but I agree.)}
 
 \subsubsection{Data Preprocessing} I begin by preprocessing the CVE descriptions:
 
@@ -1223,12 +1222,12 @@ also other options in using something like pretrained fasttext~\cite{fasttext} a
 \subsubsection{LDA Model Training}
 
 I have done many different iterations of the models with varying numbers of topics and
-hyperparameters. In grid search attempts I found that the different coherences metrics did not agree
+hyperparameters. In grid search attempts I found that the different coherences metrics\notedme{?} did not agree
 with each other. In addition, as we are searching for unknown topics in a unsupervised fashion, it
-is dubious how helpful these measures of fit are in any case. The hyperparameters below are broadly
+is \change[dubious]{doubtful} how helpful these measures of fit are in any case. The hyperparameters below are broadly
 matching what I found to be the best, however the main metric came from looking at the actual
 clustering results, and the biggest impact came from the number of topics, with the final models
-being picked by their purity score (as described in Section~\ref{sec:purity}) The key
+being picked by their purity score (as described in Section~\ref{sec:purity}). The key
 hyperparameters used in the LDA model training are as follows:
 
 \begin{itemize}
@@ -1302,7 +1301,7 @@ This set of hyperparameters collectively defines a thorough exploration of the t
 for the discovery of both broad and specific themes in the CVSS data. The wide range of topic
 numbers (20 to 100) was particularly impactful in identifying the optimal granularity for
 representing the vulnerability descriptions. The LDA model is implemented using Gensim's
-LdaMulticore\cite{gensim}, allowing for parallel processing. In general I found Gensim very nice to
+LdaMulticore~\cite{gensim}, allowing for parallel processing. In general I found Gensim very nice to
 work with, the model training was fast and the API made sense. The combination of Gensim's efficient
 implementation and these carefully chosen hyperparameters facilitated a comprehensive exploration of
 the topic structure in the CVSS vulnerability descriptions.
@@ -1371,7 +1370,7 @@ cluster $\omega_k$ that belong to class $c_j$.
 \subsubsection{Interpretation}
 
 Purity ranges from 0 to 1, where 1 indicates perfect purity. A higher purity value generally
-suggests better clustering quality with respect to the ground truth classes\cite{purity_info_ret}.
+suggests better clustering quality with respect to the ground truth classes~\cite{purity_info_ret}.
 
 In the context of topic modeling for CVSS metrics, high purity would indicate that each discovered
 topic strongly corresponds to a specific CVSS class.
@@ -1406,12 +1405,12 @@ topic strongly corresponds to a specific CVSS class.
 
 \subsubsection{Limitations}
 
-It's important to note that purity tends to increase as the number of clusters increases, with a
+It is important to note that purity tends to increase as the number of clusters increases, with a
 trivial solution of perfect purity when each object is in its own cluster \cite{v-measure}.
 Therefore, it should be interpreted cautiously, especially when comparing models with different
 numbers of topics, however, as seen by Figures~\ref{fig:purity_20_confidentiality}, \ref{fig:purity_integrity},
 \ref{fig:purity_20_availability}, this effect did not present
-itself too strongly. This effect incentivise picking the number of topics around the elbow of the
+itself too strongly. This effect incentivises picking the number of topics around the elbow of the
 graph (the point on a curve where the rate of change significantly shifts), as any minor increase in
 the purity score could just be based on the inherent increase in the purity score as the number of
 topics increase.
@@ -1493,7 +1492,7 @@ ones.
 	\begin{subfigure}{\textwidth}
 		\centering
 		\includegraphics[width=0.7\textwidth]{figures/confidentialityImpact/merged_top_k_topics_category_focus_counts_confidentialityImpact_NONE_k1.pdf}
-		\caption{The counts of the documents within the best topic in relation to \texttt{confidentiality Impact} with target class \texttt{NONE}}
+		\caption{The counts of the documents within the best topic in relation to \texttt{confidentiality Impact} with target class \texttt{NONE}\notedme{only use subfigure if you have more than one figure.}}
 		\label{fig:confidentialityImpact_60_NONE}
 	\end{subfigure}
 
@@ -1510,7 +1509,7 @@ ones.
 		\label{fig:confidentialityImpact_60_LOW}
 	\end{subfigure}
 
-	\caption{Confidentiality Impact Topic Counts}
+	\caption{Confidentiality Impact Topic Counts\notedme{Don't use subfigures like this: you can't repeat the same figure multiple times: again, just let {\LaTeX} do this stuff.}}
 \end{figure}
 
 \begin{figure}[h!]
@@ -1784,7 +1783,7 @@ database, email).
 		\includegraphics[width=0.7\textwidth]{figures/availabilityImpact/merged_top_k_topics_category_focus_counts_availabilityImpact_HIGH_k1.pdf}
 		\caption{The counts of the documents within the best topic in relation to availabilityImpact
 			with target class \texttt{HIGH}. Extra example showing that the best topic for
-			availabilityImpact can include the expected denial of service related keywords}
+			availabilityImpact\notedme{? Multiple occurences, too} can include the expected denial of service related keywords}
 		\label{fig:availabilityImpact_60_HIGH_denial}
 	\end{subfigure}
 
@@ -1860,7 +1859,7 @@ underrepresented categories.
 \subsubsection{Availability Impact: Focus on class HIGH}
 
 Figure \ref{fig:availabilityImpact_60_HIGH} shows the distribution for the cluster best representing
-
+\notedme{?}
 the \texttt{HIGH} class of availability impact.
 
 In this cluster, we see a clear focus on remote code execution and command injection
@@ -1899,8 +1898,7 @@ system availability.
 
 \subsection{Discussion of CVSS Impact Metrics}
 
-Our analysis of the three CVSS impact metrics - Integrity, Confidentiality, and Availability -
-reveals intriguing patterns and distinctions in how different types of vulnerabilities are
+Our analysis of the three CVSS impact metrics---Integrity, Confidentiality, and Availability---reveals intriguing patterns and distinctions in how different types of vulnerabilities are
 categorized. However, it's crucial to note the significant data imbalance in the Availability Impact
 metric, which influences our interpretations and comparisons.
 
@@ -1966,7 +1964,7 @@ metric, which influences our interpretations and comparisons.
 
 	\item \textbf{Severity Nuances:} Where data is sufficiently representative, our clustering
 	      results capture nuances in severity levels effectively. The distinction between LOW and HIGH
-	      impacts often lies in the scope of the vulnerability - whether it affects individual
+	      impacts often lies in the scope of the vulnerability---whether it affects individual
 	      sessions or has system-wide implications.
 
 	\item \textbf{Alignment with Expert Knowledge:} For well-represented categories, the topic
