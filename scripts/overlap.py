@@ -26,11 +26,8 @@ def overlap():
 
 
 def main():
-<<<<<<< Updated upstream
-=======
     # data, nvd_ids = nvd_data_correlation.read_data()
     # nvd_data = {"data": data, "ids": nvd_ids}
->>>>>>> Stashed changes
     # data, mitre_ids = mitre_data_correlation.read_data()
     # mitre_data = {"data": data, "ids": mitre_ids}
     # print("writing data to file....")
@@ -40,7 +37,6 @@ def main():
 
     # plot.plot_metrics(nvd_metrics)
     # plot.plot_metrics(mitre_metrics)
-<<<<<<< Updated upstream
     # nvd_overlap, mitre_overlap = overlap()
     # count = 0
     # mitre_count = 0
@@ -75,11 +71,9 @@ def main():
     nvd_data = {"data": data, "ids": nvd_ids}
     nvd_counts = metric_counts.calculate_metric_counts(nvd_data, 31)
     plot.plot_metrics(nvd_counts)
-=======
     nvd_overlap, mitre_overlap = overlap()
 
     plot.plot_comparison(nvd_overlap, mitre_overlap)
->>>>>>> Stashed changes
 
 
 if __name__ == "__main__":

@@ -76,18 +76,7 @@ def plot_diagnostics(trace):
 def compute_metropolis_hastings():
 
     nvd, mitre = counts(read_data())
-<<<<<<< Updated upstream
-    print(nvd, mitre)
-    exit()
 
-=======
-    print(nvd)
-    print()
-    print()
-    print()
-    print(mitre)
-    exit()
->>>>>>> Stashed changes
     nvd_observed = {
         metric: np.array(list(data.values())) for metric, data in nvd.items()
     }
@@ -178,8 +167,8 @@ def compute_metropolis_hastings():
                 ax=mitre_axes.flat[i],
             )
     try:
-        nvd_fig.savefig(f"../plots/nvd_{CVSS_VERSION}.png")
-        mitre_fig.savefig(f"../plots/mitre_{CVSS_VERSION}.png")
+        nvd_fig.savefig(f"./new_gibbs//nvd_{CVSS_VERSION}.png")
+        mitre_fig.savefig(f"./new_gibbs/mitre_{CVSS_VERSION}.png")
     except Exception as e:
         print(f"Error: {e}")
 
