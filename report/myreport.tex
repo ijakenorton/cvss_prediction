@@ -70,27 +70,23 @@
 
 \begin{abstract}
 
-	The Common Vulnerability Scoring System (CVSS) is designed to produce scores for software
-	vulnerabilities, serving as a crucial tool for triaging the increasing number of new
-	vulnerabilities released each year. As manual scoring cannot keep pace with this growth,
-	\notedme{Claim feels a bit off: it's more that at the moment the trend is rising faster than the employed set of staff to handle the situation.}
-	there
-	is a need for automated prediction methods. While machine learning, particularly large language
-	models (LLMs), have shown promise in predicting CVSS metrics given there descriptions.
-	\notedme{This isn't a sentence (preceding) and `their' not `there'.}
-	This
-	paper aims to explore the CVE and CVSS processes to provide a foundation for future research.
-	This paper explores the potential of using multiple data sources for cross-validation and
-	increased training data volume, specifically comparing NVD with the MITRE database. The analysis
-	reveals differences in how these databases rate Common Vulnerabilities and Exposures (CVEs),
-	highlighting the challenges in establishing a consistent ground truth for CVSS scores. While the
-	combination of multiple datasets did not yield the expected improvements in prediction accuracy,
-	this investigation provides valuable insights into the complexities of CVSS scoring across
-	different evaluation teams. The next focus of this paper is on enhancing the interpretability
-	and analysis of CVE/CVSS data through clustering techniques and other dataset analysis methods.
-	I employ Latent Dirichlet Allocation (LDA) and other clustering approaches to uncover patterns
-	within the vulnerability descriptions. The findings demonstrate that certain types of vulnerabilities
-	tend to cluster together, such as cross-site scripting, and denial-of-service attacks.
+	New software vulnerabilities are released everyday, and the challenge of managing and prioritizing
+	software vulnerabilities continues to grow. This research explores the use of multiple data sources,
+	primarily the National Vulnerability Database (NVD) and MITRE, to enhance Common Vulnerability
+	Scoring System (CVSS) prediction and analysis. Initial comparisons between NVD and MITRE revealed
+	significant differences in CVE ratings, highlighting the subjective nature of CVSS scoring. While
+	combining these datasets did not improve CVSS prediction as anticipated, it provided insights into
+	the variability of human-assigned scores. The research then focused on enhancing the
+	interpretability of CVE/CVSS data through clustering techniques, primarily Latent Dirichlet
+	Allocation (LDA). This approach offered a data-driven perspective complementing LLM-based prediction
+	methods, faster analysis times, and revealed inherent groupings within vulnerability descriptions.
+	The clustering analysis yielded insights into how certain vulnerability types cluster together,
+	aligning with expert knowledge in the field. This study addresses scoring consistency between MITRE
+	and NVD, the potential for improving LLM classifier performance through dataset augmentation, and
+	the identification of key vulnerability indicators. Our findings contribute to more effective
+	management and prioritization of software vulnerabilities in an increasingly complex digital
+	landscape.
+
 \end{abstract}
 
 
@@ -166,7 +162,7 @@ Research Questions:
 
 
 
-\begin{figure}[t] \centering
+\begin{figure}[ht] \centering
 	\includegraphics[width=0.8\textwidth]{figures/cves_per_year.pdf}
 	\caption{\label{fig:cves_per_year}Number of new CVEs by year}
 \end{figure}
@@ -321,13 +317,13 @@ the vector strings in the MITRE database).
 
 
 
-\begin{figure}
+\begin{figure}[H]
 	\centering
-	\makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{figures/combined_overlap.pdf}}
+	\makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{figures/combined_overlap.pdf}}
 	\caption{\label{fig:counts}Comparison of CVSS ratings between MITRE and NVD}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
 	\centering
 	\makebox[\textwidth][c]{\includegraphics[width=0.8\textwidth]{figures/nvd_data.pdf}}
 	\caption{\label{fig:nvd_data}Distribution of Metric ratings for NVD}
@@ -507,16 +503,6 @@ knowledge, which can vary between scorers. Our machine learning model, though la
 to this knowledge, aims to learn these nuances by analyzing patterns across numerous
 vulnerabilities.
 
-% The scorers for both NVD and MITRE do rate CVEs reasonably similarly. One pattern you can see as
-% shown by Figure~\ref{fig:counts}, is that NVD generally give\notedme{grammar} the most common
-% categorical output more ratings. They are less spread out across the full range of values. In
-% addition, if we look at the \texttt{Attack Complexity} metric, there is a reasonably large
-% difference in how they are rated, MITRE rate a lot more of the metrics with a \texttt{Low} score.
-% This points to some of the difficulty with this kind of rating system, while in theory there is a
-% true value for these metrics, it requires knowledge of the whole space around each of the
-% vulnerabilities, this knowledge will always vary marker to marker. The model will not have direct
-% access to this knowledge; however, it is hoped that it will be able to trace relationships between
-% the different vulnerabilities and learn this intrinsically.
 
 \subsection{Hierarchical Bayesian Model} \label{bayesian_modeling}
 
@@ -606,9 +592,9 @@ performance and tendencies remain consistent with our initial observations.
 
 \bigskip
 
-\begin{figure}
+\begin{figure}[H]
 	\centering
-	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{subfigure}[t]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{./figures/confusion_matrices/attack_vector_mitre.pdf}
 		\caption{Attack Vector}
 
@@ -619,7 +605,7 @@ performance and tendencies remain consistent with our initial observations.
 		\end{tablenotes}
 	\end{subfigure}
 	\hfill
-	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{subfigure}[t]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{./figures/confusion_matrices/attack_complexity_mitre.pdf}
 		\caption{Attack Complexity}
 		\begin{tablenotes}
@@ -630,7 +616,7 @@ performance and tendencies remain consistent with our initial observations.
 
 	\vspace{1em}
 
-	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{subfigure}[t]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{./figures/confusion_matrices/privileges_required_mitre.pdf}
 		\caption{Privileges Required}
 		\begin{tablenotes}
@@ -639,7 +625,7 @@ performance and tendencies remain consistent with our initial observations.
 		\end{tablenotes}
 	\end{subfigure}
 	\hfill
-	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{subfigure}[t]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{./figures/confusion_matrices/user_interaction_mitre.pdf}
 		\caption{User Interaction}
 		\begin{tablenotes}
@@ -656,7 +642,7 @@ performance and tendencies remain consistent with our initial observations.
 
 	\vspace{1em}
 
-	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{subfigure}[t]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{./figures/confusion_matrices/scope_mitre.pdf}
 		\caption{Scope}
 		\begin{tablenotes}
@@ -665,7 +651,7 @@ performance and tendencies remain consistent with our initial observations.
 		\end{tablenotes}
 	\end{subfigure}
 	\hfill
-	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{subfigure}[t]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{./figures/confusion_matrices/confidentiality_impact_mitre.pdf}
 		\caption{Confidentiality Impact}
 		\begin{tablenotes}
@@ -676,7 +662,7 @@ performance and tendencies remain consistent with our initial observations.
 
 	\vspace{1em}
 
-	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{subfigure}[t]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{./figures/confusion_matrices/integrity_impact_mitre.pdf}
 		\caption{Integrity Impact}
 
@@ -686,7 +672,7 @@ performance and tendencies remain consistent with our initial observations.
 		\end{tablenotes}
 	\end{subfigure}
 	\hfill
-	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{subfigure}[t]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{./figures/confusion_matrices/availability_impact_mitre.pdf}
 		\caption{Availability Impact}
 
@@ -702,7 +688,7 @@ performance and tendencies remain consistent with our initial observations.
 
 \begin{figure}
 	\centering
-	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{subfigure}[t]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{./figures/confusion_matrices/attack_vector_nvd.pdf}
 		\caption{Attack Vector}
 
@@ -713,7 +699,7 @@ performance and tendencies remain consistent with our initial observations.
 		\end{tablenotes}
 	\end{subfigure}
 	\hfill
-	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{subfigure}[t]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{./figures/confusion_matrices/attack_complexity_nvd.pdf}
 		\caption{Attack Complexity}
 
@@ -725,7 +711,7 @@ performance and tendencies remain consistent with our initial observations.
 
 	\vspace{1em}
 
-	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{subfigure}[t]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{./figures/confusion_matrices/privileges_required_nvd.pdf}
 		\caption{Privileges Required}
 
@@ -735,7 +721,7 @@ performance and tendencies remain consistent with our initial observations.
 		\end{tablenotes}
 	\end{subfigure}
 	\hfill
-	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{subfigure}[t]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{./figures/confusion_matrices/user_interaction_nvd.pdf}
 
 		\caption{User Interaction}
@@ -753,7 +739,7 @@ performance and tendencies remain consistent with our initial observations.
 
 	\vspace{1em}
 
-	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{subfigure}[t]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{./figures/confusion_matrices/scope_nvd.pdf}
 		\caption{Scope}
 
@@ -763,7 +749,7 @@ performance and tendencies remain consistent with our initial observations.
 		\end{tablenotes}
 	\end{subfigure}
 	\hfill
-	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{subfigure}[t]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{./figures/confusion_matrices/confidentiality_impact_nvd.pdf}
 		\caption{Confidentiality Impact}
 
@@ -775,7 +761,7 @@ performance and tendencies remain consistent with our initial observations.
 
 	\vspace{1em}
 
-	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{subfigure}[t]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{./figures/confusion_matrices/integrity_impact_nvd.pdf}
 		\caption{Integrity Impact}
 
@@ -785,7 +771,7 @@ performance and tendencies remain consistent with our initial observations.
 		\end{tablenotes}
 	\end{subfigure}
 	\hfill
-	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{subfigure}[t]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{./figures/confusion_matrices/availability_impact_nvd.pdf}
 		\caption{Availability Impact}
 
@@ -1030,15 +1016,16 @@ development.
 	\end{tablenotes}
 \end{table}
 
-\todo[inline]{Dont think this is the perfect title but leaving for now}
-\section{Important keywords for each class}
+\section{Important Keywords for each Class}
 
-\change[This next section is the continuation of the exploratory study with a focus on what are the]{In this section we explore the}
-contributing factors for each metric / class for said metric. Clustering and analysis of the data
-makes sense in many ways. As the data is already grouped into Common Weakness Enumeration~\cite{CWE}, it is likely that there are some sort of patterns we can find. As a somewhat arbitrary place to
-start, choose K\notedme{Context not explained, and I'massuming should be $K$ anyway?} as 8 due to that being the number of CVSS metrics. For this I was hoping to see the
-data would naturally have some clusters based on the general theme of the vulnerability /
-description, e.g.\@ a cluster based generally around SQL injection / databases in general.\notedme{This paragraph needs elaboration: it's missing details at the moment.}
+In this section we explore the contributing factors for each metric / class for said metric.
+Clustering and analysis of the data makes sense in many ways. As the data is already grouped into
+Common Weakness Enumeration~\cite{CWE}, it is likely that there are patterns we can
+find. As a somewhat arbitrary place to start, choose number of clusters ($K$) as 8 due to that being the number of CVSS
+metrics. For this I was hoping to see the data would naturally have some clusters based on the
+general theme of the vulnerability / description, e.g.\@ a cluster based generally around SQL
+injection / databases in general.\notedme{This paragraph needs elaboration: it's missing details at
+	the moment.}
 
 
 \subsection{K-Means Clustering of Vulnerability Descriptions}
@@ -1079,7 +1066,7 @@ direction of inquiry.
 
 \subsubsection{Interpretation}
 
-Below are the example topics gained from the initial kmeans\notedme{terminology should be consistent: above this is `K-means'} clustering:
+Below are the example topics gained from the initial K-means clustering:
 \begin{itemize}
 
 	\item Cluster 0: vulnerability allows user service access attacker versions prior discovered issue
@@ -1103,14 +1090,15 @@ Below are the example topics gained from the initial kmeans\notedme{terminology 
 
 The most promising from this initial set is cluster four, highlighted in red above. Cross-site
 scripting (XSS) and WordPress plugins are a common trend within CVEs.
-Figure~\ref{fig:cross_site_per_year} shows the counts per year of CVEs published containing at least five of the
-words from that cluster. Five is arbitrary, this is more here just to show a potential insight in
-looking at these trends. In this case, from 2019 to 2023 there is a large increase in these types
-of vulnerabilities, mainly in WordPress plugins. You may notice the trend matches with the general
-trend of CVEs published (Figure~\ref{fig:cves_per_year}), this is a positive result, in that, the clustering
-is still following the underlying distribution and has not failed to capture the overall trend.
+Figure~\ref{fig:cross_site_per_year} shows the counts per year of CVEs published containing at least
+five of the words from that cluster. Five is arbitrary, this is more here just to show a potential
+insight in looking at these trends. In this case, from 2019 to 2023 there is a large increase in
+these types of vulnerabilities, mainly in WordPress plugins. You may notice the trend matches with
+the general trend of CVEs published (Figure~\ref{fig:cves_per_year}), this is a positive result, in
+that, the clustering is still following the underlying distribution and has not failed to capture
+the overall trend.
 
-Here are some example of the descriptions, for your viewing pleasure:\notedme{a bit too informal, and had a grammatical error, but I fixed that.}
+Here are some examples of the descriptions:
 
 \begin{table}[h]
 	\centering
@@ -1138,7 +1126,7 @@ Here are some example of the descriptions, for your viewing pleasure:\notedme{a 
 	\label{tab:cve-descriptions}
 \end{table}
 
-This\notedme{what is? Also all tables and figures should be floated top (t)} was a good indicator that it is worth looking into clustering further.
+This naive approach to clustering still rendering   good indicator that it is worth looking into clustering further.
 
 \begin{figure}[H]
 	\centering
@@ -1164,7 +1152,7 @@ The paper \say{Security trend analysis with CVE topic models, by Neuhaus \&
 dataset (the analysis was for data ending in 2009) giving precedence to LDA being effective for this
 sort of task.
 
-The methodology comprises several key steps:\notedme{You can't colon into subsections. Say something like "The methodology comprises several key steps, which are detailed in the subsections below." (AI actually made that quote, but I agree.)}
+The methodology comprises several key steps, which are detailed in the subsections below.
 
 \subsubsection{Data Preprocessing} I begin by preprocessing the CVE descriptions:
 
@@ -1198,37 +1186,15 @@ The parameters chosen here just felt like reasonable defaults and have not been 
 also other options in using something like pretrained fasttext~\cite{fasttext} as used in
 \cite{nvd_clustering_fasttext}.
 
-% \subsubsection*{Topic Coherence Metric}
-
-% \todo[inline]{As I haven't really used these in a rigorous way, I am unsure if I should keep this
-% 	in, I have not gone into detail on these as I feel like it may be wasted effort if I do not use them
-% 	too much }
-
-% I define a custom coherence metric based on Word2Vec similarities:
-
-% \begin{equation}
-% 	\mathit{Coherence} = \frac{\sum_{i=1}^{n}\sum_{j=i+1}^{n} \mathrm{similarity}(\mathit{word}_i, \mathit{word}_j)}{\binom{n}{2}}
-% \end{equation}
-
-% where $n$ is the number of top words in a topic (10 in my implementation).
-
-% In addition I have kept track of the C-V coherence score used as default by Gensim, which comes from
-% \cite{cv_coherence}
-
-% \todo[inline]{Also have used perplexity, as a score as that was the common way in the original lda
-% 	paper.... I haven't really used it though, just interesting in how unstable it was compared with the
-% 	other coherence style metrics...}
 
 \subsubsection{LDA Model Training}
 
 I have done many different iterations of the models with varying numbers of topics and
-hyperparameters. In grid search attempts I found that the different coherences metrics\notedme{?} did not agree
-with each other. In addition, as we are searching for unknown topics in a unsupervised fashion, it
-is \change[dubious]{doubtful} how helpful these measures of fit are in any case. The hyperparameters below are broadly
-matching what I found to be the best, however the main metric came from looking at the actual
-clustering results, and the biggest impact came from the number of topics, with the final models
-being picked by their purity score (as described in Section~\ref{sec:purity}). The key
-hyperparameters used in the LDA model training are as follows:
+hyperparameters. The hyperparameters below are broadly matching what I found to be the best,
+however the main metric came from looking at the actual clustering results, and the biggest impact
+came from the number of topics, with the final models being picked by their purity score (as
+described in Section~\ref{sec:purity}). The key hyperparameters used in the LDA model training are
+as follows:
 
 \begin{itemize}
 
@@ -1375,7 +1341,7 @@ suggests better clustering quality with respect to the ground truth classes~\cit
 In the context of topic modeling for CVSS metrics, high purity would indicate that each discovered
 topic strongly corresponds to a specific CVSS class.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 
 	\begin{minipage}[t]{\textwidth}
@@ -1416,9 +1382,6 @@ the purity score could just be based on the inherent increase in the purity scor
 topics increase.
 
 
-
-
-
 \subsection{Evaluation and Insights}
 
 \subsubsection{Elephant in the Room, Data Imbalance}
@@ -1439,7 +1402,7 @@ impact.
 
 % If we take a look at Figure~\ref{fig:integrityImpact_60_NONE_BAD}
 
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.7\textwidth]{figures/privilegesRequired/merged_top_k_topics_category_focus_counts_privilegesRequired_HIGH_k1.pdf}
 
@@ -1450,7 +1413,7 @@ impact.
 \end{figure}
 
 
-% \begin{figure}[h!]
+% \begin{figure}[ht]
 
 % 	\centering
 % 	\includegraphics[width=0.8\textwidth]{figures/integrityImpact/integrityImpact_NONE_60_BAD.pdf}
@@ -1458,6 +1421,7 @@ impact.
 % 		target class \texttt{NONE}, for the number of clusters (60) with the lowest purity}
 % 	\label{fig:integrityImpact_60_NONE_BAD}
 % \end{figure}
+
 \subsection{Clustering Results}
 
 The clustering analysis using Latent Dirichlet Allocation (LDA) yielded insights into the patterns
@@ -1486,43 +1450,27 @@ successfully exploited vulnerability. Confidentiality refers to limiting informa
 disclosure to only authorized users, as well as preventing access by, or disclosure to, unauthorized
 ones.
 
-\begin{figure}[h!]
-	\ContinuedFloat*
+\begin{figure}[H]
 	\centering
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=0.7\textwidth]{figures/confidentialityImpact/merged_top_k_topics_category_focus_counts_confidentialityImpact_NONE_k1.pdf}
-		\caption{The counts of the documents within the best topic in relation to \texttt{confidentiality Impact} with target class \texttt{NONE}\notedme{only use subfigure if you have more than one figure.}}
-		\label{fig:confidentialityImpact_60_NONE}
-	\end{subfigure}
+	\includegraphics[width=0.7\textwidth]{figures/confidentialityImpact/merged_top_k_topics_category_focus_counts_confidentialityImpact_NONE_k1.pdf}
+	\caption{The counts of the documents within the best topic in relation to \texttt{confidentiality Impact} with target class \texttt{NONE}}
+	\label{fig:confidentialityImpact_60_NONE}
 
-	\caption{Confidentiality Impact Topic Counts}
 \end{figure}
 
-\begin{figure}[h!]
-	\ContinuedFloat
+\begin{figure}[ht]
 	\centering
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=0.7\textwidth]{figures/confidentialityImpact/merged_top_k_topics_category_focus_counts_confidentialityImpact_LOW_k1.pdf}
-		\caption{The counts of the documents within the best topic in relation to \texttt{confidentiality Impact} with target class \texttt{LOW}}
-		\label{fig:confidentialityImpact_60_LOW}
-	\end{subfigure}
+	\includegraphics[width=0.7\textwidth]{figures/confidentialityImpact/merged_top_k_topics_category_focus_counts_confidentialityImpact_LOW_k1.pdf}
+	\caption{The counts of the documents within the best topic in relation to \texttt{confidentiality Impact} with target class \texttt{LOW}}
+	\label{fig:confidentialityImpact_60_LOW}
 
-	\caption{Confidentiality Impact Topic Counts\notedme{Don't use subfigures like this: you can't repeat the same figure multiple times: again, just let {\LaTeX} do this stuff.}}
 \end{figure}
 
-\begin{figure}[h!]
-	\ContinuedFloat
+\begin{figure}[ht]
 	\centering
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=0.7\textwidth]{figures/confidentialityImpact/merged_top_k_topics_category_focus_counts_confidentialityImpact_HIGH_k1.pdf}
-		\caption{The counts of the documents within the best topic in relation to confidentialityImpact with target class \texttt{HIGH}}
-		\label{fig:confidentialityImpact_60_HIGH}
-	\end{subfigure}
-
-	\caption{Confidentiality Impact Topic Counts}
+	\includegraphics[width=0.7\textwidth]{figures/confidentialityImpact/merged_top_k_topics_category_focus_counts_confidentialityImpact_HIGH_k1.pdf}
+	\caption{The counts of the documents within the best topic in relation to confidentialityImpact with target class \texttt{HIGH}}
+	\label{fig:confidentialityImpact_60_HIGH}
 \end{figure}
 
 \subsubsection{Confidentiality Impact: Focus on class NONE}
@@ -1567,8 +1515,8 @@ Key findings:
 	\item The cluster shows a majority of \texttt{LOW}-rated vulnerabilities, with some overlap into
 	      other categories.
 
-	\item Predominant terms include \say{scripting}, \say{xss}, \say{site}, \say{stored}, \say{arbitrary}, \say{user},
-	      \say{web}, \say{inject}, \say{html}, and \say{css}.
+	\item Predominant terms include \say{scripting}, \say{xss}, \say{site}, \say{stored},\
+	      \say{arbitrary}, \say{user}, \say{web}, \say{inject}, \say{html}, and \say{css}.
 
 	\item The prevalence of web-related terms suggests that this cluster captures client-side
 	      vulnerabilities that often have a lower impact on overall system confidentiality.
@@ -1616,58 +1564,40 @@ could affect the trustworthiness and veracity of data. A high integrity impact i
 could be significantly corrupted or altered, potentially leading to serious consequences for the
 affected system or its users.
 
-\begin{figure}[h!]
-	\ContinuedFloat*
+\begin{figure}[H]
 	\centering
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=0.7\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_NONE_k1.pdf}
-		\caption{The counts of the documents within the best topic in relation to \texttt{Integrity
-				Impact} with
-			target class \texttt{NONE}}
+	\includegraphics[width=0.7\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_NONE_k1.pdf}
+	\caption{The counts of the documents within the best topic in relation to \texttt{Integrity
+			Impact} with
+		target class \texttt{NONE}}
 
-		\label{fig:integrityImpact_60_NONE}
-	\end{subfigure}
-	\caption{Integrity Impact Topic Counts}
+	\label{fig:integrityImpact_60_NONE}
 
 \end{figure}
 
-\begin{figure}[h!]
-	\ContinuedFloat
+\begin{figure}[ht]
 	\centering
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=0.7\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_LOW_k1.pdf}
-		\caption{The counts of the documents within the best topic in relation to \texttt{Integrity Impact} with target class \texttt{LOW}}
-		\label{fig:integrityImpact_60_LOW}
-	\end{subfigure}
+	\includegraphics[width=0.7\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_LOW_k1.pdf}
+	\caption{The counts of the documents within the best topic in relation to \texttt{Integrity Impact} with target class \texttt{LOW}}
+	\label{fig:integrityImpact_60_LOW}
 
-	\caption{Integrity Impact Topic Counts}
 \end{figure}
 
-\begin{figure}[h!]
-	\ContinuedFloat
+\begin{figure}[ht]
 	\centering
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=0.7\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_HIGH_k1.pdf}
-		\caption{The counts of the documents within the best topic in relation to integrityImpact with target class \texttt{HIGH}}
-		\label{fig:integrityImpact_60_HIGH}
-	\end{subfigure}
+	\includegraphics[width=0.7\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_HIGH_k1.pdf}
+	\caption{The counts of the documents within the best topic in relation to integrityImpact with target class \texttt{HIGH}}
+	\label{fig:integrityImpact_60_HIGH}
 
-	\caption{Integrity Impact Topic Counts}
 \end{figure}
 
 \subsubsection{Integrity Impact: Focus on class NONE}
 
-Figure \ref{fig:integrityImpact_60_NONE} shows the distribution for the cluster best representing
-the \texttt{NONE} class of integrity impact.
-
-
-In this cluster, we observe a predominance of vulnerabilities related to denial of service attacks
-and system crashes. While these issues are serious and can affect system availability, they
-typically do not directly compromise data integrity. This aligns with the expectations for
-vulnerabilities classified as having no integrity impact.
+In this cluster (Figure \ref{fig:integrityImpact_60_NONE}), we observe a predominance of
+vulnerabilities related to denial of service attacks and system crashes. While these issues are
+serious and can affect system availability, they typically do not directly compromise data
+integrity. This aligns with the expectations for vulnerabilities classified as having no integrity
+impact.
 
 Key findings:
 \begin{itemize}
@@ -1684,10 +1614,7 @@ Key findings:
 
 \subsubsection{Integrity Impact: Focus on class LOW}
 
-Figure \ref{fig:integrityImpact_60_LOW} represents the distribution for the cluster best
-representing the \texttt{LOW} class of integrity impact.
-
-This cluster predominantly features cross-site scripting (XSS) vulnerabilities and other generally
+This cluster (Figure \ref{fig:integrityImpact_60_LOW}) predominantly features cross-site scripting (XSS) vulnerabilities and other generally
 web browser based attacks. These types of vulnerabilities can indeed cause data integrity issues, but
 they are usually limited in scope, typically affecting individual user interactions rather than
 compromising the entire application's data integrity.
@@ -1706,11 +1633,7 @@ Key findings:
 
 \subsubsection{Integrity Impact: Focus on class HIGH}
 
-Figure \ref{fig:integrityImpact_60_HIGH} shows the distribution for the cluster best representing
-the \texttt{HIGH} class of integrity impact.
-
-
-In this cluster, we see a focus on remote code execution vulnerabilities. These
+In this cluster (Figure \ref{fig:integrityImpact_60_HIGH}), we see a focus on remote code execution vulnerabilities. These
 types of attacks have the potential to severely compromise data integrity by allowing unauthorized
 modification or corruption of server contents.
 
@@ -1733,60 +1656,38 @@ affected component resulting from a successfully exploited vulnerability. This m
 loss of availability of the impacted component itself, such as a networked service (e.g., web,
 database, email).
 
-\begin{figure}[h!]
-	\ContinuedFloat*
+\begin{figure}[H]
 	\centering
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=0.7\textwidth]{figures/availabilityImpact/merged_top_k_topics_category_focus_counts_availabilityImpact_NONE_k1.pdf}
+	\includegraphics[width=0.7\textwidth]{figures/availabilityImpact/merged_top_k_topics_category_focus_counts_availabilityImpact_NONE_k1.pdf}
 
-		\caption{The counts of the documents within the best topic in relation to \texttt{availability
-				Impact} with
-			target class \texttt{NONE}}
-	\end{subfigure}
+	\caption{The counts of the documents within the best topic in relation to \texttt{availability
+			Impact} with
+		target class \texttt{NONE}}
 
-
-	\caption{Availability Impact Topic Counts}
 	\label{fig:availabilityImpact_60_NONE}
 \end{figure}
 
-\begin{figure}[h!]
-	\ContinuedFloat
+\begin{figure}[ht]
 	\centering
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=0.7\textwidth]{figures/availabilityImpact/merged_top_k_topics_category_focus_counts_availabilityImpact_LOW_k1.pdf}
-		\caption{The counts of the documents within the best topic in relation to \texttt{availability Impact} with target class \texttt{LOW}}
-		\label{fig:availabilityImpact_60_LOW}
-	\end{subfigure}
-
-	\caption{Availability Impact Topic Counts}
+	\includegraphics[width=0.7\textwidth]{figures/availabilityImpact/merged_top_k_topics_category_focus_counts_availabilityImpact_LOW_k1.pdf}
+	\caption{The counts of the documents within the best topic in relation to \texttt{availability Impact} with target class \texttt{LOW}}
+	\label{fig:availabilityImpact_60_LOW}
 \end{figure}
 
-\begin{figure}[h!]
-	\ContinuedFloat
+\begin{figure}[ht]
 	\centering
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=0.7\textwidth]{figures/availabilityImpact/merged_top_k_topics_category_focus_counts_availabilityImpact_HIGH_k1.pdf}
-		\caption{The counts of the documents within the best topic in relation to availabilityImpact with target class \texttt{HIGH}}
-		\label{fig:availabilityImpact_60_HIGH}
-	\end{subfigure}
-
-	\caption{Availability Impact Topic Counts}
+	\includegraphics[width=0.7\textwidth]{figures/availabilityImpact/merged_top_k_topics_category_focus_counts_availabilityImpact_HIGH_k1.pdf}
+	\caption{The counts of the documents within the best topic in relation to availabilityImpact with target class \texttt{HIGH}}
+	\label{fig:availabilityImpact_60_HIGH}
 \end{figure}
 
-\begin{figure}[h!]
-	\ContinuedFloat
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=0.7\textwidth]{figures/availabilityImpact/merged_top_k_topics_category_focus_counts_availabilityImpact_HIGH_k1.pdf}
-		\caption{The counts of the documents within the best topic in relation to availabilityImpact
-			with target class \texttt{HIGH}. Extra example showing that the best topic for
-			availabilityImpact\notedme{? Multiple occurences, too} can include the expected denial of service related keywords}
-		\label{fig:availabilityImpact_60_HIGH_denial}
-	\end{subfigure}
-
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.7\textwidth]{figures/availabilityImpact/merged_top_k_topics_category_focus_counts_availabilityImpact_HIGH_k1.pdf}
+	\caption{The counts of the documents within the best topic in relation to availabilityImpact
+		with target class \texttt{HIGH}. Extra example showing that the best topic for
+		availabilityImpact\notedme{? Multiple occurences, too} can include the expected denial of service related keywords}
+	\label{fig:availabilityImpact_60_HIGH_denial}
 \end{figure}
 \subsubsection{Availability Impact: Focus on class NONE}
 
@@ -1858,14 +1759,11 @@ underrepresented categories.
 
 \subsubsection{Availability Impact: Focus on class HIGH}
 
-Figure \ref{fig:availabilityImpact_60_HIGH} shows the distribution for the cluster best representing
-\notedme{?}
-the \texttt{HIGH} class of availability impact.
 
-In this cluster, we see a clear focus on remote code execution and command injection
-vulnerabilities. These types of attacks have the potential to severely compromise system
-availability by allowing attackers to execute arbitrary code or commands, potentially leading to
-system crashes or complete takeover.
+In this cluster ( Figure \ref{fig:availabilityImpact_60_HIGH} ), we see a clear focus on remote code
+execution and command injection vulnerabilities. These types of attacks have the potential to
+severely compromise system availability by allowing attackers to execute arbitrary code or commands,
+potentially leading to system crashes or complete takeover.
 
 Key findings:
 
@@ -1898,9 +1796,10 @@ system availability.
 
 \subsection{Discussion of CVSS Impact Metrics}
 
-Our analysis of the three CVSS impact metrics---Integrity, Confidentiality, and Availability---reveals intriguing patterns and distinctions in how different types of vulnerabilities are
-categorized. However, it's crucial to note the significant data imbalance in the Availability Impact
-metric, which influences our interpretations and comparisons.
+Our analysis of the three CVSS impact metrics---Integrity, Confidentiality, and
+Availability---reveals intriguing patterns and distinctions in how different types of
+vulnerabilities are categorized. However, it's crucial to note the significant data imbalance in the
+Availability Impact metric, which influences our interpretations and comparisons.
 
 \subsubsection{Cross-Metric Comparisons}
 
@@ -2013,33 +1912,21 @@ by their model. This other approach potentially offers a more nuanced way of ide
 
 To illustrate the effects of cluster merging, we present the following Figures~\ref{fig:integrityImpact_60_NONE_merged},~\ref{fig:confidentialityImpact_60_LOW_merged}
 
-\begin{figure}[h!]
-	\ContinuedFloat*
+\begin{figure}[H]
 	\centering
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=0.7\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_LOW_k5.pdf}
-		\caption{The counts of the documents within the best five topics merged in relation to \texttt{Integrity
-				Impact} with
-			target class \texttt{LOW}}
+	\includegraphics[width=0.7\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_LOW_k5.pdf}
+	\caption{The counts of the documents within the best five topics merged in relation to \texttt{Integrity
+			Impact} with
+		target class \texttt{LOW}}
 
-		\label{fig:integrityImpact_60_NONE_merged}
-	\end{subfigure}
-	\caption{Counts of Merged Topic Clusters}
-
+	\label{fig:integrityImpact_60_NONE_merged}
 \end{figure}
 
-\begin{figure}[h!]
-	\ContinuedFloat
+\begin{figure}[ht]
 	\centering
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=0.7\textwidth]{figures/confidentialityImpact/merged_top_k_topics_category_focus_counts_confidentialityImpact_NONE_k5.pdf}
-		\caption{The counts of the documents within the best topic in relation to \texttt{Integrity Impact} with target class \texttt{LOW}}
-		\label{fig:confidentialityImpact_60_LOW_merged}
-	\end{subfigure}
-
-	\caption{Counts of Merged Topic Clusters}
+	\includegraphics[width=0.7\textwidth]{figures/confidentialityImpact/merged_top_k_topics_category_focus_counts_confidentialityImpact_NONE_k5.pdf}
+	\caption{The counts of the documents within the best topic in relation to \texttt{Integrity Impact} with target class \texttt{LOW}}
+	\label{fig:confidentialityImpact_60_LOW_merged}
 \end{figure}
 
 Contrary to our initial expectations, the process of merging clusters did not lead to improved
@@ -2157,11 +2044,26 @@ vulnerability management but also contribute to a more secure digital ecosystem 
 
 \printbibliography[title={References}]
 
-
+\makeatletter
+\newcounter{savesection}
+\newcounter{apdxsection}
+\renewcommand\appendix{\par
+	\setcounter{savesection}{\value{section}}%
+	\setcounter{section}{\value{apdxsection}}%
+	\setcounter{subsection}{0}%
+	\gdef\thesection{\@Alph\c@section}}
+\newcommand\unappendix{\par
+	\setcounter{apdxsection}{\value{section}}%
+	\setcounter{section}{\value{savesection}}%
+	\setcounter{subsection}{0}%
+	\gdef\thesection{\@arabic\c@section}}
+\makeatother
 
 \appendix
-
-\renewcommand{\thesection}{Appendix \Alph{section}}
+% \newcounter{savesection}
+% \setcounter{savesection}{\value{section}}%
+% \setcounter{section}{0}
+% \renewcommand{\thesection}{Appendix \Alph{section}}
 
 \subsection{CVSS figures from other versions}
 
@@ -2171,26 +2073,26 @@ as there was very little data.
 
 \begin{figure}[H]
 	\centering
-	\makebox[\textwidth][c]{\includegraphics[width=1.5\textwidth]{{figures/nvd_2_titles.pdf}}}%
+	\makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{{figures/nvd_2_titles.pdf}}}%
 	\caption{\label{fig:nvd_2_confusion_matrices}Confusion matrix of estimated accuracy for CVSS metrics for version 2.0 for NVD}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\makebox[\textwidth][c]{\includegraphics[width=1.5\textwidth]{figures/mitre_2_titles.pdf}}
+	\makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{figures/mitre_2_titles.pdf}}
 	\caption{\label{fig:mitre_2_confusion_matrices}Confusion matrix of estimated accuracy for CVSS
 		metrics for version 2.0 for MITRE}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\makebox[\textwidth][c]{\includegraphics[width=1.5\textwidth]{figures/nvd_30_titles.pdf}}
+	\makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{figures/nvd_30_titles.pdf}}
 	\caption{\label{fig:nvd_30_confusion_matrices}Confusion matrix of estimated accuracy for CVSS metrics for version 3.0 for NVD}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\makebox[\textwidth][c]{\includegraphics[width=1.5\textwidth]{figures/mitre_30_titles.pdf}}
+	\makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{figures/mitre_30_titles.pdf}}
 	\caption{\label{fig:mitre_30_confusion_matrices}Confusion matrix of estimated accuracy for CVSS
 		metrics for version 3.0 for MITRE}
 \end{figure}
@@ -2208,8 +2110,8 @@ Below is a formulaic representation of the CVSS 3.1 base score formula.
 			\mathit{Impact} =
 			\begin{cases}
 				7.52 \times (\mathit{ISS} - 0.029) - 3.25 \times (\mathit{ISS} - 0.02)^{15} & \text{if \textit{Scope} is
-				\textit{Changed}}                                                                      \\
-				6.42 \times \mathit{ISS}                                           & \text{if \textit{Scope} is
+				\textit{Changed}}                                                                                        \\
+				6.42 \times \mathit{ISS}                                                    & \text{if \textit{Scope} is
 					\textit{Unchanged}}
 			\end{cases}
 		\end{equation}
@@ -2222,34 +2124,17 @@ Below is a formulaic representation of the CVSS 3.1 base score formula.
 		\begin{equation}
 			\mathit{BaseScore} =
 			\begin{cases}
-				0                                                           & \mathit{Impact} \leq 0              \\
+				0                                                                          & \mathit{Impact} \leq 0     \\
 				Roundup(\min(1.08 \times (\mathit{Impact} + \mathit{Exploitability}), 10)) & \text{if \textit{Scope} is
-				\textit{Changed}}                                                                        \\
+				\textit{Changed}}                                                                                       \\
 				Roundup(\min((\mathit{Impact} + \mathit{Exploitability}), 0))              & \text{if \textit{Scope} is
-				\textit{Unchanged}}                                                                      \\
+				\textit{Unchanged}}                                                                                     \\
 			\end{cases}
 		\end{equation}
 	}
 
-\subsection{Exploit Prediction Scoring System diagrams for reference}
 
-Below are two graphs from FIRST, the creator of EPSS. These show some of the results they have
-found for this system, especially when comparing EPSS to CVSS in terms of effeciency of effort if
-you use EPSS to guide remediation of vulnerabilities.
-
-\begin{figure}
-	\centering
-	\makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{figures/epss.pdf}}
-	\caption{\label{fig:epss}Comparing Metrics: CVSS 7+ vs. EPSS 10\%+ sourced from \cite{EPSS}}
-\end{figure}
-
-\begin{figure}
-	\centering
-	\makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{figures/epss_and_cvss.pdf}}
-	\caption{\label{fig:epss_and_cvss}EPSS score compared to CVSS Base Score (NVD) sourced from
-		\cite{EPSS_USER}}
-\end{figure}
-
+\unappendix
 \section{Aims and Objectives}
 
 \subsection{Original}
