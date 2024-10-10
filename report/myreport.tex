@@ -818,9 +818,8 @@ development.
 	\end{tablenotes}
 \end{table}
 
-\todo[inline]{Dont think this is the perfect question but leaving for now}
-% \section{What are the important keywords for each category?}
-\section{In pursuit of keywords}
+\todo[inline]{Dont think this is the perfect title but leaving for now}
+\section{Important keywords for each category}
 
 This next section is the continuation of the exploratory study with a focus on what are the
 contributing factors for each metric / class for said metric. Clustering and analysis of the data
@@ -1014,12 +1013,11 @@ also other options in using something like pretrained fasttext~\cite{fasttext} a
 I have done many different iterations of the models with varying numbers of topics and
 hyperparameters. In grid search attempts I found that the different coherences metrics did not agree
 with each other. In addition, as we are searching for unknown topics in a unsupervised fashion, it
-is dubious how helpful these measures of fit are in any case. My results of such exploration will be
-found in the appendices. The hyperparameters below are broadly matching what I found to be the best,
-however the main metric came from looking at the actual clustering results, and the biggest impact
-came from the number of topics, with the final models being picked by their purity score (as
-described in Section~\ref{sec:purity}) The key hyperparameters used in the LDA model training are as
-follows:
+is dubious how helpful these measures of fit are in any case. The hyperparameters below are broadly
+matching what I found to be the best, however the main metric came from looking at the actual
+clustering results, and the biggest impact came from the number of topics, with the final models
+being picked by their purity score (as described in Section~\ref{sec:purity}) The key
+hyperparameters used in the LDA model training are as follows:
 
 \begin{itemize}
 
@@ -1123,19 +1121,6 @@ For each saved model:
 
 \end{itemize}
 
-
-% \subsubsection*{ Dataset Analysis}
-
-% We run the LDA model on a balanced dataset to mitigate potential biases:
-
-% \begin{itemize}
-
-% 	\item The dataset is balanced by undersampling to ensure equal representation of each class
-% 	      within a chosen CVSS metric (e.g., Confidentiality Impact) where possible.
-
-% 	\item The LDA model is then applied to this balanced dataset using the previously determined parameters.
-
-% \end{itemize}
 
 \subsubsection*{Cluster-Class Association}
 
@@ -1284,123 +1269,147 @@ unfeasible for the time being.
 
 \subsubsection*{Methodology and Presentation}
 
-The primary results of the analysis are presented in graphical form. Each graph shows the
-distribution of documents across the three classes of integrity impact (\texttt{NONE}, \texttt{LOW},
-\texttt{HIGH}) for the topic cluster that best represents each target class. This approach allows us
-to visualize how well this clustering method separates vulnerabilities based on their integrity impact.
+The primary results of our analysis are presented in graphical form for each of the three CVSS
+impact metrics: Integrity Impact, Confidentiality Impact, and Availability Impact. For each metric,
+we provide three graphs corresponding to the three possible impact levels: \texttt{NONE},
+\texttt{LOW}, and \texttt{HIGH}.
+
+Each graph shows the distribution of documents across all three classes (\texttt{NONE},
+\texttt{LOW}, \texttt{HIGH}) for the topic cluster that best represents the target class. This
+approach allows us to visualize how effectively our clustering method separates vulnerabilities
+based on their impact levels for each metric.
 
 \todo[inline]{Fix the position of the myriad graphs that are in weird places in the document}
 
 \todo[inline]{Work in progress, copy paste of previous but with the new graphs currently}
 \subsubsection{Confidentiality Impact Analysis}
 
-The \texttt{Confidentiality Impact} metric in CVSS refers to the degree to which a vulnerability, if exploited,
-could affect the trustworthiness and veracity of data. A high confidentiality impact implies that data
-could be significantly corrupted or altered, potentially leading to serious consequences for the
-affected system or its users.
+The \texttt{Confidentiality Impact} metric in CVSS measures the impact on confidentiality of a
+successfully exploited vulnerability. Confidentiality refers to limiting information access and
+disclosure to only authorized users, as well as preventing access by, or disclosure to, unauthorized
+ones.
 
-\begin{figure}
+\begin{figure}[h!]
 	\ContinuedFloat*
 	\centering
 	\begin{subfigure}{\textwidth}
 		\centering
 		\includegraphics[width=0.7\textwidth]{figures/confidentialityImpact/merged_top_k_topics_category_focus_counts_confidentialityImpact_NONE_k1.pdf}
+		\caption{The counts of the documents within the best topic in relation to \texttt{confidentiality Impact} with target class \texttt{NONE}}
+		\label{fig:confidentialityImpact_60_NONE}
 	\end{subfigure}
 
-	\caption{The counts of the documents within the best topic in relation to \texttt{confidentiality Impact} with target class \texttt{NONE}}
-	\label{fig:confidentialityImpact_60_NONE}
+	\caption{Confidentiality Impact Topic Counts}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h!]
 	\ContinuedFloat
 	\centering
 	\begin{subfigure}{\textwidth}
 		\centering
 		\includegraphics[width=0.7\textwidth]{figures/confidentialityImpact/merged_top_k_topics_category_focus_counts_confidentialityImpact_LOW_k1.pdf}
+		\caption{The counts of the documents within the best topic in relation to \texttt{confidentiality Impact} with target class \texttt{LOW}}
+		\label{fig:confidentialityImpact_60_LOW}
 	\end{subfigure}
 
-	\caption{The counts of the documents within the best topic in relation to \texttt{confidentiality Impact} with target class \texttt{LOW}}
-	\label{fig:confidentialityImpact_60_LOW}
+	\caption{Confidentiality Impact Topic Counts}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h!]
 	\ContinuedFloat
 	\centering
 	\begin{subfigure}{\textwidth}
 		\centering
 		\includegraphics[width=0.7\textwidth]{figures/confidentialityImpact/merged_top_k_topics_category_focus_counts_confidentialityImpact_HIGH_k1.pdf}
+		\caption{The counts of the documents within the best topic in relation to confidentialityImpact with target class \texttt{HIGH}}
+		\label{fig:confidentialityImpact_60_HIGH}
 	\end{subfigure}
 
-	\caption{The counts of the documents within the best topic in relation to confidentialityImpact with target class \texttt{HIGH}}
-	\label{fig:confidentialityImpact_60_HIGH}
+	\caption{Confidentiality Impact Topic Counts}
 \end{figure}
 
-\subsubsection*{Confidentiality Impact, NONE Category}
+\subsubsection*{NONE Category}
 
-Figure \ref{fig:confidentialityImpact_60_NONE} shows the distribution for the cluster best representing
-the \texttt{NONE} category of confidentiality impact.
+Figure \ref{fig:confidentialityImpact_60_NONE} shows the distribution for the cluster best
+representing the \texttt{NONE} category of confidentiality impact.
 
-
-In this cluster, we observe a predominance of vulnerabilities related to denial of service attacks
-and system crashes. While these issues are serious and can affect system availability, they
-typically do not directly compromise data confidentiality. This aligns with the expectations for
-vulnerabilities classified as having no confidentiality impact.
+This cluster primarily contains vulnerabilities related to service disruptions and system crashes.
+While these issues can severely affect system availability, they typically do not directly
+compromise data confidentiality.
 
 Key findings:
+
 \begin{itemize}
 
 	\item The cluster shows a clear majority of \texttt{NONE}-rated vulnerabilities.
 
-	\item Common terms in this cluster likely include "denial of service", "crash", and
-	      "dos".
+	\item Predominant terms include "service", "function", "crash", "crafted", "remote", "denial",
+	      "cause", "attackers", "memory", and "dos".
 
-	\item This result supports the effectiveness of our clustering in identifying vulnerabilities
-	      with no confidentiality impact.
+	\item The presence of terms like "denial" and "dos" (denial of service) aligns with
+	      vulnerabilities that affect system availability rather than confidentiality.
+
+	\item This cluster effectively identifies vulnerabilities with no direct impact on
+	      confidentiality.
 
 \end{itemize}
 
-\subsubsection*{Confidentiality Impact, LOW Category}
+\subsubsection*{LOW Category}
 
-Figure \ref{fig:confidentialityImpact_60_LOW} represents the distribution for the cluster best representing the \texttt{LOW} category of confidentiality impact.
-
-
-This cluster predominantly features cross-site scripting (XSS) vulnerabilities and other generally
-web browser based attacks. These types of vulnerabilities can indeed cause data confidentiality issues, but
-they are usually limited in scope, typically affecting individual user interactions rather than
-compromising the entire application's data confidentiality.
+Figure \ref{fig:confidentialityImpact_60_LOW} represents the distribution for the cluster best
+representing the \texttt{LOW} category of confidentiality impact. This cluster predominantly
+features web-based vulnerabilities, particularly cross-site scripting (XSS) attacks. These types of
+vulnerabilities can indeed cause confidentiality issues, but they are usually limited in scope,
+typically affecting individual user sessions rather than compromising the entire system's
+confidentiality.
 
 Key findings:
+
 \begin{itemize}
 
 	\item The cluster shows a majority of \texttt{LOW}-rated vulnerabilities, with some overlap into
 	      other categories.
 
-	\item Common terms likely include "cross-site scripting", "XSS", "javascript", and "html".
+	\item Predominant terms include "scripting", "xss", "site", "stored", "arbitrary", "user",
+	      "web", "inject", "html", and "css".
 
-	\item This cluster aligns with our earlier k-means clustering results, providing some
-	      similarities between the clustering
+	\item The prevalence of web-related terms suggests that this cluster captures client-side
+	      vulnerabilities that often have a lower impact on overall system confidentiality.
+
+	\item This cluster aligns with expectations for low-impact confidentiality issues in web
+	      applications.
+
 \end{itemize}
 
-\subsubsection*{Confidentiality Impact, HIGH Category}
+\subsubsection*{HIGH Category}
 
-Figure \ref{fig:confidentialityImpact_60_HIGH} shows the distribution for the cluster best representing the \texttt{HIGH} category of confidentiality impact.
+Figure \ref{fig:confidentialityImpact_60_HIGH} shows the distribution for the cluster best
+representing the \texttt{HIGH} category of confidentiality impact. In this cluster, we see a focus
+on remote code execution and file manipulation vulnerabilities. These types of attacks have the
+potential to severely compromise data confidentiality by allowing unauthorized access to sensitive
+information or system resources. Key findings:
 
-
-In this cluster, we see a focus on remote code execution vulnerabilities. These
-types of attacks have the potential to severely compromise data confidentiality by allowing unauthorized
-modification or corruption of server contents.
-
-Key findings:
 \begin{itemize}
 
 	\item The cluster shows a strong representation of \texttt{HIGH}-rated vulnerabilities.
 
-	\item Common terms likely include "remote", "execution"
+	\item Predominant terms include "execution", "execute", "crafted", "remote", "upload", "code",
+	      "arbitrary", "file", "request", and "attackers".
 
-	\item The prevalence of these severe vulnerabilities in this cluster aligns with cybersecurity
-	      expert expectations for high-impact confidentiality issues.
+	\item The presence of terms like "remote" and "arbitrary" suggests vulnerabilities that allow
+	      attackers to gain extensive access to a system, potentially compromising large amounts of
+	      confidential data.
+
+	\item This cluster effectively captures severe confidentiality breaches that align with
+	      cybersecurity expert expectations for high-impact confidentiality issues.
 
 \end{itemize}
+
+The analysis of these clusters for Confidentiality Impact reveals clear distinctions between the
+NONE, LOW, and HIGH categories. The clustering effectively separates vulnerabilities based on their
+potential to compromise data confidentiality, from those with no impact (like denial of service
+attacks) to severe breaches (such as remote code execution). This demonstrates the model's ability
+to capture the nuances of confidentiality impacts in various types of vulnerabilities.
 
 \subsubsection{Integrity Impact Analysis}
 
@@ -1409,44 +1418,48 @@ could affect the trustworthiness and veracity of data. A high integrity impact i
 could be significantly corrupted or altered, potentially leading to serious consequences for the
 affected system or its users.
 
-\begin{figure}
+\begin{figure}[h!]
 	\ContinuedFloat*
 	\centering
 	\begin{subfigure}{\textwidth}
 		\centering
 		\includegraphics[width=0.7\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_NONE_k1.pdf}
+		\caption{The counts of the documents within the best topic in relation to \texttt{Integrity
+				Impact} with
+			target class \texttt{NONE}}
+
+		\label{fig:integrityImpact_60_NONE}
 	\end{subfigure}
+	\caption{Integrity Impact Topic Counts}
 
-	\caption{The counts of the documents within the best topic in relation to \texttt{Integrity
-			Impact} with
-		target class \texttt{NONE}}
-
-	\label{fig:integrityImpact_60_NONE}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h!]
 	\ContinuedFloat
 	\centering
 	\begin{subfigure}{\textwidth}
 		\centering
 		\includegraphics[width=0.7\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_LOW_k1.pdf}
+		\caption{The counts of the documents within the best topic in relation to \texttt{Integrity Impact} with target class \texttt{LOW}}
+		\label{fig:integrityImpact_60_LOW}
 	\end{subfigure}
 
-	\caption{The counts of the documents within the best topic in relation to \texttt{Integrity Impact} with target class \texttt{LOW}}
-	\label{fig:integrityImpact_60_LOW}
+	\caption{Integrity Impact Topic Counts}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h!]
 	\ContinuedFloat
 	\centering
 	\begin{subfigure}{\textwidth}
 		\centering
 		\includegraphics[width=0.7\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_HIGH_k1.pdf}
+		\caption{The counts of the documents within the best topic in relation to integrityImpact with target class \texttt{HIGH}}
+		\label{fig:integrityImpact_60_HIGH}
 	\end{subfigure}
 
-	\caption{The counts of the documents within the best topic in relation to integrityImpact with target class \texttt{HIGH}}
-	\label{fig:integrityImpact_60_HIGH}
+	\caption{Integrity Impact Topic Counts}
 \end{figure}
+
 \subsubsection*{NONE Category}
 
 Figure \ref{fig:integrityImpact_60_NONE} shows the distribution for the cluster best representing
@@ -1474,7 +1487,6 @@ Key findings:
 \subsubsection*{LOW Category}
 
 Figure \ref{fig:integrityImpact_60_LOW} represents the distribution for the cluster best representing the \texttt{LOW} category of integrity impact.
-
 
 This cluster predominantly features cross-site scripting (XSS) vulnerabilities and other generally
 web browser based attacks. These types of vulnerabilities can indeed cause data integrity issues, but
@@ -1516,16 +1528,170 @@ Key findings:
 
 \end{itemize}
 
-\begin{figure}[ht]
+\subsubsection{Availability Impact Analysis}
+
+The \texttt{Availability Impact} metric in CVSS measures the impact on the availability of the
+affected component resulting from a successfully exploited vulnerability. This metric refers to the
+loss of availability of the impacted component itself, such as a networked service (e.g., web,
+database, email).
+
+\begin{figure}[h!]
+	\ContinuedFloat*
 	\centering
-	\includegraphics[width=0.8\textwidth]{figures/integrityImpact/integrityImpact_NONE_60_BAD.pdf}
-	\caption{The counts of the documents within the best topic in relation to integrityImpact with
-		target class \texttt{NONE}, for the number of clusters (60) with the lowest purity}
-	\label{fig:integrityImpact_60_NONE_BAD}
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=0.7\textwidth]{figures/availabilityImpact/merged_top_k_topics_category_focus_counts_availabilityImpact_NONE_k1.pdf}
+
+		\caption{The counts of the documents within the best topic in relation to \texttt{availability
+				Impact} with
+			target class \texttt{NONE}}
+	\end{subfigure}
+
+
+	\caption{Availability Impact Topic Counts}
+	\label{fig:availabilityImpact_60_NONE}
 \end{figure}
 
-\todo[inline]{I was also planning on adding confidentiality and availability impact after here which
-	I have not done yet, still a good idea? So that I can talk about them together a bit more}
+\begin{figure}[h!]
+	\ContinuedFloat
+	\centering
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=0.7\textwidth]{figures/availabilityImpact/merged_top_k_topics_category_focus_counts_availabilityImpact_LOW_k1.pdf}
+		\caption{The counts of the documents within the best topic in relation to \texttt{availability Impact} with target class \texttt{LOW}}
+		\label{fig:availabilityImpact_60_LOW}
+	\end{subfigure}
+
+	\caption{Availability Impact Topic Counts}
+\end{figure}
+
+\begin{figure}[h!]
+	\ContinuedFloat
+	\centering
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=0.7\textwidth]{figures/availabilityImpact/merged_top_k_topics_category_focus_counts_availabilityImpact_HIGH_k1.pdf}
+		\caption{The counts of the documents within the best topic in relation to availabilityImpact with target class \texttt{HIGH}}
+		\label{fig:availabilityImpact_60_HIGH}
+	\end{subfigure}
+
+	\caption{Availability Impact Topic Counts}
+\end{figure}
+
+\subsubsection*{NONE Category}
+
+Figure \ref{fig:availabilityImpact_60_NONE} shows the distribution for the cluster best representing
+the \texttt{NONE} category of availability impact.
+
+Interestingly, this cluster primarily contains vulnerabilities related to web application security
+issues, particularly injection attacks and cross-site scripting. While these vulnerabilities can be
+severe in terms of confidentiality and integrity, they typically do not directly impact system
+availability.
+
+Key findings:
+
+\begin{itemize}
+
+	\item The cluster shows a clear majority of \texttt{NONE}-rated vulnerabilities for availability
+	      impact.
+
+	\item Predominant terms include "inject", "arbitrary", "html", "cross", "scripting", "site",
+	      "xss", "user", "stored", and "web".
+
+	\item The presence of web application security terms suggests that these vulnerabilities, while
+	      potentially severe in other aspects, do not typically cause system downtime or service
+	      interruptions.
+
+	\item This cluster effectively identifies vulnerabilities that, despite their severity in other
+	      areas, have minimal impact on system availability.
+
+\end{itemize}
+
+\subsubsection*{LOW Category}
+
+Figure \ref{fig:availabilityImpact_60_LOW} represents the distribution for the cluster best
+representing the \texttt{LOW} category of availability impact. However, this category requires
+careful interpretation due to significant class imbalance in the dataset.
+
+As evident from Figure \ref{fig:nvd_data}, the \texttt{LOW} category for Availability Impact is
+highly under-represented in the true category values. This imbalance has a profound effect on our
+clustering results, leading to a diluted cluster where the primary focus class is actually
+\texttt{NONE} rather than \texttt{LOW}.
+
+Key findings:
+
+\begin{itemize}
+
+	\item The cluster shows a majority of \texttt{NONE}-rated vulnerabilities, contrary to what we
+	      would expect for a \texttt{LOW} category cluster.
+
+	\item Predominant terms include "compromise", "oracle", "access", "data", "cvss", "attacks",
+	      "unauthorized", "successful", "accessible", and "base".
+
+	\item The mix of terms suggests a broad range of vulnerabilities, many of which may not
+	      significantly impact system availability.
+
+	\item This cluster highlights the challenges in accurately identifying and categorizing
+	      low-impact availability vulnerabilities due to their scarcity in the dataset.
+
+\end{itemize}
+
+The results for this category underscore a crucial limitation in our current model and dataset. The
+severe underrepresentation of \texttt{LOW} Availability Impact vulnerabilities makes it difficult
+for the model to accurately capture the characteristics of this category. Instead, the cluster is
+dominated by \texttt{NONE} impact vulnerabilities, which are much more prevalent in the dataset.
+
+This observation points to the need for careful consideration when interpreting results for
+underrepresented classes in imbalanced datasets. It also suggests potential areas for improvement in
+our model, such as employing techniques to address class imbalance or collecting more data for
+underrepresented categories.
+
+\subsubsection*{HIGH Category}
+
+Figure \ref{fig:availabilityImpact_60_HIGH} shows the distribution for the cluster best representing
+
+the \texttt{HIGH} category of availability impact.
+
+In this cluster, we see a clear focus on remote code execution and command injection
+vulnerabilities. These types of attacks have the potential to severely compromise system
+availability by allowing attackers to execute arbitrary code or commands, potentially leading to
+system crashes or complete takeover.
+
+Key findings:
+
+\begin{itemize}
+
+	\item The cluster shows a strong representation of \texttt{HIGH}-rated vulnerabilities for
+	      availability impact.
+
+	\item Predominant terms include "attackers", "arbitrary", "injection", "execution", "commands",
+	      "execute", "function", "command", "remote", and "code".
+
+	\item The presence of terms like "remote" and "arbitrary" coupled with "execution" and "command"
+	      suggests vulnerabilities that allow attackers to run malicious code, potentially causing
+	      severe system disruptions.
+
+	\item This cluster effectively captures severe availability threats that align with
+	      cybersecurity expert expectations for high-impact availability issues.
+
+\end{itemize}
+
+The analysis of these clusters for Availability Impact reveals interesting distinctions between the
+NONE, LOW, and HIGH categories. Notably, vulnerabilities that severely impact confidentiality or
+integrity (such as XSS) are often categorized as having no availability impact. In contrast,
+vulnerabilities allowing remote code execution or command injection are correctly identified as
+high-impact for availability. This demonstrates the model's ability to differentiate between various
+security impacts and accurately categorize vulnerabilities based on their potential to disrupt
+system availability.\todo[inline]{talk about an example of a bad case}
+
+% \begin{figure}[ht]
+% 	\centering
+% 	\includegraphics[width=0.8\textwidth]{figures/integrityImpact/integrityImpact_NONE_60_BAD.pdf}
+% 	\caption{The counts of the documents within the best topic in relation to integrityImpact with
+% 		target class \texttt{NONE}, for the number of clusters (60) with the lowest purity}
+% 	\label{fig:integrityImpact_60_NONE_BAD}
+% \end{figure}
+
 
 \subsection{Cluster Merging and Refinement}
 
