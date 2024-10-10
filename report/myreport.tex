@@ -19,7 +19,8 @@
 \usepackage[draft]{cosc4x0style}
 %\usepackage{cosc4x0style}
 \usepackage[T1]{fontenc}
-
+\usepackage{subcaption}
+\usepackage{caption}
 \usepackage{hyperref}
 \usepackage{fvextra}
 \usepackage{csquotes} 
@@ -1178,40 +1179,70 @@ suggests better clustering quality with respect to the ground truth classes\cite
 In the context of topic modeling for CVSS metrics, high purity would indicate that each discovered
 topic strongly corresponds to a specific CVSS category.
 
+\begin{figure}[h!]
+	\centering
+
+	\begin{minipage}[t]{\textwidth}
+		\centering
+		\includegraphics[width=0.8\textwidth]{figures/purity/topic_model_performance_purity_ground_truth_confidentialityImpact.pdf}
+		\caption{The purity score for when the topics have been assigned with a focus on \texttt{Confidentiality Impact}, split by the different possible classes}
+		\label{fig:purity_20_confidentiality}
+	\end{minipage}
+
+	\begin{minipage}[t]{\textwidth}
+		\centering
+		\includegraphics[width=0.8\textwidth]{figures/purity/topic_model_performance_purity_ground_truth_integrityImpact.pdf}
+		\caption{The purity score for when the topics have been assigned with a focus on \texttt{Integrity Impact}, split by the different possible classes}
+		\label{fig:purity_integrity}
+	\end{minipage}
+
+
+	\begin{minipage}[t]{\textwidth}
+		\centering
+		\includegraphics[width=0.8\textwidth]{figures/purity/topic_model_performance_purity_ground_truth_availabilityImpact.pdf}
+		\caption{The purity score for when the topics have been assigned with a focus on \texttt{Availability Impact}, split by the different possible classes}
+		\label{fig:purity_20_availability}
+	\end{minipage}
+
+
+\end{figure}
+
 \subsubsection*{Limitations}
 
 It's important to note that purity tends to increase as the number of clusters increases, with a
 trivial solution of perfect purity when each object is in its own cluster \cite{v-measure}.
 Therefore, it should be interpreted cautiously, especially when comparing models with different
-numbers of topics, however, as seen by Figures~\ref{fig:purity_integrity},
-\ref{fig:purity_20_availability}, \ref{fig:purity_20_confidentiality} this effect did not present
+numbers of topics, however, as seen by Figures~\ref{fig:purity_20_confidentiality}, \ref{fig:purity_integrity},
+\ref{fig:purity_20_availability}, this effect did not present
 itself too strongly. This effect incentivise picking the number of topics around the elbow of the
 graph (the point on a curve where the rate of change significantly shifts), as any minor increase in
 the purity score could just be based on the inherent increase in the purity score as the number of
 topics increase.
 
-\begin{figure}[ht] \centering
 
-	\includegraphics[width=1\textwidth]{figures/purity/topic_model_performance_purity_ground_truth_integrityImpact.pdf}
 
-	\caption{\label{fig:purity_integrity}The purity score for when the topics have been assigned with a focus on \texttt{Integrity Impact}, split by the
-		different possible classes}
+% \begin{figure}[ht] \centering
 
-\end{figure}
+% 	\includegraphics[width=1\textwidth]{figures/purity/topic_model_performance_purity_ground_truth_integrityImpact.pdf}
 
-\begin{figure}[ht] \centering
-	\includegraphics[width=1\textwidth]{figures/purity/topic_model_performance_purity_ground_truth_availabilityImpact.pdf}
-	\caption{\label{fig:purity_20_availability}The purity score
-		for when the topics have been assigned with a focus on \texttt{Availability Impact}, split by the different
-		possible classes}
-\end{figure}
+% 	\caption{\label{fig:purity_integrity}The purity score for when the topics have been assigned with a focus on \texttt{Integrity Impact}, split by the
+% 		different possible classes}
 
-\begin{figure}[ht] \centering
-	\includegraphics[width=1\textwidth]{figures/purity/topic_model_performance_purity_ground_truth_confidentialityImpact.pdf}
-	\caption{\label{fig:purity_20_confidentiality}The purity score
-		for when the topics have been assigned with a focus on \texttt{Confidentiality Impact}, split by the different
-		possible classes}
-\end{figure}
+% \end{figure}
+
+% \begin{figure}[ht] \centering
+% 	\includegraphics[width=1\textwidth]{figures/purity/topic_model_performance_purity_ground_truth_availabilityImpact.pdf}
+% 	\caption{\label{fig:purity_20_availability}The purity score
+% 		for when the topics have been assigned with a focus on \texttt{Availability Impact}, split by the different
+% 		possible classes}
+% \end{figure}
+
+% \begin{figure}[ht] \centering
+% 	\includegraphics[width=1\textwidth]{figures/purity/topic_model_performance_purity_ground_truth_confidentialityImpact.pdf}
+% 	\caption{\label{fig:purity_20_confidentiality}The purity score
+% 		for when the topics have been assigned with a focus on \texttt{Confidentiality Impact}, split by the different
+% 		possible classes}
+% \end{figure}
 
 
 \subsection{Evaluation and Insights}
@@ -1232,9 +1263,9 @@ data. As a result the analysis will be focused on the metrics which are the most
 as well as related to each other, these are the CIA triad, confidentiality, integrity, and availiability
 impact.
 
-\begin{figure}[ht]
+\begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.8\textwidth]{figures/privilegesRequired/merged_top_k_topics_category_focus_counts_privilegesRequired_HIGH_k1.pdf}
+	\includegraphics[width=0.7\textwidth]{figures/privilegesRequired/merged_top_k_topics_category_focus_counts_privilegesRequired_HIGH_k1.pdf}
 
 	\caption{The counts of the documents within the best topic in relation to Privileges Required with
 		target class \texttt{HIGH}}
@@ -1261,117 +1292,113 @@ to visualize how well this clustering method separates vulnerabilities based on 
 \todo[inline]{Fix the position of the myriad graphs that are in weird places in the document}
 
 
-% \subsubsection{Confidentiality Impact Analysis}
+\subsubsection{Confidentiality Impact Analysis}
 
-% The \texttt{Confidentiality Impact} metric in CVSS refers to the degree to which a vulnerability, if exploited,
-% could affect the trustworthiness and veracity of data. A high confidentiality impact implies that data
-% could be significantly corrupted or altered, potentially leading to serious consequences for the
-% affected system or its users.
+The \texttt{Confidentiality Impact} metric in CVSS refers to the degree to which a vulnerability, if exploited,
+could affect the trustworthiness and veracity of data. A high confidentiality impact implies that data
+could be significantly corrupted or altered, potentially leading to serious consequences for the
+affected system or its users.
 
-% \subsubsection*{NONE Category}
+\begin{figure}
+	\ContinuedFloat*
+	\centering
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=0.7\textwidth]{figures/confidentialityImpact/merged_top_k_topics_category_focus_counts_confidentialityImpact_NONE_k1.pdf}
+	\end{subfigure}
 
-% Figure \ref{fig:confidentialityImpact_60_NONE} shows the distribution for the cluster best representing
-% the \texttt{NONE} category of confidentiality impact.
+	\caption{The counts of the documents within the best topic in relation to \texttt{confidentiality Impact} with target class \texttt{NONE}}
+	\label{fig:confidentialityImpact_60_NONE}
+\end{figure}
 
-% \begin{figure}[ht]
-% 	\centering
-% 	\includegraphics[width=0.8\textwidth]{figures/confidentialityImpact/merged_top_k_topics_category_focus_counts_confidentialityImpact_NONE_k1.png}
+\begin{figure}
+	\ContinuedFloat
+	\centering
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=0.7\textwidth]{figures/confidentialityImpact/merged_top_k_topics_category_focus_counts_confidentialityImpact_LOW_k1.pdf}
+	\end{subfigure}
 
-% 	\caption{The counts of the documents within the best topic in relation to \texttt{confidentiality
-% 			Impact} with
-% 		target class \texttt{NONE}}
+	\caption{The counts of the documents within the best topic in relation to \texttt{confidentiality Impact} with target class \texttt{LOW}}
+	\label{fig:confidentialityImpact_60_LOW}
+\end{figure}
 
-% 	\label{fig:confidentialityImpact_60_NONE}
-% \end{figure}
+\begin{figure}
+	\ContinuedFloat
+	\centering
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=0.7\textwidth]{figures/confidentialityImpact/merged_top_k_topics_category_focus_counts_confidentialityImpact_HIGH_k1.pdf}
+	\end{subfigure}
 
-% In this cluster, we observe a predominance of vulnerabilities related to denial of service attacks
-% and system crashes. While these issues are serious and can affect system availability, they
-% typically do not directly compromise data confidentiality. This aligns with the expectations for
-% vulnerabilities classified as having no confidentiality impact.
+	\caption{The counts of the documents within the best topic in relation to confidentialityImpact with target class \texttt{HIGH}}
+	\label{fig:confidentialityImpact_60_HIGH}
+\end{figure}
 
-% Key findings:
-% \begin{itemize}
-
-% 	\item The cluster shows a clear majority of \texttt{NONE}-rated vulnerabilities.
-
-% 	\item Common terms in this cluster likely include "denial of service", "crash", and
-% 	      "dos".
-
-% 	\item This result supports the effectiveness of our clustering in identifying vulnerabilities
-% 	      with no confidentiality impact.
-
-% \end{itemize}
-
-% \subsubsection*{LOW Category}
-
-% Figure \ref{fig:confidentialityImpact_60_LOW} represents the distribution for the cluster best representing the \texttt{LOW} category of confidentiality impact.
-
-% \begin{figure}[ht]
-% 	\centering
-% 	\includegraphics[width=0.8\textwidth]{figures/confidentialityImpact/merged_top_k_topics_category_focus_counts_confidentialityImpact_LOW_k1.png}
-% 	\caption{The counts of the documents within the best topic in relation to \texttt{confidentiality Impact} with target class \texttt{LOW}}
-% 	\label{fig:confidentialityImpact_60_LOW}
-% \end{figure}
-
-% This cluster predominantly features cross-site scripting (XSS) vulnerabilities and other generally
-% web browser based attacks. These types of vulnerabilities can indeed cause data confidentiality issues, but
-% they are usually limited in scope, typically affecting individual user interactions rather than
-% compromising the entire application's data confidentiality.
-
-% Key findings:
-% \begin{itemize}
-
-% 	\item The cluster shows a majority of \texttt{LOW}-rated vulnerabilities, with some overlap into
-% 	      other categories.
-
-% 	\item Common terms likely include "cross-site scripting", "XSS", "javascript", and "html".
-
-% 	\item This cluster aligns with our earlier k-means clustering results, providing some
-% 	      similarities between the clustering
-% \end{itemize}
-
-% \subsubsection*{HIGH Category}
-
-% \todo[inline]{Needs a bit of work, when switching to purity this changed a little what was the best
-% 	topic...}
-% Figure \ref{fig:confidentialityImpact_60_HIGH} shows the distribution for the cluster best representing the \texttt{HIGH} category of confidentiality impact.
-
-% \begin{figure}[ht]
-% 	\centering
-% 	\includegraphics[width=0.8\textwidth]{figures/confidentialityImpact/merged_top_k_topics_category_focus_counts_confidentialityImpact_HIGH_k1.png}
-% 	\caption{The counts of the documents within the best topic in relation to confidentialityImpact with target class \texttt{HIGH}}
-% 	\label{fig:confidentialityImpact_60_HIGH}
-% \end{figure}
-
-% In this cluster, we see a focus on remote code execution vulnerabilities. These
-% types of attacks have the potential to severely compromise data confidentiality by allowing unauthorized
-% modification or corruption of server contents.
-
-% Key findings:
-% \begin{itemize}
-
-% 	\item The cluster shows a strong representation of \texttt{HIGH}-rated vulnerabilities.
-
-% 	\item Common terms likely include "remote", "execution"
-
-% 	\item The prevalence of these severe vulnerabilities in this cluster aligns with cybersecurity
-% 	      expert expectations for high-impact confidentiality issues.
-
-% \end{itemize}
-
-% \begin{figure}[ht]
-% 	\centering
-% 	\includegraphics[width=0.8\textwidth]{figures/confidentialityImpact/confidentialityImpact_NONE_60_BAD.pdf}
-% 	\caption{The counts of the documents within the best topic in relation to confidentialityImpact with
-% 		target class \texttt{NONE}, for the number of clusters (60) with the lowest purity}
-% 	\label{fig:confidentialityImpact_60_NONE_BAD}
-% \end{figure}
+Figure \ref{fig:confidentialityImpact_60_NONE} shows the distribution for the cluster best representing
+the \texttt{NONE} category of confidentiality impact.
 
 
+In this cluster, we observe a predominance of vulnerabilities related to denial of service attacks
+and system crashes. While these issues are serious and can affect system availability, they
+typically do not directly compromise data confidentiality. This aligns with the expectations for
+vulnerabilities classified as having no confidentiality impact.
+
+Key findings:
+\begin{itemize}
+
+	\item The cluster shows a clear majority of \texttt{NONE}-rated vulnerabilities.
+
+	\item Common terms in this cluster likely include "denial of service", "crash", and
+	      "dos".
+
+	\item This result supports the effectiveness of our clustering in identifying vulnerabilities
+	      with no confidentiality impact.
+
+\end{itemize}
+
+\subsubsection*{LOW Category}
+
+Figure \ref{fig:confidentialityImpact_60_LOW} represents the distribution for the cluster best representing the \texttt{LOW} category of confidentiality impact.
 
 
+This cluster predominantly features cross-site scripting (XSS) vulnerabilities and other generally
+web browser based attacks. These types of vulnerabilities can indeed cause data confidentiality issues, but
+they are usually limited in scope, typically affecting individual user interactions rather than
+compromising the entire application's data confidentiality.
+
+Key findings:
+\begin{itemize}
+
+	\item The cluster shows a majority of \texttt{LOW}-rated vulnerabilities, with some overlap into
+	      other categories.
+
+	\item Common terms likely include "cross-site scripting", "XSS", "javascript", and "html".
+
+	\item This cluster aligns with our earlier k-means clustering results, providing some
+	      similarities between the clustering
+\end{itemize}
+
+\subsubsection*{HIGH Category}
+
+Figure \ref{fig:confidentialityImpact_60_HIGH} shows the distribution for the cluster best representing the \texttt{HIGH} category of confidentiality impact.
 
 
+In this cluster, we see a focus on remote code execution vulnerabilities. These
+types of attacks have the potential to severely compromise data confidentiality by allowing unauthorized
+modification or corruption of server contents.
+
+Key findings:
+\begin{itemize}
+
+	\item The cluster shows a strong representation of \texttt{HIGH}-rated vulnerabilities.
+
+	\item Common terms likely include "remote", "execution"
+
+	\item The prevalence of these severe vulnerabilities in this cluster aligns with cybersecurity
+	      expert expectations for high-impact confidentiality issues.
+
+\end{itemize}
 
 \subsubsection{Integrity Impact Analysis}
 
@@ -1380,14 +1407,13 @@ could affect the trustworthiness and veracity of data. A high integrity impact i
 could be significantly corrupted or altered, potentially leading to serious consequences for the
 affected system or its users.
 
-\subsubsection*{NONE Category}
-
-Figure \ref{fig:integrityImpact_60_NONE} shows the distribution for the cluster best representing
-the \texttt{NONE} category of integrity impact.
-
-\begin{figure}[ht]
+\begin{figure}
+	\ContinuedFloat*
 	\centering
-	\includegraphics[width=0.8\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_NONE_k1.pdf}
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=0.7\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_NONE_k1.pdf}
+	\end{subfigure}
 
 	\caption{The counts of the documents within the best topic in relation to \texttt{Integrity
 			Impact} with
@@ -1395,6 +1421,35 @@ the \texttt{NONE} category of integrity impact.
 
 	\label{fig:integrityImpact_60_NONE}
 \end{figure}
+
+\begin{figure}
+	\ContinuedFloat
+	\centering
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=0.7\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_LOW_k1.pdf}
+	\end{subfigure}
+
+	\caption{The counts of the documents within the best topic in relation to \texttt{Integrity Impact} with target class \texttt{LOW}}
+	\label{fig:integrityImpact_60_LOW}
+\end{figure}
+
+\begin{figure}
+	\ContinuedFloat
+	\centering
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=0.7\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_HIGH_k1.pdf}
+	\end{subfigure}
+
+	\caption{The counts of the documents within the best topic in relation to integrityImpact with target class \texttt{HIGH}}
+	\label{fig:integrityImpact_60_HIGH}
+\end{figure}
+\subsubsection*{NONE Category}
+
+Figure \ref{fig:integrityImpact_60_NONE} shows the distribution for the cluster best representing
+the \texttt{NONE} category of integrity impact.
+
 
 In this cluster, we observe a predominance of vulnerabilities related to denial of service attacks
 and system crashes. While these issues are serious and can affect system availability, they
@@ -1418,12 +1473,6 @@ Key findings:
 
 Figure \ref{fig:integrityImpact_60_LOW} represents the distribution for the cluster best representing the \texttt{LOW} category of integrity impact.
 
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=0.8\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_LOW_k1.pdf}
-	\caption{The counts of the documents within the best topic in relation to \texttt{Integrity Impact} with target class \texttt{LOW}}
-	\label{fig:integrityImpact_60_LOW}
-\end{figure}
 
 This cluster predominantly features cross-site scripting (XSS) vulnerabilities and other generally
 web browser based attacks. These types of vulnerabilities can indeed cause data integrity issues, but
@@ -1448,12 +1497,6 @@ Key findings:
 	topic...}
 Figure \ref{fig:integrityImpact_60_HIGH} shows the distribution for the cluster best representing the \texttt{HIGH} category of integrity impact.
 
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=0.8\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_HIGH_k1.pdf}
-	\caption{The counts of the documents within the best topic in relation to integrityImpact with target class \texttt{HIGH}}
-	\label{fig:integrityImpact_60_HIGH}
-\end{figure}
 
 In this cluster, we see a focus on remote code execution vulnerabilities. These
 types of attacks have the potential to severely compromise data integrity by allowing unauthorized
