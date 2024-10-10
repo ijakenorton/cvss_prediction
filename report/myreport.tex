@@ -2202,30 +2202,30 @@ as there was very little data.
 Below is a formulaic representation of the CVSS 3.1 base score formula.
 	{\scriptsize
 		\begin{equation}
-			ISS = 1 - ((1 - Confidentiality) \times (1 - Integrity) \times (1 - Availability)) \\
+			\mathit{ISS} = 1 - ((1 - \mathit{Confidentiality}) \times (1 - \mathit{Integrity}) \times (1 - \mathit{Availability})) \\
 		\end{equation}
 		\begin{equation}
-			Impact =
+			\mathit{Impact} =
 			\begin{cases}
-				7.52 \times (ISS - 0.029) - 3.25 \times (ISS - 0.02)^{15} & \text{if \textit{Scope} is
+				7.52 \times (\mathit{ISS} - 0.029) - 3.25 \times (\mathit{ISS} - 0.02)^{15} & \text{if \textit{Scope} is
 				\textit{Changed}}                                                                      \\
-				6.42 \times ISS                                           & \text{if \textit{Scope} is
+				6.42 \times \mathit{ISS}                                           & \text{if \textit{Scope} is
 					\textit{Unchanged}}
 			\end{cases}
 		\end{equation}
 
 		\begin{equation}
-			Exploitability = 8.22 - AttackVector \times AttackComplexity \times PrivilegesRequired \times
-			UserInteraction \\
+			\mathit{Exploitability} = 8.22 - \mathit{AttackVector} \times \mathit{AttackComplexity} \times \mathit{PrivilegesRequired} \times
+			\mathit{UserInteraction} \\
 		\end{equation}
 
 		\begin{equation}
-			Base Score =
+			\mathit{BaseScore} =
 			\begin{cases}
-				0                                                           & Impact \leq 0              \\
-				Roundup(Minimum(1.08 \times (Impact + Exploitability), 10)) & \text{if \textit{Scope} is
+				0                                                           & \mathit{Impact} \leq 0              \\
+				Roundup(\min(1.08 \times (\mathit{Impact} + \mathit{Exploitability}), 10)) & \text{if \textit{Scope} is
 				\textit{Changed}}                                                                        \\
-				Roundup(Minimum((Impact + Exploitability), 0))              & \text{if \textit{Scope} is
+				Roundup(\min((\mathit{Impact} + \mathit{Exploitability}), 0))              & \text{if \textit{Scope} is
 				\textit{Unchanged}}                                                                      \\
 			\end{cases}
 		\end{equation}
