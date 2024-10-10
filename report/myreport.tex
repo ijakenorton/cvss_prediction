@@ -96,28 +96,29 @@
 
 \section{Introduction}
 
-In 2023, there were 29,065 new vulnerabilities recorded, as illustrated in Figure~\ref{fig:cves_per_year}.
-This number continues to rise year on year, underscoring the growing challenge of managing and
-prioritizing software vulnerabilities. These vulnerabilities are documented using the Common
-Vulnerabilities and Exposure system (CVE~\cite{CVE}), with CVSS scores derived from these entries to
-indicate severity and impact. The National Vulnerability Database (NVD~\cite{NVD}) serves as the
-primary source for CVSS-enriched CVE data and is widely used in research (e.g., \cite{costa,
-	nvd_example1, nvd_example2}). However, to explore the potential benefits of multiple data sources,
-we also investigated the MITRE database~\cite{MITRE}, which is the main repository for CVEs and
-includes a significant number of entries with CVSS scores. The initial comparison between NVD and
-MITRE databases employed a methodology inspired by the paper \say{Can the Common Vulnerability
-	Scoring System be Trusted? A Bayesian Analysis}~\cite{bayes}. This approach aimed to assess the
-agreement between different data sources in scoring CVEs and explore the feasibility of establishing
-a ground truth. The analysis revealed differences in how these databases rate CVEs (see Figure
-\ref{fig:counts}, \ref{fig:mitre_31_confusion_matrices}, \ref{fig:nvd_31_confusion_matrices}), highlighting the subjective nature of CVSS scoring and the challenges in
-achieving consistency across different evaluation teams. While the comparison of multiple datasets
-did not yield the anticipated improvements in CVSS prediction, it provided valuable insights into
-the variability of human-assigned scores. This variability suggests that automated prediction models
-may face similar challenges in areas where human evaluators disagree. Given these findings, the
-focus of the research shifted towards enhancing the interpretability and analysis of the CVE/CVSS
-data itself. I employed clustering techniques, primarily Latent Dirichlet Allocation
-(LDA~\cite{lda_origin}), along with other dataset analysis methods to uncover patterns within the
-vulnerability descriptions. This approach offers several advantages:
+In 2023, there were 29,065 new vulnerabilities recorded, as illustrated in
+Figure~\ref{fig:cves_per_year}. This number continues to rise year on year, underscoring the growing
+challenge of managing and prioritizing software vulnerabilities. These vulnerabilities are
+documented using the Common Vulnerabilities and Exposure system (CVE~\cite{CVE}), with CVSS scores
+derived from these entries to indicate severity and impact. The National Vulnerability Database
+(NVD~\cite{NVD}) serves as the primary source for CVSS-enriched CVE data and is widely used in
+research (e.g., \cite{costa, nvd_example1, nvd_example2}). However, to explore the potential
+benefits of multiple data sources, we also investigated the MITRE database~\cite{MITRE}, which is
+the main repository for CVEs and includes a significant number of entries with CVSS scores. The
+initial comparison between NVD and MITRE databases employed a methodology inspired by the paper
+\say{Can the Common Vulnerability Scoring System be Trusted? A Bayesian Analysis}~\cite{bayes}. This
+approach aimed to assess the agreement between different data sources in scoring CVEs and explore
+the feasibility of establishing a ground truth. The analysis revealed differences in how these
+databases rate CVEs (see Figures~\ref{fig:counts}, \ref{fig:mitre_31_confusion_matrices_1},
+\ref{fig:nvd_31_confusion_matrices_1}), highlighting the subjective nature of CVSS scoring and the
+challenges in achieving consistency across different evaluation teams. While the comparison of
+multiple datasets did not yield the anticipated improvements in CVSS prediction, it provided
+valuable insights into the variability of human-assigned scores. This variability suggests that
+automated prediction models may face similar challenges in areas where human evaluators disagree.
+Given these findings, the focus of the research shifted towards enhancing the interpretability and
+analysis of the CVE/CVSS data itself. I employed clustering techniques, primarily Latent Dirichlet
+Allocation (LDA~\cite{lda_origin}), along with other dataset analysis methods to uncover patterns
+within the vulnerability descriptions. This approach offers several advantages:
 
 \begin{enumerate}
 
@@ -605,21 +606,213 @@ performance and tendencies remain consistent with our initial observations.
 
 \bigskip
 
-\begin{figure}[H]
+\begin{figure}
 	\centering
-	\makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{figures/nvd_31_titles.pdf}}
-	\caption{\label{fig:nvd_31_confusion_matrices}Confusion Matrices for NVD for CVSS version 3.1}
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{./figures/confusion_matrices/attack_vector_mitre.pdf}
+		\caption{Attack Vector}
+
+		\begin{tablenotes}
+			\footnotesize
+			\item \quad AN = Adjacent Network, L = Local
+			\item \quad N = Network, P = Physical
+		\end{tablenotes}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{./figures/confusion_matrices/attack_complexity_mitre.pdf}
+		\caption{Attack Complexity}
+		\begin{tablenotes}
+			\footnotesize
+			\item \quad L = Low, H = High
+		\end{tablenotes}
+	\end{subfigure}
+
+	\vspace{1em}
+
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{./figures/confusion_matrices/privileges_required_mitre.pdf}
+		\caption{Privileges Required}
+		\begin{tablenotes}
+			\footnotesize
+			\item \quad N = None, L = Low, H = High
+		\end{tablenotes}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{./figures/confusion_matrices/user_interaction_mitre.pdf}
+		\caption{User Interaction}
+		\begin{tablenotes}
+			\footnotesize
+			\item \quad N = None, R = Required
+		\end{tablenotes}
+	\end{subfigure}
+
+	\caption{\label{fig:mitre_31_confusion_matrices_1}Confusion Matrices for NVD for CVSS version 3.1 Part 1}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}
 	\centering
-	\makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{figures/mitre_31_titles.pdf}}
-	\caption{\label{fig:mitre_31_confusion_matrices}Confusion Matrices for MITRE for CVSS version 3.1}
+
+	\vspace{1em}
+
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{./figures/confusion_matrices/scope_mitre.pdf}
+		\caption{Scope}
+		\begin{tablenotes}
+			\footnotesize
+			\item \quad U = Unchanged, C = Changed
+		\end{tablenotes}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{./figures/confusion_matrices/confidentiality_impact_mitre.pdf}
+		\caption{Confidentiality Impact}
+		\begin{tablenotes}
+			\footnotesize
+			\item \quad N = None, L = Low, H = High
+		\end{tablenotes}
+	\end{subfigure}
+
+	\vspace{1em}
+
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{./figures/confusion_matrices/integrity_impact_mitre.pdf}
+		\caption{Integrity Impact}
+
+		\begin{tablenotes}
+			\footnotesize
+			\item \quad N = None, L = Low, H = High
+		\end{tablenotes}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{./figures/confusion_matrices/availability_impact_mitre.pdf}
+		\caption{Availability Impact}
+
+		\begin{tablenotes}
+			\footnotesize
+			\item \quad N = None, L = Low, H = High
+		\end{tablenotes}
+	\end{subfigure}
+
+	\caption{\label{fig:mitre_31_confusion_matrices_2}Confusion Matrices for MITRE for CVSS version 3.1 Part 2}
 \end{figure}
+
+
+\begin{figure}
+	\centering
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{./figures/confusion_matrices/attack_vector_nvd.pdf}
+		\caption{Attack Vector}
+
+		\begin{tablenotes}
+			\footnotesize
+			\item \quad AN = Adjacent Network, L = Local
+			\item \quad N = Network, P = Physical
+		\end{tablenotes}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{./figures/confusion_matrices/attack_complexity_nvd.pdf}
+		\caption{Attack Complexity}
+
+		\begin{tablenotes}
+			\footnotesize
+			\item \quad L = Low, H = High
+		\end{tablenotes}
+	\end{subfigure}
+
+	\vspace{1em}
+
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{./figures/confusion_matrices/privileges_required_nvd.pdf}
+		\caption{Privileges Required}
+
+		\begin{tablenotes}
+			\footnotesize
+			\item \quad N = None, L = Low, H = High
+		\end{tablenotes}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{./figures/confusion_matrices/user_interaction_nvd.pdf}
+
+		\caption{User Interaction}
+		\begin{tablenotes}
+			\footnotesize
+			\item \quad N = None, R = Required
+		\end{tablenotes}
+	\end{subfigure}
+
+	\caption{\label{fig:nvd_31_confusion_matrices_1}Confusion Matrices for nvd for CVSS version 3.1 Part 1}
+\end{figure}
+
+\begin{figure}
+	\centering
+
+	\vspace{1em}
+
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{./figures/confusion_matrices/scope_nvd.pdf}
+		\caption{Scope}
+
+		\begin{tablenotes}
+			\footnotesize
+			\item \quad U = Unchanged, C = Changed
+		\end{tablenotes}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{./figures/confusion_matrices/confidentiality_impact_nvd.pdf}
+		\caption{Confidentiality Impact}
+
+		\begin{tablenotes}
+			\footnotesize
+			\item \quad N = None, L = Low, H = High
+		\end{tablenotes}
+	\end{subfigure}
+
+	\vspace{1em}
+
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{./figures/confusion_matrices/integrity_impact_nvd.pdf}
+		\caption{Integrity Impact}
+
+		\begin{tablenotes}
+			\footnotesize
+			\item \quad N = None, L = Low, H = High
+		\end{tablenotes}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{./figures/confusion_matrices/availability_impact_nvd.pdf}
+		\caption{Availability Impact}
+
+		\begin{tablenotes}
+			\footnotesize
+			\item \quad N = None, L = Low, H = High
+		\end{tablenotes}
+	\end{subfigure}
+
+	\caption{\label{fig:nvd_31_confusion_matrices_2}Confusion Matrices for nvd for CVSS version 3.1 Part 2}
+\end{figure}
+
+% \begin{figure}[H]
+% 	\centering
+% 	\makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{figures/nvd_31_titles.pdf}}
+% 	\caption{\label{fig:nvd_31_confusion_matrices}Confusion Matrices for NVD for CVSS version 3.1}
+% \end{figure}
+
+% \begin{figure}[H]
+% 	\centering
+% 	\makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{figures/mitre_31_titles.pdf}}
+% 	\caption{\label{fig:mitre_31_confusion_matrices}Confusion Matrices for MITRE for CVSS version 3.1}
+% \end{figure}
 
 % \begin{table}
 % 	\centering
-% 	\caption{\label{tab:johnson_confusion_matrices}Confusion Matrices for NVD on CVSS version 2.0 from Johnson et al.\@ \cite{bayes}}
+% 	\caption{\label{tab:johnson_confusion_matrices}Confusion Matrices for NVD on CVSS version 2.0 45from Johnson et al.\@ \cite{bayes}}
 % 	\[
 % 		\begin{array}{c|c}
 % 			\textbf{Access vector}  & \textbf{Access complexity} \\
@@ -680,23 +873,30 @@ performance and tendencies remain consistent with our initial observations.
 % \end{table}
 
 
-\section{Can we improve the LLMs' classifier performance when we augment the NVD dataset with data
-  from the MITRE dataset?}\label{cvss_prediction}
+\section{Can we improve classification of CVSS Metrics?}\label{cvss_prediction}
 
-\notedme{Normally every section should have some lead-in text here. Also, the section title is really long.}
+This section addresses our second research question: \say{Can we improve the LLMs' classifier
+	performance when we augment the NVD dataset with data from the MITRE dataset?} Our hypothesis is
+that that incorporating a second perspective in classifying CVE descriptions will enhance the model's
+ability to generalize, potentially leading to better performance on test data.
+
+To contextualize our approach and findings, it's crucial to examine recent advancements in the field
+of automated CVSS metric prediction. The following related work showcases significant progress in
+this area, providing a foundation for our research and a basis for comparison.
+
 
 \subsection{Related Work}
 
-Recent advancements in natural language processing and machine learning have led to significant
-progress in automating CVSS metric prediction from vulnerability descriptions. This area of research
-is particularly relevant to our work in Section \ref{cvss_prediction}\notedme{... sounds like a reference pointing elsewhere, but this \emph{is} section 4. This is probably what I'd expect the lead-in text to discuss.}.
 
-Shahid and Debar \cite{cvss_bert} proposed CVSS-BERT, an approach leveraging state-of-the-art
-natural language processing techniques to determine the severity of a computer security
-vulnerability from its description. Their work, titled \say{CVSS-BERT: Explainable Natural Language
-	Processing to Determine the Severity of a Computer Security Vulnerability from its Description,}
-uses multiple BERT classifiers, one for each metric composing the CVSS vector. This approach is
-similar to our methodology in Section \ref{cvss_prediction}\notedme{Again needs not to sound like this text has been moved here from a different section.}.
+Recent advancements in natural language processing and machine learning have led to significant
+progress in automating CVSS metric prediction from vulnerability descriptions. Shahid and Debar
+\cite{cvss_bert} proposed CVSS-BERT, an approach leveraging state-of-the-art natural language
+processing techniques to determine the severity of a computer security vulnerability from its
+description. Their work, titled \say{CVSS-BERT: Explainable Natural Language Processing to Determine
+	the Severity of a Computer Security Vulnerability from its Description,} uses multiple BERT
+classifiers, one for each metric composing the CVSS vector. This approach bears similarities to our
+methodology in the upcoming section, providing a valuable point of comparison for our augmented
+dataset approach.
 
 The authors of CVSS-BERT trained their model on CVE vulnerability data from 2018 to 2020, using
 BERT-small, a lighter version of BERT. They achieved high accuracy for predicting individual CVSS
@@ -719,7 +919,7 @@ explainability.
 
 These studies collectively demonstrate the potential of transformer-based models in vulnerability
 assessment and highlight the challenges in accurately predicting CVSS metrics from textual
-descriptions. Our work in Section~\ref{cvss_prediction}\notedme{again with the \S\ref{cvss_prediction} issue} builds upon these foundations, particularly
+descriptions. Our work builds upon these foundations, particularly
 the approach of CVSS-BERT, while exploring the impact of augmenting the training data with
 additional sources to potentially improve prediction accuracy and robustness.
 
@@ -768,35 +968,6 @@ to accurately predict across all categories. These findings underscore the compl
 CVSS prediction and highlight areas for future improvement in both data curation and model
 development.
 
-% The model is trained separately for each metric. Each of the eight models were trained on five
-% different data splits to allow for a standard deviation to be calculated, in order to aid in
-% reducing the chance of a \textit{lucky} data split effecting the results. The difference between
-% Costa et al.\@ \& Airey's work, and mine is that my model was trained on a combination of NVD and
-% MITRE data as opposed to just using NVD. This was converted to a CSV containing the descriptions and
-% the CVSS scores. This does mean there are now $\sim$40000 duplicate CVEs and $\sim$140000 CVEs
-% enriched with CVSS scores total. Below, Table~\ref{tab:distil_part1} and Table~\ref{tab:distil_part2}
-% show the results of the DistilBERT model trained on a combination of NVD and MITRE data.
-% Unfortunately this has a purely negative effect on all metrics, with the caveat that some of the
-% standard deviations are lower. Additional note is that the balanced accuracy for some metrics looks
-% a bit weird, I believe that is due to the model not outputing some of the categorical options for
-% that metric. This applies to all the balanced accuracy scores, apart from the \texttt{Priorities
-% 	Required} (PR) and \texttt{Confidentiality} (C) as seen on Table~\ref{tab:distil_part1} and
-% Table~\ref{tab:distil_part2}.
-% \todo[inline]{Finish rewriting the sections}
-% I hypothesize that this is due to the discrepancy between the two datasets on how a CVE is scored
-
-% % As to why the model performs worse, my theory is that the added data,
-% % and therefore the overlapping CVEs with different scores confuse the model. I thought that adding
-% % the additional data may have given the model a better chance of generalising, however this does not
-% % appear to be the case.
-
-% It suggests that the model may encounter similar challenges to those faced by human
-% evaluators. The lowest score for my model is in the \texttt{Availability Impact} category. This observation indicates a correlation between the machine learning models'
-% difficulties and the issues faced by human scorers. \texttt{Attack Complexity} also presents challenges,
-% likely due to data imbalance, as the dataset is heavily skewed towards the \texttt{Low} score,
-% thereby incentivizing the model to output \texttt{Low} scores (see
-% Figures~~\ref{fig:counts},~\ref{fig:nvd_31_confusion_matrices},~\ref{fig:mitre_31_confusion_matrices}
-% for reference).
 
 \begin{table}[H]
 	\centering
@@ -823,8 +994,8 @@ development.
 	\label{tab:distil_part1}
 	\begin{tablenotes}
 		\small
-		\item Note: AV = Attack Vector, AC = Attack Complexity, PR = Privileges Required, UI = User Interaction
-		\item Bal Acc = Balanced Accuracy
+		\item note: av = attack vector, ac = attack complexity, pr = privileges required, ui = user interaction
+		\item bal acc = balanced accuracy
 	\end{tablenotes}
 \end{table}
 
