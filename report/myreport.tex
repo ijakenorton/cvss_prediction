@@ -172,10 +172,10 @@ This report will try to answer these questions:\notedme{Typically expressed as `
 
 \section{Background}
 
-Vulnerabilities are stored in a consistent system called Common Vulnerabilities and
+Vulnerabilities are stored in a consistent system\notedme{system? Elaborate?} called Common Vulnerabilities and
 Exposures (CVE~\cite{CVE}).
 
-\subsubsection*{Here is an example CVE}
+\subsection{Here is an example CVE}
 \begin{itemize}
 
 	\item   Unique Identifier: CVE-2024-38526
@@ -192,12 +192,12 @@ Exposures (CVE~\cite{CVE}).
 
 \end{itemize}
 
-{\footnotesize Sourced from \href{https://nvd.nist.gov/vuln/detail/CVE-2024-38526}{NVD CVE-2024-38526
+{\footnotesize \notedme{Don't do unexplained formatting changes: use accepted semantic elements. I'd put this as an actual footnote to the subsection... noting that you're treating the subsection as a formatting command when it's semantic too. A key point of working in {\LaTeX} is that you should be focusing entirely on the semantics of your text, and not at all on the formatting, not least since changing the class file might make huge changes visually, and the class file should be driving how the PDF is generated.} Sourced from \href{https://nvd.nist.gov/vuln/detail/CVE-2024-38526}{NVD CVE-2024-38526
 	Detail} \cite{polyfill}} \\
 \bigskip
 
-This has a unique identifier, which is given by one of the CVE numbering authorities (CNA~\cite{CNA}), such as
-GitHub, Google or any of these, \href{https://www.cve.org/PartnerInformation/ListofPartners}{CVE list of
+\change[This]{Each CVE report}\notedme{Don't use anaphoric references when you can be more specific.} has a unique identifier, which is given by one of the CVE numbering authorities (CNA~\cite{CNA}), such as
+GitHub, Google or any of the \href{https://www.cve.org/PartnerInformation/ListofPartners}{CVE list of
 	partners}~\cite{partners}.
 The description is the most important part in our case. This should provide information about the
 vulnerability. What can be exploited (device / software component)? How is the product affected if
@@ -205,7 +205,7 @@ the vulnerability is exploited? Ideally there would be a part of the description
 unfortunately these descriptions are not necessarily suited to machine learning as the people
 writing the descriptions are expecting a lot of intrinsic knowledge.
 
-\subsection*{The Common Vulnerability Scoring System}
+\subsection{The Common Vulnerability Scoring System}
 
 CVSS scoring is a high level way to break up vulnerabilities into different categories.
 Organisations can use it to choose which vulnerability to focus on first. CVSS is broken up into
@@ -214,7 +214,12 @@ three distinct sections: base, temporal and environmental scores.
 For brevity I will only show the specifics of CVSS 3.1~\cite{CVSS_31} as this is by far the most commonly used
 version, even if it is not the most recent.
 
-\subsubsection*{Base Score}
+\subsubsection{Base Score}
+
+Below we summarise the
+\href{https://www.first.org/cvss/v3.1/specification-document}{3.1 specification document
+	provided by the  Forum of Incident Response and Security Teams (FIRST)}~\cite{CVSS_31}.
+
 
 \begin{itemize}
 
@@ -232,33 +237,34 @@ version, even if it is not the most recent.
 	      (e.g.\@ Administrator). The lower the privilege the higher the base score.
 
 	\item User Interaction: Describes if the exploit requires another human user to make the attack
-	      possible, E.g.\@ clicking a phishing link. This is either \texttt{None} or
+	      possible, e.g.\@ clicking a phishing link. This is either \texttt{None} or
 	      \texttt{Required}, the score is highest when no user interaction is required.
 
-	\item Scope: Defines if the attack can leak into other security scopes. E.g.\@~access to one
-	      machine gives the ability to elevate privileges on other parts of the system. This can take
+	\item Scope: Defines if the attack can leak into other security scopes. For example, access to one
+	      machine nay provide the ability to elevate privileges on other parts of the system. This can take
 	      \texttt{Unchanged} or \texttt{Changed}, the score being highest when a scope change occurs.
 
 	\item Confidentiality Impact: Detemines what is the impact on the information access /
 	      disclosure to the attacker. This can be: \texttt{High}, \texttt{Low} or \texttt{None} with
 	      \texttt{High} adding the most to the base score.
 
-	\item Integrity Impact: Refers to the integrity of the information within the component. I.e.\@
+	\item Integrity Impact: Refers to the integrity of the information within the component, i.e.\@
 	      could the data have been modified by the attacker. This has: \texttt{High}, \texttt{Low} or
 	      \texttt{None}, as categories with \texttt{High} adding the most to the base score.
 
 	\item Availability Impact: Refers to the impact of the attack on the availability of the
-	      component. E.g.\@ the attacker taking the component off the network, denying the users
+	      component, e.g.\@ the attacker taking the component off the network, denying the users
 	      access. This can be: \texttt{High}, \texttt{Low} and \texttt{None} with \texttt{High} adding
 	      the most to the base score.
 
 \end{itemize}
 
-{\footnotesize This is a summarized version of the
-\href{https://www.first.org/cvss/v3.1/specification-document}{3.1 specification document
-	provided by the  Forum of Incident Response and Security Teams (FIRST)}~\cite{CVSS_31}. } \\
 
-\subsubsection*{Temporal}
+\subsubsection{Temporal}
+
+Below we again summarise from the
+\href{https://www.first.org/cvss/v3.1/specification-document}{3.1 specification document
+	provided by the Forum of Incident Response and Security Teams (FIRST)}~\cite{CVSS_31}.
 
 \begin{itemize}
 
@@ -272,9 +278,7 @@ version, even if it is not the most recent.
 
 \end{itemize}
 
-{\footnotesize This is a summarized version of the
-\href{https://www.first.org/cvss/v3.1/specification-document}{3.1 specification document
-	provided by the Forum of Incident Response and Security Teams (FIRST)}~\cite{CVSS_31}.}  \\
+
 \bigskip
 
 Temporal metrics would be useful in general for a CVSS score, however NVD do not store these
@@ -283,7 +287,7 @@ discourse
 \href{https://security.stackexchange.com/questions/270257/cvss-v3-and-v3-1-missing-temporal-metrics-exploit-code-maturity-and-remediation}{(Stack exchange post)}~\cite{stack_exchange} around the subject suggests that this is due to a lack
 of verifiable reporting. From my perspective, both remidiation level and report confidence feel like
 they could have scores attributed to them, however finding verifiable reports on the exploits seen
-in the wild is difficult. There are two relatively new organisations on this front,
+in the wild is difficult. There are two relatively new organisations on this front\notedme{On what front?},
 Cybersecurity \& Infrastructure Security Agency (CISA,
 \href{https://www.cisa.gov/known-exploited-vulnerabilities-catalog}{public sector}) and
 inthewild.org (\href{https://inthewild.io/}{private sector}~\cite{cisa}).
@@ -297,7 +301,7 @@ remain for modern data. There are others, but they are either in archival or pro
 \subsubsection{National Vulnerability Database} \label{NVD_SECTION}
 
 The National Vulnerability Database is the defacto standard dataset used for CVSS generation
-research~\cite{costa, nvd_example1, nvd_example2}.  This makes a lot of sense as it is built
+research~\cite{costa, nvd_example1, nvd_example2}.  This makes a lot of sense\notedme{what makes a lot of sense?} as it is built
 for the purpose with a team dedicated to enriching CVEs with CVSS scores. The dataset I am using was
 retrieved using the NVD API in March 2024 and contains $\sim$100000 CVEs enriched with CVSS scores. This
 comes in a consistently formatted JSON dump.
@@ -306,7 +310,7 @@ comes in a consistently formatted JSON dump.
 
 MITRE is the defacto database for the storage of CVEs themselves, their database contains $\sim$40000
 CVEs enriched with CVSS 3.1 scores. These are in a JSON dump retrieved in March 2024. The
-format for usage is a bit more cumbersome to use. The CVSS scores are only stored as CVSS vector
+format for usage is a bit more cumbersome. The CVSS scores are only stored as CVSS vector
 strings (a simple text encoding~\cite{vector_string}). These are not hard to parse, though they are stored slightly
 different between versions, as well as sometimes being inconsistent ($\sim$5000 had temporal metrics within
 the vector strings in the MITRE database).
@@ -326,7 +330,7 @@ the vector strings in the MITRE database).
 \end{figure}
 
 
-\subsection{Evolution of CVSS and Its Identity Crisis}
+\subsection{Evolution of CVSS and its Identity Crisis}
 \todo[inline]{Possibly need some kind of link between these...}
 When CVSS 2.0 was released, it was promoted as a framework to help IT management prioritize and
 remediate vulnerabilities posing the greatest risk. The initial goal was to provide a comprehensive
@@ -376,7 +380,7 @@ process summarised from
 	\item Create sub-vectors for each group:
 	      \begin{itemize}
 		      \item \textbf{Impact sub-vector}: 27 possible values ($3^3$)
-		      \item \textbf{Exploitability sub-vector}: 26 possible values ($3^3 - 1$ for no impact)
+		      \item \textbf{Exploitability sub-vector}: 26 possible values ($3^3 - 1$ for `no impact')
 	      \end{itemize}
 
 	\item Develop and apply a series of rules to order the sub-vectors. These rules
@@ -402,11 +406,11 @@ process summarised from
 
 \end{enumerate}
 
-This process is inherently inaccurate, it is not a system designed to give precise scores. If we
+This process is inherently \change[inaccurate]{imprecise}\notedme{check, but I'm pretty sure you mean `imprecise', not `inaccurate'.}, it is not a system designed to give precise scores. If we
 look at~\ref{formula} above, the formula (\ref{equation} shows the CVSS 3.1 base score formula for
-reference) which produces the score, does not match exactly the experts decision. There is a lot of
+reference) which produces the score, does not match exactly the experts decision.\notedme{wrong refs} There is a lot of
 rounding and approximation going on. This is designed to make a system which is easy to use and
-quick to complete by security professionals. There is a space for CVSS, however this along with the
+quick to complete by security professionals. There is a space\notedme{sounds informal, and ambiguous to me: do you mean `role'? Also, this is the conclusion of Section 2, so make that clearer in the text. What you're writing here is not just a passing remark, it's you justifying flow into the next section\dots} for CVSS, however this along with the
 other mentioned reasons outlines the issues with using CVSS as a sole metric for prioritization. Perhaps an option
 is to triage the large swathes of new vulnerabilites coming in with an initial CVSS score, then move
 on to a deeper dive. This could be in the form of the extra CVSS metrics (Temporal score \&
