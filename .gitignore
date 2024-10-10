@@ -14,3 +14,4 @@ scripts/__pycache__/
 **/*.fdb_latexmk
 **/*.run.xml
 **/*.gensim*
+./report/*.pdf
