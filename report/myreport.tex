@@ -680,21 +680,23 @@ performance and tendencies remain consistent with our initial observations.
 % \end{table}
 
 
-\section{Can we improve the LLMs classifier performance when we augment the NVD dataset with data
+\section{Can we improve the LLMs' classifier performance when we augment the NVD dataset with data
   from the MITRE dataset?}\label{cvss_prediction}
+
+\notedme{Normally every section should have some lead-in text here. Also, the section title is really long.}
 
 \subsection{Related Work}
 
 Recent advancements in natural language processing and machine learning have led to significant
 progress in automating CVSS metric prediction from vulnerability descriptions. This area of research
-is particularly relevant to our work in Section \ref{cvss_prediction}.
+is particularly relevant to our work in Section \ref{cvss_prediction}\notedme{... sounds like a reference pointing elsewhere, but this \emph{is} section 4. This is probably what I'd expect the lead-in text to discuss.}.
 
 Shahid and Debar \cite{cvss_bert} proposed CVSS-BERT, an approach leveraging state-of-the-art
 natural language processing techniques to determine the severity of a computer security
 vulnerability from its description. Their work, titled \say{CVSS-BERT: Explainable Natural Language
 	Processing to Determine the Severity of a Computer Security Vulnerability from its Description,}
 uses multiple BERT classifiers, one for each metric composing the CVSS vector. This approach is
-similar to our methodology in Section \ref{cvss_prediction}.
+similar to our methodology in Section \ref{cvss_prediction}\notedme{Again needs not to sound like this text has been moved here from a different section.}.
 
 The authors of CVSS-BERT trained their model on CVE vulnerability data from 2018 to 2020, using
 BERT-small, a lighter version of BERT. They achieved high accuracy for predicting individual CVSS
@@ -708,7 +710,7 @@ training data with additional sources (MITRE dataset) to potentially improve the
 performance. We aim to investigate whether this augmentation can lead to more accurate and robust
 CVSS predictions.
 
-Costa et al. \cite{costa} also contributed to this field with their paper \say{Predicting CVSS Metric
+Costa et al.~\cite{costa} also contributed to this field with their paper \say{Predicting CVSS Metric
 	via Description Interpretation.} They tested various large language encoder-only models for
 generating CVSS from CVE descriptions, achieving state-of-the-art results with the DistilBERT model.
 Their work included text preprocessing techniques and explored the interpretability of the models
@@ -717,13 +719,13 @@ explainability.
 
 These studies collectively demonstrate the potential of transformer-based models in vulnerability
 assessment and highlight the challenges in accurately predicting CVSS metrics from textual
-descriptions. Our work in Section \ref{cvss_prediction} builds upon these foundations, particularly
+descriptions. Our work in Section~\ref{cvss_prediction}\notedme{again with the \S\ref{cvss_prediction} issue} builds upon these foundations, particularly
 the approach of CVSS-BERT, while exploring the impact of augmenting the training data with
 additional sources to potentially improve prediction accuracy and robustness.
 
-Cody Airey --a classmate of mine-- has been working on a similar problem. He has been repoducing
+Cody Airey---a classmate of mine---has been working on a similar problem. He has been repoducing
 results from Costa et al.\@~\cite{costa}, I am choosing to use Airey's results due to them being on
-CVSS version 3.1 instead of a mix of versions 3.0 and 3.1 as Costa et al. used. My choice of model
+CVSS version 3.1 instead of a mix of versions 3.0 and 3.1 as Costa et al.\@ used. My choice of model
 for CVSS prediction will very much bootstrap off his work. So far, a strong contender for
 state-of-the-art model for predicting CVSS metrics from CVE descriptions is the DistilBERT
 model~\cite{distilbert}. This is a variant of BERT~\cite{BERT}, a pre-trained deep bidirectional
@@ -738,7 +740,7 @@ reliability of our results, we trained each model on five different data splits.
 allows us to calculate standard deviations, effectively mitigating the impact of any potential
 \say{lucky} data split on our findings.
 
-Our work diverges from Costa et al. and Airey's approaches by utilizing a combined dataset from both
+Our work diverges from Costa et al.\@ and Airey's approaches by utilizing a combined dataset from both
 NVD and MITRE, rather than relying solely on NVD data. We converted this merged data into a CSV
 format, containing vulnerability descriptions and their corresponding CVSS scores. This integration
 resulted in approximately 40,000 duplicate CVEs and a total of around 140,000 CVEs enriched with
