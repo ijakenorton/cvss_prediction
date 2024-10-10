@@ -426,23 +426,23 @@ research in recent years. This section outlines key studies that have contribute
 understanding of vulnerability scoring consistency, database reliability, and automated assessment
 techniques.
 
-\subsubsection*{Comparative Analysis of Vulnerability Databases}
+\subsubsection{Comparative Analysis of Vulnerability Databases}
 
 The primary work most closely aligned with our Bayesian analysis between MITRE and NVD is the study
-by Johnson et al. titled "Can the Common Vulnerability Scoring System be Trusted? A Bayesian
-Analysis"\cite{bayes}. Conducted in 2016, this research investigated the state of CVSS databases and
-their accuracy. Johnson et al. found that NVD was the most reliable database and concluded that the
+by Johnson et al. entitled \notedme{make sure your quotes are all ``fancy'' ones and not "straight" ones, in your body text.} "Can the Common Vulnerability Scoring System be Trusted? A Bayesian
+Analysis"~\cite{bayes}. Conducted in 2016, this research investigated the state of CVSS databases and
+their accuracy. Johnson et al.\@ found that NVD was the most reliable database and concluded that the
 Common Vulnerability Scoring System could be trusted overall, as scorers rated CVEs consistently.
 Their methodology forms the foundation for the database comparison in Section~\ref{bayesian_modeling}
 of our study, although the specific results may have evolved since their publication.
 
-Dong et al.\@\cite{dong} conducted a comprehensive study on detecting inconsistencies in public security
+Dong et al.\@ \cite{dong} conducted a comprehensive study on detecting inconsistencies in public security
 vulnerability reports. Their work, which analyzed vulnerability information from MITRE, NVD, and other
 sources, highlighted the prevalence of information inconsistencies and developed an automated system
 to detect such inconsistencies. This research underscores the importance of maintaining accurate and
 consistent vulnerability information across different databases and reports.
 
-\subsubsection*{Automated Vulnerability Assessment Techniques}
+\subsubsection{Automated Vulnerability Assessment Techniques}
 
 Jiang and Atif's work, "An Approach to Discover and Assess Vulnerability Severity Automatically in
 Cyber-Physical Systems"~\cite{jiang}, presents an innovative pipeline for vulnerability assessment.
@@ -451,7 +451,7 @@ impact of incorrectly scored CVEs. While their methods differ from our focus on 
 their work underscores the value of leveraging multiple data sources in vulnerability assessment.
 
 
-\subsubsection*{Consistency and Reliability of CVSS Scoring}
+\subsubsection{Consistency and Reliability of CVSS Scoring}
 
 Allodi and Massacci~\cite{allodi} conducted a critical examination of CVSS scoring in their paper
 "Comparing Vulnerability Severity and Exploits Using Case-Control Studies." Their research questions
@@ -463,7 +463,7 @@ different human raters in their study "Towards Improving CVSS." They found signi
 how different individuals interpret and apply CVSS scoring guidelines, highlighting the challenges
 in achieving consistent vulnerability assessments even within a standardized framework.
 
-\subsubsection*{Summary}
+\subsubsection{Summary}
 
 These studies collectively demonstrate the ongoing challenges and advancements in vulnerability
 scoring and database reliability. While Johnson et al.~\cite{bayes} provided a foundational analysis
@@ -474,8 +474,8 @@ updated data and methodologies.
 
 \subsection{Priliminary Data exploration}
 
-The scorers for both NVD and MITRE do rate CVEs reasonably similar, one pattern you can see as shown
-by Figure~\ref{fig:counts}, is that NVD generally give the most common categorical output more ratings.
+The scorers for both NVD and MITRE do rate CVEs reasonably \change{similarly}. One pattern you can see as shown
+by Figure~\ref{fig:counts}, is that NVD generally give\notedme{grammar} the most common categorical output more ratings.
 They are less spread out across the full range of values. In addition, if we look at the
 \texttt{Attack Complexity} metric, there is a reasonably large difference in how they are rated,
 MITRE rate a lot more of the metrics with a \texttt{Low} score. This points to some of the
@@ -522,7 +522,7 @@ the database.
 
 \subsubsection{Prior Distributions}
 
-For categorical variables, we employ uninformative priors using Dirichlet distributions\cite{dirichlet}. This
+For categorical variables, we employ uninformative priors using Dirichlet distributions~\cite{dirichlet}. This
 approach provides a uniform prior over the probability space for all categorical options, minimizing
 the influence of prior beliefs on the results. The impact of these priors is negligible for
 categorical metrics with more options than the number of categories.
@@ -563,7 +563,7 @@ estimated accuracies. They do better for the higher frequency options, for the \
 on \texttt{Attack Complexity} for example, NVD have 98\% estimated accuracy and 66\% for
 \texttt{High} versus MITRE (see Figure~\ref{fig:mitre_31_confusion_matrices}), \texttt{Low} scored
 87\% and 75\% for \texttt{High}. Instead of further analysing in this way, I will point out some of
-my worries around these results, not that they are wrong per se, but that they do not really tell us
+my \change{concerns regarding} these results, not that they are wrong per se, but that they do not really tell us
 anything extra than that shown by in Figure~\ref{fig:counts}, except perhaps it is helpful to see
 the results in a percentage estimated accuracy instead of a proportion. Unfortunately this is
 outside of my strengths, I did some cursory exploration into if doing this sort of analysis
