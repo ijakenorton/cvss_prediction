@@ -100,11 +100,11 @@ In 2023, 29,065 new vulnerabilities were recorded, as illustrated in Figure~\ref
 This number continues to rise year on year, underscoring the growing challenge of managing and
 prioritizing software vulnerabilities. These vulnerabilities are documented using the Common
 Vulnerabilities and Exposure system (CVE~\cite{CVE}), with CVSS scores derived from these entries to
-indicate severity and impact. The National Vulnerability Database (NVD~\cite{NVD} serves as the
+indicate severity and impact. The National Vulnerability Database (NVD~\cite{NVD}) serves as the
 primary source for CVSS-enriched CVE data and is widely used in research (e.g., \cite{costa,
 	nvd_example1, nvd_example2}). However, to explore the potential benefits of multiple data sources,
 we also investigated the MITRE database~\cite{MITRE}, which is the main repository for CVEs and
-includes a significant number of entries with CVSS scores.The initial comparison between NVD and
+includes a significant number of entries with CVSS scores. The initial comparison between NVD and
 MITRE databases employed a methodology inspired by the paper \say{Can the Common Vulnerability
 	Scoring System be Trusted? A Bayesian Analysis}~\cite{bayes}. This approach aimed to assess the
 agreement between different data sources in scoring CVEs and explore the feasibility of establishing
@@ -124,7 +124,7 @@ vulnerability descriptions. This approach offers several advantages:
 	\item It provides a data-driven perspective that complements the LLM-based prediction methods.
 
 	\item The clustering techniques offer faster analysis times compared to complex LLM interpretability
-	      methods, with LDA processing the entire corpus in approximately one hour.
+	      methods, with LDA processing the entire corpus in approximately one hour.\notedme{compared to what duration?}
 
 	\item It reveals inherent groupings and relationships within the data that may not be immediately apparent
 	      through other analysis methods.
@@ -143,7 +143,7 @@ vulnerabilities to cluster together. For example the analysis of the integrity i
 	\item Low impact (\texttt{LOW}) on integrity was frequently associated with cross-site scripting
 	      vulnerabilities, particularly in WordPress plugins. This classification makes sense as such
 	      vulnerabilities can cause localized data integrity issues, often limited to individual user
-	      interactions rather than compromising the entire application.
+	      interactions rather, than compromising the entire application.
 
 	\item High impact (\texttt{HIGH}) integrity issues clustered around SQL injection and
 	      database-related vulnerabilities. This aligns with the severe nature of these attacks, which
@@ -151,12 +151,12 @@ vulnerabilities to cluster together. For example the analysis of the integrity i
 
 \end{itemize}
 
-The following report will try to answer these questions:
+This report will try to answer these questions:\notedme{Typically expressed as `research questions'?}
 
 \begin{itemize}
 	\item Is there scoring consistency between MITRE and NVD?
 
-	\item Can we improve the LLMs classifier performance when we augment the NVD dataset with data
+	\item Can we improve the LLMs' classifier performance when we augment the NVD dataset with data
 	      from the MITRE dataset?
 
 	\item What are the important keywords for each category?
@@ -164,7 +164,7 @@ The following report will try to answer these questions:
 
 
 
-\begin{figure}[ht] \centering
+\begin{figure}[t] \centering
 	\includegraphics[width=0.8\textwidth]{figures/cves_per_year.pdf}
 	\caption{\label{fig:cves_per_year}Number of new CVEs by year}
 \end{figure}
