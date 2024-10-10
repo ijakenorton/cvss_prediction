@@ -72,11 +72,11 @@
 
 	The Common Vulnerability Scoring System (CVSS) is designed to produce scores for software
 	vulnerabilities, serving as a crucial tool for triaging the increasing number of new
-	vulnerabilities released each year. As manual scoring cannot keep pace with this growth, 	
-\notedme{Claim feels a bit off: it's more that at the moment the trend is rising faster than the employed set of staff to handle the situation.}
+	vulnerabilities released each year. As manual scoring cannot keep pace with this growth,
+	\notedme{Claim feels a bit off: it's more that at the moment the trend is rising faster than the employed set of staff to handle the situation.}
 	there
 	is a need for automated prediction methods. While machine learning, particularly large language
-	models (LLMs), have shown promise in predicting CVSS metrics given there descriptions. 
+	models (LLMs), have shown promise in predicting CVSS metrics given there descriptions.
 	\notedme{This isn't a sentence (preceding) and `their' not `there'.}
 	This
 	paper aims to explore the CVE and CVSS processes to provide a foundation for future research.
@@ -124,7 +124,8 @@ vulnerability descriptions. This approach offers several advantages:
 	\item It provides a data-driven perspective that complements the LLM-based prediction methods.
 
 	\item The clustering techniques offer faster analysis times compared to complex LLM interpretability
-	      methods, with LDA processing the entire corpus in approximately one hour.\notedme{compared to what duration?}
+	      methods, with LDA processing the entire corpus in approximately one hour, as opposed to in
+	      the LLMs taking closer to a day per metric.
 
 	\item It reveals inherent groupings and relationships within the data that may not be immediately apparent
 	      through other analysis methods.
@@ -151,7 +152,7 @@ vulnerabilities to cluster together. For example the analysis of the integrity i
 
 \end{itemize}
 
-This report will try to answer these questions:\notedme{Typically expressed as `research questions'?}
+Research Questions:
 
 \begin{itemize}
 	\item Is there scoring consistency between MITRE and NVD?
@@ -172,7 +173,7 @@ This report will try to answer these questions:\notedme{Typically expressed as `
 
 \section{Background}
 
-Vulnerabilities are stored in a consistent system\notedme{system? Elaborate?} called Common Vulnerabilities and
+Vulnerabilities are stored in a consistent format called Common Vulnerabilities and
 Exposures (CVE~\cite{CVE}).
 
 \subsection{Here is an example CVE}
@@ -187,16 +188,17 @@ Exposures (CVE~\cite{CVE}).
 	\item   Updated: 06/26/2024
 
 	\item   Description: pdoc provides API Documentation for Python Projects. Documentation
-	      generated with \texttt{pdoc --math} linked to JavaScript files from polyfill.io. The polyfill.io
-	      CDN has been sold and now serves malicious code. This issue has been fixed in pdoc 14.5.1.
+	      generated with \texttt{pdoc --math} linked to JavaScript files from polyfill.io. The
+	      polyfill.io CDN has been sold and now serves malicious code. This issue has been fixed in
+	      pdoc 14.5.1\footnote{ Sourced from
+		      \href{https://nvd.nist.gov/vuln/detail/CVE-2024-38526}{NVD CVE-2024-38526 Detail}
+		      \cite{polyfill}}. \\
 
 \end{itemize}
 
-{\footnotesize \notedme{Don't do unexplained formatting changes: use accepted semantic elements. I'd put this as an actual footnote to the subsection... noting that you're treating the subsection as a formatting command when it's semantic too. A key point of working in {\LaTeX} is that you should be focusing entirely on the semantics of your text, and not at all on the formatting, not least since changing the class file might make huge changes visually, and the class file should be driving how the PDF is generated.} Sourced from \href{https://nvd.nist.gov/vuln/detail/CVE-2024-38526}{NVD CVE-2024-38526
-	Detail} \cite{polyfill}} \\
 \bigskip
 
-\change[This]{Each CVE report}\notedme{Don't use anaphoric references when you can be more specific.} has a unique identifier, which is given by one of the CVE numbering authorities (CNA~\cite{CNA}), such as
+CVE reports have a unique identifier, which is given by one of the CVE numbering authorities (CNA~\cite{CNA}), such as
 GitHub, Google or any of the \href{https://www.cve.org/PartnerInformation/ListofPartners}{CVE list of
 	partners}~\cite{partners}.
 The description is the most important part in our case. This should provide information about the
@@ -287,7 +289,8 @@ discourse
 \href{https://security.stackexchange.com/questions/270257/cvss-v3-and-v3-1-missing-temporal-metrics-exploit-code-maturity-and-remediation}{(Stack exchange post)}~\cite{stack_exchange} around the subject suggests that this is due to a lack
 of verifiable reporting. From my perspective, both remidiation level and report confidence feel like
 they could have scores attributed to them, however finding verifiable reports on the exploits seen
-in the wild is difficult. There are two relatively new organisations on this front\notedme{On what front?},
+in the wild is difficult. There are two relatively new organisations trying to provide a solution to
+this lack of verifiable reporting,
 Cybersecurity \& Infrastructure Security Agency (CISA,
 \href{https://www.cisa.gov/known-exploited-vulnerabilities-catalog}{public sector}) and
 inthewild.org (\href{https://inthewild.io/}{private sector}~\cite{cisa}).
@@ -301,7 +304,7 @@ remain for modern data. There are others, but they are either in archival or pro
 \subsubsection{National Vulnerability Database} \label{NVD_SECTION}
 
 The National Vulnerability Database is the defacto standard dataset used for CVSS generation
-research~\cite{costa, nvd_example1, nvd_example2}.  This makes a lot of sense\notedme{what makes a lot of sense?} as it is built
+research~\cite{costa, nvd_example1, nvd_example2}.  NVD being the standard makes a lot of sense as it is built
 for the purpose with a team dedicated to enriching CVEs with CVSS scores. The dataset I am using was
 retrieved using the NVD API in March 2024 and contains $\sim$100000 CVEs enriched with CVSS scores. This
 comes in a consistently formatted JSON dump.
@@ -397,7 +400,7 @@ process summarised from
 		      \item \textbf{Exploitability}: 0.4
 	      \end{itemize}
 
-	\item \label{formula} Develop a formula that approximates the scores derived from the ordered
+	\item \label{formula_description} Develop a formula that approximates the scores derived from the ordered
 	      sub-vectors. Ensure the formula produces scores with $\pm$0.5 error from the originally
 	      defined vector score and does not exceed the maximum value of 10.
 
@@ -406,16 +409,19 @@ process summarised from
 
 \end{enumerate}
 
-This process is inherently \change[inaccurate]{imprecise}\notedme{check, but I'm pretty sure you mean `imprecise', not `inaccurate'.}, it is not a system designed to give precise scores. If we
-look at~\ref{formula} above, the formula (\ref{equation} shows the CVSS 3.1 base score formula for
-reference) which produces the score, does not match exactly the experts decision.\notedme{wrong refs} There is a lot of
-rounding and approximation going on. This is designed to make a system which is easy to use and
-quick to complete by security professionals. There is a space\notedme{sounds informal, and ambiguous to me: do you mean `role'? Also, this is the conclusion of Section 2, so make that clearer in the text. What you're writing here is not just a passing remark, it's you justifying flow into the next section\dots} for CVSS, however this along with the
-other mentioned reasons outlines the issues with using CVSS as a sole metric for prioritization. Perhaps an option
-is to triage the large swathes of new vulnerabilites coming in with an initial CVSS score, then move
-on to a deeper dive. This could be in the form of the extra CVSS metrics (Temporal score \&
-Environmental score), or a look into other potential options like the Exploit Prediction Scoring
-System (EPSS~\cite{EPSS}).
+This process is inherently imprecise; it is not a system designed to give exact scores. As evidenced
+by Item~\ref{formula_description} above, the formula (Equation~\ref{equation} shows the CVSS 3.1
+base score formula for reference) that produces the score does not precisely match expert decisions.
+The system incorporates considerable rounding and approximation, aiming to create a framework that
+is both accessible and efficient for security professionals to use.
+
+While CVSS serves a valuable purpose in vulnerability assessment, the limitations discussed
+throughout this section highlight the potential pitfalls of relying solely on CVSS as a metric for
+prioritization. However, as the major issues with CVSS relate to how the score is computed, there is
+still value in the accuracy of the categorical scores themselves. This lead naturally on to
+naturally lead us to question the consistency and reliability of CVSS scoring across different
+organizations and databases. In the following section, we will explore this issue by examining the
+scoring consistency between MITRE and NVD, two prominent sources of vulnerability information.
 
 \section{Is there scoring consistency between MITRE and NVD?}
 
@@ -429,12 +435,13 @@ techniques.
 \subsubsection{Comparative Analysis of Vulnerability Databases}
 
 The primary work most closely aligned with our Bayesian analysis between MITRE and NVD is the study
-by Johnson et al. entitled \notedme{make sure your quotes are all ``fancy'' ones and not "straight" ones, in your body text.} "Can the Common Vulnerability Scoring System be Trusted? A Bayesian
-Analysis"~\cite{bayes}. Conducted in 2016, this research investigated the state of CVSS databases and
-their accuracy. Johnson et al.\@ found that NVD was the most reliable database and concluded that the
-Common Vulnerability Scoring System could be trusted overall, as scorers rated CVEs consistently.
-Their methodology forms the foundation for the database comparison in Section~\ref{bayesian_modeling}
-of our study, although the specific results may have evolved since their publication.
+by Johnson et al. entitled \say{Can the Common Vulnerability Scoring System be Trusted? A Bayesian
+	Analysis}~\cite{bayes}. Conducted in 2016, this research investigated the state of CVSS databases
+and their accuracy. Johnson et al.\@ found that NVD was the most reliable database and concluded
+that the Common Vulnerability Scoring System could be trusted overall, as scorers rated CVEs
+consistently. Their methodology forms the foundation for the database comparison in
+Section~\ref{bayesian_modeling} of our study, although the specific results may have evolved since
+their publication.
 
 Dong et al.\@ \cite{dong} conducted a comprehensive study on detecting inconsistencies in public security
 vulnerability reports. Their work, which analyzed vulnerability information from MITRE, NVD, and other
@@ -444,8 +451,8 @@ consistent vulnerability information across different databases and reports.
 
 \subsubsection{Automated Vulnerability Assessment Techniques}
 
-Jiang and Atif's work, "An Approach to Discover and Assess Vulnerability Severity Automatically in
-Cyber-Physical Systems"~\cite{jiang}, presents an innovative pipeline for vulnerability assessment.
+Jiang and Atif's work, \say{An Approach to Discover and Assess Vulnerability Severity Automatically in
+	Cyber-Physical Systems}~\cite{jiang}, presents an innovative pipeline for vulnerability assessment.
 Their approach utilizes multiple data sources and employs a majority voting system to mitigate the
 impact of incorrectly scored CVEs. While their methods differ from our focus on database comparison,
 their work underscores the value of leveraging multiple data sources in vulnerability assessment.
@@ -454,12 +461,12 @@ their work underscores the value of leveraging multiple data sources in vulnerab
 \subsubsection{Consistency and Reliability of CVSS Scoring}
 
 Allodi and Massacci~\cite{allodi} conducted a critical examination of CVSS scoring in their paper
-"Comparing Vulnerability Severity and Exploits Using Case-Control Studies." Their research questions
+\say{Comparing Vulnerability Severity and Exploits Using Case-Control Studies.} Their research questions
 the correlation between CVSS scores and the actual exploitation of vulnerabilities in the wild,
 raising important considerations about the practical implications of vulnerability scoring systems.
 
 Furthermore, Spring et al.~\cite{improving_cvss} investigated the reliability of CVSS scoring across
-different human raters in their study "Towards Improving CVSS." They found significant variations in
+different human raters in their study \say{Towards Improving CVSS.} They found significant variations in
 how different individuals interpret and apply CVSS scoring guidelines, highlighting the challenges
 in achieving consistent vulnerability assessments even within a standardized framework.
 
@@ -474,16 +481,42 @@ updated data and methodologies.
 
 \subsection{Priliminary Data exploration}
 
-The scorers for both NVD and MITRE do rate CVEs reasonably \change{similarly}. One pattern you can see as shown
-by Figure~\ref{fig:counts}, is that NVD generally give\notedme{grammar} the most common categorical output more ratings.
-They are less spread out across the full range of values. In addition, if we look at the
-\texttt{Attack Complexity} metric, there is a reasonably large difference in how they are rated,
-MITRE rate a lot more of the metrics with a \texttt{Low} score. This points to some of the
-difficulty with this kind of rating system, while in theory there is a true value for these metrics,
-it requires knowledge of the whole space around each of the vulnerabilities, this knowledge will
-always vary marker to marker. The model will not have direct access to this knowledge; however, it
-is hoped that it will be able to trace relationships between the different vulnerabilities and learn
-this intrinsically.
+To enable a direct comparison between NVD and MITRE scoring practices, we performed necessary data
+preprocessing steps. CVE entries from both sources were aligned and normalized to ensure consistency
+in format and metric representation. Figure~\ref{fig:counts} presents the resulting comparison of
+NVD and MITRE scores across various CVSS metrics.
+
+Analysis of the processed data reveals:
+
+\begin{itemize}
+
+	\item NVD and MITRE scorers generally rate CVEs similarly, indicating broad consensus in
+	      vulnerability assessment.
+
+	\item NVD tends to assign the most common categorical value more frequently for each metric,
+	      while MITRE's ratings show a wider distribution (Figure~\ref{fig:counts}).
+
+	\item Significant discrepancies exist for certain metrics, notably \texttt{Attack Complexity},
+	      where MITRE assigns \texttt{Low} scores more frequently than NVD.
+
+\end{itemize}
+
+These observations highlight the challenges inherent in vulnerability rating systems. While a \say{true}
+value for each metric theoretically exists, comprehensive assessment requires extensive domain
+knowledge, which can vary between scorers. Our machine learning model, though lacking direct access
+to this knowledge, aims to learn these nuances by analyzing patterns across numerous
+vulnerabilities.
+
+% The scorers for both NVD and MITRE do rate CVEs reasonably similarly. One pattern you can see as
+% shown by Figure~\ref{fig:counts}, is that NVD generally give\notedme{grammar} the most common
+% categorical output more ratings. They are less spread out across the full range of values. In
+% addition, if we look at the \texttt{Attack Complexity} metric, there is a reasonably large
+% difference in how they are rated, MITRE rate a lot more of the metrics with a \texttt{Low} score.
+% This points to some of the difficulty with this kind of rating system, while in theory there is a
+% true value for these metrics, it requires knowledge of the whole space around each of the
+% vulnerabilities, this knowledge will always vary marker to marker. The model will not have direct
+% access to this knowledge; however, it is hoped that it will be able to trace relationships between
+% the different vulnerabilities and learn this intrinsically.
 
 \subsection{Hierarchical Bayesian Model} \label{bayesian_modeling}
 
@@ -551,102 +584,101 @@ expert assessments.
 
 \subsubsection{Bayesian Analysis Results}
 
-The results for the database analysis will be shown through the confusion matrices for the estimated
-accuracy of both NVD and MITRE. Unfortunately it is difficult to compare my results to the original
-paper~\cite{bayes} as they are on a totally different dataset. However, I will note that in general the estimated
-accuracy for both datasets is much lower than the scores from the original study. Across the board NVD
-often had $\sim$90\% accuracy for the highest accuracy field of any metric, with Confidentiality as
-a clear outlier as seen from Table~\ref{tab:johnson_confusion_matrices}.
+The database analysis results, presented through confusion matrices, corroborate the observations
+made in Figure~\ref{fig:counts} regarding NVD and MITRE scoring patterns. Key findings include:
 
-Some general trends are that NVD (see Figure~\ref{fig:nvd_31_confusion_matrices}) have more extreme
-estimated accuracies. They do better for the higher frequency options, for the \texttt{Low} option
-on \texttt{Attack Complexity} for example, NVD have 98\% estimated accuracy and 66\% for
-\texttt{High} versus MITRE (see Figure~\ref{fig:mitre_31_confusion_matrices}), \texttt{Low} scored
-87\% and 75\% for \texttt{High}. Instead of further analysing in this way, I will point out some of
-my \change{concerns regarding} these results, not that they are wrong per se, but that they do not really tell us
-anything extra than that shown by in Figure~\ref{fig:counts}, except perhaps it is helpful to see
-the results in a percentage estimated accuracy instead of a proportion. Unfortunately this is
-outside of my strengths, I did some cursory exploration into if doing this sort of analysis
-between two populations like this does make sense, the discourse here~\cite{stat_modeling} suggests
-that such a thing can be done, though it also suggests the need for more informative priors. This
-may apply in my case, and I intend on getting an expert opinion closer to home, however that will be
-after this report.
+\begin{itemize}
+	\item NVD consistently demonstrates higher accuracy for the most common categories in each metric,
+	      aligning with its tendency to favor dominant categorizations as observed in Figure~\ref{fig:counts}.
+
+	\item The disparity in scoring is particularly evident in metrics like \texttt{Attack Complexity}, where
+	      NVD shows higher accuracy for the more frequent \texttt{Low} option (98\%) compared to
+	      MITRE (87\%).
+
+	\item MITRE's scoring exhibits a more balanced distribution across categories, consistent with the wider
+	      spread of ratings seen in Figure~\ref{fig:counts}.
+\end{itemize}
+
+These quantitative results confirm the visual patterns observed in Figure~\ref{fig:counts},
+providing a numerical basis for the scoring differences between NVD and MITRE. While the overall
+estimated accuracy for both databases is lower than in previous studies~\cite{bayes}, the relative
+performance and tendencies remain consistent with our initial observations.
 
 \bigskip
 
 \begin{figure}[H]
 	\centering
-	\makebox[\textwidth][c]{\includegraphics[width=1.3\textwidth]{figures/nvd_31_titles.pdf}}
+	\makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{figures/nvd_31_titles.pdf}}
 	\caption{\label{fig:nvd_31_confusion_matrices}Confusion Matrices for NVD for CVSS version 3.1}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\makebox[\textwidth][c]{\includegraphics[width=1.3\textwidth]{figures/mitre_31_titles.pdf}}
+	\makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{figures/mitre_31_titles.pdf}}
 	\caption{\label{fig:mitre_31_confusion_matrices}Confusion Matrices for MITRE for CVSS version 3.1}
 \end{figure}
 
-\begin{table}
-	\centering
-	\caption{\label{tab:johnson_confusion_matrices}Confusion Matrices for NVD on CVSS version 2.0 from Johnson et al.\@ \cite{bayes}}
-	\[
-		\begin{array}{c|c}
-			\textbf{Access vector}  & \textbf{Access complexity} \\
-			\hline
-			\begin{tabular}{l|ccc}
-				  & N    & A    & L    \\
-				\hline
-				N & 0.99 & 0    & 0    \\
-				A & 0.21 & 0.71 & 0.08 \\
-				L & 0.05 & 0.0  & 0.95 \\
-			\end{tabular}
-			                        &
-			\begin{tabular}{l|ccc}
-				  & L    & M    & H    \\
-				\hline
-				L & 0.54 & 0.29 & 0.17 \\
-				M & 0.02 & 0.88 & 0.1  \\
-				H & 0.01 & 0.08 & 0.91 \\
-			\end{tabular}
-			\\
-			\textbf{Authentication} & \textbf{Confidentiality}   \\
-			\hline
-			\begin{tabular}{l|ccc}
-				  & N    & S    & M    \\
-				\hline
-				N & 0.99 & 0.01 & 0    \\
-				S & 0.04 & 0.95 & 0.01 \\
-				M & 0.19 & 0.2  & 0.6  \\
-			\end{tabular}
-			                        &
-			\begin{tabular}{l|ccc}
-				  & C   & P    & N    \\
-				\hline
-				C & 0.4 & 0.2  & 0.2  \\
-				P & 0.2 & 0.4  & 0.19 \\
-				N & 0.2 & 0.21 & 0.4  \\
-			\end{tabular}
-			\\
-			\textbf{Integrity}      & \textbf{Availability}      \\
-			\hline
-			\begin{tabular}{l|ccc}
-				  & C    & P    & N    \\
-				\hline
-				C & 0.91 & 0.08 & 0.01 \\
-				P & 0.05 & 0.93 & 0.02 \\
-				N & 0.02 & 0.07 & 0.92 \\
-			\end{tabular}
-			                        &
-			\begin{tabular}{l|ccc}
-				  & C    & P    & N    \\
-				\hline
-				C & 0.92 & 0.07 & 0.01 \\
-				P & 0.07 & 0.91 & 0.02 \\
-				N & 0.02 & 0.11 & 0.87 \\
-			\end{tabular}
-		\end{array}
-	\]
-\end{table}
+% \begin{table}
+% 	\centering
+% 	\caption{\label{tab:johnson_confusion_matrices}Confusion Matrices for NVD on CVSS version 2.0 from Johnson et al.\@ \cite{bayes}}
+% 	\[
+% 		\begin{array}{c|c}
+% 			\textbf{Access vector}  & \textbf{Access complexity} \\
+% 			\hline
+% 			\begin{tabular}{l|ccc}
+% 				  & N    & A    & L    \\
+% 				\hline
+% 				N & 0.99 & 0    & 0    \\
+% 				A & 0.21 & 0.71 & 0.08 \\
+% 				L & 0.05 & 0.0  & 0.95 \\
+% 			\end{tabular}
+% 			                        &
+% 			\begin{tabular}{l|ccc}
+% 				  & L    & M    & H    \\
+% 				\hline
+% 				L & 0.54 & 0.29 & 0.17 \\
+% 				M & 0.02 & 0.88 & 0.1  \\
+% 				H & 0.01 & 0.08 & 0.91 \\
+% 			\end{tabular}
+% 			\\
+% 			\textbf{Authentication} & \textbf{Confidentiality}   \\
+% 			\hline
+% 			\begin{tabular}{l|ccc}
+% 				  & N    & S    & M    \\
+% 				\hline
+% 				N & 0.99 & 0.01 & 0    \\
+% 				S & 0.04 & 0.95 & 0.01 \\
+% 				M & 0.19 & 0.2  & 0.6  \\
+% 			\end{tabular}
+% 			                        &
+% 			\begin{tabular}{l|ccc}
+% 				  & C   & P    & N    \\
+% 				\hline
+% 				C & 0.4 & 0.2  & 0.2  \\
+% 				P & 0.2 & 0.4  & 0.19 \\
+% 				N & 0.2 & 0.21 & 0.4  \\
+% 			\end{tabular}
+% 			\\
+% 			\textbf{Integrity}      & \textbf{Availability}      \\
+% 			\hline
+% 			\begin{tabular}{l|ccc}
+% 				  & C    & P    & N    \\
+% 				\hline
+% 				C & 0.91 & 0.08 & 0.01 \\
+% 				P & 0.05 & 0.93 & 0.02 \\
+% 				N & 0.02 & 0.07 & 0.92 \\
+% 			\end{tabular}
+% 			                        &
+% 			\begin{tabular}{l|ccc}
+% 				  & C    & P    & N    \\
+% 				\hline
+% 				C & 0.92 & 0.07 & 0.01 \\
+% 				P & 0.07 & 0.91 & 0.02 \\
+% 				N & 0.02 & 0.11 & 0.87 \\
+% 			\end{tabular}
+% 		\end{array}
+% 	\]
+% \end{table}
 
 
 \section{Can we improve the LLMs classifier performance when we augment the NVD dataset with data
@@ -660,8 +692,8 @@ is particularly relevant to our work in Section \ref{cvss_prediction}.
 
 Shahid and Debar \cite{cvss_bert} proposed CVSS-BERT, an approach leveraging state-of-the-art
 natural language processing techniques to determine the severity of a computer security
-vulnerability from its description. Their work, titled "CVSS-BERT: Explainable Natural Language
-Processing to Determine the Severity of a Computer Security Vulnerability from its Description,"
+vulnerability from its description. Their work, titled \say{CVSS-BERT: Explainable Natural Language
+	Processing to Determine the Severity of a Computer Security Vulnerability from its Description,}
 uses multiple BERT classifiers, one for each metric composing the CVSS vector. This approach is
 similar to our methodology in Section \ref{cvss_prediction}.
 
@@ -677,8 +709,8 @@ training data with additional sources (MITRE dataset) to potentially improve the
 performance. We aim to investigate whether this augmentation can lead to more accurate and robust
 CVSS predictions.
 
-Costa et al. \cite{costa} also contributed to this field with their paper "Predicting CVSS Metric
-via Description Interpretation." They tested various large language encoder-only models for
+Costa et al. \cite{costa} also contributed to this field with their paper \say{Predicting CVSS Metric
+	via Description Interpretation.} They tested various large language encoder-only models for
 generating CVSS from CVE descriptions, achieving state-of-the-art results with the DistilBERT model.
 Their work included text preprocessing techniques and explored the interpretability of the models
 using Shapley values, providing additional perspectives on enhancing CVSS prediction accuracy and
@@ -705,7 +737,7 @@ the model.
 The model is trained separately for each of the eight CVSS metrics. To ensure robustness and
 reliability of our results, we trained each model on five different data splits. This approach
 allows us to calculate standard deviations, effectively mitigating the impact of any potential
-"lucky" data split on our findings.
+\say{lucky} data split on our findings.
 
 Our work diverges from Costa et al. and Airey's approaches by utilizing a combined dataset from both
 NVD and MITRE, rather than relying solely on NVD data. We converted this merged data into a CSV
@@ -1048,7 +1080,7 @@ hyperparameters used in the LDA model training are as follows:
 
 		      \item Controls the prior distribution over topic mixtures for each document.
 
-		      \item The "symmetric" setting assumes all topics are equally likely a priori for each
+		      \item The \say{symmetric} setting assumes all topics are equally likely a priori for each
 		            document, providing an unbiased starting point for topic discovery in CVSS
 		            vulnerability descriptions.
 
@@ -1214,28 +1246,6 @@ topics increase.
 
 
 
-% \begin{figure}[ht] \centering
-
-% 	\includegraphics[width=1\textwidth]{figures/purity/topic_model_performance_purity_ground_truth_integrityImpact.pdf}
-
-% 	\caption{\label{fig:purity_integrity}The purity score for when the topics have been assigned with a focus on \texttt{Integrity Impact}, split by the
-% 		different possible classes}
-
-% \end{figure}
-
-% \begin{figure}[ht] \centering
-% 	\includegraphics[width=1\textwidth]{figures/purity/topic_model_performance_purity_ground_truth_availabilityImpact.pdf}
-% 	\caption{\label{fig:purity_20_availability}The purity score
-% 		for when the topics have been assigned with a focus on \texttt{Availability Impact}, split by the different
-% 		possible classes}
-% \end{figure}
-
-% \begin{figure}[ht] \centering
-% 	\includegraphics[width=1\textwidth]{figures/purity/topic_model_performance_purity_ground_truth_confidentialityImpact.pdf}
-% 	\caption{\label{fig:purity_20_confidentiality}The purity score
-% 		for when the topics have been assigned with a focus on \texttt{Confidentiality Impact}, split by the different
-% 		possible classes}
-% \end{figure}
 
 
 \subsection{Evaluation and Insights}
@@ -1248,7 +1258,7 @@ made finding a well defined cluster for each topic difficult as well as making t
 interpreting the outcome of the clustering somewhat awkward.
 
 As an example, if we take look at Figure~\ref{fig:priviledgesRequired_BAD}, which shows the
-clustering for Privileges Required  of the best cluster with a focus on the \texttt{HIGH} class, we
+clustering for \texttt{Privileges Required}  of the best cluster with a focus on the \texttt{HIGH} class, we
 can see that even though we are trying to find the cluster with the best representation of
 \texttt{HIGH} both of the other classes are more dominant. This is a result of the massive class
 imbalance, the clustering cannot manage to find a class to represent such a little proportion of the
@@ -1256,16 +1266,27 @@ data. As a result the analysis will be focused on the metrics which are the most
 as well as related to each other, these are the CIA triad, confidentiality, integrity, and availiability
 impact.
 
+% If we take a look at Figure~\ref{fig:integrityImpact_60_NONE_BAD}
+
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.7\textwidth]{figures/privilegesRequired/merged_top_k_topics_category_focus_counts_privilegesRequired_HIGH_k1.pdf}
 
-	\caption{The counts of the documents within the best topic in relation to Privileges Required with
+	\caption{The counts of the documents within the best topic in relation to \texttt{Privileges Required} with
 		target class \texttt{HIGH}}
 
 	\label{fig:priviledgesRequired_BAD}
 \end{figure}
 
+
+% \begin{figure}[h!]
+
+% 	\centering
+% 	\includegraphics[width=0.8\textwidth]{figures/integrityImpact/integrityImpact_NONE_60_BAD.pdf}
+% 	\caption{The counts of the documents within the best topic in relation to integrityImpact with
+% 		target class \texttt{NONE}, for the number of clusters (60) with the lowest purity}
+% 	\label{fig:integrityImpact_60_NONE_BAD}
+% \end{figure}
 \subsection{Clustering Results}
 
 The clustering analysis using Latent Dirichlet Allocation (LDA) yielded insights into the patterns
@@ -1351,10 +1372,10 @@ Key findings:
 
 	\item The cluster shows a clear majority of \texttt{NONE}-rated vulnerabilities.
 
-	\item Predominant terms include "service", "function", "crash", "crafted", "remote", "denial",
-	      "cause", "attackers", "memory", and "dos".
+	\item Predominant terms include \say{service}, \say{function}, \say{crash}, \say{crafted},
+	      \say{remote}, \say{denial}, \say{cause}, \say{attackers}, \say{memory}, and \say{dos}.
 
-	\item The presence of terms like "denial" and "dos" (denial of service) aligns with
+	\item The presence of terms like \say{denial} and \say{dos} (denial of service) aligns with
 	      vulnerabilities that affect system availability rather than confidentiality.
 
 	\item This cluster effectively identifies vulnerabilities with no direct impact on
@@ -1378,8 +1399,8 @@ Key findings:
 	\item The cluster shows a majority of \texttt{LOW}-rated vulnerabilities, with some overlap into
 	      other categories.
 
-	\item Predominant terms include "scripting", "xss", "site", "stored", "arbitrary", "user",
-	      "web", "inject", "html", and "css".
+	\item Predominant terms include \say{scripting}, \say{xss}, \say{site}, \say{stored}, \say{arbitrary}, \say{user},
+	      \say{web}, \say{inject}, \say{html}, and \say{css}.
 
 	\item The prevalence of web-related terms suggests that this cluster captures client-side
 	      vulnerabilities that often have a lower impact on overall system confidentiality.
@@ -1401,10 +1422,11 @@ information or system resources. Key findings:
 
 	\item The cluster shows a strong representation of \texttt{HIGH}-rated vulnerabilities.
 
-	\item Predominant terms include "execution", "execute", "crafted", "remote", "upload", "code",
-	      "arbitrary", "file", "request", and "attackers".
+	\item Predominant terms include \say{execution}, \say{execute}, \say{crafted},
+	      \say{remote}, \say{upload}, \say{code},
+	      \say{arbitrary}, \say{file}, \say{request}, and \say{attackers}.
 
-	\item The presence of terms like "remote" and "arbitrary" suggests vulnerabilities that allow
+	\item The presence of terms like \say{remote} and \say{arbitrary} suggests vulnerabilities that allow
 	      attackers to gain extensive access to a system, potentially compromising large amounts of
 	      confidential data.
 
@@ -1484,8 +1506,8 @@ Key findings:
 
 	\item The cluster shows a clear majority of \texttt{NONE}-rated vulnerabilities.
 
-	\item Common terms in this cluster likely include "denial of service", "crash", and
-	      "dos".
+	\item Common terms in this cluster likely include \say{denial of service}, \say{crash}, and
+	      \say{dos}.
 
 	\item This result supports the effectiveness of our clustering in identifying vulnerabilities
 	      with no integrity impact.
@@ -1507,7 +1529,7 @@ Key findings:
 	\item The cluster shows a majority of \texttt{LOW}-rated vulnerabilities, with some overlap into
 	      other categories.
 
-	\item Common terms likely include "cross-site scripting", "XSS", "javascript", and "html".
+	\item Common terms likely include \say{cross-site scripting}, \say{XSS}, \say{javascript}, and \say{html}.
 
 	\item This cluster aligns with our earlier k-means clustering results, providing some
 	      similarities between the clustering
@@ -1529,7 +1551,7 @@ Key findings:
 
 	\item The cluster shows a strong representation of \texttt{HIGH}-rated vulnerabilities.
 
-	\item Common terms likely include "remote", "execution"
+	\item Common terms likely include \say{remote}, \say{execution}
 
 	\item The prevalence of these severe vulnerabilities in this cluster aligns with cybersecurity
 	      expert expectations for high-impact integrity issues.
@@ -1586,6 +1608,18 @@ database, email).
 	\caption{Availability Impact Topic Counts}
 \end{figure}
 
+\begin{figure}[h!]
+	\ContinuedFloat
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=0.7\textwidth]{figures/availabilityImpact/merged_top_k_topics_category_focus_counts_availabilityImpact_HIGH_k1.pdf}
+		\caption{The counts of the documents within the best topic in relation to availabilityImpact
+			with target class \texttt{HIGH}. Extra example showing that the best topic for
+			availabilityImpact can include the expected denial of service related keywords}
+		\label{fig:availabilityImpact_60_HIGH_denial}
+	\end{subfigure}
+
+\end{figure}
 \subsubsection*{NONE Category}
 
 Figure \ref{fig:availabilityImpact_60_NONE} shows the distribution for the cluster best representing
@@ -1603,8 +1637,8 @@ Key findings:
 	\item The cluster shows a clear majority of \texttt{NONE}-rated vulnerabilities for availability
 	      impact.
 
-	\item Predominant terms include "inject", "arbitrary", "html", "cross", "scripting", "site",
-	      "xss", "user", "stored", and "web".
+	\item Predominant terms include \say{inject}, \say{arbitrary}, \say{html}, \say{cross}, \say{scripting}, \say{site},
+	      \say{xss}, \say{user}, \say{stored}, and \say{web}.
 
 	\item The presence of web application security terms suggests that these vulnerabilities, while
 	      potentially severe in other aspects, do not typically cause system downtime or service
@@ -1633,8 +1667,8 @@ Key findings:
 	\item The cluster shows a majority of \texttt{NONE}-rated vulnerabilities, contrary to what we
 	      would expect for a \texttt{LOW} category cluster.
 
-	\item Predominant terms include "compromise", "oracle", "access", "data", "cvss", "attacks",
-	      "unauthorized", "successful", "accessible", and "base".
+	\item Predominant terms include \say{compromise}, \say{oracle}, \say{access}, \say{data}, \say{cvss}, \say{attacks},
+	      \say{unauthorized}, \say{successful}, \say{accessible}, and \say{base}.
 
 	\item The mix of terms suggests a broad range of vulnerabilities, many of which may not
 	      significantly impact system availability.
@@ -1672,10 +1706,11 @@ Key findings:
 	\item The cluster shows a strong representation of \texttt{HIGH}-rated vulnerabilities for
 	      availability impact.
 
-	\item Predominant terms include "attackers", "arbitrary", "injection", "execution", "commands",
-	      "execute", "function", "command", "remote", and "code".
+	\item Predominant terms include \say{attackers}, \say{arbitrary}, \say{injection},
+	      \say{execution}, \say{commands},
+	      \say{execute}, \say{function}, \say{command}, \say{remote}, and \say{code}.
 
-	\item The presence of terms like "remote" and "arbitrary" coupled with "execution" and "command"
+	\item The presence of terms like \say{remote} and \say{arbitrary} coupled with \say{execution} and \say{command}
 	      suggests vulnerabilities that allow attackers to run malicious code, potentially causing
 	      severe system disruptions.
 
@@ -1692,13 +1727,7 @@ high-impact for availability. This demonstrates the model's ability to different
 security impacts and accurately categorize vulnerabilities based on their potential to disrupt
 system availability.\todo[inline]{talk about an example of a bad case}
 
-% \begin{figure}[ht]
-% 	\centering
-% 	\includegraphics[width=0.8\textwidth]{figures/integrityImpact/integrityImpact_NONE_60_BAD.pdf}
-% 	\caption{The counts of the documents within the best topic in relation to integrityImpact with
-% 		target class \texttt{NONE}, for the number of clusters (60) with the lowest purity}
-% 	\label{fig:integrityImpact_60_NONE_BAD}
-% \end{figure}
+
 \subsection{Discussion of CVSS Impact Metrics}
 
 Our analysis of the three CVSS impact metrics - Integrity, Confidentiality, and Availability -
@@ -1722,9 +1751,10 @@ metric, which influences our interpretations and comparisons.
 	      consistency emphasizes the severe and multi-faceted threat posed by such vulnerabilities.
 
 	\item \textbf{Denial of Service:} Terms related to denial of service (DoS) attacks are prominent
-	      in the NONE category for both Integrity and Confidentiality impacts. However, their absence
-	      from the Availability impact categories, particularly in the HIGH category where we might
-	      expect them, highlights the data imbalance issue in the Availability metric.
+	      in the NONE category for both Integrity and Confidentiality impacts. Denial of service and
+	      related terms are sometimes absent from the Availability impact categories, particularly in
+	      the HIGH category where we might expect them, this suggests some instability in this model
+	      due to the imbalanced data.
 
 \end{itemize}
 
