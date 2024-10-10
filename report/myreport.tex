@@ -96,7 +96,7 @@
 
 \section{Introduction}
 
-In 2023, 29,065 new vulnerabilities were recorded, as illustrated in Figure~\ref{fig:cves_per_year}.
+In 2023, there were 29,065 new vulnerabilities recorded, as illustrated in Figure~\ref{fig:cves_per_year}.
 This number continues to rise year on year, underscoring the growing challenge of managing and
 prioritizing software vulnerabilities. These vulnerabilities are documented using the Common
 Vulnerabilities and Exposure system (CVE~\cite{CVE}), with CVSS scores derived from these entries to
@@ -124,8 +124,8 @@ vulnerability descriptions. This approach offers several advantages:
 	\item It provides a data-driven perspective that complements the LLM-based prediction methods.
 
 	\item The clustering techniques offer faster analysis times compared to complex LLM interpretability
-	      methods, with LDA processing the entire corpus in approximately one hour, as opposed to in
-	      the LLMs taking closer to a day per metric.
+	      methods, with LDA processing the entire corpus in the order of hours, as opposed to in
+	      the LLMs working in the order of days.
 
 	\item It reveals inherent groupings and relationships within the data that may not be immediately apparent
 	      through other analysis methods.
@@ -160,7 +160,7 @@ Research Questions:
 	\item Can we improve the LLMs' classifier performance when we augment the NVD dataset with data
 	      from the MITRE dataset?
 
-	\item What are the important keywords for each category?
+	\item What are the important keywords for each class?
 \end{itemize}
 
 
@@ -334,7 +334,6 @@ the vector strings in the MITRE database).
 
 
 \subsection{Evolution of CVSS and its Identity Crisis}
-\todo[inline]{Possibly need some kind of link between these...}
 When CVSS 2.0 was released, it was promoted as a framework to help IT management prioritize and
 remediate vulnerabilities posing the greatest risk. The initial goal was to provide a comprehensive
 method for assessing risk, as indicated by its original documentation:
@@ -758,7 +757,7 @@ data would enhance the model's generalization capabilities, our results indicate
 discrepancy between databases serves as a valuable indicator when analyzing generated CVE scores,
 suggesting that our model faces challenges similar to those encountered by human evaluators.
 
-Our model's lowest performance is observed in the \texttt{Availability Impact} category, a trend
+Our model's lowest performance is observed in the \texttt{Availability Impact} metric, a trend
 also noted in Airey's work. This correlation between machine learning model difficulties and human
 scoring challenges provides insight into the inherent complexities of this particular metric.
 \texttt{Attack Complexity} presents another notable challenge, primarily due to data imbalance. The
@@ -859,7 +858,7 @@ development.
 \end{table}
 
 \todo[inline]{Dont think this is the perfect title but leaving for now}
-\section{Important keywords for each category}
+\section{Important keywords for each class}
 
 This next section is the continuation of the exploratory study with a focus on what are the
 contributing factors for each metric / class for said metric. Clustering and analysis of the data
@@ -1202,7 +1201,7 @@ Purity ranges from 0 to 1, where 1 indicates perfect purity. A higher purity val
 suggests better clustering quality with respect to the ground truth classes\cite{purity_info_ret}.
 
 In the context of topic modeling for CVSS metrics, high purity would indicate that each discovered
-topic strongly corresponds to a specific CVSS category.
+topic strongly corresponds to a specific CVSS class.
 
 \begin{figure}[h!]
 	\centering
@@ -1308,9 +1307,6 @@ Each graph shows the distribution of documents across all three classes (\texttt
 approach allows us to visualize how effectively our clustering method separates vulnerabilities
 based on their impact levels for each metric.
 
-\todo[inline]{Fix the position of the myriad graphs that are in weird places in the document}
-
-\todo[inline]{Work in progress, copy paste of previous but with the new graphs currently}
 \subsubsection{Confidentiality Impact Analysis}
 
 The \texttt{Confidentiality Impact} metric in CVSS measures the impact on confidentiality of a
@@ -1357,10 +1353,10 @@ ones.
 	\caption{Confidentiality Impact Topic Counts}
 \end{figure}
 
-\subsubsection{Confidentiality Impact: Focus on category NONE}
+\subsubsection{Confidentiality Impact: Focus on class NONE}
 
 Figure \ref{fig:confidentialityImpact_60_NONE} shows the distribution for the cluster best
-representing the \texttt{NONE} category of confidentiality impact.
+representing the \texttt{NONE} class of confidentiality impact.
 
 This cluster primarily contains vulnerabilities related to service disruptions and system crashes.
 While these issues can severely affect system availability, they typically do not directly
@@ -1383,10 +1379,10 @@ Key findings:
 
 \end{itemize}
 
-\subsubsection{Confidentiality Impact: Focus on category LOW}
+\subsubsection{Confidentiality Impact: Focus on class LOW}
 
 Figure \ref{fig:confidentialityImpact_60_LOW} represents the distribution for the cluster best
-representing the \texttt{LOW} category of confidentiality impact. This cluster predominantly
+representing the \texttt{LOW} class of confidentiality impact. This cluster predominantly
 features web-based vulnerabilities, particularly cross-site scripting (XSS) attacks. These types of
 vulnerabilities can indeed cause confidentiality issues, but they are usually limited in scope,
 typically affecting individual user sessions rather than compromising the entire system's
@@ -1410,10 +1406,10 @@ Key findings:
 
 \end{itemize}
 
-\subsubsection{Confidentiality Impact: Focus on category LOW}
+\subsubsection{Confidentiality Impact: Focus on class LOW}
 
 Figure \ref{fig:confidentialityImpact_60_HIGH} shows the distribution for the cluster best
-representing the \texttt{HIGH} category of confidentiality impact. In this cluster, we see a focus
+representing the \texttt{HIGH} class of confidentiality impact. In this cluster, we see a focus
 on remote code execution and file manipulation vulnerabilities. These types of attacks have the
 potential to severely compromise data confidentiality by allowing unauthorized access to sensitive
 information or system resources. Key findings:
@@ -1490,10 +1486,10 @@ affected system or its users.
 	\caption{Integrity Impact Topic Counts}
 \end{figure}
 
-\subsubsection{Integrity Impact: Focus on category NONE}
+\subsubsection{Integrity Impact: Focus on class NONE}
 
 Figure \ref{fig:integrityImpact_60_NONE} shows the distribution for the cluster best representing
-the \texttt{NONE} category of integrity impact.
+the \texttt{NONE} class of integrity impact.
 
 
 In this cluster, we observe a predominance of vulnerabilities related to denial of service attacks
@@ -1514,9 +1510,10 @@ Key findings:
 
 \end{itemize}
 
-\subsubsection{Integrity Impact: Focus on category LOW}
+\subsubsection{Integrity Impact: Focus on class LOW}
 
-Figure \ref{fig:integrityImpact_60_LOW} represents the distribution for the cluster best representing the \texttt{LOW} category of integrity impact.
+Figure \ref{fig:integrityImpact_60_LOW} represents the distribution for the cluster best
+representing the \texttt{LOW} class of integrity impact.
 
 This cluster predominantly features cross-site scripting (XSS) vulnerabilities and other generally
 web browser based attacks. These types of vulnerabilities can indeed cause data integrity issues, but
@@ -1535,11 +1532,10 @@ Key findings:
 	      similarities between the clustering
 \end{itemize}
 
-\subsubsection{Integrity Impact: Focus on category HIGH}
+\subsubsection{Integrity Impact: Focus on class HIGH}
 
-\todo[inline]{Needs a bit of work, when switching to purity this changed a little what was the best
-	topic...}
-Figure \ref{fig:integrityImpact_60_HIGH} shows the distribution for the cluster best representing the \texttt{HIGH} category of integrity impact.
+Figure \ref{fig:integrityImpact_60_HIGH} shows the distribution for the cluster best representing
+the \texttt{HIGH} class of integrity impact.
 
 
 In this cluster, we see a focus on remote code execution vulnerabilities. These
@@ -1620,10 +1616,10 @@ database, email).
 	\end{subfigure}
 
 \end{figure}
-\subsubsection{Availability Impact: Focus on category NONE}
+\subsubsection{Availability Impact: Focus on class NONE}
 
 Figure \ref{fig:availabilityImpact_60_NONE} shows the distribution for the cluster best representing
-the \texttt{NONE} category of availability impact.
+the \texttt{NONE} class of availability impact.
 
 Interestingly, this cluster primarily contains vulnerabilities related to web application security
 issues, particularly injection attacks and cross-site scripting. While these vulnerabilities can be
@@ -1649,14 +1645,14 @@ Key findings:
 
 \end{itemize}
 
-\subsubsection{Availability Impact: Focus on category LOW}
+\subsubsection{Availability Impact: Focus on class LOW}
 
 Figure \ref{fig:availabilityImpact_60_LOW} represents the distribution for the cluster best
-representing the \texttt{LOW} category of availability impact. However, this category requires
+representing the \texttt{LOW} class of availability impact. However, this class requires
 careful interpretation due to significant class imbalance in the dataset.
 
-As evident from Figure \ref{fig:nvd_data}, the \texttt{LOW} category for Availability Impact is
-highly under-represented in the true category values. This imbalance has a profound effect on our
+As evident from Figure \ref{fig:nvd_data}, the \texttt{LOW} class for Availability Impact is
+highly under-represented in the true class values. This imbalance has a profound effect on our
 clustering results, leading to a diluted cluster where the primary focus class is actually
 \texttt{NONE} rather than \texttt{LOW}.
 
@@ -1665,7 +1661,7 @@ Key findings:
 \begin{itemize}
 
 	\item The cluster shows a majority of \texttt{NONE}-rated vulnerabilities, contrary to what we
-	      would expect for a \texttt{LOW} category cluster.
+	      would expect for a \texttt{LOW} class cluster.
 
 	\item Predominant terms include \say{compromise}, \say{oracle}, \say{access}, \say{data}, \say{cvss}, \say{attacks},
 	      \say{unauthorized}, \say{successful}, \say{accessible}, and \say{base}.
@@ -1678,9 +1674,9 @@ Key findings:
 
 \end{itemize}
 
-The results for this category underscore a crucial limitation in our current model and dataset. The
+The results for this class underscore a crucial limitation in our current model and dataset. The
 severe underrepresentation of \texttt{LOW} Availability Impact vulnerabilities makes it difficult
-for the model to accurately capture the characteristics of this category. Instead, the cluster is
+for the model to accurately capture the characteristics of this class. Instead, the cluster is
 dominated by \texttt{NONE} impact vulnerabilities, which are much more prevalent in the dataset.
 
 This observation points to the need for careful consideration when interpreting results for
@@ -1688,11 +1684,11 @@ underrepresented classes in imbalanced datasets. It also suggests potential area
 our model, such as employing techniques to address class imbalance or collecting more data for
 underrepresented categories.
 
-\subsubsection{Availability Impact: Focus on category HIGH}
+\subsubsection{Availability Impact: Focus on class HIGH}
 
 Figure \ref{fig:availabilityImpact_60_HIGH} shows the distribution for the cluster best representing
 
-the \texttt{HIGH} category of availability impact.
+the \texttt{HIGH} class of availability impact.
 
 In this cluster, we see a clear focus on remote code execution and command injection
 vulnerabilities. These types of attacks have the potential to severely compromise system
@@ -1725,7 +1721,7 @@ integrity (such as XSS) are often categorized as having no availability impact. 
 vulnerabilities allowing remote code execution or command injection are correctly identified as
 high-impact for availability. This demonstrates the model's ability to differentiate between various
 security impacts and accurately categorize vulnerabilities based on their potential to disrupt
-system availability.\todo[inline]{talk about an example of a bad case}
+system availability.
 
 
 \subsection{Discussion of CVSS Impact Metrics}
@@ -1742,7 +1738,7 @@ metric, which influences our interpretations and comparisons.
 	\item \textbf{Web Application Vulnerabilities:} Cross-site scripting (XSS) and related web
 	      vulnerabilities consistently appear in the LOW categories for both Integrity and
 	      Confidentiality impacts. For Availability, these vulnerabilities predominantly fall into the
-	      NONE category. This pattern underscores the nature of XSS attacks, primarily affecting data
+	      NONE class. This pattern underscores the nature of XSS attacks, primarily affecting data
 	      integrity and confidentiality at the client-side but rarely causing system-wide availability
 	      issues.
 
@@ -1751,9 +1747,9 @@ metric, which influences our interpretations and comparisons.
 	      consistency emphasizes the severe and multi-faceted threat posed by such vulnerabilities.
 
 	\item \textbf{Denial of Service:} Terms related to denial of service (DoS) attacks are prominent
-	      in the NONE category for both Integrity and Confidentiality impacts. Denial of service and
+	      in the NONE class for both Integrity and Confidentiality impacts. Denial of service and
 	      related terms are sometimes absent from the Availability impact categories, particularly in
-	      the HIGH category where we might expect them, this suggests some instability in this model
+	      the HIGH class where we might expect them, this suggests some instability in this model
 	      due to the imbalanced data.
 
 \end{itemize}
@@ -1773,9 +1769,9 @@ metric, which influences our interpretations and comparisons.
 	\item \textbf{Availability Impact:} The severe underrepresentation of LOW Availability Impact
 	      vulnerabilities significantly affects our analysis. The NONE and HIGH categories are more
 	      reliably represented, showing a distinction between vulnerabilities that don't typically
-	      affect system uptime (web vulnerabilities in NONE category) and those that could lead to
-	      system-wide disruptions (remote code execution in HIGH category). However, the lack of a
-	      well-defined LOW category limits our ability to observe a clear progression of severity in
+	      affect system uptime (web vulnerabilities in NONE class) and those that could lead to
+	      system-wide disruptions (remote code execution in HIGH class). However, the lack of a
+	      well-defined LOW class limits our ability to observe a clear progression of severity in
 	      this metric.
 
 \end{itemize}
@@ -1814,7 +1810,7 @@ topic model, I explored the concept of merging related clusters. This process in
 
 \begin{itemize}
 
-	\item Identifying clusters with semantic similarity or overlapping representation of CVSS classes.
+	\item Identifying clusters with overlapping representation of CVSS classes.
 
 	\item Merging these clusters by combining their topic-word distributions and reassigning documents.
 
@@ -1823,8 +1819,6 @@ topic model, I explored the concept of merging related clusters. This process in
 	\item Comparing the performance of the merged model to the original in terms of:
 
 	      \begin{itemize}
-
-		      \item Overall topic coherence
 
 		      \item Clarity of class representation
 
@@ -1836,8 +1830,7 @@ topic model, I explored the concept of merging related clusters. This process in
 
 \subsubsection{Methodology}
 
-The approach to cluster merging was based on a simple similarity metric between topic-word
-distributions. Clusters were merged if their similarity exceeded a predefined threshold. While this
+Clusters were merged by finding the top-k best clusters in the cluster distribution. While this
 method is straightforward to implement, it is admittedly crude and may not capture all the nuances
 of semantic similarity between topics.
 
@@ -1847,23 +1840,36 @@ by their model. This other approach potentially offers a more nuanced way of ide
 
 \subsubsection{Results}
 
-To illustrate the effects of cluster merging, we present the following figures:
-\todo[inline]{need to add these in!}
+To illustrate the effects of cluster merging, we present the following Figures~\ref{fig:integrityImpact_60_NONE_merged},~\ref{fig:confidentialityImpact_60_LOW_merged}
 
-% Insert figures here
-% \begin{figure}[ht]
-% \centering
-% \includegraphics[width=0.8\textwidth]{path_to_original_cluster_figure}
-% \caption{Distribution of CVSS classes in original clusters}
-% \label{fig:original_clusters}
-% \end{figure}
+\begin{figure}[h!]
+	\ContinuedFloat*
+	\centering
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=0.7\textwidth]{figures/integrityImpact/merged_top_k_topics_category_focus_counts_integrityImpact_LOW_k5.pdf}
+		\caption{The counts of the documents within the best five topics merged in relation to \texttt{Integrity
+				Impact} with
+			target class \texttt{LOW}}
 
-% \begin{figure}[ht]
-% \centering
-% \includegraphics[width=0.8\textwidth]{path_to_merged_cluster_figure}
-% \caption{Distribution of CVSS classes in merged clusters}
-% \label{fig:merged_clusters}
-% \end{figure}
+		\label{fig:integrityImpact_60_NONE_merged}
+	\end{subfigure}
+	\caption{Counts of Merged Topic Clusters}
+
+\end{figure}
+
+\begin{figure}[h!]
+	\ContinuedFloat
+	\centering
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=0.7\textwidth]{figures/confidentialityImpact/merged_top_k_topics_category_focus_counts_confidentialityImpact_NONE_k5.pdf}
+		\caption{The counts of the documents within the best topic in relation to \texttt{Integrity Impact} with target class \texttt{LOW}}
+		\label{fig:confidentialityImpact_60_LOW_merged}
+	\end{subfigure}
+
+	\caption{Counts of Merged Topic Clusters}
+\end{figure}
 
 Contrary to our initial expectations, the process of merging clusters did not lead to improved
 results. Instead, I observed the following effects:
@@ -1889,23 +1895,6 @@ suggests that more sophisticated merging strategies may be needed to preserve th
 information captured in the original clusters while still allowing for the combination of truly
 related topics.
 
-Possible future work on this topic includes:
-
-\begin{itemize}
-
-	\item Implementing the cluster merging approach of Neuhaus \& Zimmerman (2010), which focuses on
-	      the similarity of topic words rather than overall distribution similarity.
-
-	\item Exploring hierarchical topic modeling approaches, which might allow for the representation
-	      of both fine-grained and broader topic categories simultaneously.
-
-	\item Investigating dynamic topic modeling techniques to capture how vulnerability types and
-	      their CVSS ratings evolve over time, potentially revealing patterns in how initially
-	      distinct vulnerability categories merge or diverge over time.
-
-\end{itemize}
-
-
 \subsection{Overall Observations}
 
 \begin{enumerate}
@@ -1923,25 +1912,10 @@ Possible future work on this topic includes:
 	      changing nature of cybersecurity threats.
 
 	\item The overlap between categories in some clusters (particularly visible in the \texttt{LOW}
-	      category) highlights the complexity of vulnerability classification and the potential for
+	      class) highlights the complexity of vulnerability classification and the potential for
 	      ambiguity in CVSS scoring.
 
 \end{enumerate}
-
-
-% \section{Discussion}\label{discussion}
-
-
-% \subsubsection{Exploit Prediction Scoring System}
-
-% EPSS is developed by FIRST, the same group who govern the CVSS standard. It has a different take
-% on the problem, focusing on a data driven model designed to give \say{a daily estimate of the probability
-% 	of exploitation activity being observed over the next 30 days~\cite{EPSS}.} If the data shown on the model
-% page is to be believed, it is a promising system (some of their findings Figure~\ref{fig:epss_and_cvss},
-% Figure~\ref{fig:epss}). Unfortunately, while good to keep in mind for the industry, it is less useful
-% for our purposes. This is a pretrained and uninterpretable model, from the outside at least.
-% Analysis could be done on the output of the model in relation to CVEs, but that will not be a focus
-% going forward.
 
 
 \subsection{Future Work}
@@ -2009,33 +1983,6 @@ work towards a more consistent, accurate, and interpretable system for assessing
 software vulnerabilities. This improved system would not only enhance the efficiency of
 vulnerability management but also contribute to a more secure digital ecosystem overall.
 
-% \subsection{Future Work}
-
-% Despite the disadvantages of CVSS, I will continue to focus on it in my studies. My focus will pivot
-% towards the interpretability of large language models, particularly from the perspective of data.
-% The CVE dataset is messy, with many poorly written CVE descriptions that are not useful for machine
-% learning models. I plan to clean up this dataset by identifying and removing low-quality entries. To
-% achieve this, I will perform clustering and general analysis of the CVE descriptions to better
-% understand the dataset and develop heuristics for filtering it.
-
-% \section{Conclusion}
-
-% The Common Vulnerability Scoring System (CVSS) is integral in prioritizing and managing the
-% ever-growing number of software vulnerabilities. While the current approach heavily relies on
-% manually assigned scores from the National Vulnerability Database (NVD), it may be worth using the
-% MITRE database as well. However, the findings are very much inconclusive, it is possible that adding
-% the extra data during model training is worth it, but so far it has only been to the detriment of
-% performance. One key issue is the variability in CVSS scores between different databases, such as NVD
-% and MITRE, which suggests a lack of consistency in the scoring process. This inconsistency can
-% confuse automated systems and reduce the overall reliability of the predicted scores.
-
-% In conclusion, while CVSS remains a crucial tool for vulnerability management, its current
-% implementation has limitations that need to be addressed. The integration of machine learning models
-% offers a promising solution to automate and enhance the accuracy of CVSS scoring. However the focus
-% should be on predicting the distinct categorical variable for each metric, as this is a universally
-% interesting classification task and will be more able to apply to changes in the CVSS standard.
-% Future research should focus on refining these models, and focusing on interpretability, whether
-% through LLM interpretability methods, or through more traditional databased clustering.
 
 \printbibliography[title={References}]
 
