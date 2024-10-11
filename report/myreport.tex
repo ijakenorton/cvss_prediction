@@ -158,7 +158,7 @@ questions that we strive to answer in this report:
 
 	\item Is there scoring consistency between MITRE and NVD? (Section~\ref{sec:scoring_consistency})
 
-	\item Can we improve the LLMs’ classifier performance when we augment the NVD dataset with data
+	\item Can we improve the LLMs’ classification performance when we augment the NVD dataset with data
 	      from the MITRE dataset? (Section~\ref{sec:cvss_prediction})
 
 	\item What are the important keywords for each class? (Section~\ref{sec:important_keywords})
@@ -205,7 +205,8 @@ The description is the most important part in our case. This should provide info
 vulnerability. What can be exploited (device / software component)? How is the product affected if
 the vulnerability is exploited? Ideally there would be a part of the description that relates to every metric,
 unfortunately these descriptions are not necessarily suited to machine learning as the people
-writing the descriptions are expecting a lot of intrinsic knowledge.
+writing the descriptions are expecting a lot of intrinsic knowledge or assuming a default value
+through omission.
 
 \subsection{The Common Vulnerability Scoring System}
 
@@ -293,7 +294,8 @@ in the wild is difficult. There are two relatively new organisations trying to p
 this lack of verifiable reporting,
 Cybersecurity \& Infrastructure Security Agency (CISA,
 \href{https://www.cisa.gov/known-exploited-vulnerabilities-catalog}{public sector}) and
-inthewild.org (\href{https://inthewild.io/}{private sector}~\cite{cisa}).
+inthewild.org (\href{https://inthewild.io/}{private sector}~\cite{cisa}). We choose not to go into
+environmental metrics as they are specific to each individual business.
 
 \subsection{Data Options}
 
