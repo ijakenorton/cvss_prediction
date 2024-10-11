@@ -112,7 +112,7 @@ multiple datasets did not yield the anticipated improvements in CVSS prediction,
 valuable insights into the variability of human-assigned scores. This variability suggests that
 automated prediction models may face similar challenges in areas where human evaluators disagree.
 Given these findings, the focus of the research shifted towards enhancing the interpretability and
-analysis of the CVE/CVSS data itself. I employed clustering techniques, primarily Latent Dirichlet
+analysis of the CVE/CVSS data itself. We employed clustering techniques, primarily Latent Dirichlet
 Allocation (LDA~\cite{lda_origin}), along with other dataset analysis methods to uncover patterns
 within the vulnerability descriptions. This approach offers several advantages:
 
@@ -149,18 +149,21 @@ vulnerabilities to cluster together. For example the analysis of the integrity i
 
 \end{itemize}
 
-Research Questions:
+
+To be able to create an accurate model to predict each CVSS metric, we must first understand the
+underlying CVE data (Section~\ref{sec:background}) available to us. As such, we have formulated three research
+questions that we strive to answer in this report:
 
 \begin{itemize}
-	\item Is there scoring consistency between MITRE and NVD?
 
-	\item Can we improve the LLMs' classifier performance when we augment the NVD dataset with data
-	      from the MITRE dataset?
+	\item Is there scoring consistency between MITRE and NVD? (Section~\ref{sec:scoring_consistency})
 
-	\item What are the important keywords for each class?
+	\item Can we improve the LLMs’ classifier performance when we augment the NVD dataset with data
+	      from the MITRE dataset? (Section~\ref{sec:cvss_prediction})
+
+	\item What are the important keywords for each class? (Section~\ref{sec:important_keywords})
+
 \end{itemize}
-
-
 
 \begin{figure}[ht] \centering
 	\includegraphics[width=0.8\textwidth]{figures/cves_per_year.pdf}
@@ -168,7 +171,7 @@ Research Questions:
 \end{figure}
 
 
-\section{Background}
+\section{Background} \label{sec:background}
 
 Vulnerabilities are stored in a consistent format called Common Vulnerabilities and
 Exposures (CVE~\cite{CVE}).
@@ -210,7 +213,7 @@ CVSS scoring is a high level way to break up vulnerabilities into different cate
 Organisations can use it to choose which vulnerability to focus on first. CVSS is broken up into
 three distinct sections: base, temporal and environmental scores.
 
-For brevity I will only show the specifics of CVSS 3.1~\cite{CVSS_31} as this is by far the most commonly used
+For brevity we will only show the specifics of CVSS 3.1~\cite{CVSS_31} as this is by far the most commonly used
 version, even if it is not the most recent.
 
 \subsubsection{Base Score}
@@ -281,7 +284,7 @@ Below we again summarise from the
 \bigskip
 
 Temporal metrics would be useful in general for a CVSS score, however NVD do not store these
-temporal metrics. As far as I can tell there is no reason given for this specifically, though
+temporal metrics. As far as we can tell there is no reason given for this specifically, though
 discourse
 \href{https://security.stackexchange.com/questions/270257/cvss-v3-and-v3-1-missing-temporal-metrics-exploit-code-maturity-and-remediation}{(Stack exchange post)}~\cite{stack_exchange} around the subject suggests that this is due to a lack
 of verifiable reporting. From my perspective, both remidiation level and report confidence feel like
@@ -294,7 +297,7 @@ inthewild.org (\href{https://inthewild.io/}{private sector}~\cite{cisa}).
 
 \subsection{Data Options}
 
-I will be using NVD and MITRE as the sources of data. In 2016 when Johnson et al.\@ did their paper
+We will be using NVD and MITRE as the sources of data. In 2016 when Johnson et al.\@ did their paper
 on CVSS~\cite{bayes}, they had access to five different databases. Unfortunately only two of these
 remain for modern data. There are others, but they are either in archival or proprietary status.
 
@@ -302,7 +305,7 @@ remain for modern data. There are others, but they are either in archival or pro
 
 The National Vulnerability Database is the defacto standard dataset used for CVSS generation
 research~\cite{costa, nvd_example1, nvd_example2}.  NVD being the standard makes a lot of sense as it is built
-for the purpose with a team dedicated to enriching CVEs with CVSS scores. The dataset I am using was
+for the purpose with a team dedicated to enriching CVEs with CVSS scores. The dataset we are using was
 retrieved using the NVD API in March 2024 and contains $\sim$100000 CVEs enriched with CVSS scores. This
 comes in a consistently formatted JSON dump.
 
@@ -419,7 +422,7 @@ naturally lead us to question the consistency and reliability of CVSS scoring ac
 organizations and databases. In the following section, we will explore this issue by examining the
 scoring consistency between MITRE and NVD, two prominent sources of vulnerability information.
 
-\section{Is there scoring consistency between MITRE and NVD?}
+\section{Is there scoring consistency between MITRE and NVD?} \label{sec:scoring_consistency}
 
 \subsection{Related Work}
 
@@ -859,7 +862,7 @@ performance and tendencies remain consistent with our initial observations.
 % \end{table}
 
 
-\section{Can we improve classification of CVSS Metrics?}\label{cvss_prediction}
+\section{Can we improve classification of CVSS Metrics?}\label{sec:cvss_prediction}
 
 This section addresses our second research question: \say{Can we improve the LLMs' classifier
 	performance when we augment the NVD dataset with data from the MITRE dataset?} Our hypothesis is
@@ -910,7 +913,7 @@ the approach of CVSS-BERT, while exploring the impact of augmenting the training
 additional sources to potentially improve prediction accuracy and robustness.
 
 Cody Airey---a classmate of mine---has been working on a similar problem. He has been repoducing
-results from Costa et al.\@~\cite{costa}, I am choosing to use Airey's results due to them being on
+results from Costa et al.\@~\cite{costa}, we are choosing to use Airey's results due to them being on
 CVSS version 3.1 instead of a mix of versions 3.0 and 3.1 as Costa et al.\@ used. My choice of model
 for CVSS prediction will very much bootstrap off his work. So far, a strong contender for
 state-of-the-art model for predicting CVSS metrics from CVE descriptions is the DistilBERT
@@ -960,28 +963,28 @@ development.
 	\resizebox{\textwidth}{!}{%
 		\begin{tabular}{llcccc}
 			\toprule
-			\textbf{Metric} & \textbf{Model} & \textbf{AV}           & \textbf{AC}           & \textbf{PR}           & \textbf{UI}           \\
+			\textbf{Metric} & \textbf{Dataset} & \textbf{AV}           & \textbf{AC}           & \textbf{PR}           & \textbf{UI}           \\
 			\midrule
 			\multirow{2}{*}{Accuracy}
-			                & NVD            & \textbf{91.28 ± 0.26} & \textbf{95.64 ± 0.68} & \textbf{82.77 ± 0.24} & \textbf{93.86 ± 0.19} \\
-			                & NVD and MITRE  & 72.81 ± 0.32          & 92.62 ± 0.15          & 81.18 ± 0.18          & 66.35 ± 0.24          \\
+			                & NVD              & \textbf{91.28 ± 0.26} & \textbf{95.64 ± 0.68} & \textbf{82.77 ± 0.24} & \textbf{93.86 ± 0.19} \\
+			                & NVD and MITRE    & 72.81 ± 0.32          & 92.62 ± 0.15          & 81.18 ± 0.18          & 66.35 ± 0.24          \\
 			\midrule
 			\multirow{2}{*}{F1}
-			                & NVD            & \textbf{90.98 ± 0.31} & \textbf{93.85 ± 1.39} & \textbf{82.53 ± 0.26} & \textbf{93.82 ± 0.19} \\
-			                & NVD and MITRE  & 61.36 ± 0.42          & 89.08 ± 0.22          & 80.96 ± 0.19          & 52.93 ± 0.31          \\
+			                & NVD              & \textbf{90.98 ± 0.31} & \textbf{93.85 ± 1.39} & \textbf{82.53 ± 0.26} & \textbf{93.82 ± 0.19} \\
+			                & NVD and MITRE    & 61.36 ± 0.42          & 89.08 ± 0.22          & 80.96 ± 0.19          & 52.93 ± 0.31          \\
 			\midrule
 			\multirow{2}{*}{Bal Acc}
-			                & NVD            & \textbf{67.88 ± 2.11} & \textbf{55.82 ± 7.23} & \textbf{75.98 ± 0.47} & \textbf{92.46 ± 0.21} \\
-			                & NVD and MITRE  & 25.00 ± 0.00          & 50.00 ± 0.00          & 75.18 ± 0.31          & 50.00 ± 0.00          \\
+			                & NVD              & \textbf{67.88 ± 2.11} & \textbf{55.82 ± 7.23} & \textbf{75.98 ± 0.47} & \textbf{92.46 ± 0.21} \\
+			                & NVD and MITRE    & 25.00 ± 0.00          & 50.00 ± 0.00          & 75.18 ± 0.31          & 50.00 ± 0.00          \\
 			\bottomrule
 		\end{tabular}
 	}
-	\caption{Comparison of the effects of the pre-trained models on the CVSS v3.1 dataset (Part 1).}
+	\caption{Comparison of the Distill-BERT models prediction when trained on NVD only CVSS v3.1 dataset vs. NVD+Mitre CVSS v3.1 dataset.}
 	\label{tab:distil_part1}
 	\begin{tablenotes}
 		\small
-		\item Note: AV = Attack Vector, AC = Attack Complexity, PR = Privileges Required, UI = User Interaction
-		\item Bal Acc = Balanced Accuracy
+		\item Note: AV = Attack Vector, AC = Attack Complexity, PR = Privileges Required
+		\item \quad \quad UI = User Interaction, Bal Acc = Balanced Accuracy
 	\end{tablenotes}
 \end{table}
 
@@ -990,42 +993,80 @@ development.
 	\resizebox{\textwidth}{!}{%
 		\begin{tabular}{llcccc}
 			\toprule
-			\textbf{Metric} & \textbf{Model} & \textbf{S}            & \textbf{C}            & \textbf{I}            & \textbf{A}            \\
+			\textbf{Metric} & \textbf{Dataset} & \textbf{S}            & \textbf{C}            & \textbf{I}            & \textbf{A}            \\
 			\midrule
 			\multirow{2}{*}{Accuracy}
-			                & NVD            & \textbf{96.38 ± 0.09} & \textbf{86.24 ± 0.20} & \textbf{87.15 ± 0.10} & \textbf{88.70 ± 0.10} \\
-			                & NVD and MITRE  & 80.21 ± 0.16          & 82.45 ± 0.11          & 45.71 ± 0.26          & 52.53 ± 0.23          \\
+			                & NVD              & \textbf{96.38 ± 0.09} & \textbf{86.24 ± 0.20} & \textbf{87.15 ± 0.10} & \textbf{88.70 ± 0.10} \\
+			                & NVD and MITRE    & 80.21 ± 0.16          & 82.45 ± 0.11          & 45.71 ± 0.26          & 52.53 ± 0.23          \\
 			\midrule
 			\multirow{2}{*}{F1}
-			                & NVD            & \textbf{96.30 ± 0.10} & \textbf{86.09 ± 0.21} & \textbf{87.11 ± 0.10} & \textbf{88.04 ± 0.11} \\
-			                & NVD and MITRE  & 71.40 ± 0.22          & 82.34 ± 0.12          & 28.68 ± 0.28          & 36.18 ± 0.27          \\
+			                & NVD              & \textbf{96.30 ± 0.10} & \textbf{86.09 ± 0.21} & \textbf{87.11 ± 0.10} & \textbf{88.04 ± 0.11} \\
+			                & NVD and MITRE    & 71.40 ± 0.22          & 82.34 ± 0.12          & 28.68 ± 0.28          & 36.18 ± 0.27          \\
 			\midrule
 			\multirow{2}{*}{Bal Acc}
-			                & NVD            & \textbf{91.57 ± 0.43} & \textbf{82.70 ± 0.36} & \textbf{85.81 ± 0.10} & \textbf{64.01 ± 0.13} \\
-			                & NVD and MITRE  & 50.00 ± 0.00          & 79.85 ± 0.23          & 33.33 ± 0.00          & 33.33 ± 0.00          \\
+			                & NVD              & \textbf{91.57 ± 0.43} & \textbf{82.70 ± 0.36} & \textbf{85.81 ± 0.10} & \textbf{64.01 ± 0.13} \\
+			                & NVD and MITRE    & 50.00 ± 0.00          & 79.85 ± 0.23          & 33.33 ± 0.00          & 33.33 ± 0.00          \\
 			\bottomrule
 		\end{tabular}
 	}
-	\caption{Comparison of the effects of the pre-trained models on the CVSS v3.1 dataset (Part 2).}
+	\caption{Comparison of the Distill-BERT models prediction when trained on NVD only CVSS v3.1 dataset vs. NVD+Mitre CVSS v3.1 dataset.}
 	\label{tab:distil_part2}
 	\begin{tablenotes}
 		\small
-		\item Note: S = Scope, C = Confidentiality Impact, I = Integrity Impact, A = Availability
-		Impact
-		\item Bal Acc = Balanced Accuracy
+		\item Note: S = Scope, C = Confidentiality Impact, I = Integrity Impact
+		\item \quad \quad A = Availability Impact, Bal Acc = Balanced Accuracy
 	\end{tablenotes}
 \end{table}
 
-\section{Important Keywords for each Class}
 
-In this section we explore the contributing factors for each metric / class for said metric.
-Clustering and analysis of the data makes sense in many ways. As the data is already grouped into
-Common Weakness Enumeration~\cite{CWE}, it is likely that there are patterns we can
-find. As a somewhat arbitrary place to start, choose number of clusters ($K$) as 8 due to that being the number of CVSS
-metrics. For this I was hoping to see the data would naturally have some clusters based on the
-general theme of the vulnerability / description, e.g.\@ a cluster based generally around SQL
-injection / databases in general.\notedme{This paragraph needs elaboration: it's missing details at
-	the moment.}
+\section{Clustering Analysis of CVSS Metrics and Vulnerability Descriptions} \label{sec:important_keywords}
+
+In this section, we address Research Question 3: \say{What are the important keywords for each class
+	within the CVSS metrics?} This question is crucial for several reasons:
+
+\begin{itemize}
+
+	\item It helps in understanding the underlying patterns and themes in vulnerability descriptions
+	      that contribute to specific CVSS ratings.
+
+	\item Identifying key keywords can aid in automating the process of CVSS scoring for new
+	      vulnerabilities.
+
+	\item It provides insights into the linguistic features that security experts focus on when
+	      assigning CVSS scores.
+
+\end{itemize}
+
+To explore this question, we employ various clustering and analysis techniques on the vulnerability
+descriptions. Our approach is based on the assumption that vulnerabilities with similar CVSS ratings
+may share common linguistic features or themes. By identifying these patterns, we can potentially
+uncover the factors that contribute to each CVSS metric and class.
+
+In this analysis, we utilize the following methods:
+
+\begin{itemize}
+
+	\item	K-Means Clustering: We start with a straightforward K-means clustering approach to get an initial
+	      understanding of how vulnerability descriptions group together. We arbitrarily choose 8 clusters to
+	      match the number of CVSS metrics, providing a baseline for further analysis.
+
+	\item Latent Dirichlet Allocation (LDA): We then employ a more sophisticated topic modeling technique,
+	      LDA, in conjunction with Word2Vec embeddings. This allows us to discover latent themes in the
+	      vulnerability descriptions and how they relate to CVSS metrics.
+
+	\item Purity Analysis: To evaluate the effectiveness of our clustering, we use the purity metric, which
+	      helps us understand how well our clusters align with the predefined CVSS classes.
+
+\end{itemize}
+
+
+
+Throughout this section, we will present the results of these analyses, discussing the key findings
+for each CVSS metric (\texttt{Integrity Impact}, \texttt{Confidentiality Impact}, and
+\texttt{Availability Impact}) and their
+respective classes (\texttt{NONE}, \texttt{LOW}, \texttt{HIGH}). We will explore the most representative clusters for each
+class, the predominant terms associated with these clusters, and how these findings contribute to
+our understanding of the factors influencing CVSS ratings.
 
 
 \subsection{K-Means Clustering of Vulnerability Descriptions}
@@ -1059,7 +1100,7 @@ retrieval.
 
 
 To assess the stability of the results, the clustering process is repeated multiple times
-with different random seeds. I did record a coherency score, but as this was just for exploratory
+with different random seeds. We did record a coherency score, but as this was just for exploratory
 purposes, the important part was if there was at least some indicator of this being a positive
 direction of inquiry.
 
@@ -1098,7 +1139,7 @@ the general trend of CVEs published (Figure~\ref{fig:cves_per_year}), this is a 
 that, the clustering is still following the underlying distribution and has not failed to capture
 the overall trend.
 
-Here are some examples of the descriptions:
+Here are some examples of the descriptions (Table~\ref{tab:cve-descriptions}
 
 \begin{table}[h]
 	\centering
@@ -1154,7 +1195,7 @@ sort of task.
 
 The methodology comprises several key steps, which are detailed in the subsections below.
 
-\subsubsection{Data Preprocessing} I begin by preprocessing the CVE descriptions:
+\subsubsection{Data Preprocessing} We begin by preprocessing the CVE descriptions:
 
 \begin{itemize}
 
@@ -1189,8 +1230,8 @@ also other options in using something like pretrained fasttext~\cite{fasttext} a
 
 \subsubsection{LDA Model Training}
 
-I have done many different iterations of the models with varying numbers of topics and
-hyperparameters. The hyperparameters below are broadly matching what I found to be the best,
+We have done many different iterations of the models with varying numbers of topics and
+hyperparameters. The hyperparameters below are broadly matching what we found to be the best,
 however the main metric came from looking at the actual clustering results, and the biggest impact
 came from the number of topics, with the final models being picked by their purity score (as
 described in Section~\ref{sec:purity}). The key hyperparameters used in the LDA model training are
@@ -1267,20 +1308,10 @@ This set of hyperparameters collectively defines a thorough exploration of the t
 for the discovery of both broad and specific themes in the CVSS data. The wide range of topic
 numbers (20 to 100) was particularly impactful in identifying the optimal granularity for
 representing the vulnerability descriptions. The LDA model is implemented using Gensim's
-LdaMulticore~\cite{gensim}, allowing for parallel processing. In general I found Gensim very nice to
+LdaMulticore~\cite{gensim}, allowing for parallel processing. In general we found Gensim very nice to
 work with, the model training was fast and the API made sense. The combination of Gensim's efficient
 implementation and these carefully chosen hyperparameters facilitated a comprehensive exploration of
 the topic structure in the CVSS vulnerability descriptions.
-
-% \subsubsection{Model Evaluation and Selection}
-
-% Models are evaluated based on the average topic coherence:
-
-% \begin{equation}
-% 	Score = \frac{1}{T}\sum_{t=1}^{T} Coherence(topic_t)
-% \end{equation}
-
-% where $T$ is the total number of topics.
 
 
 \subsubsection{Topic Assignment and Analysis}
@@ -1660,9 +1691,7 @@ database, email).
 	\centering
 	\includegraphics[width=0.7\textwidth]{figures/availabilityImpact/merged_top_k_topics_category_focus_counts_availabilityImpact_NONE_k1.pdf}
 
-	\caption{The counts of the documents within the best topic in relation to \texttt{availability
-			Impact} with
-		target class \texttt{NONE}}
+	\caption{The counts of the documents within the best topic in relation to \texttt{Availability Impact} with target class \texttt{NONE}}
 
 	\label{fig:availabilityImpact_60_NONE}
 \end{figure}
@@ -1670,25 +1699,26 @@ database, email).
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\textwidth]{figures/availabilityImpact/merged_top_k_topics_category_focus_counts_availabilityImpact_LOW_k1.pdf}
-	\caption{The counts of the documents within the best topic in relation to \texttt{availability Impact} with target class \texttt{LOW}}
+	\caption{The counts of the documents within the best topic in relation to \texttt{Availability Impact} with target class \texttt{LOW}}
 	\label{fig:availabilityImpact_60_LOW}
 \end{figure}
 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\textwidth]{figures/availabilityImpact/merged_top_k_topics_category_focus_counts_availabilityImpact_HIGH_k1.pdf}
-	\caption{The counts of the documents within the best topic in relation to availabilityImpact with target class \texttt{HIGH}}
+	\caption{The counts of the documents within the best topic in relation to \texttt{Availability Impact} with target class \texttt{HIGH}}
 	\label{fig:availabilityImpact_60_HIGH}
 \end{figure}
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.7\textwidth]{figures/availabilityImpact/merged_top_k_topics_category_focus_counts_availabilityImpact_HIGH_k1.pdf}
-	\caption{The counts of the documents within the best topic in relation to availabilityImpact
-		with target class \texttt{HIGH}. Extra example showing that the best topic for
-		availabilityImpact\notedme{? Multiple occurences, too} can include the expected denial of service related keywords}
+	\includegraphics[width=0.7\textwidth]{figures/availabilityImpact/merged_top_k_topics_category_focus_counts_availabilityImpact_HIGH_k1_denial.pdf}
+	\caption{The counts of the documents within the best topic in relation to \texttt{Availability
+			Impact} with target class \texttt{HIGH}. Extra example showing that the best topic for \texttt{Availability
+			Impact} can focus on denial of service}
 	\label{fig:availabilityImpact_60_HIGH_denial}
 \end{figure}
+
 \subsubsection{Availability Impact: Focus on class NONE}
 
 Figure \ref{fig:availabilityImpact_60_NONE} shows the distribution for the cluster best representing
@@ -1818,9 +1848,10 @@ Availability Impact metric, which influences our interpretations and comparisons
 
 	\item \textbf{Denial of Service:} Terms related to denial of service (DoS) attacks are prominent
 	      in the NONE class for both Integrity and Confidentiality impacts. Denial of service and
-	      related terms are sometimes absent from the Availability impact categories, particularly in
-	      the HIGH class where we might expect them, this suggests some instability in this model
-	      due to the imbalanced data.
+	      related terms are sometimes absent from the Availability impact categories (see
+	      Figure~\ref{fig:availabilityImpact_60_HIGH_denial} as example that the topic modelling does
+	      sometimes pick up on denial of service, particularly in the HIGH class where we might expect
+	      them, this suggests some instability in this model due to the imbalanced data.
 
 \end{itemize}
 
@@ -1876,7 +1907,7 @@ Availability Impact metric, which influences our interpretations and comparisons
 \subsection{Cluster Merging and Refinement}
 
 In an attempt to enhance class representation and potentially improve the overall performance of the
-topic model, I explored the concept of merging related clusters. This process involved several steps:
+topic model, we explored the concept of merging related clusters. This process involved several steps:
 
 \begin{itemize}
 
@@ -1930,7 +1961,7 @@ To illustrate the effects of cluster merging, we present the following Figures~\
 \end{figure}
 
 Contrary to our initial expectations, the process of merging clusters did not lead to improved
-results. Instead, I observed the following effects:
+results. Instead, we observed the following effects:
 
 The merging of clusters resulted in several negative impacts on the model's quality and utility. The
 process led to decreased cluster purity, with a higher mix of different CVSS classes within each
@@ -2016,6 +2047,14 @@ Key findings from our study include:
 	      different databases, such as NVD and MITRE. This inconsistency underscores the subjective
 	      nature of vulnerability scoring and the challenges in establishing a reliable ground truth.
 
+	\item \textbf{CVSS Prediction Challenges:} Our experiments with CVSS prediction using a DistilBERT
+	      model trained on combined NVD and MITRE data revealed unexpected challenges. Contrary to our
+	      hypothesis, data augmentation led to decreased performance across all metrics, though with
+	      improved consistency in some cases. We observed metric-specific difficulties, particularly for
+	      Availability Impact and Attack Complexity, which align with known human scoring challenges.
+	      These findings highlight the complexities of integrating multiple data sources, the impact of
+	      data imbalance, and the need for sophisticated approaches in automating vulnerability scoring.
+
 	\item \textbf{Clustering Insights:} The application of Latent Dirichlet Allocation (LDA) for
 	      clustering CVE descriptions revealed meaningful patterns in vulnerability types and their
 	      associated CVSS ratings. This demonstrates the potential of unsupervised learning techniques
@@ -2028,6 +2067,7 @@ Key findings from our study include:
 	\item \textbf{Data Quality Importance:} The analysis highlighted the critical role of data
 	      quality in both manual and automated CVSS scoring processes. Poorly written or inconsistent
 	      CVE descriptions pose significant challenges for accurate vulnerability assessment.
+
 
 \end{itemize}
 
@@ -2060,10 +2100,6 @@ vulnerability management but also contribute to a more secure digital ecosystem 
 \makeatother
 
 \appendix
-% \newcounter{savesection}
-% \setcounter{savesection}{\value{section}}%
-% \setcounter{section}{0}
-% \renewcommand{\thesection}{Appendix \Alph{section}}
 
 \subsection{CVSS figures from other versions}
 
