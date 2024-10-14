@@ -288,7 +288,7 @@ Temporal metrics would be useful in general for a CVSS score, however NVD do not
 temporal metrics. As far as we can tell there is no reason given for this specifically, though
 discourse
 \href{https://security.stackexchange.com/questions/270257/cvss-v3-and-v3-1-missing-temporal-metrics-exploit-code-maturity-and-remediation}{(Stack exchange post)}~\cite{stack_exchange} around the subject suggests that this is due to a lack
-of verifiable reporting. From my perspective, both remidiation level and report confidence feel like
+of verifiable reporting. From our perspective, both remidiation level and report confidence feel like
 they could have scores attributed to them, however finding verifiable reports on the exploits seen
 in the wild is difficult. There are two relatively new organisations trying to provide a solution to
 this lack of verifiable reporting,
@@ -367,7 +367,7 @@ This change in stance has created confusion about the true purpose of CVSS.
 
 
 How CVSS is computed under-the-hood is confusing at best. CVSS 3.1 is not explained to the same
-depth as version 2.0, but my understanding is that it followed a similar process. This is that
+depth as version 2.0, but our understanding is that it followed a similar process. This is that
 process summarised from
 \href{https://www.first.org/cvss/v2/faq#Explanation-of-CVSS-v2-formula-and-metric-valued-development}{CVSS
 	version 2 FAQ:}~\cite{CVSS_formula}
@@ -524,7 +524,7 @@ deviate from this true value. These potential inaccuracies are represented using
 
 A key distinction from the original model is the variability in the number of categorical choices
 for each CVSS metric. While the original model consistently used three variables for each CVSS
-metric, my adapted model accommodates between two to four categorical choices, depending on the
+metric, our adapted model accommodates between two to four categorical choices, depending on the
 specific CVSS dimension being evaluated.
 
 \subsubsection{Confusion Matrix}
@@ -538,6 +538,13 @@ Below is an example of the confusion matrix for the CVSS dimension \texttt{Confi
 		\pi_{hn} & \pi_{hl} & \pi_{hh} \\
 	\end{bmatrix}
 \end{equation}
+
+Note:
+\begin{itemize}
+	\item $n$ = \texttt{None}
+	\item $L$ = \texttt{Low}
+	\item $H$ = \texttt{High}
+\end{itemize}
 
 where $\pi_{nn}$ denotes the probability that the database correctly assigns the score \texttt{None}
 when the actual value is indeed \texttt{None}. Conversely, $\pi_{nl}$ and $\pi_{nh}$ represent
@@ -916,7 +923,7 @@ additional sources to potentially improve prediction accuracy and robustness.
 
 Cody Airey---a classmate of mine---has been working on a similar problem. He has been repoducing
 results from Costa et al.\@~\cite{costa}, we are choosing to use Airey's results due to them being on
-CVSS version 3.1 instead of a mix of versions 3.0 and 3.1 as Costa et al.\@ used. My choice of model
+CVSS version 3.1 instead of a mix of versions 3.0 and 3.1 as Costa et al.\@ used. Our choice of model
 for CVSS prediction will very much bootstrap off his work. So far, a strong contender for
 state-of-the-art model for predicting CVSS metrics from CVE descriptions is the DistilBERT
 model~\cite{distilbert}. This is a variant of BERT~\cite{BERT}, a pre-trained deep bidirectional
@@ -1048,9 +1055,10 @@ In this analysis, we utilize the following methods:
 
 \begin{itemize}
 
-	\item	K-Means Clustering: We start with a straightforward K-means clustering approach to get an initial
-	      understanding of how vulnerability descriptions group together. We arbitrarily choose 8 clusters to
-	      match the number of CVSS metrics, providing a baseline for further analysis.
+	\item	K-Means Clustering: We start with a straightforward K-means clustering approach to get
+	      an initial understanding of how vulnerability descriptions group together. We arbitrarily
+	      choose eight clusters to match the number of CVSS metrics, providing a baseline for further
+	      analysis.
 
 	\item Latent Dirichlet Allocation (LDA): We then employ a more sophisticated topic modeling technique,
 	      LDA, in conjunction with Word2Vec embeddings. This allows us to discover latent themes in the
@@ -1141,7 +1149,7 @@ the general trend of CVEs published (Figure~\ref{fig:cves_per_year}), this is a 
 that, the clustering is still following the underlying distribution and has not failed to capture
 the overall trend.
 
-Here are some examples of the descriptions (Table~\ref{tab:cve-descriptions}
+Here are some examples of the descriptions (Table~\ref{tab:cve-descriptions})
 
 \begin{table}[h]
 	\centering
@@ -1169,7 +1177,6 @@ Here are some examples of the descriptions (Table~\ref{tab:cve-descriptions}
 	\label{tab:cve-descriptions}
 \end{table}
 
-This naive approach to clustering still rendering   good indicator that it is worth looking into clustering further.
 
 \begin{figure}[H]
 	\centering
@@ -1234,10 +1241,10 @@ also other options in using something like pretrained fasttext~\cite{fasttext} a
 
 We have done many different iterations of the models with varying numbers of topics and
 hyperparameters. The hyperparameters below are broadly matching what we found to be the best,
-however the main metric came from looking at the actual clustering results, and the biggest impact
-came from the number of topics, with the final models being picked by their purity score (as
-described in Section~\ref{sec:purity}). The key hyperparameters used in the LDA model training are
-as follows:
+however the favoured method of analysis came from looking at the actual clustering results, and the
+biggest impact came from the number of topics, with the final models being picked by their purity
+score (as described in Section~\ref{sec:purity}). The key hyperparameters used in the LDA model
+training are as follows:
 
 \begin{itemize}
 
@@ -2049,13 +2056,14 @@ Key findings from our study include:
 	      different databases, such as NVD and MITRE. This inconsistency underscores the subjective
 	      nature of vulnerability scoring and the challenges in establishing a reliable ground truth.
 
-	\item \textbf{CVSS Prediction Challenges:} Our experiments with CVSS prediction using a DistilBERT
-	      model trained on combined NVD and MITRE data revealed unexpected challenges. Contrary to our
-	      hypothesis, data augmentation led to decreased performance across all metrics, though with
-	      improved consistency in some cases. We observed metric-specific difficulties, particularly for
-	      Availability Impact and Attack Complexity, which align with known human scoring challenges.
-	      These findings highlight the complexities of integrating multiple data sources, the impact of
-	      data imbalance, and the need for sophisticated approaches in automating vulnerability scoring.
+	\item \textbf{CVSS Prediction Challenges:} Our experiments with CVSS prediction using a
+	      DistilBERT model trained on the combined NVD and MITRE data revealed unexpected challenges.
+	      Contrary to our hypothesis, data augmentation led to decreased performance across all
+	      metrics, though with improved consistency in some cases. We observed metric-specific
+	      difficulties, particularly for \texttt{Availability Impact} and \texttt{Attack Complexity}.
+	      This aligns with challenges humans face while assessing the same metrics. These findings
+	      highlight the complexities of integrating multiple data sources, the impact of data
+	      imbalance, and the need for sophisticated approaches in automating vulnerability scoring.
 
 	\item \textbf{Clustering Insights:} The application of Latent Dirichlet Allocation (LDA) for
 	      clustering CVE descriptions revealed meaningful patterns in vulnerability types and their
