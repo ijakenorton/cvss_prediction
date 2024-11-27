@@ -70,51 +70,14 @@
 
 \begin{abstract}
 
-	New software vulnerabilities are released everyday, and the challenge of managing and prioritizing
-	software vulnerabilities continues to grow. This research explores the use of multiple data sources,
-	primarily the National Vulnerability Database (NVD) and MITRE, to enhance Common Vulnerability
-	Scoring System (CVSS) prediction and analysis. Initial comparisons between NVD and MITRE revealed
-	significant differences in CVE ratings, highlighting the subjective nature of CVSS scoring. While
-	combining these datasets did not improve CVSS prediction as anticipated, it provided insights into
-	the variability of human-assigned scores. The research then focused on enhancing the
-	interpretability of CVE/CVSS data through clustering techniques, primarily Latent Dirichlet
-	Allocation (LDA). This approach offered a data-driven perspective complementing LLM-based prediction
-	methods, faster analysis times, and revealed inherent groupings within vulnerability descriptions.
-	The clustering analysis yielded insights into how certain vulnerability types cluster together,
-	aligning with expert knowledge in the field. This study addresses scoring consistency between MITRE
-	and NVD, the potential for improving LLM classifier performance through dataset augmentation, and
-	the identification of key vulnerability indicators. Our findings contribute to more effective
-	management and prioritization of software vulnerabilities in an increasingly complex digital
-	landscape.
+	New software vulnerabilities are released everyday, and the challenge of managing and prioritizing software vulnerabilities continues to grow. This research explores the use of multiple data sources, primarily the National Vulnerability Database (NVD) and MITRE, to enhance Common Vulnerability Scoring System (CVSS) prediction and analysis. Initial comparisons between NVD and MITRE revealed significant differences in CVE ratings, highlighting the subjective nature of CVSS scoring. While combining these datasets did not improve CVSS prediction as anticipated, it provided insights into the variability of human-assigned scores. The research then focused on enhancing the interpretability of CVE/CVSS data through clustering techniques, primarily Latent Dirichlet Allocation (LDA). This approach offered a data-driven perspective complementing LLM-based prediction methods, faster analysis times, and revealed inherent groupings within vulnerability descriptions. The clustering analysis yielded insights into how certain vulnerability types cluster together, aligning with expert knowledge in the field. This study addresses scoring consistency between MITRE and NVD, the potential for improving LLM classifier performance through dataset augmentation, and the identification of key vulnerability indicators. Our findings contribute to more effective management and prioritization of software vulnerabilities in an increasingly complex digital landscape.
 
 \end{abstract}
 
 
 \section{Introduction}
 
-In 2023, there were 29,065 new vulnerabilities recorded, as illustrated in
-Figure~\ref{fig:cves_per_year}. This number continues to rise year on year, underscoring the growing
-challenge of managing and prioritizing software vulnerabilities. These vulnerabilities are
-documented using the Common Vulnerabilities and Exposure system (CVE~\cite{CVE}), with CVSS scores
-derived from these entries to indicate severity and impact. The National Vulnerability Database
-(NVD~\cite{NVD}) serves as the primary source for CVSS-enriched CVE data and is widely used in
-research (e.g., \cite{costa, nvd_example1, nvd_example2}). However, to explore the potential
-benefits of multiple data sources, we also investigated the MITRE database~\cite{MITRE}, which is
-the main repository for CVEs and includes a significant number of entries with CVSS scores. The
-initial comparison between NVD and MITRE databases employed a methodology inspired by the paper
-\say{Can the Common Vulnerability Scoring System be Trusted? A Bayesian Analysis}~\cite{bayes}. This
-approach aimed to assess the agreement between different data sources in scoring CVEs and explore
-the feasibility of establishing a ground truth. The analysis revealed differences in how these
-databases rate CVEs (see Figures~\ref{fig:counts}, \ref{fig:mitre_31_confusion_matrices_1},
-\ref{fig:nvd_31_confusion_matrices_1}), highlighting the subjective nature of CVSS scoring and the
-challenges in achieving consistency across different evaluation teams. While the comparison of
-multiple datasets did not yield the anticipated improvements in CVSS prediction, it provided
-valuable insights into the variability of human-assigned scores. This variability suggests that
-automated prediction models may face similar challenges in areas where human evaluators disagree.
-Given these findings, the focus of the research shifted towards enhancing the interpretability and
-analysis of the CVE/CVSS data itself. We employed clustering techniques, primarily Latent Dirichlet
-Allocation (LDA~\cite{lda_origin}), along with other dataset analysis methods to uncover patterns
-within the vulnerability descriptions. This approach offers several advantages:
+In 2023, there were 29,065 new vulnerabilities recorded, as illustrated in Figure~\ref{fig:cves_per_year}. This number continues to rise year on year, underscoring the growing challenge of managing and prioritizing software vulnerabilities. These vulnerabilities are documented using the Common Vulnerabilities and Exposure system (CVE~\cite{CVE}), with CVSS scores derived from these entries to indicate severity and impact. The National Vulnerability Database (NVD~\cite{NVD}) serves as the primary source for CVSS-enriched CVE data and is widely used in research (e.g., \cite{costa, nvd_example1, nvd_example2}). However, to explore the potential benefits of multiple data sources, we also investigated the MITRE database~\cite{MITRE}, which is the main repository for CVEs and includes a significant number of entries with CVSS scores. The initial comparison between NVD and MITRE databases employed a methodology inspired by the paper \say{Can the Common Vulnerability Scoring System be Trusted? A Bayesian Analysis}~\cite{bayes}. This approach aimed to assess the agreement between different data sources in scoring CVEs and explore the feasibility of establishing a ground truth. The analysis revealed differences in how these databases rate CVEs (see Figures~\ref{fig:counts}, \ref{fig:mitre_31_confusion_matrices_1}, \ref{fig:nvd_31_confusion_matrices_1}), highlighting the subjective nature of CVSS scoring and the challenges in achieving consistency across different evaluation teams. While the comparison of multiple datasets did not yield the anticipated improvements in CVSS prediction, it provided valuable insights into the variability of human-assigned scores. This variability suggests that automated prediction models may face similar challenges in areas where human evaluators disagree. Given these findings, the focus of the research shifted towards enhancing the interpretability and analysis of the CVE/CVSS data itself. We employed clustering techniques, primarily Latent Dirichlet Allocation (LDA~\cite{lda_origin}), along with other dataset analysis methods to uncover patterns within the vulnerability descriptions. This approach offers several advantages:
 
 \begin{enumerate}
 
